@@ -1,0 +1,33 @@
+services:
+    imatic_view.menu.navbar:
+        class: '%mopa_bootstrap.navbar.generic%'
+        scope: request
+        arguments:
+            - { leftmenu: @imatic_view.menu.navbar_main=, rightmenu: @imatic_view.menu.navbar_main_right= }
+            - {}
+            - { title: "Imatic IS", titleRoute: "homepage", fixedTop: true, isFluid: true }
+        tags:
+            - { name: mopa_bootstrap.navbar, alias: navbar }
+
+    imatic_view.menu.navbar_menu_builder:
+        class: Imatic\Bundle\ViewBundle\Menu\NavbarBuilder
+        scope: request
+        arguments: [ '@knp_menu.factory', '@security.context' ]
+
+    imatic_view.menu.navbar_main:
+        class: Knp\Menu\MenuItem
+        factory_service: imatic_view.menu.navbar_menu_builder
+        factory_method: createMainMenu
+        arguments: [ '@request' ]
+        scope: request
+        tags:
+            - { name: knp_menu.menu, alias: main }
+
+    imatic_view.menu.navbar_main_right:
+        class: Knp\Menu\MenuItem
+        factory_service: imatic_view.menu.navbar_menu_builder
+        factory_method: createMainRightMenu
+        arguments: [ '@request' ]
+        scope: request
+        tags:
+            - { name: knp_menu.menu, alias: main }

@@ -1,0 +1,24 @@
+{
+    "name": "imatic/view-bundle",
+    "type": "library",
+    "description": "Imatic View Bundle",
+    "keywords": [],
+    "homepage": "http://imatic.cz",
+    "license": "Imatic",
+    "authors": [
+        {
+            "name": "Stepan Koci",
+            "email": "stepan.koci@imatic.cz"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Imatic\\Bundle\\ViewBundle": "" }
+    },
+    "target-dir": "Imatic/Bundle/ViewBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

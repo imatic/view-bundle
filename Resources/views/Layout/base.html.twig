@@ -1,0 +1,102 @@
+{% from 'ImaticViewBundle:component:flash.html.twig' import session_flash %}
+{% spaceless %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8"/>
+
+    {% block stylesheets %}
+        {% stylesheets
+        'css/less/bootstrap/standard.less'
+        'components/jquery-ui/themes/flick/jquery-ui.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" media=" screen" type="text/css">
+        {% endstylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% javascripts
+        'components/jquery/jquery.js'
+        'components/jquery-ui/jquery-ui.js'
+        'components/jquery-ui/i18n/jquery-ui-i18n.js'
+        'components/bootstrap/js/bootstrap-affix.js'
+        'components/bootstrap/js/bootstrap-transition.js'
+        'components/bootstrap/js/bootstrap-modal.js'
+        'components/bootstrap/js/bootstrap-dropdown.js'
+        'components/bootstrap/js/bootstrap-scrollspy.js'
+        'components/bootstrap/js/bootstrap-tab.js'
+        'components/bootstrap/js/bootstrap-tooltip.js'
+        'components/bootstrap/js/bootstrap-popover.js'
+        'components/bootstrap/js/bootstrap-alert.js'
+        'components/bootstrap/js/bootstrap-button.js'
+        'components/bootstrap/js/bootstrap-collapse.js'
+        'components/bootstrap/js/bootstrap-carousel.js'
+        'components/bootstrap/js/bootstrap-typeahead.js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+    {% endblock %}
+
+    <title>{% block title %}Imatic IS{% endblock title %}</title>
+
+    {% block metas %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+
+    {% block icons %}
+        <link rel="shortcut icon" href="{{ asset('ico/favicon.ico') }}"/>
+        <link rel="apple-touch-icon-precomposed" sizes="144x144"
+              href="{{ asset('ico/apple-touch-icon-144-precomposed.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114"
+              href="{{ asset('ico/apple-touch-icon-114-precomposed.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72"
+              href="{{ asset('ico/apple-touch-icon-72-precomposed.png') }}">
+        <link rel="apple-touch-icon-precomposed" href="{{ asset('ico/apple-touch-icon-57-precomposed.png') }}">
+    {% endblock %}
+
+</head>
+
+{% block body_tag %}
+<body data-spy="scroll">
+{% endblock body_tag %}
+
+{% block body %}
+    <header>
+        {% block header %}
+            {{ mopa_bootstrap_navbar('navbar') }}
+        {% endblock %}
+    </header>
+
+    <div class="container-fluid content">
+        {% block container %}
+            {% block breadcrumbs %}
+            {% endblock %}
+
+            <div class="page-header">
+                <div class="pull-right">{% block header_actions %}{% endblock %}</div>
+                <h1>{% block headline %}Imatic IS{% endblock %}</h1>
+            </div>
+
+            {% block flashes %}
+                {% if app.session.flashbag.peekAll|length > 0 %}
+                    {{ session_flash() }}
+                {% endif %}
+            {% endblock %}
+
+            {% block action %}
+            {% endblock %}
+
+        {% endblock %}
+    </div>
+
+    <footer class="container-fluid">
+        <div class="footer-content">
+            {% block footer %}
+                Imatic Software, s.r.o.
+            {% endblock %}
+        </div>
+    </footer>
+
+{% endblock %}
+</body>
+</html>
+{% endspaceless %}
