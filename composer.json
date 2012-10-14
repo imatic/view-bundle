@@ -11,14 +11,12 @@
             "email": "stepan.koci@imatic.cz"
         }
     ],
+    "require": {
+        "mopa/bootstrap-bundle": "dev-master"
+    },
     "autoload": {
         "psr-0": { "Imatic\\Bundle\\ViewBundle": "" }
     },
     "target-dir": "Imatic/Bundle/ViewBundle",
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }
