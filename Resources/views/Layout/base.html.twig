@@ -1,5 +1,5 @@
 {% from 'ImaticViewBundle:component:flash.html.twig' import session_flash %}
-{% spaceless %}
+{#{% spaceless %}#}
 <!DOCTYPE html>
 
 <html>
@@ -8,8 +8,11 @@
 
     {% block stylesheets %}
         {% stylesheets
-        'css/less/bootstrap/standard.less'
-        'components/jquery-ui/themes/flick/jquery-ui.css' %}
+        'components/bootstrap/less/bootstrap.less'
+        'components/bootstrap/less/responsive.less'
+        'css/less/style.less'
+        'components/jquery-ui/themes/flick/jquery-ui.css'
+        output='css/compiled/style.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" media=" screen" type="text/css">
         {% endstylesheets %}
     {% endblock %}
@@ -31,7 +34,8 @@
         'components/bootstrap/js/bootstrap-button.js'
         'components/bootstrap/js/bootstrap-collapse.js'
         'components/bootstrap/js/bootstrap-carousel.js'
-        'components/bootstrap/js/bootstrap-typeahead.js' %}
+        'components/bootstrap/js/bootstrap-typeahead.js'
+        output='js/compiled/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
     {% endblock %}
@@ -99,4 +103,4 @@
 {% endblock %}
 </body>
 </html>
-{% endspaceless %}
+{#{% endspaceless %}#}
