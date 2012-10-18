@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Downloaded from https://gist.github.com/2725096
+ * Inspired by from https://gist.github.com/2725096
  * More info: https://github.com/symfony/AsseticBundle/issues/82 (but it's still not in assetic or distribution bundle)
  */
 
@@ -12,6 +12,18 @@ use Symfony\Component\Process\Process;
 
 class ScriptHandler
 {
+    public static function bowerUpdate($event)
+    {
+        $options = self::getOptions($event);
+        $webDir = $options['symfony-web-dir'];
+
+        $process = new Process('bower update');
+        $process->setWorkingDirectory($webDir);
+        $process->run(function ($type, $buffer) use ($event) {
+            $event->getIO()->write($buffer, false);
+        });
+    }
+
     public static function dumpAssets($event)
     {
         $options = self::getOptions($event);
