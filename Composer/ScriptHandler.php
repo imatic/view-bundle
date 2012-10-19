@@ -79,15 +79,15 @@ class ScriptHandler
             $configContent = str_replace('$node.bin$', $value, $configContent);
         }
 
-        if (strpos($configContent, '$node.modules.path$')) {
+        if (strpos($configContent, '$node.module.path$')) {
             $io->write('');
-            $io->write('<error>Configuration node.modules.path is not set in ' . $configFile . '</error>');
+            $io->write('<error>Configuration node.module.path is not set in ' . $configFile . '</error>');
             $value = static::askFor(
                 $io,
-                'Please provide full path to the global node modules directory',
-                'Filled path is not valid node modules directory',
+                'Please provide full path to the global node module directory',
+                'Filled path is not valid node module directory',
                 'detectNodeModuleDir');
-            $configContent = str_replace('$node.modules.path$', $value, $configContent);
+            $configContent = str_replace('$node.module.path$', $value, $configContent);
         }
 
         if ($configContent != $configContentOrig) {
