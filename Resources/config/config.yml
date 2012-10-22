@@ -1,2 +1,7 @@
 mopa_bootstrap:
     navbar: ~
+    form:
+        show_legend: false
+
+parameters:
+  application.name: Imatic IS

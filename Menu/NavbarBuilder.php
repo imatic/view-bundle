@@ -6,17 +6,20 @@ use Knp\Menu\FactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Mopa\Bundle\BootstrapBundle\Navbar\AbstractNavbarMenuBuilder;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class NavbarBuilder extends AbstractNavbarMenuBuilder
 {
     protected $securityContext;
+    protected $translator;
     protected $isLoggedIn;
 
-    public function __construct(FactoryInterface $factory, SecurityContextInterface $securityContext)
+    public function __construct(FactoryInterface $factory, SecurityContextInterface $securityContext, TranslatorInterface $translator)
     {
         parent::__construct($factory);
 
         $this->securityContext = $securityContext;
+        $this->translator = $translator;
 
         $this->isLoggedIn = false;
         if ($this->securityContext->getToken()) {
@@ -35,6 +38,8 @@ class NavbarBuilder extends AbstractNavbarMenuBuilder
 
     public function createMainRightMenu(Request $request)
     {
+        $t = $this->translator;
+
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav pull-right');
 
@@ -45,12 +50,12 @@ class NavbarBuilder extends AbstractNavbarMenuBuilder
 
         if ($this->isLoggedIn) {
             $userMenu = $this->createDropdownMenuItem($menu, $this->securityContext->getToken()->getUser());
-            $userMenu->addChild('Profile', array('route' => 'fos_user_profile_show'));
-            $userMenu->addChild('Change password', array('route' => 'fos_user_change_password'));
+            $userMenu->addChild($t->trans('profile.show.headline', array(), 'ImaticUserBundle'), array('route' => 'fos_user_profile_show'));
+            $userMenu->addChild($t->trans('profile.password.headline', array(), 'ImaticUserBundle'), array('route' => 'fos_user_change_password'));
             $this->addDivider($userMenu);
-            $userMenu->addChild('Logout', array('route' => 'fos_user_security_logout'));
+            $userMenu->addChild($t->trans('layout.logout', array(), 'FOSUserBundle'), array('route' => 'fos_user_security_logout'));
         } else {
-            $menu->addChild('Login', array('route' => 'fos_user_security_login'));
+            $menu->addChild($t->trans('layout.login', array(), 'FOSUserBundle'), array('route' => 'fos_user_security_login'));
         }
 
         return $menu;

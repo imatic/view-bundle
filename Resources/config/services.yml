@@ -5,14 +5,14 @@ services:
         arguments:
             - { leftmenu: @imatic_view.menu.navbar_main=, rightmenu: @imatic_view.menu.navbar_main_right= }
             - {}
-            - { title: "Imatic IS", titleRoute: "homepage", fixedTop: true, isFluid: true }
+            - { title: "Imatic IS", titleRoute: "homepage", fixedTop: true, inverse: true, isFluid: true }
         tags:
             - { name: mopa_bootstrap.navbar, alias: navbar }
 
     imatic_view.menu.navbar_menu_builder:
         class: Imatic\Bundle\ViewBundle\Menu\NavbarBuilder
         scope: request
-        arguments: [ '@knp_menu.factory', '@security.context' ]
+        arguments: [ '@knp_menu.factory', '@security.context', '@translator' ]
 
     imatic_view.menu.navbar_main:
         class: Knp\Menu\MenuItem
@@ -31,3 +31,14 @@ services:
         scope: request
         tags:
             - { name: knp_menu.menu, alias: main }
+
+    imatic_view.twig.extension.debug:
+        class:        Twig_Extension_Debug
+        tags:
+             - { name: 'twig.extension' }
+
+    imatic_view.twig.extension.application:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ApplicationExtension
+        arguments:    [ '@service_container' ]
+        tags:
+             - { name: 'twig.extension' }

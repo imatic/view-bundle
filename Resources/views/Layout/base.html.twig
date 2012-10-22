@@ -1,5 +1,5 @@
-{% from 'ImaticViewBundle:component:flash.html.twig' import session_flash %}
-{#{% spaceless %}#}
+{% from 'MopaBootstrapBundle::flash.html.twig' import session_flash %}
+{% spaceless %}
 <!DOCTYPE html>
 
 <html>
@@ -8,8 +8,6 @@
 
     {% block stylesheets %}
         {% stylesheets
-        'components/bootstrap/less/bootstrap.less'
-        'components/bootstrap/less/responsive.less'
         'css/less/style.less'
         'components/jquery-ui/themes/flick/jquery-ui.css'
         output='css/compiled/style.css' %}
@@ -40,7 +38,7 @@
         {% endjavascripts %}
     {% endblock %}
 
-    <title>{% block title %}Imatic IS{% endblock title %}</title>
+    <title>{% block title %}{{ block('headline') }} - {{ application.name }}{% endblock title %}</title>
 
     {% block metas %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,17 +66,19 @@
         {% block header %}
             {{ mopa_bootstrap_navbar('navbar') }}
         {% endblock %}
+
+        <div class="headline">
+            <div class="container-fluid">
+                <div class="pull-right">{% block headline_side %}{% block page_actions %}{% endblock %}{% endblock %}</div>
+                <h1>{% block headline %}Imatic IS{% endblock %}</h1>
+            </div>
+        </div>
     </header>
 
     <div class="container-fluid content">
         {% block container %}
-            {% block breadcrumbs %}
-            {% endblock %}
-
-            <div class="page-header">
-                <div class="pull-right">{% block header_actions %}{% endblock %}</div>
-                <h1>{% block headline %}Imatic IS{% endblock %}</h1>
-            </div>
+            {#{% block breadcrumbs %}#}
+            {#{% endblock %}#}
 
             {% block flashes %}
                 {% if app.session.flashbag.peekAll|length > 0 %}
@@ -86,8 +86,19 @@
                 {% endif %}
             {% endblock %}
 
-            {% block action %}
-            {% endblock %}
+            <div class="row-fluid">
+                {% set sidebar = block('sidebar') %}
+                {% if sidebar|default(false) %}
+                    <div class="span3">
+                        {{ sidebar|raw }}
+                    </div>
+                {% endif %}
+
+                <div class="span{{ sidebar|default(false) ? 9 : 12 }}">
+                    {% block action %}
+                    {% endblock %}
+                </div>
+            </div>
 
         {% endblock %}
     </div>
@@ -103,4 +114,4 @@
 {% endblock %}
 </body>
 </html>
-{#{% endspaceless %}#}
+{% endspaceless %}
