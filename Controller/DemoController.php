@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * @Route("/demo")
+ * @Route("/imatic/view/demo")
  */
 class DemoController extends Controller
 {
@@ -16,15 +16,6 @@ class DemoController extends Controller
      * @Template()
      */
     public function indexAction()
-    {
-        return array();
-    }
-
-    /**
-     * @Route("/base")
-     * @Template()
-     */
-    public function baseAction()
     {
         return array();
     }

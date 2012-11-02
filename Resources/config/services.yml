@@ -1,36 +1,26 @@
 services:
-    imatic_view.menu.navbar:
-        class: '%mopa_bootstrap.navbar.generic%'
-        scope: request
+    imatic_view.menu.provider:
+        class: Imatic\Bundle\ViewBundle\Menu\Provider
         arguments:
-            - { leftmenu: @imatic_view.menu.navbar_main=, rightmenu: @imatic_view.menu.navbar_main_right= }
-            - {}
-            - { title: "Imatic IS", titleRoute: "homepage", fixedTop: true, inverse: true, isFluid: true }
+          - @service_container
         tags:
-            - { name: mopa_bootstrap.navbar, alias: navbar }
+          - { name: knp_menu.provider }
 
-    imatic_view.menu.navbar_menu_builder:
-        class: Imatic\Bundle\ViewBundle\Menu\NavbarBuilder
-        scope: request
-        arguments: [ '@knp_menu.factory', '@security.context', '@translator' ]
+    imatic_view.menu.factory:
+        class: Imatic\Bundle\ViewBundle\Menu\Factory
+        arguments: [ @knp_menu.factory ]
 
-    imatic_view.menu.navbar_main:
-        class: Knp\Menu\MenuItem
-        factory_service: imatic_view.menu.navbar_menu_builder
-        factory_method: createMainMenu
-        arguments: [ '@request' ]
-        scope: request
+    imatic_view.menu.main:
+        class: Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder
+        arguments: [ @security.context, @translator ]
         tags:
-            - { name: knp_menu.menu, alias: main }
+            - { name: imatic_view.menu, alias: imatic.main }
+            - { name: imatic_view.menu, alias: imatic.main_side, method: getSideMenu }
 
-    imatic_view.menu.navbar_main_right:
-        class: Knp\Menu\MenuItem
-        factory_service: imatic_view.menu.navbar_menu_builder
-        factory_method: createMainRightMenu
-        arguments: [ '@request' ]
-        scope: request
+    imatic_view.menu.demo:
+        class: Imatic\Bundle\ViewBundle\Menu\DemoMenuBuilder
         tags:
-            - { name: knp_menu.menu, alias: main }
+            - { name: imatic_view.menu, alias: imatic.demo }
 
     imatic_view.twig.extension.debug:
         class:        Twig_Extension_Debug

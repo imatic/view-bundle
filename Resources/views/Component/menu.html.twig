@@ -1,0 +1,41 @@
+{% macro navbar(name, options, renderer, config) %}
+    <div class="navbar">
+        <div class="navbar-inner">
+            {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'navbar' })) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro menu(name, options, renderer, config) %}
+    {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'menu' })) }}
+{% endmacro %}
+
+{% macro side(name, options, renderer, config) %}
+    <div class="sidebar-nav">
+        {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'list' })) }}
+    </div>
+{% endmacro %}
+
+{% macro tabs(name, options, renderer, config) %}
+    {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'tabs' })) }}
+{% endmacro %}
+
+{% macro pills(name, options, renderer, config) %}
+    {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'pills' })) }}
+{% endmacro %}
+
+{%- macro _menu(name, options, renderer, config) -%}
+    {% spaceless %}
+        {% set config = config|default({}) %}
+        {% set children_class = [] %}
+        {% if (config.class|default(false)) %}
+            {% set children_class = children_class|merge([config.class]) %}
+        {% endif %}
+        {% if (config.type|default(false)) %}
+            {% set children_class = children_class|merge(['nav nav-' ~ config.type]) %}
+        {% endif %}
+        {{ knp_menu_render(name, options|default([])|merge({'currentClass': 'active', 'currentAsLink': true}), renderer)
+        |replace({'%%children_attribute_class%%': children_class|join(' ')})
+        |raw }}
+    {% endspaceless %}
+{%- endmacro -%}
