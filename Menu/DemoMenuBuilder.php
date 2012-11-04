@@ -18,7 +18,8 @@ class DemoMenuBuilder
 
         $menu->addChild('Home', array('route' => 'homepage'));
         $menu->addChild('About', array('route' => 'homepage'))->setCurrent(true);
-        $menu->addChild('Products', array('route' => 'homepage'));
+        $products = $menu->addChild('Products', array('route' => 'homepage'));
+        $factory->setBadge($products, 2, 'important', true);
         $menu->addChild('Reference', array('route' => 'homepage'))->setAttribute('class', 'disabled');
         $factory->addDivider($menu, true);
         $contact = $factory->createDropdown($menu, 'Contact');

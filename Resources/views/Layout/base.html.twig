@@ -10,7 +10,6 @@
         {% block stylesheets %}
             {% stylesheets
             'css/less/style.less'
-            'components/jquery-ui/themes/flick/jquery-ui.css'
             output='css/compiled/style.css' %}
             <link rel="stylesheet" href="{{ asset_url }}" media=" screen" type="text/css">
             {% endstylesheets %}
@@ -67,17 +66,16 @@
             {% block header %}
                 <div class="navbar navbar-inverse navbar-static-top">
                     <div class="navbar-inner">
-                        <div class="container-fluid">
-                            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </a>
-                            <a class="brand" href="#">{{ application.name }}</a>
-                            <div class="nav-collapse collapse">
-                                {{ menu.menu('imatic.main') }}
-                                {{ menu.menu('imatic.main_side', null, null, { 'class': 'pull-right' }) }}
-                            </div>
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="#">{{ application.name }}</a>
+
+                        <div class="nav-collapse collapse">
+                            {{ menu.menu('imatic.main') }}
+                            {{ menu.menu('imatic.main_side', null, null, { 'class': 'pull-right' }) }}
                         </div>
                     </div>
                 </div>

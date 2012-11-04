@@ -1,7 +1,7 @@
 
 // Mixins
 .header-font {
-  font-family: Dosis;
+  font-family: Dosis, @sansFontFamily;
   font-weight: normal;
   text-transform: uppercase;
 }
@@ -62,7 +62,7 @@
 // Scarfold
 @font-face {
   font-family: Dosis;
-  src: url(/research/imatic-symfony/web/bundles/imaticview/font/Dosis-SemiBold.ttf);
+  src: url(../../bundles/imaticview/font/Dosis-SemiBold.ttf);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -149,6 +149,9 @@ h1, h2, h3, h4, h5, h6 {
 @navbarInverseBackgroundHighlight: lighten(@grayDark, 10%);
 @navbarInverseLinkColor: @white;
 @navbarInverseLinkColorHover: @orange;
+
+@iconSpritePath:          "../../components/bootstrap/img/glyphicons-halflings.png";
+@iconWhiteSpritePath:     "../../components/bootstrap/img/glyphicons-halflings-white.png";
 
 ///////////////////////////////////////////////////
 //

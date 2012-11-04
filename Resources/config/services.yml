@@ -25,10 +25,10 @@ services:
     imatic_view.twig.extension.debug:
         class:        Twig_Extension_Debug
         tags:
-             - { name: 'twig.extension' }
+            - { name: 'twig.extension' }
 
     imatic_view.twig.extension.application:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\ApplicationExtension
         arguments:    [ '@service_container' ]
         tags:
-             - { name: 'twig.extension' }
+            - { name: 'twig.extension' }

@@ -5,6 +5,7 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\NodeInterface;
 use Knp\Menu\ItemInterface;
+use Imatic\Bundle\ViewBundle\Util\String;
 
 class Factory implements FactoryInterface
 {
@@ -66,12 +67,33 @@ class Factory implements FactoryInterface
      */
     public function createDropdown(ItemInterface $rootItem, $title)
     {
-        return $rootItem
+        $dropdown = $rootItem
             ->addChild($title, array('uri' => '#'))
             ->setLinkattribute('class', 'dropdown-toggle')
             ->setLinkattribute('data-toggle', 'dropdown')
             ->setAttribute('class', 'dropdown')
             ->setChildrenAttribute('class', 'dropdown-menu');
+
+        $dropdown->setLabel($dropdown->getLabel() . '<span class="caret"></span>');
+        $dropdown->setExtra('safe_label', true);
+
+        return $dropdown;
+    }
+
+    public function setBadge(ItemInterface $item, $content, $type = null, $right = null)
+    {
+        $badge = sprintf(' <span class="badge badge-%s %s">%s</span>', $type, $right ? ' pull-right' : '', $content);
+        $item
+            ->setExtra('safe_label', true)
+            ->setLabel(String::escape($item->getLabel()) . $badge);
+    }
+
+    public function setIcon(ItemInterface $item, $icon, $right = null)
+    {
+        $icon = sprintf('<i class="icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
+        $item
+            ->setExtra('safe_label', true)
+            ->setLabel(String::escape($item->getLabel()) . $icon);
     }
 
     /**

@@ -34,7 +34,7 @@
         {% if (config.type|default(false)) %}
             {% set children_class = children_class|merge(['nav nav-' ~ config.type]) %}
         {% endif %}
-        {{ knp_menu_render(name, options|default([])|merge({'currentClass': 'active', 'currentAsLink': true}), renderer)
+        {{ knp_menu_render(name, options|default([])|merge({'currentClass': 'active', 'currentAsLink': true, 'allow_safe_labels': true}), renderer)
         |replace({'%%children_attribute_class%%': children_class|join(' ')})
         |raw }}
     {% endspaceless %}
