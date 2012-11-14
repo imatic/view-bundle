@@ -1,0 +1,64 @@
+{%- macro table(data, columns, options) -%}
+    {% spaceless %}
+        {% from 'ImaticViewBundle:Component:util.html.twig' import attributes %}
+        {% set classes =
+        [
+        options.table|default(true) ? 'table' : '',
+        options.bordered|default(false) ? 'table-bordered' : '',
+        options.striped|default(false) ? 'table-striped' : '',
+        options.hover|default(false) ? 'table-hover' : '',
+        options.condensed|default(false) ? 'table-condensed' : ''
+        ]|join(' ') %}
+        <table{{ attributes({'class': classes}) }}>
+            {{ _self.header(columns, options) }}
+            {{ _self.body(data, columns, options) }}
+        </table>
+    {% endspaceless %}
+{%- endmacro -%}
+
+{%- macro header(columns, options) -%}
+    {#{% spaceless %}#}
+    {% if columns|default(false) %}
+        <thead>
+        <tr>
+            {% for column in columns %}
+                <th>
+                    {{ column.label|default(column.name|default(column)) }}
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+    {% endif %}
+    {#{% endspaceless %}#}
+{%- endmacro -%}
+
+{%- macro body(data, columns, options) -%}
+    {#{% spaceless %}#}
+    <tbody>
+    {% for row in data %}
+        {% if loop.first %}
+            {% if columns|default(false) == false %}
+                {% set columns = [] %}
+                {% for item, k in row %}
+                    {% set columns = columns|merge([{'name': item}]) %}
+                {% endfor %}
+            {% endif %}
+            {{ dump(columns) }}
+        {% endif %}
+        {{ _self.row(row, columns) }}
+    {% endfor %}
+    </tbody>
+    {#{% endspaceless %}#}
+{%- endmacro -%}
+
+{%- macro row(row, columns) -%}
+    {#{% spaceless %}#}
+    <tr>
+        {% for cell in columns %}
+            <td>
+                {#{{ attribute(row, cell.name) }}#}
+            </td>
+        {% endfor %}
+    </tr>
+    {#{% endspaceless %}#}
+{%- endmacro -%}

@@ -1,18 +1,7 @@
 {% extends '::base.html.twig' %}
 
-{% block breadcrumbs %}
-    <ul style="margin-bottom: 5px;" class="breadcrumb">
-        <li><a href="#">Home</a> <span class="divider">/</span></li>
-        <li><a href="#">Library</a> <span class="divider">/</span></li>
-        <li class="active">Data</li>
-    </ul>
-{% endblock %}
-
-{% block flashes %}
-    <div class="alert alert-success">
-        <button data-dismiss="alert" class="close" type="button">×</button>
-        <strong>Well done!</strong> You successfully read this important alert message.
-    </div>
+{% block headline %}
+    Imatic View Bundle - templates and components documentaion
 {% endblock %}
 
 {% block sidebar %}
@@ -23,184 +12,13 @@
 {% block action %}
     <div id="demo-content">
 
-    <h2 class="menu">Navigace</h2>
-    {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+    <p class="alert alert-info">Current template is <strong>ImaticViewBundle:Demo:index.html.twig</strong>, look inside
+        for more information.
+    </p>
 
-    <h3 class="menu">Navbar</h3>
-    {{ menu.navbar('imatic.demo') }}
-    <h3 class="menu">Tabs</h3>
-    {{ menu.tabs('imatic.demo') }}
-    <h3 class="menu">Pills</h3>
-    {{ menu.pills('imatic.demo') }}
-    <h3 class="menu">Sidebar</h3>
-    {{ menu.side('imatic.demo') }}
-    <h3 class="menu">Sidebar sub menu</h3>
-    <ul class="nav nav-list">
-        <li class=""><a href="#">Menu 1</a></li>
-        <li class=""><a href="#">Menu 2</a></li>
-        <li class=""><a href="#">Menu 3</a></li>
-        <li class=""><a href="#">Menu 4</a></li>
-        <li class=""><a href="#">Menu 5</a></li>
-        <li class=""><a href="#">Menu 6</a></li>
-        <li class=""><a href="#">Menu 7</a>
-            <ul class="nav nav-list">
-                <li class=""><a href="#">Sub menu 1</a></li>
-                <li class=""><a href="#">Sub menu 2</a></li>
-                <li class=""><a href="#">Sub menu 3</a></li>
-                <li class=""><a href="#">Sub menu 4</a></li>
-            </ul>
-        </li>
-        <li class=""><a href="#">Menu 8</a></li>
-        <li class=""><a href="#">Menu 9</a></li>
-    </ul>
-    <h3 class="menu">Plain menu</h3>
-    {{ menu.menu('imatic.demo') }}
+    <h2 class="menu">Scarfolding</h2>
 
-    <h2 class="menu">Typografie</h2>
-
-    <h3 class="menu">Nadpisy</h3>
-
-    <div class="bs-docs-example">
-        <h1>h1. Heading 1</h1>
-
-        <h2>h2. Heading 2</h2>
-
-        <h3>h3. Heading 3</h3>
-        <h4>h4. Heading 4</h4>
-        <h5>h5. Heading 5</h5>
-        <h6>h6. Heading 6</h6>
-    </div>
-
-    <h3 class="menu">Odstavce</h3>
-
-    <div class="bs-docs-example">
-        <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient
-            montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-
-        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla
-            non
-            metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio
-            sem
-            nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
-
-        <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget
-            metus.
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
-    </div>
-
-    <div class="bs-docs-example">
-        <p class="muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
-
-        <p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
-
-        <p class="text-error">Donec ullamcorper nulla non metus auctor fringilla.</p>
-
-        <p class="text-info">Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.</p>
-
-        <p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-    </div>
-
-    <div class="bs-docs-example">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="bs-docs-example">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td rowspan="2">1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@TwBootstrap</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="bs-docs-example">
-        <table class="table table-condensed">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <h3 class="menu">Grid system</h3>
 
     <div class="bs-docs-example">
         <div class="row-fluid">
@@ -240,6 +58,178 @@
         </div>
     </div>
 
+    <h2 class="menu">Base css</h2>
+
+    <h3 class="menu">Typography</h3>
+
+    <h4>Headings</h4>
+
+    <div class="bs-docs-example">
+        <h1>h1. Heading 1</h1>
+
+        <h2>h2. Heading 2</h2>
+
+        <h3>h3. Heading 3</h3>
+        <h4>h4. Heading 4</h4>
+        <h5>h5. Heading 5</h5>
+        <h6>h6. Heading 6</h6>
+    </div>
+
+    <h4>Paragraphs</h4>
+
+    <div class="bs-docs-example">
+        <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient
+            montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
+
+        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla
+            non
+            metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio
+            sem
+            nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+        <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget
+            metus.
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+    </div>
+
+    <div class="bs-docs-example">
+        <p class="muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+
+        <p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
+
+        <p class="text-error">Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+        <p class="text-info">Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.</p>
+
+        <p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+    </div>
+
+    <h3 class="menu">Tables</h3>
+
+    <div class="bs-docs-example">
+
+        {% import 'ImaticViewBundle:Component:table.html.twig' as table %}
+
+        {% set table_data = [
+        { 'id': 1, 'name': 'Lister', 'active': true, age: 28 },
+        { 'id': 2, 'name': 'Rimmer', 'active': false, age: 32 },
+        { 'id': 3, 'name': 'Kriten', 'active': true, age: 345 },
+        { 'id': 4, 'name': 'Cat', 'active': true, age: 12 }
+        ] %}
+
+        <hr>
+        {{ table.table(table_data) }}
+        {{ table.table(table_data, ['id', 'name', 'active', 'age']) }}
+        {{ table.table(table_data, [{'name':'id','label':'Id'}, {'name':'name'}, {'name':'active','type':'bool'}, {'name':'age', 'type':'int'}]) }}
+        <hr>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Bordered table</h4>
+
+    <div class="bs-docs-example">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td rowspan="2">1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@TwBootstrap</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Condensed table</h4>
+
+    <div class="bs-docs-example">
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="menu">Forms</h3>
+
     <div class="bs-docs-example">
         <form class="bs-docs-example form-horizontal">
             <legend>Legend</legend>
@@ -268,16 +258,30 @@
         </form>
     </div>
 
+    <h3 class="menu">Buttons</h3>
+
     <div class="bs-docs-example">
         <button class="btn" type="button">Default</button>
+        <br>
         <button class="btn btn-primary" type="button">Primary</button>
+        <br>
         <button class="btn btn-info" type="button">Info</button>
+        <br>
         <button class="btn btn-success" type="button">Success</button>
+        <br>
         <button class="btn btn-warning" type="button">Warning</button>
+        <br>
         <button class="btn btn-danger" type="button">Danger</button>
+        <br>
         <button class="btn btn-inverse" type="button">Inverse</button>
+        <br>
         <button class="btn btn-link" type="button">Link</button>
+        <br>
     </div>
+
+    <h2 class="menu">Components</h2>
+
+    <h3 class="menu">Dropdown</h3>
 
     <div class="bs-docs-example">
         <div class="dropdown clearfix">
@@ -292,78 +296,42 @@
         </div>
     </div>
 
-    <div class="bs-docs-example">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Messages</a></li>
-        </ul>
-    </div>
+    <h3 class="menu">Navs</h3>
 
-    <div class="bs-docs-example">
-        <ul class="nav nav-pills">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Messages</a></li>
-        </ul>
-    </div>
+    {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
 
-    <div class="bs-docs-example">
-        <div class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a href="#" class="brand">Title</a>
+    <h4>Tabs</h4>
+    {{ menu.tabs('imatic.demo') }}
+    <h4>Pills</h4>
+    {{ menu.pills('imatic.demo') }}
+    <h4>Sidebar</h4>
+    {{ menu.side('imatic.demo') }}
+    <h4>Sidebar sub menu</h4>
+    <ul class="nav nav-list">
+        <li class=""><a href="#">Menu 1</a></li>
+        <li class=""><a href="#">Menu 2</a></li>
+        <li class=""><a href="#">Menu 3</a></li>
+        <li class=""><a href="#">Menu 4</a></li>
+        <li class=""><a href="#">Menu 5</a></li>
+        <li class=""><a href="#">Menu 6</a></li>
+        <li class=""><a href="#">Menu 7</a>
+            <ul class="nav nav-list">
+                <li class=""><a href="#">Sub menu 1</a></li>
+                <li class=""><a href="#">Sub menu 2</a></li>
+                <li class=""><a href="#">Sub menu 3</a></li>
+                <li class=""><a href="#">Sub menu 4</a></li>
+            </ul>
+        </li>
+        <li class=""><a href="#">Menu 8</a></li>
+        <li class=""><a href="#">Menu 9</a></li>
+    </ul>
+    <h4>Plain menu</h4>
+    {{ menu.menu('imatic.demo') }}
 
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a href="#">Link</a></li>
-                            <li><a href="#">Link</a></li>
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b
-                                        class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li class="nav-header">Nav header</li>
-                                    <li><a href="#">Separated link</a></li>
-                                    <li><a href="#">One more separated link</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <form action="" class="navbar-search pull-left">
-                            <input type="text" placeholder="Search" class="search-query span2">
-                        </form>
-                        <ul class="nav pull-right">
-                            <li><a href="#">Link</a></li>
-                            <li class="divider-vertical"></li>
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b
-                                        class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /.nav-collapse -->
-                </div>
-            </div>
-            <!-- /navbar-inner -->
-        </div>
-        <!-- /navbar -->
-    </div>
+    <h3 class="menu">Navbar</h3>
+    {{ menu.navbar('imatic.demo') }}
+
+    <h3 class="menu">Breadcrumbs</h3>
 
     <div class="bs-docs-example">
         <ul style="margin-bottom: 5px;" class="breadcrumb">
@@ -372,6 +340,8 @@
             <li class="active">Data</li>
         </ul>
     </div>
+
+    <h3 class="menu">Pagination</h3>
 
     <div class="bs-docs-example">
         <div class="pagination">
@@ -394,23 +364,32 @@
         </ul>
     </div>
 
-    <div class="bs-docs-example">
-        <span class="label">Default</span>
-        <span class="label label-success">Success</span>
-        <span class="label label-warning">Warning</span>
-        <span class="label label-important">Important</span>
-        <span class="label label-info">Info</span>
-        <span class="label label-inverse">Inverse</span>
-    </div>
+    <h3 class="menu">Labels and badges</h3>
+
+    <h4>Labels</h4>
 
     <div class="bs-docs-example">
-        <span class="badge">1</span>
-        <span class="badge badge-success">2</span>
-        <span class="badge badge-warning">4</span>
-        <span class="badge badge-important">6</span>
-        <span class="badge badge-info">8</span>
-        <span class="badge badge-inverse">10</span>
+        <span class="label">Default</span><br>
+        <span class="label label-success">Success</span><br>
+        <span class="label label-warning">Warning</span><br>
+        <span class="label label-important">Important</span><br>
+        <span class="label label-info">Info</span><br>
+        <span class="label label-inverse">Inverse</span><br>
     </div>
+
+    <h4>Badges</h4>
+
+    <div class="bs-docs-example">
+        <span class="badge">1</span><br>
+        <span class="badge badge-success">2</span><br>
+        <span class="badge badge-warning">4</span><br>
+        <span class="badge badge-important">6</span><br>
+        <span class="badge badge-info">8</span><br>
+        <span class="badge badge-inverse">10</span><br>
+    </div>
+
+    <h3 class="menu">Typography</h3>
+    <h4>Hero unit</h4>
 
     <div class="bs-docs-example">
         <div class="hero-unit">
@@ -423,6 +402,8 @@
         </div>
     </div>
 
+    <h4>Page header</h4>
+
     <div class="bs-docs-example">
         <div class="page-header">
             <h1>Example page header
@@ -430,6 +411,8 @@
             </h1>
         </div>
     </div>
+
+    <h3 class="menu">Thumbnails</h3>
 
     <div class="bs-docs-example">
         <ul class="thumbnails">
@@ -456,6 +439,8 @@
         </ul>
     </div>
 
+    <h3 class="menu">Messages/alerts</h3>
+
     <div class="bs-docs-example">
         <div class="alert alert-success">
             <button data-dismiss="alert" class="close" type="button">×</button>
@@ -481,11 +466,16 @@
         </div>
     </div>
 
+    <h3 class="menu">Misc</h3>
+    <h4>Well</h4>
+
     <div class="bs-docs-example">
         <div class="well">
             Look, I'm in a well!
         </div>
     </div>
+
+    <h4>Modal</h4>
 
     <div style="background-color: #f5f5f5;" class="bs-docs-example">
         <div style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;"
