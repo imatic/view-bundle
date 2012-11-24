@@ -53,7 +53,7 @@ class Provider implements MenuProviderInterface
      * @return \Knp\Menu\ItemInterface
      * @throws \InvalidArgumentException if the menu does not exists
      */
-    function get($name, array $options = array())
+    public function get($name, array $options = array())
     {
         if (!isset($this->menuCollection[$name])) {
             if (!isset($this->menuInfoCollection[$name])) {
@@ -64,7 +64,8 @@ class Provider implements MenuProviderInterface
             $service = $menuInfo['id'];
             $method = isset($menuInfo['method']) ? $menuInfo['method'] : 'getMenu';
             $factory = $this->container->get('imatic_view.menu.factory');
-            $menu = $this->container->get($service)->$method($factory);
+            $helper = $this->container->get('imatic_view.menu.helper');
+            $menu = $this->container->get($service)->$method($factory, $helper);
 
             $event = new ConfigureMenuEvent($menu, $factory, $name);
             $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.' . $name, $event);
@@ -82,7 +83,7 @@ class Provider implements MenuProviderInterface
      * @param array $options
      * @return bool
      */
-    function has($name, array $options = array())
+    public function has($name, array $options = array())
     {
         return isset($this->menuInfoCollection[$name]);
     }

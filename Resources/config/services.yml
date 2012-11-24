@@ -1,4 +1,5 @@
 services:
+    # Menu
     imatic_view.menu.provider:
         class: Imatic\Bundle\ViewBundle\Menu\Provider
         arguments:
@@ -10,9 +11,12 @@ services:
         class: Imatic\Bundle\ViewBundle\Menu\Factory
         arguments: [ @knp_menu.factory ]
 
+    imatic_view.menu.helper:
+        class: Imatic\Bundle\ViewBundle\Menu\Helper
+        arguments: [ @security.context, @translator ]
+
     imatic_view.menu.main:
         class: Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder
-        arguments: [ @security.context, @translator ]
         tags:
             - { name: imatic_view.menu, alias: imatic.main }
             - { name: imatic_view.menu, alias: imatic.main_side, method: getSideMenu }
@@ -22,6 +26,7 @@ services:
         tags:
             - { name: imatic_view.menu, alias: imatic.demo }
 
+    # Twig
     imatic_view.twig.extension.debug:
         class:        Twig_Extension_Debug
         tags:

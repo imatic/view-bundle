@@ -3,43 +3,16 @@
 namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Imatic\Bundle\ViewBundle\Menu\Factory;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Imatic\Bundle\ViewBundle\Menu\Helper;
 
 class MainMenuBuilder
 {
     /**
-     * @var SecurityContextInterface
-     */
-    protected $securityContext;
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-    /**
-     * @var boolean
-     */
-    protected $loggedIn;
-
-    /**
-     * @param SecurityContextInterface $securityContext
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(SecurityContextInterface $securityContext, TranslatorInterface $translator)
-    {
-        $this->securityContext = $securityContext;
-        $this->translator = $translator;
-        $this->isLoggedIn = false;
-        if ($this->securityContext->getToken()) {
-            $this->isLoggedIn = $this->securityContext->isGranted('IS_AUTHENTICATED_FULLY');
-        }
-    }
-
-    /**
      * @param Factory $factory
+     * @param Helper $helper
      * @return \Knp\Menu\ItemInterface
      */
-    public function getMenu($factory)
+    public function getMenu($factory, $helper)
     {
         $menu = $factory->createRoot();
 
@@ -48,12 +21,13 @@ class MainMenuBuilder
 
     /**
      * @param Factory $factory
+     * @param Helper $helper
      * @return \Knp\Menu\ItemInterface
      */
-    public function getSideMenu($factory)
+    public function getSideMenu($factory, $helper)
     {
         $menu = $factory->createRoot();
-        $menu->addChild('Settings', array('route' => 'homepage'));
+        $menu->addChild('Settings', array('uri' => 'fos_user_login'));
         $menu->addChild('Help', array('route' => 'homepage'));
 
         return $menu;
