@@ -6,6 +6,7 @@ use Knp\Menu\ItemInterface;
 use Imatic\Bundle\ViewBundle\Util\String;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class Helper
 {
@@ -29,34 +30,6 @@ class Helper
     }
 
     /**
-     * Returns true if current user is logged
-     *
-     * @return bool
-     */
-    public function isUserLogged()
-    {
-        $logged = false;
-        if ($this->securityContext->getToken()) {
-            $logged = $this->securityContext->isGranted('IS_AUTHENTICATED_FULLY');
-        }
-
-        return $logged;
-    }
-
-    /**
-     * Checks if the attributes are granted against the current authentication token and optionally supplied object.
-     *
-     * @param array $attributes
-     * @param mixed $object
-     *
-     * @return Boolean
-     */
-    public function isUserGranted($attributes, $object = null)
-    {
-        $this->securityContext->isGranted($attributes, $object);
-    }
-
-    /**
      * Adds a vertical/horizontal divider
      *
      * @param ItemInterface $item
@@ -72,25 +45,45 @@ class Helper
     }
 
     /**
-     * Creates a drop down menu
+     * Adds a menu header
      *
-     * @param ItemInterface $rootItem
-     * @param string $title
+     * @param ItemInterface $item
+     * @param $text
      * @return ItemInterface
      */
-    public function createDropdown(ItemInterface $rootItem, $title)
+    public function addHeader(ItemInterface $item, $text)
     {
-        $dropdown = $rootItem
-            ->addChild($title, array('uri' => '#'))
+        return $item->addChild('header_' . rand())
+            ->setLabel($text)
+            ->setAttribute('class', 'nav-header');
+    }
+
+    /**
+     * Creates a drop down menu item from item
+     *
+     * @param ItemInterface $dropDownItem
+     */
+    public function setDropdown(ItemInterface $dropDownItem)
+    {
+        $dropDownItem
+            ->setUri('#')
             ->setLinkattribute('class', 'dropdown-toggle')
             ->setLinkattribute('data-toggle', 'dropdown')
             ->setAttribute('class', 'dropdown')
             ->setChildrenAttribute('class', 'dropdown-menu');
 
-        $dropdown->setLabel($dropdown->getLabel() . '<span class="caret"></span>');
-        $dropdown->setExtra('safe_label', true);
+        $dropDownItem->setLabel($dropDownItem->getLabel() . '<span class="caret"></span>');
+        $dropDownItem->setExtra('safe_label', true);
+    }
 
-        return $dropdown;
+    /**
+     * Creates a sub menu item from item
+     *
+     * @param ItemInterface $item
+     */
+    public function setSubmenu(ItemInterface $item)
+    {
+        $item->setChildrenAttribute('class', 'nav nav-list');
     }
 
     public function setBadge(ItemInterface $item, $content, $type = null, $right = null)
@@ -148,5 +141,46 @@ class Helper
     public function getLocale()
     {
         $this->translator->getLocale();
+    }
+
+    /**
+     * Returns true if current user is logged
+     *
+     * @return bool
+     */
+    public function isUserLogged()
+    {
+        $logged = false;
+        if ($this->securityContext->getToken()) {
+            $logged = $this->securityContext->isGranted('IS_AUTHENTICATED_FULLY');
+        }
+
+        return $logged;
+    }
+
+    /**
+     * @return null|UserInterface
+     */
+    public function getUser()
+    {
+        $user = null;
+        if ($this->securityContext->getToken()) {
+            $user = $this->securityContext->getToken()->getUser();
+        }
+
+        return $user;
+    }
+
+    /**
+     * Checks if the attributes are granted against the current authentication token and optionally supplied object.
+     *
+     * @param array $attributes
+     * @param mixed $object
+     *
+     * @return Boolean
+     */
+    public function isUserGranted($attributes, $object = null)
+    {
+        return $this->securityContext->isGranted($attributes, $object);
     }
 }

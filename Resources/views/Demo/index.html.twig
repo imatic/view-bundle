@@ -116,116 +116,22 @@
         { 'id': 3, 'name': 'Kriten', 'active': true, age: 345 },
         { 'id': 4, 'name': 'Cat', 'active': true, age: 12 }
         ] %}
+        {% set table_columns = [
+        {'name':'id','label':'Id'},
+        {'name':'name'},
+        {'name':'active','type':'bool'},
+        {'name':'age', 'type':'int'}
+        ] %}
 
-        <hr>
+
+        <h4>Plain table</h4>
         {{ table.table(table_data) }}
-        {{ table.table(table_data, ['id', 'name', 'active', 'age']) }}
-        {{ table.table(table_data, [{'name':'id','label':'Id'}, {'name':'name'}, {'name':'active','type':'bool'}, {'name':'age', 'type':'int'}]) }}
-        <hr>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h4>Bordered table</h4>
-
-    <div class="bs-docs-example">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td rowspan="2">1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@TwBootstrap</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h4>Condensed table</h4>
-
-    <div class="bs-docs-example">
-        <table class="table table-condensed">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
+        <h4>Standard table</h4>
+        {{ table.table(table_data, table_columns) }}
+        <h4>Bordered table</h4>
+        {{ table.table(table_data, table_columns, { 'bordered': true }) }}
+        <h4>Condensed table</h4>
+        {{ table.table(table_data, table_columns, { 'condensed': true }) }}
     </div>
 
     <h3 class="menu">Forms</h3>
@@ -305,28 +211,9 @@
     <h4>Pills</h4>
     {{ menu.pills('imatic.demo') }}
     <h4>Sidebar</h4>
-    {{ menu.side('imatic.demo') }}
-    <h4>Sidebar sub menu</h4>
-    <ul class="nav nav-list">
-        <li class=""><a href="#">Menu 1</a></li>
-        <li class=""><a href="#">Menu 2</a></li>
-        <li class=""><a href="#">Menu 3</a></li>
-        <li class=""><a href="#">Menu 4</a></li>
-        <li class=""><a href="#">Menu 5</a></li>
-        <li class=""><a href="#">Menu 6</a></li>
-        <li class=""><a href="#">Menu 7</a>
-            <ul class="nav nav-list">
-                <li class=""><a href="#">Sub menu 1</a></li>
-                <li class=""><a href="#">Sub menu 2</a></li>
-                <li class=""><a href="#">Sub menu 3</a></li>
-                <li class=""><a href="#">Sub menu 4</a></li>
-            </ul>
-        </li>
-        <li class=""><a href="#">Menu 8</a></li>
-        <li class=""><a href="#">Menu 9</a></li>
-    </ul>
-    <h4>Plain menu</h4>
-    {{ menu.menu('imatic.demo') }}
+    {{ menu.side('imatic.demo_sub') }}
+    <h4>Menu from template</h4>
+    {{ menu.tabs([{'name': 'Item 1', 'uri': 'http://www.imatic.cz'}, {'name': 'Item 2', 'route': 'homepage'}, {'name': 'Item 3', 'uri': '#'}]) }}
 
     <h3 class="menu">Navbar</h3>
     {{ menu.navbar('imatic.demo') }}
@@ -441,29 +328,14 @@
 
     <h3 class="menu">Messages/alerts</h3>
 
+    {% import 'ImaticViewBundle:Component:flash.html.twig' as flash %}
+
     <div class="bs-docs-example">
-        <div class="alert alert-success">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            <strong>Well done!</strong> You successfully read this important alert message.
-        </div>
-
-        <div class="alert alert-error">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            <strong>Oh snap!</strong> Change a few things up and try submitting again.
-        </div>
-
-        <div class="alert alert-block">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            <h4>Warning!</h4>
-
-            <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent
-                commodo cursus magna, vel scelerisque nisl consectetur et.</p>
-        </div>
-
-        <div class="alert alert-info">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
-        </div>
+        {{ flash.message('success', '<strong>Well done!</strong> You successfully read this important alert message.', true, true) }}
+        {{ flash.message('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.', true, true) }}
+        {{ flash.block_message('alert', 'Warning!', 'Best check yo self, you\'re not looking too good.
+        Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.') }}
+        {{ flash.message('info', 'Heads up! This alert needs your attention, but it\'s not super important.') }}
     </div>
 
     <h3 class="menu">Misc</h3>

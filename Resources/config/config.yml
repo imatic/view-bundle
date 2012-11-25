@@ -1,5 +1,4 @@
 mopa_bootstrap:
-    navbar: ~
     form:
         show_legend: false
 

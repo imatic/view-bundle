@@ -36,29 +36,41 @@
     {#{% spaceless %}#}
     <tbody>
     {% for row in data %}
-        {% if loop.first %}
-            {% if columns|default(false) == false %}
-                {% set columns = [] %}
-                {% for item, k in row %}
-                    {% set columns = columns|merge([{'name': item}]) %}
-                {% endfor %}
-            {% endif %}
-            {{ dump(columns) }}
-        {% endif %}
-        {{ _self.row(row, columns) }}
+        {{ _self.row(row, columns, options) }}
     {% endfor %}
     </tbody>
     {#{% endspaceless %}#}
 {%- endmacro -%}
 
-{%- macro row(row, columns) -%}
+{%- macro row(row, columns, options) -%}
     {#{% spaceless %}#}
     <tr>
-        {% for cell in columns %}
-            <td>
-                {#{{ attribute(row, cell.name) }}#}
-            </td>
-        {% endfor %}
+        {% if columns is defined and columns|length > 0 %}
+            {% for cell in columns %}
+                {% set type = cell.type|default('string') %}
+                <td class="{{ type }}">
+                    {{ attribute(_self, 'cell_' ~ type, [row[cell.name], cell, row, options]) }}
+                </td>
+            {% endfor %}
+        {% else %}
+            {% for cell in row %}
+                <td>
+                    {{ cell }}
+                </td>
+            {% endfor %}
+        {% endif %}
     </tr>
     {#{% endspaceless %}#}
 {%- endmacro -%}
+
+{% macro cell_int(value, cell, row, options) %}
+    {{ value }}
+{% endmacro %}
+
+{% macro cell_string(value, cell, row, options) %}
+    {{ value }}
+{% endmacro %}
+
+{% macro cell_bool(value, cell, row, options) %}
+    {{ value ? 'Yes' : 'No' }}
+{% endmacro %}

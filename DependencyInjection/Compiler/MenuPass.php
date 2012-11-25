@@ -8,7 +8,7 @@ class MenuPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('imatic_view.menu.provider');
+        $definition = $container->getDefinition('imatic_view.menu.provider_container');
 
         foreach ($container->findTaggedServiceIds('imatic_view.menu') as $id => $tags) {
             foreach ($tags as $attributes) {

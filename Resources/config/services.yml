@@ -1,7 +1,7 @@
 services:
     # Menu
-    imatic_view.menu.provider:
-        class: Imatic\Bundle\ViewBundle\Menu\Provider
+    imatic_view.menu.provider_container:
+        class: Imatic\Bundle\ViewBundle\Menu\ContainerProvider
         arguments:
           - @service_container
         tags:
@@ -17,6 +17,7 @@ services:
 
     imatic_view.menu.main:
         class: Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder
+        arguments: [ @imatic_view.menu.provider_container ]
         tags:
             - { name: imatic_view.menu, alias: imatic.main }
             - { name: imatic_view.menu, alias: imatic.main_side, method: getSideMenu }
@@ -25,6 +26,7 @@ services:
         class: Imatic\Bundle\ViewBundle\Menu\DemoMenuBuilder
         tags:
             - { name: imatic_view.menu, alias: imatic.demo }
+            - { name: imatic_view.menu, alias: imatic.demo_sub, method: getMenuSub }
 
     # Twig
     imatic_view.twig.extension.debug:
@@ -34,6 +36,12 @@ services:
 
     imatic_view.twig.extension.application:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\ApplicationExtension
-        arguments:    [ '@service_container' ]
+        arguments:    [ @service_container ]
+        tags:
+            - { name: 'twig.extension' }
+
+    imatic_view.twig.extension.menu:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension
+        arguments:    [ @imatic_view.menu.factory, @knp_menu.renderer.twig ]
         tags:
             - { name: 'twig.extension' }

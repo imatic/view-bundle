@@ -6,9 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Imatic\Bundle\ViewBundle\Event\ConfigureMenuEvent;
-use Imatic\Bundle\ViewBundle\Event\ViewEvents;
 
-class Provider implements MenuProviderInterface
+class ContainerProvider implements MenuProviderInterface
 {
     /**
      * @var ContainerInterface
@@ -50,7 +49,7 @@ class Provider implements MenuProviderInterface
      *
      * @param string $name
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      * @throws \InvalidArgumentException if the menu does not exists
      */
     public function get($name, array $options = array())

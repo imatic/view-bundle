@@ -1,41 +1,51 @@
-{% macro navbar(name, options, renderer, config) %}
+{% macro navbar(menu, options, renderer, config) %}
     <div class="navbar">
         <div class="navbar-inner">
-            {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'navbar' })) }}
+            {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar' })) }}
         </div>
     </div>
 {% endmacro %}
 
-{% macro menu(name, options, renderer, config) %}
-    {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'menu' })) }}
+{% macro menu(menu, options, renderer, config) %}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'menu' })) }}
 {% endmacro %}
 
-{% macro side(name, options, renderer, config) %}
+{% macro side(menu, options, renderer, config) %}
     <div class="sidebar-nav">
-        {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'list' })) }}
+        {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'list' })) }}
     </div>
 {% endmacro %}
 
-{% macro tabs(name, options, renderer, config) %}
-    {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'tabs' })) }}
+{% macro tabs(menu, options, renderer, config) %}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'tabs' })) }}
 {% endmacro %}
 
-{% macro pills(name, options, renderer, config) %}
-    {{ _self._menu(name, options, renderer, config|default({})|merge({ 'type': 'pills' })) }}
+{% macro pills(menu, options, renderer, config) %}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'pills' })) }}
 {% endmacro %}
 
-{%- macro _menu(name, options, renderer, config) -%}
+{%- macro _menu(menu, options, renderer, config) -%}
     {% spaceless %}
-        {% set config = config|default({}) %}
-        {% set children_class = [] %}
-        {% if (config.class|default(false)) %}
-            {% set children_class = children_class|merge([config.class]) %}
+        {#{% set config = config|default({}) %}#}
+        {% set children_class = '' %}
+        {% if config.class is defined %}
+            {% set children_class = children_class ~ ' ' ~ config.class %}
         {% endif %}
-        {% if (config.type|default(false)) %}
-            {% set children_class = children_class|merge(['nav nav-' ~ config.type]) %}
+        {% if config.type is defined %}
+            {% set children_class = children_class  ~ ' ' ~  'nav nav-' ~ config.type %}
         {% endif %}
-        {{ knp_menu_render(name, options|default([])|merge({'currentClass': 'active', 'currentAsLink': true, 'allow_safe_labels': true}), renderer)
-        |replace({'%%children_attribute_class%%': children_class|join(' ')})
-        |raw }}
+        {% set options = options|default([])|merge(
+        {
+        'currentClass': 'active',
+        'currentAsLink': true,
+        'allow_safe_labels': true,
+        'template': 'ImaticViewBundle:Component:knp_menu.html.twig',
+        'menu_class': children_class}
+        ) %}
+        {% if menu is iterable %}
+            {{ imatic_view_menu_render_array(menu, options) }}
+        {% else %}
+            {{ knp_menu_render(menu, options, renderer) }}
+        {% endif %}
     {% endspaceless %}
 {%- endmacro -%}

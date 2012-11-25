@@ -2,23 +2,58 @@
 
 namespace Imatic\Bundle\ViewBundle\Menu;
 
-use Knp\Menu\MenuFactory;
 use Knp\Menu\ItemInterface;
+use Knp\Menu\NodeInterface;
+use Knp\Menu\FactoryInterface;
 
-class Factory extends MenuFactory
+class Factory implements FactoryInterface
 {
     /**
-     * Creates a root menu item
+     * @var FactoryInterface
+     */
+    protected $factory;
+
+    /**
+     * @param FactoryInterface $factory
+     */
+    public function __construct(FactoryInterface $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    /**
+     * Creates a menu item
      *
      * @param string $name
      * @param array $options
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function createRoot($name = 'root', array $options = array())
+    function createItem($name, array $options = array())
     {
-        $item = $this->createItem($name, $options);
-        $item->setChildrenAttribute('class', '%%children_attribute_class%%');
+        return $this->factory->createItem($name, $options);
+    }
 
-        return $item;
+    /**
+     * Create a menu item from a NodeInterface
+     *
+     * @param \Knp\Menu\NodeInterface $node
+     * @return \Knp\Menu\ItemInterface
+     */
+    function createFromNode(NodeInterface $node)
+    {
+        return $this->factory->createFromNode($node);
+    }
+
+    /**
+     * Creates a new menu item (and tree if $data['children'] is set).
+     *
+     * The source is an array of data that should match the output from MenuItem->toArray().
+     *
+     * @param  array $data The array of data to use as a source for the menu tree
+     * @return \Knp\Menu\ItemInterface
+     */
+    function createFromArray(array $data)
+    {
+        return $this->factory->createFromArray($data);
     }
 }

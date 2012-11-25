@@ -4,9 +4,23 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Imatic\Bundle\ViewBundle\Menu\Factory;
 use Imatic\Bundle\ViewBundle\Menu\Helper;
+use Imatic\Bundle\ViewBundle\Menu\ContainerProvider;
 
 class MainMenuBuilder
 {
+    /**
+     * @var ContainerProvider
+     */
+    protected $provider;
+
+    /**
+     * @param ContainerProvider $provider
+     */
+    public function __construct(ContainerProvider $provider)
+    {
+        $this->provider = $provider;
+    }
+
     /**
      * @param Factory $factory
      * @param Helper $helper
@@ -14,7 +28,7 @@ class MainMenuBuilder
      */
     public function getMenu($factory, $helper)
     {
-        $menu = $factory->createRoot();
+        $menu = $factory->createItem('root');
 
         return $menu;
     }
@@ -26,9 +40,25 @@ class MainMenuBuilder
      */
     public function getSideMenu($factory, $helper)
     {
-        $menu = $factory->createRoot();
-        $menu->addChild('Settings', array('uri' => 'fos_user_login'));
-        $menu->addChild('Help', array('route' => 'homepage'));
+        $menu = $factory->createItem('root');
+
+        if ($helper->isUserLogged()) {
+            // Admin menu
+            if ($this->provider->has('imatic.admin')) {
+                $menu->addChild($this->provider->get('imatic.admin'));
+            }
+            // User menu - user functions
+            if ($this->provider->has('imatic.user')) {
+                $helper->addDivider($menu, true);
+                $menu->addChild($this->provider->get('imatic.user'));
+            }
+        } else {
+            // User menu - login link
+            if ($this->provider->has('imatic.user_anon')) {
+                $helper->addDivider($menu, true);
+                $menu->addChild($this->provider->get('imatic.user_anon'));
+            }
+        }
 
         return $menu;
     }
