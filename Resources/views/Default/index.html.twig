@@ -1,18 +1,45 @@
 {% extends '::base.html.twig' %}
 
 {% block headline %}
-{{ 'Homepage'|trans({}, 'ImaticViewBundle') }}
+    {{ 'Homepage'|trans({}, 'ImaticViewBundle') }}
 {% endblock %}
 
 {% block container %}
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Documentation</li>
+                    <li><a href="https://dev.imatic.cz/imatic-vyvoj/wiki/Platform">Platform</a></li>
+                    <li><a href="{{ path('imatic_view_demo_index') }}">Templates and components</a></li>
+                    <li class="nav-header">Quick links</li>
+                    <li><a href="{{ path('sonata_admin_dashboard') }}">Admin dashboard</a></li>
+                    <li><a href="{{ path('fos_user_profile_show') }}">User profile</a></li>
+                    <li><a href="{{ path('admin_bundle_user_user_list') }}">User administration</a></li>
+                    <li><a href="{{ path('admin_bundle_user_group_list') }}">Group administration</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="span9">
+            <div class="hero-unit">
+                <h1>Imatic IS Platform!</h1>
 
-    <br>
-    <div class="hero-unit">
-        <h1>Imatic IS Platform!</h1>
+                <p>Welcome in Imatic IS Platform default page</p>
 
-        <p>Welcome in Imatic IS Platform default page</p>
-
-        <p><a class="btn btn-primary btn-large">Learn more</a></p>
+                <h3>What next?</h3>
+                <ul>
+                    <li>Create an application user bundle <code>App/Bundle/UserBundle</code>
+                    </li>
+                    <li>Copy an Imatic user entities <code>Imatic/Bundle/UserBundle/Resources/app/Entity &rarr;
+                        App/Bundle/UserBundle/Entity</code>
+                    </li>
+                    <li>Update your local configuration in <code>app/config/parameters.yml</code></li>
+                    <li>Create a database <code>./app/console doctrine:database:create</code></li>
+                    <li>Create a database schema <code>./app/console doctrine:schema:create</code></li>
+                    <li>Load a database fixtures <code>./app/console doctrine:fixtures:load</code></li>
+                    <li>Start your project!</li>
+                </ul>
+            </div>
+        </div>
     </div>
-
 {% endblock %}
