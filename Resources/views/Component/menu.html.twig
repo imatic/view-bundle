@@ -1,9 +1,9 @@
 {% macro navbar(menu, options, renderer, config) %}
-    <div class="navbar">
+    <nav class="navbar">
         <div class="navbar-inner">
             {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar' })) }}
         </div>
-    </div>
+    </nav>
 {% endmacro %}
 
 {% macro menu(menu, options, renderer, config) %}
@@ -11,9 +11,9 @@
 {% endmacro %}
 
 {% macro side(menu, options, renderer, config) %}
-    <div class="sidebar-nav">
+    <nav class="sidebar-nav">
         {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'list' })) }}
-    </div>
+    </nav>
 {% endmacro %}
 
 {% macro tabs(menu, options, renderer, config) %}
