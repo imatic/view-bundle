@@ -13,7 +13,8 @@
         <h3>What next?</h3>
         <h4>User &amp; security</h4>
         <ul>
-            <li>Create an application user bundle <code>App/Bundle/UserBundle</code>
+            <li>Create an application user bundle <code>app/console generate:bundle --namespace=App/Bundle/UserBundle
+                --dir=src --no-interaction</code>
                 (may extends ImaticUserBundle)
             </li>
             <li>Copy Imatic user entities and fixtures <code>Imatic/Bundle/UserBundle/Resources/app/*</code>
@@ -29,7 +30,6 @@
         <ul>
             <li>Update your local configuration in <code>app/config/parameters.yml</code></li>
             <li>Define real homepage route in <code>app/config/routing.yml</code></li>
-            <li>Make <code>app/cache/*</code>, <code>app/logs/*</code> writable for server</li>
         </ul>
         <h4>Database</h4>
         <ul>
