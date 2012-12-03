@@ -20,10 +20,10 @@ class Helper
     protected $translator;
 
     /**
-     * @param SecurityContextInterface $securityContext
      * @param TranslatorInterface $translator
+     * @param SecurityContextInterface $securityContext
      */
-    public function __construct(SecurityContextInterface $securityContext, TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, SecurityContextInterface $securityContext = null)
     {
         $this->securityContext = $securityContext;
         $this->translator = $translator;
@@ -151,7 +151,7 @@ class Helper
     public function isUserLogged()
     {
         $logged = false;
-        if ($this->securityContext->getToken()) {
+        if ($this->securityContext && $this->securityContext->getToken()) {
             $logged = $this->securityContext->isGranted('IS_AUTHENTICATED_FULLY');
         }
 
@@ -164,7 +164,7 @@ class Helper
     public function getUser()
     {
         $user = null;
-        if ($this->securityContext->getToken()) {
+        if ($this->securityContext && $this->securityContext->getToken()) {
             $user = $this->securityContext->getToken()->getUser();
         }
 
@@ -181,6 +181,10 @@ class Helper
      */
     public function isUserGranted($attributes, $object = null)
     {
-        return $this->securityContext->isGranted($attributes, $object);
+        $granted = false;
+        if ($this->securityContext && $this->securityContext->getToken()) {
+            $granted = $this->securityContext->isGranted($attributes, $object);
+        }
+        return $granted;
     }
 }

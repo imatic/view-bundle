@@ -13,7 +13,7 @@ services:
 
     imatic_view.menu.helper:
         class: Imatic\Bundle\ViewBundle\Menu\Helper
-        arguments: [ @security.context, @translator ]
+        arguments: [ @translator, @?security.context ]
 
     imatic_view.menu.main:
         class: Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder
