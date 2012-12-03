@@ -17,19 +17,18 @@
                 --dir=src --no-interaction</code>
                 (may extends ImaticUserBundle)
             </li>
-            <li>Copy Imatic user entities and fixtures <code>Imatic/Bundle/UserBundle/Resources/app/*</code>
-                &rarr; <code>App/Bundle/UserBundle/</code>
+            <li>Copy Resources/app files from ImaticUserBundle to AppUserBundle <code>cp -R vendor/imatic/user-bundle/Imatic/Bundle/UserBundle/Resources/app/* src/App/Bundle/UserBundle/</code>
             </li>
             <li>Uncomment <code>JMSSecurityExtraBundle</code>, <code>FOSUserBundle</code>
                 and <code>ImaticUserBundle</code> in <code>app/config/AppKernel.php</code>
             </li>
             <li>Uncomment user routes in <code>app/config/routing.yml</code></li>
             <li>Uncomment @ImaticUserBundle and security imports in <code>app/config/config.yml</code></li>
+            <li>Clear cache <code>./app/console cache:clear</code></li>
         </ul>
         <h4>Configuration</h4>
         <ul>
             <li>Update your local configuration in <code>app/config/parameters.yml</code></li>
-            <li>Define real homepage route in <code>app/config/routing.yml</code></li>
         </ul>
         <h4>Database</h4>
         <ul>
@@ -40,6 +39,7 @@
         <h4>Start</h4>
         <ul>
             <li>Login in into application as an user defined in AppUserBundle fixtures</li>
+            <li>Define real homepage route in <code>app/config/routing.yml</code></li>
             <li><a href="https://dev.imatic.cz/imatic-vyvoj/wiki/Platform">Check documentation</a></li>
             <li>Start your project!</li>
         </ul>
