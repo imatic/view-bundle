@@ -13,11 +13,12 @@
         <h3>What next?</h3>
         <h4>User &amp; security</h4>
         <ul>
-            <li>Create an application user bundle <code>app/console generate:bundle --namespace=App/Bundle/UserBundle
-                --dir=src --no-interaction</code>
+            <li>Create an application user bundle <code>./app/console generate:bundle --namespace=App/Bundle/UserBundle
+                --bundle-name=AppUserBundle --dir=src --no-interaction</code>
                 (may extends ImaticUserBundle)
             </li>
-            <li>Copy Resources/app files from ImaticUserBundle to AppUserBundle <code>cp -R vendor/imatic/user-bundle/Imatic/Bundle/UserBundle/Resources/app/* src/App/Bundle/UserBundle/</code>
+            <li>Copy Resources/app files from ImaticUserBundle to AppUserBundle <code>cp -R
+                vendor/imatic/user-bundle/Imatic/Bundle/UserBundle/Resources/app/* src/App/Bundle/UserBundle/</code>
             </li>
             <li>Uncomment <code>JMSSecurityExtraBundle</code>, <code>FOSUserBundle</code>
                 and <code>ImaticUserBundle</code> in <code>app/config/AppKernel.php</code>
