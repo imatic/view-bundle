@@ -15,6 +15,29 @@
         {% endstylesheets %}
     {% endblock %}
 
+    {% block javascripts %}
+        {% javascripts
+        'components/jquery/jquery.js'
+        'components/jquery-ui/jquery-ui.js'
+        'components/jquery-ui/i18n/jquery-ui-i18n.js'
+        'components/bootstrap/js/bootstrap-affix.js'
+        'components/bootstrap/js/bootstrap-transition.js'
+        'components/bootstrap/js/bootstrap-modal.js'
+        'components/bootstrap/js/bootstrap-dropdown.js'
+        'components/bootstrap/js/bootstrap-scrollspy.js'
+        'components/bootstrap/js/bootstrap-tab.js'
+        'components/bootstrap/js/bootstrap-tooltip.js'
+        'components/bootstrap/js/bootstrap-popover.js'
+        'components/bootstrap/js/bootstrap-alert.js'
+        'components/bootstrap/js/bootstrap-button.js'
+        'components/bootstrap/js/bootstrap-collapse.js'
+        'components/bootstrap/js/bootstrap-carousel.js'
+        'components/bootstrap/js/bootstrap-typeahead.js'
+        output='js/compiled/javascript.js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+    {% endblock %}
+
     <title>{% block title_top %}{% block title %}{% spaceless %}{{ block('headline') }}{% endspaceless %} - {{ application.name }}{% endblock %}{% endblock %}</title>
 
     {% block metas -%}
@@ -62,8 +85,8 @@
 
     <div class="container-fluid content">
         {% block container %}
-            {#{% block breadcrumbs %}#}
-            {#{% endblock %}#}
+            {% block breadcrumbs %}
+            {% endblock %}
 
             {% block flashes %}
                 {{ session_message() }}
@@ -94,29 +117,6 @@
         </div>
     </footer>
 
-{% endblock %}
-
-{% block javascripts %}
-    {% javascripts
-    'components/jquery/jquery.js'
-    'components/jquery-ui/jquery-ui.js'
-    'components/jquery-ui/i18n/jquery-ui-i18n.js'
-    'components/bootstrap/js/bootstrap-affix.js'
-    'components/bootstrap/js/bootstrap-transition.js'
-    'components/bootstrap/js/bootstrap-modal.js'
-    'components/bootstrap/js/bootstrap-dropdown.js'
-    'components/bootstrap/js/bootstrap-scrollspy.js'
-    'components/bootstrap/js/bootstrap-tab.js'
-    'components/bootstrap/js/bootstrap-tooltip.js'
-    'components/bootstrap/js/bootstrap-popover.js'
-    'components/bootstrap/js/bootstrap-alert.js'
-    'components/bootstrap/js/bootstrap-button.js'
-    'components/bootstrap/js/bootstrap-collapse.js'
-    'components/bootstrap/js/bootstrap-carousel.js'
-    'components/bootstrap/js/bootstrap-typeahead.js'
-    output='js/compiled/javascript.js' %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-    {% endjavascripts %}
 {% endblock %}
 
 </body>
