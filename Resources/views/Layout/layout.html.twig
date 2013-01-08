@@ -10,6 +10,7 @@
     {% block stylesheets %}
         {%- stylesheets
         'css/less/style.less'
+        'components/select2/select2.css'
         output='css/compiled/style.css' -%}
         <link rel="stylesheet" href="{{ asset_url }}" media=" screen" type="text/css">
         {% endstylesheets %}
@@ -33,6 +34,7 @@
         'components/bootstrap/js/bootstrap-collapse.js'
         'components/bootstrap/js/bootstrap-carousel.js'
         'components/bootstrap/js/bootstrap-typeahead.js'
+        'components/select2/select2.js'
         output='js/compiled/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}

@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "genemu/form-bundle": "2.1.*",
         "mopa/bootstrap-bundle": "dev-master"
     },
     "autoload": {
