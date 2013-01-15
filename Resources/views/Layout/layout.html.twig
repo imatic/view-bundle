@@ -81,14 +81,15 @@
             <div class="container-fluid">
                 <div class="pull-right">{% block headline_side %}{% block page_actions %}{% endblock %}{% endblock %}</div>
                 <h1>{% spaceless %}{% block headline %}{{ application.name }}{% endblock %}{% endspaceless %}</h1>
+
+                {% block breadcrumbs %}
+                {% endblock %}
             </div>
         </div>
     </header>
 
     <div class="container-fluid content">
         {% block container %}
-            {% block breadcrumbs %}
-            {% endblock %}
 
             {% block flashes %}
                 {{ session_message() }}
