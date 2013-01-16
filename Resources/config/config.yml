@@ -4,3 +4,6 @@ mopa_bootstrap:
 
 parameters:
   application.name: Imatic IS
+
+  imatic_view.sidebar.grid_columns: 3
+  imatic_view.layout.grid_columns: 12
