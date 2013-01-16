@@ -96,10 +96,10 @@ class Helper
 
     public function setIcon(ItemInterface $item, $icon, $right = null)
     {
-        $icon = sprintf('<i class="icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
+        $icon = sprintf('<i class="imatic-view-menu-icon icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
         $item
             ->setExtra('safe_label', true)
-            ->setLabel(String::escape($item->getLabel()) . $icon);
+            ->setLabel($icon . String::escape($item->getLabel()));
     }
 
     /**
