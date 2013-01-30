@@ -4,6 +4,7 @@ namespace Imatic\Bundle\ViewBundle\Composer;
 
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Yaml\Yaml;
 
 class ScriptHandler
 {
@@ -18,18 +19,6 @@ class ScriptHandler
         $output = \ob_get_clean();
 
         if (\preg_match('/^v\d/', $output) && \realpath($path)) {
-            return $path;
-        }
-        return false;
-    }
-
-    /**
-     * @param string $path
-     * @return boolean
-     */
-    public static function detectNodeModuleDir($path)
-    {
-        if (\is_dir($path) && \preg_match('/node_modules$/', $path)) {
             return $path;
         }
         return false;
@@ -79,17 +68,6 @@ class ScriptHandler
             $configContent = str_replace('$node.bin$', $value, $configContent);
         }
 
-        if (strpos($configContent, '$node.module.path$')) {
-            $io->write('');
-            $io->write('<error>Configuration node.module.path is not set in ' . $configFile . '</error>');
-            $value = static::askFor(
-                $io,
-                'Please provide full path to the global node module directory',
-                'Filled path is not valid node module directory',
-                'detectNodeModuleDir');
-            $configContent = str_replace('$node.module.path$', $value, $configContent);
-        }
-
         if ($configContent != $configContentOrig) {
             file_put_contents($configFile, $configContent);
             $io->write('');
@@ -114,8 +92,21 @@ class ScriptHandler
         $options = self::getOptions($event);
         $webDir = $options['symfony-web-dir'];
 
-        $process = new Process('bower update');
+        $bin = './../node_modules/.bin/bower';
+        $process = new Process($bin . ' update');
         $process->setWorkingDirectory($webDir);
+        $process->run(function ($type, $buffer) use ($event) {
+            $event->getIO()->write($buffer, false);
+        });
+    }
+
+    /**
+     * @param \Composer\Script\CommandEvent $event
+     */
+    public static function npmInstall($event)
+    {
+        $event->getIO()->write('npm install...' . PHP_EOL, false);
+        $process = new Process('npm install');
         $process->run(function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);
         });
