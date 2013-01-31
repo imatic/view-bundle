@@ -123,6 +123,7 @@ class ScriptHandler
         $appDir = $options['symfony-app-dir'];
 
         $arguments = array();
+        $arguments[] = '-e=prod';
 
         if ($options['assetic-dump-force'])
             $arguments[] = '--force';
@@ -130,7 +131,7 @@ class ScriptHandler
         if ($options['assetic-dump-asset-root'] !== null)
             $arguments = escapeshellarg($options['assetic-dump-asset-root']);
 
-        static::executeCommand($event, $appDir, 'assetic:dump' . implode(' ', $arguments));
+        static::executeCommand($event, $appDir, 'assetic:dump ' . implode(' ', $arguments));
     }
 
     protected static function executeCommand($event, $appDir, $cmd)
