@@ -117,7 +117,9 @@
     <footer class="container-fluid">
         <div class="footer-content">
             {% block footer %}
-                Imatic Software, s.r.o.
+                <a href="http://www.imatic.cz" title="{{ 'Copyright' | trans({}, 'ImaticViewBundle') }}">
+                    {{ 'Copyright' | trans({}, 'ImaticViewBundle') }}
+                </a>
             {% endblock %}
         </div>
     </footer>
