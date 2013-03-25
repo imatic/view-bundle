@@ -57,74 +57,80 @@
 {% endblock %}
 
 {% block body %}
-    <header>
-        {% block header %}
+    {% block header_full %}
+        <header>
+            {% block header %}
 
-            <nav class="navbar navbar-inverse navbar-static-top">
-                <div class="navbar-inner">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    {% block header_logo %}
-                    <a class="brand" href="{{ path('homepage') }}">{{ application.name }}</a>
-                    {% endblock %}
-                    <div class="nav-collapse collapse">
-                        {{ menu.menu('imatic.main') }}
-                        {{ menu.menu('imatic.main_side', null, null, { 'class': 'pull-right' }) }}
+                <nav class="navbar navbar-inverse navbar-static-top">
+                    <div class="navbar-inner">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        {% block header_logo %}
+                            <a class="brand" href="{{ path('homepage') }}">{{ application.name }}</a>
+                        {% endblock %}
+                        <div class="nav-collapse collapse">
+                            {{ menu.menu('imatic.main') }}
+                            {{ menu.menu('imatic.main_side', null, null, { 'class': 'pull-right' }) }}
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
 
-        {% endblock %}
-
-        <div class="headline">
-            <div class="container-fluid">
-                <div class="pull-right">{% block headline_side %}{% block page_actions %}{% endblock %}{% endblock %}</div>
-                <h1>{% spaceless %}{% block headline %}{{ application.name }}{% endblock %}{% endspaceless %}</h1>
-
-                {% block breadcrumbs %}
-                {% endblock %}
-            </div>
-        </div>
-    </header>
-
-    <div class="container-fluid content">
-        {% block container %}
-
-            {% block flashes %}
-                {{ session_message() }}
             {% endblock %}
 
-            <div class="row-fluid">
-                {% set sidebar = block('sidebar') %}
-                {% if sidebar|default(false) %}
-                    <div class="span{{ imatic_view_config_get('sidebar.grid_columns') }}">
-                        {{ sidebar|raw }}
-                    </div>
-                {% endif %}
+            <div class="headline">
+                <div class="container-fluid">
+                    <div class="pull-right">{% block headline_side %}{% block page_actions %}{% endblock %}{% endblock %}</div>
+                    <h1>{% spaceless %}{% block headline %}{{ application.name }}{% endblock %}{% endspaceless %}</h1>
 
-                <div class="span{{ sidebar|default(false) ?
+                    {% block breadcrumbs %}
+                    {% endblock %}
+                </div>
+            </div>
+        </header>
+    {% endblock %}
+
+    {% block container_full %}
+        <div class="container-fluid content">
+            {% block container %}
+
+                {% block flashes %}
+                    {{ session_message() }}
+                {% endblock %}
+
+                <div class="row-fluid">
+                    {% set sidebar = block('sidebar') %}
+                    {% if sidebar|default(false) %}
+                        <div class="span{{ imatic_view_config_get('sidebar.grid_columns') }}">
+                            {{ sidebar|raw }}
+                        </div>
+                    {% endif %}
+
+                    <div class="span{{ sidebar|default(false) ?
                     imatic_view_config_get('layout.grid_columns') - imatic_view_config_get('sidebar.grid_columns') :
                     imatic_view_config_get('layout.grid_columns') }}">
-                    {% block action %}
-                    {% endblock %}
+                        {% block action %}
+                        {% endblock %}
+                    </div>
                 </div>
-            </div>
 
-        {% endblock %}
-    </div>
-
-    <footer class="container-fluid">
-        <div class="footer-content">
-            {% block footer %}
-                <a href="http://www.imatic.cz" title="{{ 'Copyright' | trans({}, 'ImaticViewBundle') }}">
-                    {{ 'Copyright' | trans({}, 'ImaticViewBundle') }}
-                </a>
             {% endblock %}
         </div>
-    </footer>
+    {% endblock %}
+
+    {% block footer_full %}
+        <footer class="container-fluid">
+            <div class="footer-content">
+                {% block footer %}
+                    <a href="http://www.imatic.cz" title="{{ 'Copyright' | trans({}, 'ImaticViewBundle') }}">
+                        {{ 'Copyright' | trans({}, 'ImaticViewBundle') }}
+                    </a>
+                {% endblock %}
+            </div>
+        </footer>
+    {% endblock %}
 
 {% endblock %}
 
