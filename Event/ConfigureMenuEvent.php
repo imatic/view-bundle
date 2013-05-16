@@ -2,9 +2,10 @@
 
 namespace Imatic\Bundle\ViewBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-use Knp\Menu\ItemInterface;
 use Imatic\Bundle\ViewBundle\Menu\Factory;
+use Imatic\Bundle\ViewBundle\Menu\Helper;
+use Knp\Menu\ItemInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Configure menu event
@@ -20,6 +21,10 @@ class ConfigureMenuEvent extends Event
      */
     protected $factory;
     /**
+     * @var Helper
+     */
+    protected $helper;
+    /**
      * @var string
      */
     protected $alias;
@@ -27,12 +32,14 @@ class ConfigureMenuEvent extends Event
     /**
      * @param ItemInterface $menu
      * @param Factory $factory
+     * @param Helper $helper
      * @param string $alias
      */
-    public function __construct(ItemInterface $menu, Factory $factory, $alias)
+    public function __construct(ItemInterface $menu, Factory $factory, Helper $helper, $alias)
     {
         $this->menu = $menu;
         $this->factory = $factory;
+        $this->helper = $helper;
     }
 
     /**
@@ -49,6 +56,14 @@ class ConfigureMenuEvent extends Event
     public function getFactory()
     {
         return $this->factory;
+    }
+
+    /**
+     * @return Helper
+     */
+    public function getHelper()
+    {
+        return $this->helper;
     }
 
     /**

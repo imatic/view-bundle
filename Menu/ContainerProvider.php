@@ -66,7 +66,7 @@ class ContainerProvider implements MenuProviderInterface
             $helper = $this->container->get('imatic_view.menu.helper');
             $menu = $this->container->get($service)->$method($factory, $helper);
 
-            $event = new ConfigureMenuEvent($menu, $factory, $name);
+            $event = new ConfigureMenuEvent($menu, $factory, $helper, $name);
             $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.' . $name, $event);
 
             $this->menuCollection[$name] = $menu;
