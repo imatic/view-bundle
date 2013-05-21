@@ -1,9 +1,18 @@
-{% extends '::base.html.twig' %}
+{% extends 'ImaticViewBundle:Exception:layout.html.twig' %}
 
-{% block content %}
+{% block title %}
+    {{ 'Nemáte přístup k této sekci'|trans({}, 'ImaticViewBundle') }}
+{% endblock %}
+
+{% block action %}
 
     <div class="hero-unit">
-        <h1>Nemáte přístup k této sekci.</h1>
+        <h1>{{ 'Nemáte přístup k této sekci'|trans({}, 'ImaticViewBundle') }}</h1>
+
+        <br>
+        <a href="javascript:history.back();" class="btn btn-large btn-primary">
+            <i class="icon-arrow-left icon-white"></i> {{ 'Go back' | trans({}, 'ImaticViewBundle') }}
+        </a>
     </div>
 
 {% endblock %}

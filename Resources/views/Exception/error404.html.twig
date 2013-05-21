@@ -1,9 +1,18 @@
-{% extends '::base.html.twig' %}
+{% extends 'ImaticViewBundle:Exception:layout.html.twig' %}
+
+{% block title %}
+    {{ 'Page not found'|trans({}, 'ImaticViewBundle') }}
+{% endblock %}
 
 {% block action %}
 
     <div class="hero-unit">
-        <h1>Stránka nenalezena</h1>
+        <h1>{{ 'Page not found'|trans({}, 'ImaticViewBundle') }}</h1>
+
+        <br>
+        <a href="javascript:history.back();" class="btn btn-large btn-primary">
+            <i class="icon-arrow-left icon-white"></i> {{ 'Go back' | trans({}, 'ImaticViewBundle') }}
+        </a>
     </div>
 
 {% endblock %}
