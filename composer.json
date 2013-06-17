@@ -13,7 +13,7 @@
     ],
     "require": {
         "genemu/form-bundle": "2.1.*",
-        "mopa/bootstrap-bundle": "dev-master"
+        "mopa/bootstrap-bundle": "2.2.x-dev"
     },
     "autoload": {
         "psr-0": { "Imatic\\Bundle\\ViewBundle": "" }
