@@ -87,14 +87,12 @@ class ScriptHandler
     /**
      * @param \Composer\Script\CommandEvent $event
      */
-    public static function bowerUpdate($event)
+    public static function bowerInstall($event)
     {
-        $options = self::getOptions($event);
-        $webDir = $options['symfony-web-dir'];
-
-        $bin = './../node_modules/.bin/bower';
-        $process = new Process($bin . ' update');
-        $process->setWorkingDirectory($webDir);
+        $event->getIO()->write('bower install...' . PHP_EOL, false);
+        $bin = 'node_modules/.bin/bower';
+        $process = new Process($bin . ' install');
+        $process->setTimeout(240);
         $process->run(function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);
         });
