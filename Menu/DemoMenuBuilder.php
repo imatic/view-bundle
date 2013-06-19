@@ -8,8 +8,8 @@ use Imatic\Bundle\ViewBundle\Menu\Helper;
 class DemoMenuBuilder
 {
     /**
-     * @param Factory $factory
-     * @param Helper $helper
+     * @param  Factory                 $factory
+     * @param  Helper                  $helper
      * @return \Knp\Menu\ItemInterface
      */
     public function getMenu(Factory $factory, Helper $helper)
@@ -42,8 +42,8 @@ class DemoMenuBuilder
     }
 
     /**
-     * @param Factory $factory
-     * @param Helper $helper
+     * @param  Factory                 $factory
+     * @param  Helper                  $helper
      * @return \Knp\Menu\ItemInterface
      */
     public function getMenuSub(Factory $factory, Helper $helper)

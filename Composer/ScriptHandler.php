@@ -4,12 +4,11 @@ namespace Imatic\Bundle\ViewBundle\Composer;
 
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Yaml\Yaml;
 
 class ScriptHandler
 {
     /**
-     * @param string $path
+     * @param  string  $path
      * @return boolean
      */
     public static function detectNodeBin($path)
@@ -21,14 +20,15 @@ class ScriptHandler
         if (\preg_match('/^v\d/', $output) && \realpath($path)) {
             return $path;
         }
+
         return false;
     }
 
     /**
-     * @param \Composer\IO\IOInterface $io
-     * @param string $question
-     * @param string $error
-     * @param string $validatorMethod
+     * @param  \Composer\IO\IOInterface $io
+     * @param  string                   $question
+     * @param  string                   $error
+     * @param  string                   $validatorMethod
      * @return bool
      */
     public static function askFor($io, $question, $error, $validatorMethod)
@@ -47,7 +47,7 @@ class ScriptHandler
 
     /**
      * @param \Composer\Script\CommandEvent $event
-     * @param array $options
+     * @param array                         $options
      */
     public static function updateNodeConfig($event, $options)
     {

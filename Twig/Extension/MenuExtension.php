@@ -19,7 +19,7 @@ class MenuExtension extends Twig_Extension
     protected $renderer;
 
     /**
-     * @param Factory $factory
+     * @param Factory           $factory
      * @param RendererInterface $renderer
      */
     public function __construct(Factory $factory, RendererInterface $renderer)
@@ -38,6 +38,7 @@ class MenuExtension extends Twig_Extension
     public function renderArrayMenu(array $menu, array $options)
     {
         $menu = $this->factory->createFromArray(array('name' => 'root', 'children' => $menu));
+
         return $this->renderer->render($menu, $options);
     }
 
@@ -46,7 +47,7 @@ class MenuExtension extends Twig_Extension
      *
      * @return string The extension name
      */
-    function getName()
+    public function getName()
     {
         return 'imatic_view_menu';
     }

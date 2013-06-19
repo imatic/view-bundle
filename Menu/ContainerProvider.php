@@ -35,8 +35,8 @@ class ContainerProvider implements MenuProviderInterface
     }
 
     /**
-     * @param string $alias Menu alias
-     * @param array $info Menu info (service ID, method name)
+     * @param  string $alias Menu alias
+     * @param  array  $info  Menu info (service ID, method name)
      * @return void
      */
     public function addService($alias, $info)
@@ -47,8 +47,8 @@ class ContainerProvider implements MenuProviderInterface
     /**
      * Retrieves a menu by its name
      *
-     * @param string $name
-     * @param array $options
+     * @param  string                    $name
+     * @param  array                     $options
      * @return ItemInterface
      * @throws \InvalidArgumentException if the menu does not exists
      */
@@ -78,8 +78,8 @@ class ContainerProvider implements MenuProviderInterface
     /**
      * Checks whether a menu exists in this provider
      *
-     * @param string $name
-     * @param array $options
+     * @param  string $name
+     * @param  array  $options
      * @return bool
      */
     public function has($name, array $options = array())

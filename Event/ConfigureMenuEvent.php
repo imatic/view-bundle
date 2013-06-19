@@ -31,9 +31,9 @@ class ConfigureMenuEvent extends Event
 
     /**
      * @param ItemInterface $menu
-     * @param Factory $factory
-     * @param Helper $helper
-     * @param string $alias
+     * @param Factory       $factory
+     * @param Helper        $helper
+     * @param string        $alias
      */
     public function __construct(ItemInterface $menu, Factory $factory, Helper $helper, $alias)
     {

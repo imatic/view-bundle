@@ -20,7 +20,7 @@ class Helper
     protected $translator;
 
     /**
-     * @param TranslatorInterface $translator
+     * @param TranslatorInterface      $translator
      * @param SecurityContextInterface $securityContext
      */
     public function __construct(TranslatorInterface $translator, SecurityContextInterface $securityContext = null)
@@ -32,13 +32,14 @@ class Helper
     /**
      * Adds a vertical/horizontal divider
      *
-     * @param ItemInterface $item
-     * @param bool $vertical
+     * @param  ItemInterface $item
+     * @param  bool          $vertical
      * @return ItemInterface
      */
     public function addDivider(ItemInterface $item, $vertical = false)
     {
         $class = $vertical ? 'divider-vertical' : 'divider';
+
         return $item->addChild('divider_' . rand())
             ->setLabel('')
             ->setAttribute('class', $class);
@@ -185,6 +186,7 @@ class Helper
         if ($this->securityContext && $this->securityContext->getToken()) {
             $granted = $this->securityContext->isGranted($attributes, $object);
         }
+
         return $granted;
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "imatic/view-bundle",
-    "type": "library",
+    "type": "symfony-bundle",
     "description": "Imatic View Bundle",
     "keywords": [],
     "homepage": "http://imatic.cz",
@@ -9,15 +9,27 @@
         {
             "name": "Stepan Koci",
             "email": "stepan.koci@imatic.cz"
+        },
+        {
+            "name":"Imatic Software s.r.o.",
+            "homepage":"http://imatic.cz/"
         }
     ],
     "require": {
+        "php":">=5.3.3",
+        "symfony/framework-bundle": "2.2.*",
+        "knplabs/knp-menu-bundle": "~1.1",
         "genemu/form-bundle": "2.1.*",
-        "mopa/bootstrap-bundle": "2.2.x-dev"
+        "mopa/bootstrap-bundle": "2.2.*"
     },
     "autoload": {
         "psr-0": { "Imatic\\Bundle\\ViewBundle": "" }
     },
     "target-dir": "Imatic/Bundle/ViewBundle",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2.x-dev"
+        }
+    }
 }

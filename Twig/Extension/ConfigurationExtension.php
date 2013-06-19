@@ -25,6 +25,7 @@ class ConfigurationExtension extends Twig_Extension
     public function getConfig($key)
     {
         $key = sprintf("imatic_view.%s", $key);
+
         return $this->container->getParameter($key);
     }
 
@@ -33,7 +34,7 @@ class ConfigurationExtension extends Twig_Extension
      *
      * @return string The extension name
      */
-    function getName()
+    public function getName()
     {
         return 'imatic_view_configuration';
     }

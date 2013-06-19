@@ -24,11 +24,11 @@ class Factory implements FactoryInterface
     /**
      * Creates a menu item
      *
-     * @param string $name
-     * @param array $options
+     * @param  string                  $name
+     * @param  array                   $options
      * @return \Knp\Menu\ItemInterface
      */
-    function createItem($name, array $options = array())
+    public function createItem($name, array $options = array())
     {
         return $this->factory->createItem($name, $options);
     }
@@ -36,10 +36,10 @@ class Factory implements FactoryInterface
     /**
      * Create a menu item from a NodeInterface
      *
-     * @param \Knp\Menu\NodeInterface $node
+     * @param  \Knp\Menu\NodeInterface $node
      * @return \Knp\Menu\ItemInterface
      */
-    function createFromNode(NodeInterface $node)
+    public function createFromNode(NodeInterface $node)
     {
         return $this->factory->createFromNode($node);
     }
@@ -49,10 +49,10 @@ class Factory implements FactoryInterface
      *
      * The source is an array of data that should match the output from MenuItem->toArray().
      *
-     * @param  array $data The array of data to use as a source for the menu tree
+     * @param  array                   $data The array of data to use as a source for the menu tree
      * @return \Knp\Menu\ItemInterface
      */
-    function createFromArray(array $data)
+    public function createFromArray(array $data)
     {
         return $this->factory->createFromArray($data);
     }

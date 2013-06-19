@@ -33,7 +33,7 @@ class ApplicationExtension extends Twig_Extension
      *
      * @return string The extension name
      */
-    function getName()
+    public function getName()
     {
         return 'imatic_view_application';
     }
