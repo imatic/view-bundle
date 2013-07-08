@@ -9,33 +9,34 @@
 
     {% block stylesheets %}
         {%- stylesheets
-        'css/less/style.less'
-        'components/select2/select2.css'
-        output='css/compiled/style.css' -%}
-        <link rel="stylesheet" href="{{ asset_url }}" media=" screen" type="text/css">
+        'bundles/imaticview/less/style.less'
+        'vendor/jquery-ui/themes/flick/jquery-ui.css'
+        'vendor/select2/select2.css'
+        output='css/style.css' -%}
+        <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
         {% endstylesheets %}
     {% endblock %}
 
     {% block javascripts %}
         {% javascripts
-        'components/jquery/jquery.js'
-        'components/jquery-ui/ui/jquery-ui.js'
-        'components/jquery-ui/ui/i18n/jquery-ui-i18n.js'
-        'components/bootstrap/js/bootstrap-affix.js'
-        'components/bootstrap/js/bootstrap-transition.js'
-        'components/bootstrap/js/bootstrap-modal.js'
-        'components/bootstrap/js/bootstrap-dropdown.js'
-        'components/bootstrap/js/bootstrap-scrollspy.js'
-        'components/bootstrap/js/bootstrap-tab.js'
-        'components/bootstrap/js/bootstrap-tooltip.js'
-        'components/bootstrap/js/bootstrap-popover.js'
-        'components/bootstrap/js/bootstrap-alert.js'
-        'components/bootstrap/js/bootstrap-button.js'
-        'components/bootstrap/js/bootstrap-collapse.js'
-        'components/bootstrap/js/bootstrap-carousel.js'
-        'components/bootstrap/js/bootstrap-typeahead.js'
-        'components/select2/select2.js'
-        output='js/compiled/javascript.js' %}
+        'vendor/jquery/jquery.js'
+        'vendor/jquery-ui/ui/jquery-ui.js'
+        'vendor/jquery-ui/ui/i18n/jquery-ui-i18n.js'
+        'vendor/bootstrap/js/bootstrap-affix.js'
+        'vendor/bootstrap/js/bootstrap-transition.js'
+        'vendor/bootstrap/js/bootstrap-modal.js'
+        'vendor/bootstrap/js/bootstrap-dropdown.js'
+        'vendor/bootstrap/js/bootstrap-scrollspy.js'
+        'vendor/bootstrap/js/bootstrap-tab.js'
+        'vendor/bootstrap/js/bootstrap-tooltip.js'
+        'vendor/bootstrap/js/bootstrap-popover.js'
+        'vendor/bootstrap/js/bootstrap-alert.js'
+        'vendor/bootstrap/js/bootstrap-button.js'
+        'vendor/bootstrap/js/bootstrap-collapse.js'
+        'vendor/bootstrap/js/bootstrap-carousel.js'
+        'vendor/bootstrap/js/bootstrap-typeahead.js'
+        'vendor/select2/select2.js'
+        output='js/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
     {% endblock %}
