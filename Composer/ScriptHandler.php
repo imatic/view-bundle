@@ -90,7 +90,7 @@ class ScriptHandler
     public static function bowerInstall($event)
     {
         $event->getIO()->write('bower install...' . PHP_EOL, false);
-        $bin = 'node_modules/.bin/bower';
+        $bin = sprintf('node_modules%s.bin%sbower', DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
         $process = new Process($bin . ' install');
         $process->setTimeout(240);
         $process->run(function ($type, $buffer) use ($event) {
