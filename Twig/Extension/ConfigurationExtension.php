@@ -18,14 +18,12 @@ class ConfigurationExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'imatic_view_config_get' => new Twig_Function_Method($this, 'getConfig')
+            'imatic_config_get' => new Twig_Function_Method($this, 'getConfig')
         );
     }
 
     public function getConfig($key)
     {
-        $key = sprintf("imatic_view.%s", $key);
-
         return $this->container->getParameter($key);
     }
 
