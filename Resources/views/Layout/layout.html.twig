@@ -104,14 +104,14 @@
                 <div class="row-fluid">
                     {% set sidebar = block('sidebar') %}
                     {% if sidebar|default(false) %}
-                        <div class="span{{ imatic_view_config_get('sidebar.grid_columns') }}">
+                        <div class="span{{ imatic_config_get('imatic_view.sidebar.grid_columns') }}">
                             {{ sidebar|raw }}
                         </div>
                     {% endif %}
 
                     <div class="span{{ sidebar|default(false) ?
-                    imatic_view_config_get('layout.grid_columns') - imatic_view_config_get('sidebar.grid_columns') :
-                    imatic_view_config_get('layout.grid_columns') }}">
+                    imatic_config_get('imatic_view.layout.grid_columns') - imatic_config_get('imatic_view.sidebar.grid_columns') :
+                    imatic_config_get('imatic_view.layout.grid_columns') }}">
                         {% block action %}
                         {% endblock %}
                     </div>
