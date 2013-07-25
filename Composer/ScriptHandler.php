@@ -10,15 +10,6 @@ class ScriptHandler
     /**
      * @param \Composer\Script\CommandEvent $event
      */
-    public static function updateConfig($event)
-    {
-        $options = self::getOptions($event);
-        static::updateNodeConfig($event, $options);
-    }
-
-    /**
-     * @param \Composer\Script\CommandEvent $event
-     */
     public static function bowerInstall($event)
     {
         $event->getIO()->write('bower install...' . PHP_EOL, false);
@@ -46,7 +37,6 @@ class ScriptHandler
      * Inspired by from https://gist.github.com/2725096
      * More info: https://github.com/symfony/AsseticBundle/issues/82
      */
-
     public static function dumpAssets($event)
     {
         $options = self::getOptions($event);
