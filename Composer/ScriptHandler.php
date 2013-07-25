@@ -8,74 +8,6 @@ use Symfony\Component\Process\Process;
 class ScriptHandler
 {
     /**
-     * @param  string  $path
-     * @return boolean
-     */
-    public static function detectNodeBin($path)
-    {
-        \ob_start();
-        \system(\escapeshellcmd($path) . ' -v');
-        $output = \ob_get_clean();
-
-        if (\preg_match('/^v\d/', $output) && \realpath($path)) {
-            return $path;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param  \Composer\IO\IOInterface $io
-     * @param  string                   $question
-     * @param  string                   $error
-     * @param  string                   $validatorMethod
-     * @return bool
-     */
-    public static function askFor($io, $question, $error, $validatorMethod)
-    {
-        if ($return = $io->askAndValidate(
-            '<question>' . $question . ':</question>',
-            array(__CLASS__, $validatorMethod)
-        )
-        ) {
-            return $return;
-        } else {
-            $io->write('<error>' . $error . '</error>');
-            static::askFor($io, $question, $error, $validatorMethod);
-        }
-    }
-
-    /**
-     * @param \Composer\Script\CommandEvent $event
-     * @param array                         $options
-     */
-    public static function updateNodeConfig($event, $options)
-    {
-        $io = $event->getIO();
-
-        $configFile = $options['symfony-app-dir'] . '/config/parameters.yml';
-        $configContent = file_get_contents($configFile);
-        $configContentOrig = $configContent;
-
-        if (strpos($configContent, '$node.bin$')) {
-            $io->write('');
-            $io->write('<error>Configuration node.bin is not set in ' . $configFile . '</error>');
-            $value = static::askFor(
-                $io,
-                'Please provide full path to the node binary',
-                'Filled path is not valid node.js binary',
-                'detectNodeBin');
-            $configContent = str_replace('$node.bin$', $value, $configContent);
-        }
-
-        if ($configContent != $configContentOrig) {
-            file_put_contents($configFile, $configContent);
-            $io->write('');
-            $io->write('<info>' . $configFile . '</info> updated!');
-        }
-    }
-
-    /**
      * @param \Composer\Script\CommandEvent $event
      */
     public static function updateConfig($event)
@@ -90,7 +22,7 @@ class ScriptHandler
     public static function bowerInstall($event)
     {
         $event->getIO()->write('bower install...' . PHP_EOL, false);
-        $bin = 'node_modules/.bin/bower';
+        $bin = sprintf('node_modules%s.bin%sbower', DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
         $process = new Process($bin . ' install');
         $process->setTimeout(240);
         $process->run(function ($type, $buffer) use ($event) {
