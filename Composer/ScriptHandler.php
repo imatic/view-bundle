@@ -28,6 +28,7 @@ class ScriptHandler
     {
         $event->getIO()->write('npm install...' . PHP_EOL, false);
         $process = new Process('npm install');
+        $process->setTimeout(240);
         $process->run(function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);
         });
