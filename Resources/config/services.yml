@@ -31,7 +31,7 @@ services:
             - { name: imatic_view.menu, alias: imatic.demo }
             - { name: imatic_view.menu, alias: imatic.demo_sub, method: getMenuSub }
 
-    # Twig
+    # Twig extensions
     imatic_view.twig.extension.debug:
         class:        Twig_Extension_Debug
         tags:
@@ -64,3 +64,14 @@ services:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\HtmlExtension
         tags:
             - { name: 'twig.extension' }
+
+    imatic_view.twig.extension.layout:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\LayoutExtension
+        tags:
+            - { name: 'twig.extension' }
+
+    # Twig loaders
+    imatic_view.twig.loader.remote:
+        class:        Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
+        tags:
+            - { name: 'twig.loader' }
