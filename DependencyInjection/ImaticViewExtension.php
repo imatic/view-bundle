@@ -24,5 +24,18 @@ class ImaticViewExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        if (!empty($config['templates']['remote'])) {
+            $remoteLoaderDefinition = $container->getDefinition('imatic_view.twig.loader.remote');
+
+            foreach ($config['templates']['remote'] as $remoteTemplateName => $remoteTemplate) {
+                $remoteLoaderDefinition->addMethodCall('addTemplate', array(
+                    $remoteTemplateName,
+                    $remoteTemplate['url'],
+                    $remoteTemplate['ttl'],
+                    $remoteTemplate['blocks'],
+                ));
+            }
+        }
     }
 }

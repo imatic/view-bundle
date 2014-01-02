@@ -20,9 +20,36 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('imatic_view');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('templates')
+                    ->canBeUnset(true)
+                    ->children()
+                        ->arrayNode('remote')
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->children()
+                                    ->scalarNode('name')->cannotBeEmpty()->end()
+                                    ->scalarNode('url')->cannotBeEmpty()->end()
+                                    ->scalarNode('ttl')->defaultValue(24 * 60 * 60)->end()
+                                    ->arrayNode('blocks')
+                                        ->defaultValue(array())
+                                        ->useAttributeAsKey('name')
+                                        ->prototype('array')
+                                            ->children()
+                                                ->scalarNode('name')->cannotBeEmpty()->end()
+                                                ->scalarNode('placeholder')->cannotBeEmpty()->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 }

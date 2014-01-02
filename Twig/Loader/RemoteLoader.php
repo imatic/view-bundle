@@ -2,8 +2,47 @@
 
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
-class RemoteLoader implements \Twig_LoaderInterface
+use Twig_LoaderInterface;
+use Twig_ExistsLoaderInterface;
+use Twig_Error_Loader;
+
+/**
+ * Remote loader
+ */
+class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
 {
+    /** @var array map of remote templates */
+    private $templates;
+
+    /**
+     * Add remote template
+     *
+     * @param string $name
+     * @param string $url
+     * @param int    $ttl
+     * @param array  $blocks
+     */
+    public function addTemplate($name, $url, $ttl, array $blocks)
+    {
+        $this->templates[$name] = array(
+            'url' => $url,
+            'ttl' => $ttl,
+            'blocks' => $blocks,
+        );
+    }
+
+    /**
+     * Check if we have the source code of a template, given its name.
+     *
+     * @param string $name The name of the template to check if we can load
+     *
+     * @return boolean If the template source code is handled by this loader or not
+     */
+    public function exists($name)
+    {
+        return isset($this->templates[$name]);
+    }
+
     /**
      * Gets the source code of a template, given its name.
      *
@@ -15,7 +54,16 @@ class RemoteLoader implements \Twig_LoaderInterface
      */
     public function getSource($name)
     {
-        return "{{ 'template' | upper() }} " . $name . "!";
+        $this->ensureExists($name);
+
+        $source = file_get_contents($this->templates[$name]['url']);
+        if (false === $source) {
+            throw new Twig_Error_Loader(sprintf('Could not load remote template "%s"', $name));
+        }
+
+        $source = $this->placeholdersToBlocks($this->templates[$name]['blocks'], $source);
+
+        return $source;
     }
 
     /**
@@ -29,6 +77,8 @@ class RemoteLoader implements \Twig_LoaderInterface
      */
     public function getCacheKey($name)
     {
+        $this->ensureExists($name);
+
         return $name;
     }
 
@@ -44,6 +94,85 @@ class RemoteLoader implements \Twig_LoaderInterface
      */
     public function isFresh($name, $time)
     {
-        return true;
+        $this->ensureExists($name);
+
+        return time() - $time < $this->templates[$name]['ttl'];
+    }
+
+    /**
+     * Make sure the given template is a known remote template
+     *
+     * @param string $name
+     * @throws Twig_Error_loader
+     */
+    private function ensureExists($name)
+    {
+        if (!$this->exists($name)) {
+            throw new Twig_Error_Loader(sprintf('Template "%s" is not a known remote template', $name));
+        }
+    }
+
+    /**
+     * Convert placeholders to blocks in the source
+     *
+     * @param array  $blocks
+     * @param string $source
+     * @return string
+     */
+    private function placeholdersToBlocks(array $blocks, $source)
+    {
+        $usedBlockMap = array();
+        $placeholderToBlockMap = array();
+
+        $pattern = '';
+        $first = true;
+        foreach ($blocks as $blockName => $block) {
+            if ($first) {
+                $first = false;
+            } else {
+                $pattern .= '|';
+            }
+
+            $pattern .= preg_quote($block['placeholder'], '/');
+            $placeholderToBlockMap[$block['placeholder']] = $blockName;
+        }
+
+        return preg_replace_callback(
+            sprintf('/(%s)/', $pattern),
+            function (array $match) use ($placeholderToBlockMap, &$usedBlockMap) {
+                $blockName = $placeholderToBlockMap[$match[0]];
+
+                if (isset($usedBlockMap[$blockName])) {
+                    return $this->createRepeatedPlaceholderBlockSyntax($blockName);
+                } else {
+                    $usedBlockMap[$blockName] = true;
+
+                    return $this->createPlaceholderBlockSyntax($blockName);
+                }
+            },
+            $source
+        );
+    }
+
+    /**
+     * Create placeholder block syntax
+     *
+     * @param string $blockName
+     * @return string
+     */
+    private function createPlaceholderBlockSyntax($blockName)
+    {
+        return sprintf('{%% block %s %%}{%% endblock %%}', $blockName);
+    }
+
+    /**
+     * Create repeated placeholder block syntax
+     *
+     * @param string $blockName
+     * @return string
+     */
+    private function createRepeatedPlaceholderBlockSyntax($blockName)
+    {
+        return sprintf('{{ block("%s") }}', $blockName);
     }
 }
