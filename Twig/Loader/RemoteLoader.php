@@ -21,13 +21,15 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      * @param string $url
      * @param int    $ttl
      * @param array  $blocks
+     * @param array  $metadata
      */
-    public function addTemplate($name, $url, $ttl, array $blocks)
+    public function addTemplate($name, $url, $ttl, array $blocks, array $metadata)
     {
         $this->templates[$name] = array(
             'url' => $url,
             'ttl' => $ttl,
             'blocks' => $blocks,
+            'metadata' => $metadata,
         );
     }
 
@@ -56,12 +58,18 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     {
         $this->ensureExists($name);
 
+        // fetch source
         $source = file_get_contents($this->templates[$name]['url']);
         if (false === $source) {
             throw new Twig_Error_Loader(sprintf('Could not load remote template "%s"', $name));
         }
 
+        // convert placeholders to blocks
         $source = $this->placeholdersToBlocks($this->templates[$name]['blocks'], $source);
+
+        // add metadata variable
+        $metadata = $this->getMetadata($name);
+        $source = sprintf('{%% set _remote = %s %%}', json_encode($metadata)) . $source;
 
         return $source;
     }
@@ -127,13 +135,9 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         $pattern = '';
         $first = true;
         foreach ($blocks as $blockName => $block) {
-            if ($first) {
-                $first = false;
-            } else {
-                $pattern .= '|';
-            }
-
+            $first ? $first = false : $pattern .= '|';
             $pattern .= preg_quote($block['placeholder'], '/');
+            
             $placeholderToBlockMap[$block['placeholder']] = $blockName;
         }
 
@@ -174,5 +178,21 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     private function createRepeatedPlaceholderBlockSyntax($blockName)
     {
         return sprintf('{{ block("%s") }}', $blockName);
+    }
+
+    /**
+     * Get template metadata array
+     *
+     * @param string $name template name
+     * @return string
+     */
+    private function getMetadata($name)
+    {
+        $this->ensureExists($name);
+
+        return
+            array('url' => $this->templates[$name]['url'])
+            + $this->templates[$name]['metadata']
+        ;
     }
 }
