@@ -29,7 +29,7 @@ class ImaticViewExtension extends Extension
             $remoteLoaderDefinition = $container->getDefinition('imatic_view.twig.loader.remote');
 
             foreach ($config['templates']['remote'] as $remoteTemplateName => $remoteTemplate) {
-                $remoteLoaderDefinition->addMethodCall('addTemplate', $x = array(
+                $remoteLoaderDefinition->addMethodCall('addTemplate', array(
                     $remoteTemplateName,
                     $remoteTemplate['url'],
                     $remoteTemplate['ttl'],
