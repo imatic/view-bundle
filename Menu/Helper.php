@@ -153,7 +153,7 @@ class Helper
     {
         $logged = false;
         if ($this->securityContext && $this->securityContext->getToken()) {
-            $logged = $this->securityContext->isGranted('IS_AUTHENTICATED_FULLY');
+            $logged = $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED');
         }
 
         return $logged;
