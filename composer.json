@@ -15,12 +15,23 @@
             "homepage":"http://imatic.cz/"
         }
     ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://composer.imatic.cz"
+        }
+    ],
     "require": {
         "php":">=5.3.3",
         "symfony/framework-bundle": "2.4.*",
+        "sensio/framework-extra-bundle": "3.0.*",
         "knplabs/knp-menu-bundle": "~1.1",
         "genemu/form-bundle": "2.2.*",
         "mopa/bootstrap-bundle": "2.3.*"
+    },
+    "require-dev": {
+        "imatic/testing-bundle": "dev-master",
+        "symfony/assetic-bundle": "2.4.*"
     },
     "autoload": {
         "psr-0": { "Imatic\\Bundle\\ViewBundle": "" }

@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @author Miloslav Nenadal <miloslav.nenadal@imatic.cz>
+ */
+require __DIR__ . '/../../bootstrap.php';
+
+use Imatic\Bundle\TestingBundle\Test\Console;
+
+$console = new Console('Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\TestKernel');
+$console->run();
