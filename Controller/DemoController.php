@@ -19,4 +19,24 @@ class DemoController extends Controller
     {
         return array();
     }
+
+    /**
+     * @Route("/component")
+     * @Template()
+     */
+    public function componentAction()
+    {
+        return array();
+    }
+
+    /**
+     * @Route("/component/ajax-test")
+     * @Template()
+     */
+    public function ajaxTestAction()
+    {
+        return array(
+            'value' => uniqid('', true),
+        );
+    }
 }

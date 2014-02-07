@@ -1,8 +1,8 @@
 {
     "name": "AppImaticViewBundle",
     "dependencies": {
-        "bootstrap": "~2.3",
+        "bootstrap": "~3.1",
         "jquery-ui": "~1.10",
-        "select2": "~3.4.0"
+        "select2": "~3.4.5"
     }
 }

@@ -82,6 +82,10 @@ assetic:
             node: %node.bin%
             node_paths: [ %kernel.root_dir%/node_modules ]
             apply_to: "\.less$"
+        typescript:
+            node: %node.bin%
+            bin: %kernel.root_dir%/node_modules/typescript/bin/tsc
+            apply_to: "\.ts$"
 
 #sonata_block:
 #    default_contexts:           [admin]

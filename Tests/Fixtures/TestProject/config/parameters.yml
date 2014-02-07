@@ -1,0 +1,3 @@
+parameters:
+    application.name: ViewBundle
+    node.bin: 'C:/Program Files/nodejs/node.exe'

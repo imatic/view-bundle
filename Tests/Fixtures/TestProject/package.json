@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "less": "~1.6.2",
-        "bower": "~1.2.8"
+        "bower": "~1.2.8",
+        "typescript": "~0.9.5"
     }
 }
