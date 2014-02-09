@@ -108,7 +108,7 @@
 
     <div class="bs-docs-example">
 
-        {% import 'ImaticViewBundle:Component:table.html.twig' as table %}
+        {% import 'ImaticViewBundle:ComponentOld:table.html.twig' as table %}
 
         {% set table_data = [
         { 'id': 1, 'name': 'Lister', 'active': true, age: 28 },
@@ -204,7 +204,7 @@
 
     <h3 class="menu">Navs</h3>
 
-    {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+    {% import 'ImaticViewBundle:ComponentOld:menu.html.twig' as menu %}
 
     <h4>Tabs</h4>
     {{ menu.tabs('imatic.demo') }}
@@ -328,7 +328,7 @@
 
     <h3 class="menu">Messages/alerts</h3>
 
-    {% import 'ImaticViewBundle:Component:flash.html.twig' as flash %}
+    {% import 'ImaticViewBundle:ComponentOld:flash.html.twig' as flash %}
 
     <div class="bs-docs-example">
         {{ flash.message('success', '<strong>Well done!</strong> You successfully read this important alert message.', true, true) }}

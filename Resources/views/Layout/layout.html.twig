@@ -1,5 +1,5 @@
-{% from 'ImaticViewBundle:Component:flash.html.twig' import session_message %}
-{% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+{% from 'ImaticViewBundle:ComponentOld:flash.html.twig' import session_message %}
+{% import 'ImaticViewBundle:ComponentOld:menu.html.twig' as menu %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,8 +33,6 @@
         'vendor/bootstrap/js/tab.js'
         'vendor/bootstrap/js/transition.js'
         'vendor/select2/select2.js'
-        'bundles/imaticview/ts/component.ts'
-        'bundles/imaticview/ts/init-component.ts'
         output='js/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}

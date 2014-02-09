@@ -4,9 +4,6 @@ namespace Imatic\Bundle\ViewBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * @author Miloslav Nenadal <miloslav.nenadal@imatic.cz>
- */
 class Configuration implements ConfigurationInterface
 {
     /**

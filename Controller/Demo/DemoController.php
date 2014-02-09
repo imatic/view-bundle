@@ -1,17 +1,17 @@
 <?php
 
-namespace Imatic\Bundle\ViewBundle\Controller;
+namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * @Config\Route()
+ * @Config\Route("/")
  */
-class DefaultController extends Controller
+class DemoController extends Controller
 {
     /**
-     * @Config\Route("/", name="homepage")
+     * @Config\Route()
      * @Config\Template()
      */
     public function indexAction()

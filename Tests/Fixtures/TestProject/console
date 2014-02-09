@@ -1,9 +1,7 @@
 #!/usr/bin/env php
 <?php
-/**
- * @author Miloslav Nenadal <miloslav.nenadal@imatic.cz>
- */
 require __DIR__ . '/../../bootstrap.php';
+umask(0007);
 
 use Imatic\Bundle\TestingBundle\Test\Console;
 

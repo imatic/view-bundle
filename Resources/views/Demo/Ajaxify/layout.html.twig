@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    'bundles/imaticview/ts/ajaxify/ajaxify.ts'
+    'bundles/imaticview/ts/ajaxify/init.ts'
+    output='js/javascript.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+{% endblock %}

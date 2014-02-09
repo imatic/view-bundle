@@ -1,0 +1,76 @@
+{%- macro table(data, columns, options) -%}
+    {% spaceless %}
+        {% from 'ImaticViewBundle:ComponentOld:util.html.twig' import attributes %}
+        {% set classes =
+        [
+        options.table|default(true) ? 'table' : '',
+        options.bordered|default(false) ? 'table-bordered' : '',
+        options.striped|default(false) ? 'table-striped' : '',
+        options.hover|default(false) ? 'table-hover' : '',
+        options.condensed|default(false) ? 'table-condensed' : ''
+        ]|join(' ') %}
+        <table{{ attributes({'class': classes}) }}>
+            {{ _self.header(columns, options) }}
+            {{ _self.body(data, columns, options) }}
+        </table>
+    {% endspaceless %}
+{%- endmacro -%}
+
+{%- macro header(columns, options) -%}
+    {#{% spaceless %}#}
+    {% if columns|default(false) %}
+        <thead>
+        <tr>
+            {% for column in columns %}
+                <th>
+                    {{ column.label|default(column.name|default(column)) }}
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+    {% endif %}
+    {#{% endspaceless %}#}
+{%- endmacro -%}
+
+{%- macro body(data, columns, options) -%}
+    {#{% spaceless %}#}
+    <tbody>
+    {% for row in data %}
+        {{ _self.row(row, columns, options) }}
+    {% endfor %}
+    </tbody>
+    {#{% endspaceless %}#}
+{%- endmacro -%}
+
+{%- macro row(row, columns, options) -%}
+    {#{% spaceless %}#}
+    <tr>
+        {% if columns is defined and columns|length > 0 %}
+            {% for cell in columns %}
+                {% set type = cell.type|default('string') %}
+                <td class="{{ type }}">
+                    {{ attribute(_self, 'cell_' ~ type, [row[cell.name], cell, row, options]) }}
+                </td>
+            {% endfor %}
+        {% else %}
+            {% for cell in row %}
+                <td>
+                    {{ cell }}
+                </td>
+            {% endfor %}
+        {% endif %}
+    </tr>
+    {#{% endspaceless %}#}
+{%- endmacro -%}
+
+{% macro cell_int(value, cell, row, options) %}
+    {{ value }}
+{% endmacro %}
+
+{% macro cell_string(value, cell, row, options) %}
+    {{ value }}
+{% endmacro %}
+
+{% macro cell_bool(value, cell, row, options) %}
+    {{ value ? 'Yes' : 'No' }}
+{% endmacro %}
