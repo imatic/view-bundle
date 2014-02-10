@@ -112,7 +112,7 @@ module imatic.view.ajaxify.form {
     export class SubmitFormAction implements ActionInterface
     {
         complete = false;
-        successfull = false;
+        successful = false;
         onComplete: (action: ActionInterface) => void;
 
         /**

@@ -18,7 +18,7 @@ module imatic.view.ajaxify.action {
     export interface ActionInterface
     {
         complete: boolean;
-        successfull: boolean;
+        successful: boolean;
         onComplete: (action: ActionInterface) => void;
 
         /**

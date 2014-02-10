@@ -120,7 +120,7 @@ module imatic.view.ajaxify.link {
     export class LoadHtmlAction implements ActionInterface
     {
         complete = false;
-        successfull = false;
+        successful = false;
         onComplete: (action: ActionInterface) => void;
         private request: AjaxRequest;
 
@@ -142,7 +142,7 @@ module imatic.view.ajaxify.link {
                 url: this.url,
                 cache: false,
                 success: function (response: ServerResponse) {
-                    self.successfull = true;
+                    self.successful = true;
                     container.setHtml(response.data);
                 },
                 complete: function () {
