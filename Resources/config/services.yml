@@ -1,5 +1,6 @@
 parameters:
     imatic_view.menu.main.class: Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder
+    assetic.filter.typescript.class: Imatic\Bundle\ViewBundle\Assetic\Filter\TypeScriptFilter
 
 services:
     # Menu

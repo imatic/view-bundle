@@ -1,12 +1,19 @@
+/// <reference path="document.ts"/>
+
+module imatic.view.ajaxify {
+
+    import HTMLDocumentHandler = imatic.view.ajaxify.document.HTMLDocumentHandler;
+
+    export function init(document: HTMLDocument, jQuery: any)
+    {
+        var handler = new HTMLDocumentHandler(document, jQuery);
+        
+        handler.attach();
+    }
+
+}
 
 declare var document: HTMLDocument;
-declare var jQuery;
-declare var imatic;
+declare var jQuery: any;
 
-void (function (document, jQuery) {
-
-    var htmlDocumentHandler = new imatic.view.ajaxify.HTMLDocumentHandler(document, jQuery);
-
-    htmlDocumentHandler.attach();
-
-})(document, jQuery);
+imatic.view.ajaxify.init(document, jQuery);
