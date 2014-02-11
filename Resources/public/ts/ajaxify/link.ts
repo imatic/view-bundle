@@ -2,7 +2,6 @@
 /// <reference path="container.ts"/>
 /// <reference path="widget.ts"/>
 /// <reference path="action.ts"/>
-/// <reference path="ajax.ts"/>
 
 /**
  * Imatic view ajaxify link module
@@ -12,37 +11,43 @@
 module imatic.view.ajaxify.link {
 
     "use_strict";
-    
+
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import AjaxRequest          = imatic.view.ajaxify.ajax.AjaxRequest;
-    import ServerResponse       = imatic.view.ajaxify.ajax.ServerResponse;
-    
+    import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
+
     /**
      * Link handler
-     */         
+     */
     export class LinkHandler
     {
         private linkFactory = new LinkFactory(this.configBuilder, this.jQuery);
         private linkTagNames = ['A', 'BUTTON'];
-        
+
         /**
          * Constructor
-         */           
+         */
         constructor(
             private configBuilder: ConfigurationBuilder,
             private jQuery: any
         ) {}
-        
+
         /**
          * Validate given element
-         */                 
+         */
         isValidLink(element: HTMLElement): boolean {
             return -1 !== this.linkTagNames.indexOf(element.tagName);
         }
-        
+
+        /**
+         * Validate given event
+         */
+        isValidEvent(event: MouseEvent): boolean {
+            return event.which && 1 == event.which;
+        }
+
         /**
          * Get link instance for given element
          */
@@ -103,64 +108,17 @@ module imatic.view.ajaxify.link {
          * Get link's configuration
          */
         getConfiguration(): any {
-            return this.configBuilder.build(this.element);
+            return this.configBuilder.build(
+                this.element,
+                this.container.getConfiguration()
+            );
         }
 
         /**
          * Create action
          */
         createAction(): ActionInterface {
-            return new LoadHtmlAction(this.url, this.jQuery);
-        }
-    }
-    
-    /**
-     * Load HTML action
-     */
-    export class LoadHtmlAction implements ActionInterface
-    {
-        complete = false;
-        successful = false;
-        onComplete: (action: ActionInterface) => void;
-        private request: AjaxRequest;
-
-        /**
-         * Constructor
-         */
-        constructor(private url: string, private jQuery: any) {}
-
-        /**
-         * Execute the action
-         */
-        execute(container: ContainerInterface): void {
-            var self = this;
-
-            this.request = new AjaxRequest(this.jQuery);
-            this.request.execute({
-                type: 'GET',
-                dataType: 'html',
-                url: this.url,
-                cache: false,
-                success: function (response: ServerResponse) {
-                    self.successful = true;
-                    container.setHtml(response.data);
-                },
-                complete: function () {
-                    self.complete = true;
-                    if (self.onComplete) {
-                        self.onComplete(self);
-                    }
-                },
-            });
-        }
-
-        /**
-         * Abort the action
-         */
-        abort(): void {
-            if (!this.complete) {
-                this.request.xhr.abort();
-            }
+            return new LoadHtmlAction(this, this.url, this.jQuery);
         }
     }
 

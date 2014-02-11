@@ -2,10 +2,26 @@
 
 {% block action %}
 
-    <a data-target="#test-container" href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">load</a>
+    <h1>Ajaxify</h1>
 
+    <h2>Loading dedicated content</h2>
+
+    <a data-target="#test-container" href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">load</a>
     <div id="test-container" data-role="container">
         initial
     </div>
+
+
+    <h2>Link inside a container, loading current page</h2>
+    <div id="test-container2" data-role="container">
+        <a href="{{ path('imatic_view_demo_ajaxify_index') }}">reload</a>
+        {{ value }}
+    </div>
+
+
+    <h2>Link to modal</h2>
+    <a href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}" data-target="modal">
+        modal :3
+    </a>
 
 {% endblock %}

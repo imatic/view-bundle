@@ -7,7 +7,7 @@ module imatic.view.ajaxify {
     export function init(document: HTMLDocument, jQuery: any)
     {
         var handler = new HTMLDocumentHandler(document, jQuery);
-        
+
         handler.attach();
     }
 
@@ -17,3 +17,4 @@ declare var document: HTMLDocument;
 declare var jQuery: any;
 
 imatic.view.ajaxify.init(document, jQuery);
+//xx

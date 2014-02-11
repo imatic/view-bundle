@@ -1,5 +1,3 @@
-/// <reference path="modal.ts"/>
-
 /**
  * Imatic view ajaxify configuration module
  *
@@ -8,32 +6,49 @@
 module imatic.view.ajaxify.configuration {
 
     "use_strict";
-    
-    import ModalSize                    = imatic.view.ajaxify.modal.ModalSize;
-    import ModalConfigurationDefaults   = imatic.view.ajaxify.modal.ModalConfigurationDefaults;
-    
+
+    /**
+     * Configuration processor interface
+     */
+    export interface ConfigurationProcessorInterface
+    {
+        /**
+         * Process configuration
+         */
+        process: (config: any) => void;
+    }
+
     /**
      * Configuration builder
-     */         
+     */
     export class ConfigurationBuilder
     {
         private defaults = {};
+        private processors: ConfigurationProcessorInterface[] = [];
 
         /**
          * Constructor
-         */                 
-        constructor(private document: HTMLDocument, private jQuery: any) {
-            // set defaults
-            jQuery.extend(
-                this.defaults,
-                ModalConfigurationDefaults
-            ); 
+         */
+        constructor(private document: HTMLDocument, private jQuery: any) {}
+
+        /**
+         * Add configuration processor
+         */
+        addProcessor(processor: ConfigurationProcessorInterface): void {
+            this.processors.push(processor);
+        }
+
+        /**
+         * Add default configuration
+         */
+        addDefaults(config: any): void {
+            this.jQuery.extend(this.defaults, config);
         }
 
         /**
          * Build configuration for given element
          */
-        build(element?: HTMLElement, parentConfig?) {
+        build(element?: HTMLElement, parentConfig?: any) {
             // default
             var config = this.jQuery.extend({}, this.defaults);
 
@@ -47,18 +62,18 @@ module imatic.view.ajaxify.configuration {
                 this.jQuery.extend(config, this.jQuery(element).data());
             }
 
-            return this.process(config);
+            this.process(config);
+
+            return config;
         }
 
         /**
          * Process loaded configuration
          */
-        private process(config) {
-            if (typeof config.modalSize === 'string') {
-                config.modalSize = ModalSize[config.modalSize.toUpper()];
+        private process(config): void {
+            for (var i = 0; i < this.processors.length; ++i) {
+                this.processors[i].process(config);
             }
-
-            return config;
         }
     }
 

@@ -11,42 +11,42 @@
 module imatic.view.ajaxify.form {
 
     "use_strict";
-    
+
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    
+
     /**
      * Form handler
      */
-    
+
     export class FormHandler
     {
         private formFactory = new FormFactory(this.configBuilder, this.jQuery);
-        
+
         /**
          * Constructor
-         */           
+         */
         constructor(
             private configBuilder: ConfigurationBuilder,
             private jQuery: any
         ) {}
-        
+
         /**
          * Validate given element
-         */                 
+         */
         isValidForm(element: HTMLElement): boolean {
             return 'FORM' === element.tagName;
         }
-        
+
         /**
          * Get form instance for given element
          */
         getForm(container: ContainerInterface, element: HTMLElement): Form {
             return this.formFactory.create(container, element);
         }
-    }         
+    }
 
     /**
      * Form factory
@@ -75,7 +75,7 @@ module imatic.view.ajaxify.form {
             return form;
         }
     }
-    
+
     /**
      * Form
      */
@@ -95,7 +95,10 @@ module imatic.view.ajaxify.form {
          * Get form's configuration
          */
         getConfiguration(): any {
-            return this.configBuilder.build(this.element);
+            return this.configBuilder.build(
+                this.element,
+                this.container.getConfiguration()
+            );
         }
 
         /**
@@ -105,32 +108,57 @@ module imatic.view.ajaxify.form {
             return new SubmitFormAction(this, this.jQuery);
         }
     }
-    
+
     /**
      * Submit form action
      */
     export class SubmitFormAction implements ActionInterface
     {
-        complete = false;
-        successful = false;
-        onComplete: (action: ActionInterface) => void;
+        private complete = false;
+        private successful = false;
+        private onComplete: (action: ActionInterface) => void;
 
         /**
          * Constructor
          */
-        constructor(private form: Form, private jQuery: any) {}
+        constructor(
+            private widget: WidgetInterface,
+            private jQuery: any
+        ) {}
+
+        /**
+         * See if the action is complete
+         */
+        isComplete(): boolean {
+            return this.complete;
+        }
+
+        /**
+         * See if the action was successful
+         */
+        isSuccessful(): boolean {
+            return this.successful;
+        }
+
+        /**
+         * Set callback to be invoked when the action completes
+         */
+        setOnComplete(onComplete: (action: ActionInterface) => void): void {
+            this.onComplete = onComplete;
+        }
 
         /**
          * Execute the action
          */
         execute(container: ContainerInterface): void {
-            throw new Error('Not implemented');
+
         }
 
         /**
          * Abort the action
          */
         abort(): void {
+
         }
     }
 

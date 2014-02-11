@@ -8,8 +8,8 @@ module imatic.view.ajaxify.exception {
     "use_strict";
 
     /**
-     * Exception     
-     * Base class for custom exception classes     
+     * Exception
+     * Base class for custom exception classes
      */
     export class Exception implements Error
     {
@@ -19,7 +19,7 @@ module imatic.view.ajaxify.exception {
          * Constructor
          */
         constructor(public message: string) {}
-        
+
         /**
          * Get string representation of the exception
          */

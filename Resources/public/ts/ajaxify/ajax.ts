@@ -8,13 +8,13 @@
 module imatic.view.ajaxify.ajax {
 
     "use_strict";
-    
+
     import FlashMessageInterface = imatic.view.ajaxify.message.FlashMessageInterface;
 
     /**
      * Ajax request
      * Represents an ajax request. Converts successful response into ServerResponse instance.
-     */         
+     */
     export class AjaxRequest
     {
         xhr: XMLHttpRequest;
@@ -40,7 +40,7 @@ module imatic.view.ajaxify.ajax {
             this.xhr = this.jQuery.ajax(options);
         }
     }
-    
+
     /**
      * Server response factory
      */
@@ -48,10 +48,10 @@ module imatic.view.ajaxify.ajax {
     {
         /**
          * Create server response
-         */                 
+         */
         create(jQuery: any, data: any, xhr: XMLHttpRequest) {
             var response = new ServerResponse();
-        
+
             response.title = xhr.getResponseHeader('X-Title') || '';
             response.flashes = [];
             response.data = data;
@@ -60,14 +60,14 @@ module imatic.view.ajaxify.ajax {
             if (flashesJson) {
                 response.flashes = jQuery.parseJSON(flashesJson);
             }
-            
+
             return response;
         }
     }
 
     /**
      * Server response
-     */         
+     */
     export class ServerResponse
     {
         title: string;

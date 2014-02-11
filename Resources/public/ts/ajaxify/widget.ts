@@ -8,12 +8,12 @@
 module imatic.view.ajaxify.widget {
 
     "use_strict";
-    
+
     import ActionInterface = imatic.view.ajaxify.action.ActionInterface;
 
     /**
      * Widget interface
-     * Represents an object that generates actions for it's container     
+     * Represents an object that generates actions for it's container
      */
     export interface WidgetInterface
     {
@@ -21,7 +21,7 @@ module imatic.view.ajaxify.widget {
          * Get widget's configuration
          */
         getConfiguration: () => any;
-        
+
         /**
          * Create action
          */

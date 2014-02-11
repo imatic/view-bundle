@@ -16,7 +16,9 @@ class AjaxifyController extends Controller
      */
     public function indexAction()
     {
-        return array();
+        return array(
+            'value' => uniqid('', true),
+        );
     }
 
     /**
