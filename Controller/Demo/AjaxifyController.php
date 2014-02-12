@@ -31,4 +31,15 @@ class AjaxifyController extends Controller
             'value' => uniqid('', true),
         );
     }
+
+    /**
+     * @Config\Route("/ajax-test2")
+     * @Config\Template()
+     */
+    public function ajaxTest2Action()
+    {
+        return array(
+            'value' => uniqid('', true),
+        );
+    }
 }

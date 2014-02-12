@@ -15,7 +15,7 @@ module imatic.view.ajaxify.container {
 
     import Exception            = imatic.view.ajaxify.exception.Exception;
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
-    import Events               = imatic.view.ajaxify.event.Events;
+    import DomEvents            = imatic.view.ajaxify.event.DomEvents;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import HtmlFragment         = imatic.view.ajaxify.html.HtmlFragment;
 
@@ -31,6 +31,8 @@ module imatic.view.ajaxify.container {
      */
     export interface ContainerInterface
     {
+        metadata: ContainerMetadataInterface;
+
         /**
          * Destructor
          */
@@ -65,6 +67,14 @@ module imatic.view.ajaxify.container {
          * Set container's HTML content
          */
         setHtml: (html: string) => void;
+    }
+
+    /**
+     * Container metadata interface
+     */
+    export interface ContainerMetadataInterface
+    {
+        title: string;
     }
 
     /**
@@ -241,6 +251,7 @@ module imatic.view.ajaxify.container {
         create(element: HTMLElement): ContainerInterface {
             return new Container(
                 this.configBuilder,
+                this.document,
                 this.jQuery,
                 element
             );
@@ -253,12 +264,16 @@ module imatic.view.ajaxify.container {
     export class Container implements ContainerInterface
     {
         public currentAction: ActionInterface;
+        public metadata: ContainerMetadataInterface = {
+            title: null,
+        };
 
         /**
          * Constructor
          */
         constructor(
             public configBuilder: ConfigurationBuilder,
+            public document: HTMLDocument,
             public jQuery: any,
             public element?: HTMLElement
         ) {}
@@ -309,25 +324,17 @@ module imatic.view.ajaxify.container {
             this.currentAction = action;
 
             // execute action
-            action.setOnComplete(this.onActionComplete);
             action.execute(this);
         }
-
-        /**
-         * On action complete callback
-         */
-        onActionComplete = (action: ActionInterface): void => {
-
-        };
 
         /**
          * Set container's content
          */
         setContent(content: any): void {
             this.jQuery(this.element)
-                .trigger(Events.ON_BEFORE_CONTENT_UPDATE)
+                .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
                 .empty()
-                .append(content)
+                .append(content.contents())
             ;
         }
 
@@ -344,7 +351,7 @@ module imatic.view.ajaxify.container {
                 }
             }
             if (!content) {
-                content = fragment.all();
+                content = fragment.root();
             }
 
             this.setContent(content);

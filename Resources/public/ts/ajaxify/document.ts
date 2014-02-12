@@ -16,7 +16,7 @@ module imatic.view.ajaxify.document {
     "use_strict";
 
     import ConfigurationBuilder         = imatic.view.ajaxify.configuration.ConfigurationBuilder;
-    import Events                       = imatic.view.ajaxify.event.Events;
+    import DomEvents                    = imatic.view.ajaxify.event.DomEvents;
     import ContainerInterface           = imatic.view.ajaxify.container.ContainerInterface;
     import ContainerHandler             = imatic.view.ajaxify.container.ContainerHandler;
     import WidgetInterface              = imatic.view.ajaxify.widget.WidgetInterface;
@@ -82,7 +82,7 @@ module imatic.view.ajaxify.document {
             this.jQuery(this.document)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
-                .on(Events.ON_BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
+                .on(DomEvents.ON_BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
             ;
         }
 

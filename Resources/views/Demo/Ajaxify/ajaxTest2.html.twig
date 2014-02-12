@@ -1,0 +1,16 @@
+{% extends 'ImaticViewBundle:Demo/Ajaxify:layout.html.twig' %}
+
+{% block action %}
+
+    <h1>Modal test title</h1>
+
+    <a data-target="#test-containerxx" href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">load</a>
+    <div id="test-containerxx" data-role="container">
+        initial
+    </div>
+
+    <div id="test-footer">
+        I am a footer
+    </div>
+
+{% endblock %}

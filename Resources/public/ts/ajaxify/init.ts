@@ -17,4 +17,3 @@ declare var document: HTMLDocument;
 declare var jQuery: any;
 
 imatic.view.ajaxify.init(document, jQuery);
-//xx

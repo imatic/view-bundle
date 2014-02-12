@@ -33,11 +33,6 @@ module imatic.view.ajaxify.action {
         isSuccessful: () => boolean;
 
         /**
-         * Set callback to be invoked when the action completes
-         */
-        setOnComplete: (onComplete: (action: ActionInterface) => void) => void;
-
-        /**
          * Execute the action
          */
         execute: (container: ContainerInterface) => void;
@@ -55,7 +50,6 @@ module imatic.view.ajaxify.action {
     {
         private complete = false;
         private successful = false;
-        private onComplete: (action: ActionInterface) => void;
         private request: AjaxRequest;
 
         /**
@@ -82,13 +76,6 @@ module imatic.view.ajaxify.action {
         }
 
         /**
-         * Set callback to be invoked when the action completes
-         */
-        setOnComplete(onComplete: (action: ActionInterface) => void): void {
-            this.onComplete = onComplete;
-        }
-
-        /**
          * Execute the action
          */
         execute(container: ContainerInterface): void {
@@ -102,13 +89,12 @@ module imatic.view.ajaxify.action {
                 cache: false,
                 success: function (response: ServerResponse) {
                     self.successful = true;
+
+                    container.metadata.title = response.title;
                     container.setHtml(response.data);
                 },
                 complete: function () {
                     self.complete = true;
-                    if (self.onComplete) {
-                        self.onComplete(self);
-                    }
                 },
             });
         }

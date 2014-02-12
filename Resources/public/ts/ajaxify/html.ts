@@ -24,6 +24,13 @@ module imatic.view.ajaxify.html {
         }
 
         /**
+         * Get the root element
+         */
+        root(): any {
+            return this.dom;
+        }
+
+        /**
          * Get all elements
          */
         all(): any {
