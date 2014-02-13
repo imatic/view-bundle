@@ -20,6 +20,7 @@ module imatic.view.ajaxify.document {
     import ContainerInterface           = imatic.view.ajaxify.container.ContainerInterface;
     import ContainerHandler             = imatic.view.ajaxify.container.ContainerHandler;
     import WidgetInterface              = imatic.view.ajaxify.widget.WidgetInterface;
+    import WidgetHandler                = imatic.view.ajaxify.widget.WidgetHandler;
     import ModalContainerHandler        = imatic.view.ajaxify.modal.ModalContainerHandler;
     import ModalConfigurationDefaults   = imatic.view.ajaxify.modal.ModalConfigurationDefaults;
     import ModalConfigurationProcessor  = imatic.view.ajaxify.modal.ModalConfigurationProcessor;
@@ -37,6 +38,7 @@ module imatic.view.ajaxify.document {
         private jQuery: any;
         private configBuilder: ConfigurationBuilder;
         private containerHandler: ContainerHandler;
+        private widgetHandler: WidgetHandler;
         private linkHandler: LinkHandler;
         private formHandler: FormHandler;
 
@@ -52,11 +54,14 @@ module imatic.view.ajaxify.document {
             this.configBuilder.addDefaults(ModalConfigurationDefaults);
             this.configBuilder.addProcessor(new ModalConfigurationProcessor());
 
+            // widget handler
+            this.widgetHandler = new WidgetHandler(this.jQuery);
+
             // link handler
-            this.linkHandler = new LinkHandler(this.configBuilder, this.jQuery);
+            this.linkHandler = new LinkHandler(this.widgetHandler, this.configBuilder, this.jQuery);
 
             // form handler
-            this.formHandler = new FormHandler(this.configBuilder, this.jQuery);
+            this.formHandler = new FormHandler(this.widgetHandler, this.configBuilder, this.jQuery);
 
             // container handler
             this.containerHandler = new ContainerHandler(
@@ -93,11 +98,11 @@ module imatic.view.ajaxify.document {
             var element = <HTMLElement> event.target;
 
             if (
-                this.linkHandler.isValidLink(element)
+                this.linkHandler.isValidElement(element)
                 && this.linkHandler.isValidEvent(event)
             ) {
-                var container = this.containerHandler.findContainer(element);
-                var link = this.linkHandler.getLink(container, element);
+                var container = this.containerHandler.findInstance(element);
+                var link = this.linkHandler.getInstance(container, element);
 
                 this.dispatch(container, link);
                 event.preventDefault();
@@ -110,9 +115,9 @@ module imatic.view.ajaxify.document {
         private onSubmit = (event: Event): void => {
             var element = <HTMLElement> event.target;
 
-            if (this.formHandler.isValidForm(element)) {
-                var container = this.containerHandler.findContainer(element);
-                var form = this.formHandler.getForm(container, element);
+            if (this.formHandler.isValidElement(element)) {
+                var container = this.containerHandler.findInstance(element);
+                var form = this.formHandler.getInstance(container, element);
 
                 this.dispatch(container, form);
                 event.preventDefault();
@@ -125,8 +130,14 @@ module imatic.view.ajaxify.document {
         private onBeforeContentUpdate = (event: Event): void => {
             var element = <HTMLElement> event.target;
 
-            // call destroy() on all containers that are about to be replaced
-            var containers = this.containerHandler.getAliveContainers(element);
+            // destroy() all living widget instances in the DOM subtree
+            var widgets = this.widgetHandler.findInstances(element);
+            for (var i = 0; i < widgets.length; ++i) {
+                widgets[i].destroy();
+            }
+
+            // destroy() all living container instances in the DOM subtree
+            var containers = this.containerHandler.findInstances(element);
             for (var i = 0; i < containers.length; ++i) {
                 containers[i].destroy();
             }

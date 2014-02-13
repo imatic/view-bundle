@@ -3,6 +3,7 @@
 /// <reference path="event.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="html.ts"/>
+/// <reference path="css.ts"/>
 
 /**
  * Imatic view ajaxify container module
@@ -13,11 +14,13 @@ module imatic.view.ajaxify.container {
 
     "use_strict";
 
-    import Exception            = imatic.view.ajaxify.exception.Exception;
-    import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
-    import DomEvents            = imatic.view.ajaxify.event.DomEvents;
-    import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import HtmlFragment         = imatic.view.ajaxify.html.HtmlFragment;
+    import Exception                = imatic.view.ajaxify.exception.Exception;
+    import ConfigurationBuilder     = imatic.view.ajaxify.configuration.ConfigurationBuilder;
+    import DomEvents                = imatic.view.ajaxify.event.DomEvents;
+    import EventInterface           = imatic.view.ajaxify.event.EventInterface;
+    import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
+    import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
+    import CssClasses           = imatic.view.ajaxify.css.CssClasses;
 
     /**
      * Container not found exception
@@ -31,8 +34,6 @@ module imatic.view.ajaxify.container {
      */
     export interface ContainerInterface
     {
-        metadata: ContainerMetadataInterface;
-
         /**
          * Destructor
          */
@@ -42,11 +43,6 @@ module imatic.view.ajaxify.container {
          * Get container's element ID
          */
         getId: () => string;
-
-        /**
-         * See if the container has an element ID
-         */
-        hasId: () => boolean;
 
         /**
          * Get container's configuration
@@ -67,14 +63,6 @@ module imatic.view.ajaxify.container {
          * Set container's HTML content
          */
         setHtml: (html: string) => void;
-    }
-
-    /**
-     * Container metadata interface
-     */
-    export interface ContainerMetadataInterface
-    {
-        title: string;
     }
 
     /**
@@ -129,14 +117,14 @@ module imatic.view.ajaxify.container {
         /**
          * Validate given element
          */
-        isValidContainer(element: HTMLElement): ContainerInterface {
+        isValidElement(element: HTMLElement): ContainerInterface {
             return this.jQuery(element).is(this.selector);
         }
 
         /**
          * Get container instance for given element
          */
-        findContainer(element: HTMLElement): ContainerInterface {
+        findInstance(element: HTMLElement): ContainerInterface {
             var container;
             var target = this.jQuery(element).data('target');
 
@@ -158,20 +146,20 @@ module imatic.view.ajaxify.container {
                 var containerElement;
                 if (!target || '.' === target) {
                     // parent container
-                    containerElement = this.getContainerElementFromContext(element);
+                    containerElement = this.getElementFromContext(element);
                 } else {
                     // specified by selector
-                    containerElement = this.getContainerElementFromSelector(target);
+                    containerElement = this.getElementFromSelector(target);
                 }
 
-                return this.getContainerInstance(containerElement);
+                return this.getInstance(containerElement);
             }
         }
 
         /**
          * Get container instance
          */
-        private getContainerInstance(containerElement: HTMLElement): ContainerInterface {
+        getInstance(containerElement: HTMLElement): ContainerInterface {
             var container = this.jQuery(containerElement).data(this.instanceDataKey);
             if (!container) {
                 // instance not created
@@ -188,7 +176,7 @@ module imatic.view.ajaxify.container {
         /**
          * Get container element from given element's context
          */
-        getContainerElementFromContext(element: HTMLElement): HTMLElement {
+        getElementFromContext(element: HTMLElement): HTMLElement {
             var parentContainers = this.jQuery(element).parents(this.selector);
             if (parentContainers.length < 1) {
                 throw new ContainerNotFoundException('Could not determine the container from context');
@@ -200,12 +188,12 @@ module imatic.view.ajaxify.container {
         /**
          * Get container element using given selector
          */
-        getContainerElementFromSelector(selector: string): ContainerInterface {
+        getElementFromSelector(selector: string): ContainerInterface {
             var containerElement = this.jQuery(selector, this.document)[0];
             if (!containerElement) {
                 throw new ContainerNotFoundException('Container specified by selector "' + selector + '" was not found');
             }
-            if (!this.isValidContainer(containerElement)) {
+            if (!this.isValidElement(containerElement)) {
                 throw new ContainerNotFoundException('Container specified by selector "' + selector + '" is not a valid container');
             }
 
@@ -215,12 +203,12 @@ module imatic.view.ajaxify.container {
         /**
          * Get alive container instances for given DOM subtree
          */
-        getAliveContainers(element: HTMLElement): ContainerInterface[] {
+        findInstances(element: HTMLElement): ContainerInterface[] {
             var self = this;
             var containers: ContainerInterface[] = [];
 
-            if (this.isValidContainer(element)) {
-                containers.push(this.getContainerInstance(element));
+            if (this.isValidElement(element)) {
+                containers.push(this.getInstance(element));
             }
 
             this.jQuery('[' + this.instanceMarkAttr + ']', element).each(function () {
@@ -264,9 +252,6 @@ module imatic.view.ajaxify.container {
     export class Container implements ContainerInterface
     {
         public currentAction: ActionInterface;
-        public metadata: ContainerMetadataInterface = {
-            title: null,
-        };
 
         /**
          * Constructor
@@ -289,17 +274,11 @@ module imatic.view.ajaxify.container {
          * Get container's element ID
          */
         getId(): string {
-            if (!this.hasId()) {
-                throw new Error('The container does not have an element ID');
+            if (this.element) {
+                return this.element.id;
+            } else {
+                return null;
             }
-            return this.element.id;
-        }
-
-        /**
-         * See if the container has an element ID
-         */
-        hasId(): boolean {
-            return this.element && this.element.id ? true: false;
         }
 
         /**
@@ -323,6 +302,18 @@ module imatic.view.ajaxify.container {
             // set current action
             this.currentAction = action;
 
+            // listen to action's events
+            action.events.addCallback('begin', (event: EventInterface): void => {
+                if (this.element) {
+                    this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                }
+            });
+            action.events.addCallback('complete', (event: EventInterface): void => {
+                if (this.element) {
+                    this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                }
+            });
+
             // execute action
             action.execute(this);
         }
@@ -344,12 +335,15 @@ module imatic.view.ajaxify.container {
         setHtml(html: string): void {
             var fragment = new HtmlFragment(html, this.jQuery);
             var content;
-            if (this.hasId()) {
-                var containerSelector = '#' + this.getId();
+
+            var id = this.getId();
+            if (id) {
+                var containerSelector = '#' + id;
                 if (fragment.contains(containerSelector)) {
                     content = fragment.find(containerSelector);
                 }
             }
+
             if (!content) {
                 content = fragment.root();
             }

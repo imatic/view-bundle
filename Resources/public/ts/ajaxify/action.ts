@@ -1,6 +1,7 @@
 /// <reference path="container.ts"/>
 /// <reference path="widget.ts"/>
 /// <reference path="ajax.ts"/>
+/// <reference path="event.ts"/>
 
 /**
  * Imatic view ajaxify action module
@@ -15,6 +16,9 @@ module imatic.view.ajaxify.action {
     import AjaxRequest              = imatic.view.ajaxify.ajax.AjaxRequest;
     import ServerResponse           = imatic.view.ajaxify.ajax.ServerResponse;
     import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
+    import EventDispatcherInterface = imatic.view.ajaxify.event.EventDispatcherInterface;
+    import EventDispatcher          = imatic.view.ajaxify.event.EventDispatcher;
+    import Event                    = imatic.view.ajaxify.event.Event;
 
     /**
      * Action interface
@@ -22,6 +26,8 @@ module imatic.view.ajaxify.action {
      */
     export interface ActionInterface
     {
+        events: EventDispatcherInterface;
+
         /**
          * See if the action is complete
          */
@@ -48,6 +54,8 @@ module imatic.view.ajaxify.action {
      */
     export class LoadHtmlAction implements ActionInterface
     {
+        public events = new EventDispatcher();
+
         private complete = false;
         private successful = false;
         private request: AjaxRequest;
@@ -56,9 +64,8 @@ module imatic.view.ajaxify.action {
          * Constructor
          */
         constructor(
-            private widget: WidgetInterface,
-            private url: string,
-            private jQuery: any
+            private jQuery: any,
+            private options: {url: string}
         ) {}
 
         /**
@@ -79,22 +86,31 @@ module imatic.view.ajaxify.action {
          * Execute the action
          */
         execute(container: ContainerInterface): void {
-            var self = this;
-
+            var response;
             this.request = new AjaxRequest(this.jQuery);
+
+            this.events.dispatch('begin', new Event({action: this}));
+
             this.request.execute({
                 type: 'GET',
                 dataType: 'html',
-                url: this.url,
+                url: this.options.url,
                 cache: false,
-                success: function (response: ServerResponse) {
-                    self.successful = true;
-
-                    container.metadata.title = response.title;
-                    container.setHtml(response.data);
+                success: (serverResponse: ServerResponse): void => {
+                    this.successful = true;
+                    response = serverResponse;
                 },
-                complete: function () {
-                    self.complete = true;
+                complete: (): void => {
+                    this.complete = true;
+
+                    if (this.successful) {
+                        container.setHtml(response.data);
+                    }
+
+                    this.events.dispatch('complete', new Event({
+                        action: this,
+                        response: response,
+                    }));
                 },
             });
         }

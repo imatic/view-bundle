@@ -1,6 +1,8 @@
 /// <reference path="configuration.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="widget.ts"/>
+/// <reference path="event.ts"/>
+/// <reference path="css.ts"/>
 /// <reference path="action.ts"/>
 
 /**
@@ -15,8 +17,11 @@ module imatic.view.ajaxify.link {
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
+    import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
+    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
+    import CssClasses           = imatic.view.ajaxify.css.CssClasses;
 
     /**
      * Link handler
@@ -30,6 +35,7 @@ module imatic.view.ajaxify.link {
          * Constructor
          */
         constructor(
+            private widgetHandler: WidgetHandler,
             private configBuilder: ConfigurationBuilder,
             private jQuery: any
         ) {}
@@ -37,7 +43,7 @@ module imatic.view.ajaxify.link {
         /**
          * Validate given element
          */
-        isValidLink(element: HTMLElement): boolean {
+        isValidElement(element: HTMLElement): boolean {
             return -1 !== this.linkTagNames.indexOf(element.tagName);
         }
 
@@ -51,8 +57,17 @@ module imatic.view.ajaxify.link {
         /**
          * Get link instance for given element
          */
-        getLink(container: ContainerInterface, element: HTMLElement): Link {
-            return this.linkFactory.create(container, element);
+        getInstance(container: ContainerInterface, element: HTMLElement): Link {
+            var link;
+
+            if (this.widgetHandler.hasInstance(element)) {
+                link = this.widgetHandler.getInstance(element);
+            } else {
+                link = this.linkFactory.create(container, element);
+                this.widgetHandler.setInstance(element, link);
+            }
+
+            return link;
         }
     }
 
@@ -105,6 +120,12 @@ module imatic.view.ajaxify.link {
         ) {}
 
         /**
+         * Destructor
+         */
+        destroy(): void {
+        }
+
+        /**
          * Get link's configuration
          */
         getConfiguration(): any {
@@ -118,7 +139,18 @@ module imatic.view.ajaxify.link {
          * Create action
          */
         createAction(): ActionInterface {
-            return new LoadHtmlAction(this, this.url, this.jQuery);
+            var action = new LoadHtmlAction(this.jQuery, {
+                url: this.url,
+            });
+
+            action.events.addCallback('begin', (event: EventInterface): void => {
+                this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+            });
+            action.events.addCallback('complete', (event: EventInterface): void => {
+                this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+            });
+
+            return action;
         }
     }
 

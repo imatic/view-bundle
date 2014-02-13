@@ -2,6 +2,7 @@
 /// <reference path="configuration.ts"/>
 /// <reference path="widget.ts"/>
 /// <reference path="action.ts"/>
+/// <reference path="event.ts"/>
 
 /**
  * Imatic view ajaxify form module
@@ -15,7 +16,10 @@ module imatic.view.ajaxify.form {
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
+    import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
+    import EventDispatcher      = imatic.view.ajaxify.event.EventDispatcher;
+    import Event                = imatic.view.ajaxify.event.Event;
 
     /**
      * Form handler
@@ -29,6 +33,7 @@ module imatic.view.ajaxify.form {
          * Constructor
          */
         constructor(
+            private widgetHandler: WidgetHandler,
             private configBuilder: ConfigurationBuilder,
             private jQuery: any
         ) {}
@@ -36,15 +41,24 @@ module imatic.view.ajaxify.form {
         /**
          * Validate given element
          */
-        isValidForm(element: HTMLElement): boolean {
+        isValidElement(element: HTMLElement): boolean {
             return 'FORM' === element.tagName;
         }
 
         /**
          * Get form instance for given element
          */
-        getForm(container: ContainerInterface, element: HTMLElement): Form {
-            return this.formFactory.create(container, element);
+        getInstance(container: ContainerInterface, element: HTMLElement): Form {
+            var form;
+
+            if (this.widgetHandler.hasInstance(element)) {
+                form = this.widgetHandler.getInstance(element);
+            } else {
+                form = this.formFactory.create(container, element);
+                this.widgetHandler.setInstance(element, form);
+            }
+
+            return form;
         }
     }
 
@@ -92,6 +106,12 @@ module imatic.view.ajaxify.form {
         ) {}
 
         /**
+         * Destructor
+         */
+        destroy(): void {
+        }
+
+        /**
          * Get form's configuration
          */
         getConfiguration(): any {
@@ -114,6 +134,8 @@ module imatic.view.ajaxify.form {
      */
     export class SubmitFormAction implements ActionInterface
     {
+        public events = new EventDispatcher();
+
         private complete = false;
         private successful = false;
         private onComplete: (action: ActionInterface) => void;
@@ -138,13 +160,6 @@ module imatic.view.ajaxify.form {
          */
         isSuccessful(): boolean {
             return this.successful;
-        }
-
-        /**
-         * Set callback to be invoked when the action completes
-         */
-        setOnComplete(onComplete: (action: ActionInterface) => void): void {
-            this.onComplete = onComplete;
         }
 
         /**
