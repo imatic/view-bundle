@@ -1,0 +1,5 @@
+/* Busy component */
+.imatic-view-ajaxify-busy {
+    cursor: wait;
+    opacity: .5;
+}

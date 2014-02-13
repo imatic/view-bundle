@@ -8,3 +8,12 @@
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    'bundles/imaticview/css/demo/ajaxify/ajaxify.css'
+    output='css/style.css' -%}
+    <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
+    {% endstylesheets %}
+{% endblock %}

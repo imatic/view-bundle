@@ -111,7 +111,7 @@ module imatic.view.ajaxify.modal {
                 // find contextual container element
                 var contextualContainerElement;
                 try {
-                    contextualContainerElement = this.containerHandler.getContainerElementFromContext(element);
+                    contextualContainerElement = this.containerHandler.getElementFromContext(element);
                 } catch (e) {
                     if (!(e instanceof ContainerNotFoundException)) {
                         throw e;
@@ -152,6 +152,7 @@ module imatic.view.ajaxify.modal {
                 this.configBuilder,
                 this.document,
                 this.jQuery,
+                null,
                 contextualElement,
                 owningElement
             );
@@ -170,6 +171,7 @@ module imatic.view.ajaxify.modal {
             public document: HTMLDocument,
             public jQuery: any,
             public element?: HTMLElement,
+            public contextualElement?: HTMLElement,
             public owningElement?: HTMLElement
         ) {
             super(configBuilder, document, jQuery, element);
@@ -183,10 +185,10 @@ module imatic.view.ajaxify.modal {
         }
 
         /**
-         * See if the container has an element ID
+         * Get container's element ID
          */
-        hasId(): boolean {
-            return false;
+        getId(): string {
+            return null;
         }
 
         /**
@@ -195,7 +197,7 @@ module imatic.view.ajaxify.modal {
         getConfiguration(): any {
             return this.configBuilder.build(
                 this.owningElement,
-                super.getConfiguration()
+                this.configBuilder.build(this.contextualElement)
             );
         }
 
@@ -229,9 +231,9 @@ module imatic.view.ajaxify.modal {
                 }
             }
 
-            if (!title && this.metadata.title) {
+            /*if (!title && this.metadata.title) {
                 title = this.metadata.title;
-            }
+            }*/
 
             this.modal.setTitle(title);
             this.modal.setFooter(footer ? footer.contents() : null);
@@ -395,6 +397,10 @@ module imatic.view.ajaxify.modal {
             ;
 
             this.element = this.jQuery(html, this.document).appendTo(this.document.body)[0];
+
+            this.jQuery(this.element).on('hidden.bs.modal', (): void => {
+                this.destroy();
+            });
         }
     }
 
