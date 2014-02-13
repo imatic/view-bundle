@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+
+{% block action %}
+
+    {% set table = {'selectable': {'enabled': true, 'column': 'id'} } %}
+    {% set columns = [{'name': 'name', 'format': 'text'}, {'name': 'age'}, {'name': 'active'}] %}
+
+    {{ include('ImaticViewBundle:Component:table.html.twig') }}
+    {{ include('ImaticViewBundle:Component:grid.html.twig') }}
+
+{% endblock %}

@@ -1,5 +1,3 @@
-{% from 'ImaticViewBundle:ComponentOld:flash.html.twig' import session_message %}
-{% import 'ImaticViewBundle:ComponentOld:menu.html.twig' as menu %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,19 +36,73 @@
         {% endjavascripts %}
     {% endblock %}
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title_top %}{% block title %}{% spaceless %}{{ block('headline') }}{% endspaceless %} - {{ application.name }}{% endblock %}{% endblock %}</title>
 
     {% block metas -%}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% endblock %}
 
+    {% block icons -%}
+    {% endblock %}
 </head>
 
 <body>
 
 {% block body %}
 
-    <div class="container">
+    {% block header_full %}
+        <header>
+            {% block header %}
+                <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button"
+                                    class="navbar-toggle"
+                                    data-toggle="collapse"
+                                    data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            {% block header_logo %}
+                                <a class="navbar-brand" href="{{ path('homepage') }}">
+                                    {% block header_logo_text %}Imatic IS{% endblock %}
+                                </a>
+                            {% endblock %}
+                        </div>
+
+                        <div class="collapse navbar-collapse">
+                            <div class="nav-collapse">
+                                {% block header_menu %}
+                                    {#{{ menu.menu('imatic.main') }}#}
+                                    {#{{ menu.menu('imatic.main_side', null, null, { 'class': 'pull-right' }) }}#}
+
+                                    <ul class="nav navbar-nav">
+                                        <li><a href="{{ path('imatic_view_demo_component_grid') }}">Grid</a></li>
+                                        <li><a href="{{ path('imatic_view_demo_ajaxify_index') }}">Ajaxify</a></li>
+                                    </ul>
+
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+
+            <div class="headline">
+                <div class="container-fluid">
+                    <div class="pull-right">{% block headline_side %}{% block page_actions %}{% endblock %}{% endblock %}</div>
+                    <h1>{% spaceless %}{% block headline %}{{ application.name }}{% endblock %}{% endspaceless %}</h1>
+
+                    {% block breadcrumbs %}
+                    {% endblock %}
+                </div>
+            </div>
+        </header>
+    {% endblock %}
+
+    <div class="container-fluid">
         {% block action %}{% endblock %}
     </div>
 

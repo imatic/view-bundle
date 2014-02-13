@@ -1,1 +1,71 @@
 @import "../../../vendor/bootstrap/less/bootstrap.less";
+
+// === Mixins ===
+.header-font {
+    font-family: Dosis, @font-family-sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+// === Scaffold ===
+@font-face {
+    font-family: Dosis;
+    src: url(../font/Dosis-SemiBold.ttf);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    .header-font()
+}
+
+.navbar, .nav {
+    .header-font()
+}
+
+header .navbar {
+    margin-bottom: 0;
+    #gradient > .vertical(lighten(@gray-dark, 10%), @gray-dark);
+}
+
+// === Blocks ===
+.headline {
+    margin-bottom: 20px;
+    padding: 15px 0 10px 0;
+    border-bottom: 1px solid darken(@gray-lighter, 10%);
+    #gradient > .vertical(darken(@gray-lighter, 10%), @gray-lighter);
+}
+
+.headline .breadcrumb {
+    background: none;
+    margin: .4em 0 0;
+    padding: 0;
+}
+
+.headline h1 {
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 26px;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-content {
+    padding: 10px;
+    border-top: 1px solid darken(@gray-lighter, 10%);
+    #gradient > .vertical(@gray-lighter, darken(@gray-lighter, 10%));
+    .header-font()
+}
+
+// === Variables ===
+@orange: #f60;
+@white: #fff;
+
+@link-color: #08c;
+@link-hover-color: darken(@link-color, 15%);
+
+@navbar-inverse-border: @orange;
+@navbar-inverse-bg: @gray-dark;
+@navbar-inverse-link-active-bg: @gray-dark;
+@navbar-inverse-link-color: @white;
+@navbar-inverse-link-hover-color: @orange;
+
+@icon-font-path: "../../../vendor/bootstrap/font/";

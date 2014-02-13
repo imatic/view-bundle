@@ -6,13 +6,28 @@
 #}
 
 {% block table %}
+    {% set columns = imatic_view_table_columns(columns | default([])) %}
+    {% set table   = imatic_view_table(table | default([])) %}
+
     <table class="table table-condensed">
         {% block table_head %}
             <thead>
             <tr>
+                {% if table.selectable.enabled %}
+                    <th>
+                    </th>
+                {% endif %}
                 {% for column in columns %}
                     <th>{{ column.name }}</th>
                 {% endfor %}
+                {% if table.actions %}
+                    <th>
+                        actions
+                        {% for action in table.actions %}
+                            {{ imatic_view_action(action) }}
+                        {% endfor %}
+                    </th>
+                {% endif %}
             </tr>
             </thead>
         {% endblock %}
@@ -23,26 +38,26 @@
                     <tr>
                         {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                         {% block table_row_select %}
-                            {% if columns.selectable %}
+                            {% if table.selectable.enabled %}
                                 <td>
                                     <input type="checkbox"
                                            name="selected[]"
-                                           value="{{ attribute(item, columns.selectableColumn) }}">
+                                           value="{{ attribute(item, table.selectable.column) }}">
                                 </td>
                             {% endif %}
                         {% endblock %}
                         {% block table_row_values %}
                             {% for column in columns %}
                                 <td>
-                                    {{ imatic_view_format(attribute(item, column), column.format, column.format_options) }}
+                                    {{ imatic_view_format(attribute(item, column.name), column.format, column.formatOptions) }}
                                 </td>
                             {% endfor %}
                         {% endblock %}
                         {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                         {% block table_row_actions %}
-                            {% if columns.actions %}
+                            {% if table.actions %}
                                 <td>
-                                    {% for action in columns.actions %}
+                                    {% for action in table.actions %}
                                         {{ imatic_view_action(action) }}
                                     {% endfor %}
                                 </td>

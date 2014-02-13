@@ -1,0 +1,403 @@
+{% extends '::base.html.twig' %}
+
+{% block headline %}
+    Imatic View Bundle - Templates and components documentation
+{% endblock %}
+
+{% block sidebar %}
+    <div class="sidebar-nav span3" id="demo-nav" data-spy="affix" data-offset-top="0">
+    </div>
+{% endblock %}
+
+{% block action %}
+    <div id="demo-content">
+
+    <p class="alert alert-info">Current template is <strong>ImaticViewBundle:Demo:index.html.twig</strong>, look inside
+        for more information.
+    </p>
+
+    <h2 class="menu">Scaffolding</h2>
+
+    <h3 class="menu">Grid system</h3>
+
+    <div class="bs-docs-example">
+        <div class="row-fluid">
+            <div class="span4">
+                <h2>Heading</h2>
+
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                    mauris
+                    condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
+                    euismod. Donec sed odio dui. </p>
+
+                <p><a href="#" class="btn">View details »</a></p>
+            </div>
+            <!--/span-->
+            <div class="span4">
+                <h2>Heading</h2>
+
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                    mauris
+                    condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
+                    euismod. Donec sed odio dui. </p>
+
+                <p><a href="#" class="btn">View details »</a></p>
+            </div>
+            <!--/span-->
+            <div class="span4">
+                <h2>Heading</h2>
+
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                    mauris
+                    condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
+                    euismod. Donec sed odio dui. </p>
+
+                <p><a href="#" class="btn">View details »</a></p>
+            </div>
+            <!--/span-->
+        </div>
+    </div>
+
+    <h2 class="menu">Base css</h2>
+
+    <h3 class="menu">Typography</h3>
+
+    <h4>Headings</h4>
+
+    <div class="bs-docs-example">
+        <h1>h1. Heading 1</h1>
+
+        <h2>h2. Heading 2</h2>
+
+        <h3>h3. Heading 3</h3>
+        <h4>h4. Heading 4</h4>
+        <h5>h5. Heading 5</h5>
+        <h6>h6. Heading 6</h6>
+    </div>
+
+    <h4>Paragraphs</h4>
+
+    <div class="bs-docs-example">
+        <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient
+            montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
+
+        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla
+            non
+            metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio
+            sem
+            nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+        <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget
+            metus.
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+    </div>
+
+    <div class="bs-docs-example">
+        <p class="muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+
+        <p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
+
+        <p class="text-error">Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+        <p class="text-info">Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.</p>
+
+        <p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+    </div>
+
+    <h3 class="menu">Tables</h3>
+
+    <div class="bs-docs-example">
+
+        {% import 'ImaticViewBundle:ComponentOld:table.html.twig' as table %}
+
+        {% set table_data = [
+        { 'id': 1, 'name': 'Lister', 'active': true, age: 28 },
+        { 'id': 2, 'name': 'Rimmer', 'active': false, age: 32 },
+        { 'id': 3, 'name': 'Kriten', 'active': true, age: 345 },
+        { 'id': 4, 'name': 'Cat', 'active': true, age: 12 }
+        ] %}
+        {% set table_columns = [
+        {'name':'id','label':'Id'},
+        {'name':'name'},
+        {'name':'active','type':'bool'},
+        {'name':'age', 'type':'int'}
+        ] %}
+
+
+        <h4>Plain table</h4>
+        {{ table.table(table_data) }}
+        <h4>Standard table</h4>
+        {{ table.table(table_data, table_columns) }}
+        <h4>Bordered table</h4>
+        {{ table.table(table_data, table_columns, { 'bordered': true }) }}
+        <h4>Condensed table</h4>
+        {{ table.table(table_data, table_columns, { 'condensed': true }) }}
+    </div>
+
+    <h3 class="menu">Forms</h3>
+
+    <div class="bs-docs-example">
+        <form class="bs-docs-example form-horizontal">
+            <legend>Legend</legend>
+            <div class="control-group">
+                <label for="inputEmail" class="control-label">Email</label>
+
+                <div class="controls">
+                    <input type="text" placeholder="Email" id="inputEmail">
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="inputPassword" class="control-label">Password</label>
+
+                <div class="controls">
+                    <input type="password" placeholder="Password" id="inputPassword">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <button class="btn" type="submit">Sign in</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <h3 class="menu">Buttons</h3>
+
+    <div class="bs-docs-example">
+        <button class="btn" type="button">Default</button>
+        <br>
+        <button class="btn btn-primary" type="button">Primary</button>
+        <br>
+        <button class="btn btn-info" type="button">Info</button>
+        <br>
+        <button class="btn btn-success" type="button">Success</button>
+        <br>
+        <button class="btn btn-warning" type="button">Warning</button>
+        <br>
+        <button class="btn btn-danger" type="button">Danger</button>
+        <br>
+        <button class="btn btn-inverse" type="button">Inverse</button>
+        <br>
+        <button class="btn btn-link" type="button">Link</button>
+        <br>
+    </div>
+
+    <h2 class="menu">Components</h2>
+
+    <h3 class="menu">Dropdown</h3>
+
+    <div class="bs-docs-example">
+        <div class="dropdown clearfix">
+            <ul style="display: block; position: static; margin-bottom: 5px; *width: 180px;"
+                aria-labelledby="dropdownMenu" role="menu" class="dropdown-menu">
+                <li><a href="#" tabindex="-1">Action</a></li>
+                <li><a href="#" tabindex="-1">Another action</a></li>
+                <li><a href="#" tabindex="-1">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#" tabindex="-1">Separated link</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <h3 class="menu">Navs</h3>
+
+    {% import 'ImaticViewBundle:ComponentOld:menu.html.twig' as menu %}
+
+    <h4>Tabs</h4>
+    {{ menu.tabs('imatic.demo') }}
+    <h4>Pills</h4>
+    {{ menu.pills('imatic.demo') }}
+    <h4>Sidebar</h4>
+    {{ menu.side('imatic.demo_sub') }}
+    <h4>Menu from template</h4>
+    {{ menu.tabs([{'name': 'Item 1', 'uri': 'http://www.imatic.cz'}, {'name': 'Item 2', 'route': 'homepage'}, {'name': 'Item 3', 'uri': '#'}]) }}
+
+    <h3 class="menu">Navbar</h3>
+    {{ menu.navbar('imatic.demo') }}
+
+    <h3 class="menu">Breadcrumbs</h3>
+
+    <div class="bs-docs-example">
+        <ul style="margin-bottom: 5px;" class="breadcrumb">
+            <li><a href="#">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Library</a> <span class="divider">/</span></li>
+            <li class="active">Data</li>
+        </ul>
+    </div>
+
+    <h3 class="menu">Pagination</h3>
+
+    <div class="bs-docs-example">
+        <div class="pagination">
+            <ul>
+                <li><a href="#">«</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bs-docs-example">
+        <ul class="pager">
+            <li><a href="#">Previous</a></li>
+            <li><a href="#">Next</a></li>
+        </ul>
+    </div>
+
+    <h3 class="menu">Labels and badges</h3>
+
+    <h4>Labels</h4>
+
+    <div class="bs-docs-example">
+        <span class="label">Default</span><br>
+        <span class="label label-success">Success</span><br>
+        <span class="label label-warning">Warning</span><br>
+        <span class="label label-important">Important</span><br>
+        <span class="label label-info">Info</span><br>
+        <span class="label label-inverse">Inverse</span><br>
+    </div>
+
+    <h4>Badges</h4>
+
+    <div class="bs-docs-example">
+        <span class="badge">1</span><br>
+        <span class="badge badge-success">2</span><br>
+        <span class="badge badge-warning">4</span><br>
+        <span class="badge badge-important">6</span><br>
+        <span class="badge badge-info">8</span><br>
+        <span class="badge badge-inverse">10</span><br>
+    </div>
+
+    <h3 class="menu">Typography</h3>
+    <h4>Hero unit</h4>
+
+    <div class="bs-docs-example">
+        <div class="hero-unit">
+            <h1>Hello, world!</h1>
+
+            <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured
+                content or information.</p>
+
+            <p><a class="btn btn-primary btn-large">Learn more</a></p>
+        </div>
+    </div>
+
+    <h4>Page header</h4>
+
+    <div class="bs-docs-example">
+        <div class="page-header">
+            <h1>Example page header
+                <small>Subtext for header</small>
+            </h1>
+        </div>
+    </div>
+
+    <h3 class="menu">Thumbnails</h3>
+
+    <div class="bs-docs-example">
+        <ul class="thumbnails">
+            <li class="span3">
+                <a class="thumbnail" href="#">
+                    <img alt="" src="http://placehold.it/260x180">
+                </a>
+            </li>
+            <li class="span3">
+                <a class="thumbnail" href="#">
+                    <img alt="" src="http://placehold.it/260x180">
+                </a>
+            </li>
+            <li class="span3">
+                <a class="thumbnail" href="#">
+                    <img alt="" src="http://placehold.it/260x180">
+                </a>
+            </li>
+            <li class="span3">
+                <a class="thumbnail" href="#">
+                    <img alt="" src="http://placehold.it/260x180">
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <h3 class="menu">Messages/alerts</h3>
+
+    {% import 'ImaticViewBundle:ComponentOld:flash.html.twig' as flash %}
+
+    <div class="bs-docs-example">
+        {{ flash.message('success', '<strong>Well done!</strong> You successfully read this important alert message.', true, true) }}
+        {{ flash.message('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.', true, true) }}
+        {{ flash.block_message('alert', 'Warning!', 'Best check yo self, you\'re not looking too good.
+        Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.') }}
+        {{ flash.message('info', 'Heads up! This alert needs your attention, but it\'s not super important.') }}
+    </div>
+
+    <h3 class="menu">Misc</h3>
+    <h4>Well</h4>
+
+    <div class="bs-docs-example">
+        <div class="well">
+            Look, I'm in a well!
+        </div>
+    </div>
+
+    <h4>Modal</h4>
+
+    <div style="background-color: #f5f5f5;" class="bs-docs-example">
+        <div style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;"
+             class="modal">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h3>Modal header</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn" href="#">Close</a>
+                <a class="btn btn-primary" href="#">Save changes</a>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+            var $demoNav = $('#demo-nav');
+            var $demoContent = $('#demo-content');
+            var $ul = $('<ul>', { class: 'nav nav-list' });
+            var i = 0;
+
+            $('.menu', $demoContent).each(function () {
+                var $this = $(this);
+                var id = 'id-' + ++i;
+                $this.attr('id', id);
+                $ul.append($('<li>', { class: $this.is('h2') ? 'nav-header' : '', html: $('<a>', { text: $this.text(), href: '#' + id })}));
+            });
+
+            $demoNav.append($ul);
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        h2.menu {
+            border-bottom: 3px solid #ddd;
+        }
+
+        h3.menu {
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+{% endblock %}

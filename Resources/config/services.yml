@@ -66,6 +66,11 @@ services:
         tags:
             - { name: 'twig.extension' }
 
+    imatic_view.twig.extension.component:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
+        tags:
+            - { name: 'twig.extension' }
+
     # Twig loaders
     imatic_view.twig.loader.remote:
         class:        Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
