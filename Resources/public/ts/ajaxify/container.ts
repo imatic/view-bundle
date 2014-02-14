@@ -20,7 +20,7 @@ module imatic.view.ajaxify.container {
     import EventInterface           = imatic.view.ajaxify.event.EventInterface;
     import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
     import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
-    import CssClasses           = imatic.view.ajaxify.css.CssClasses;
+    import CssClasses               = imatic.view.ajaxify.css.CssClasses;
 
     /**
      * Container not found exception
@@ -38,11 +38,6 @@ module imatic.view.ajaxify.container {
          * Destructor
          */
         destroy: () => void;
-
-        /**
-         * Get container's element ID
-         */
-        getId: () => string;
 
         /**
          * Get container's configuration
@@ -122,6 +117,36 @@ module imatic.view.ajaxify.container {
         }
 
         /**
+         * Check for container instance
+         */
+        hasInstance(containerElement: HTMLElement): boolean {
+            return this.jQuery(containerElement).data(this.instanceDataKey) ? true : false;
+        }
+
+        /**
+         * Get container instance
+         */
+        getInstance(containerElement: HTMLElement): ContainerInterface {
+            var container = this.jQuery(containerElement).data(this.instanceDataKey);
+            if (!container) {
+                throw new ContainerNotFoundException('Container instance not found');
+            }
+
+            return container;
+        }
+
+        /**
+         * Set container instance
+         */
+        setInstance(containerElement: HTMLElement, container: ContainerInterface): void {
+            this.jQuery(containerElement)
+                .data(this.instanceDataKey, container)
+                .attr(this.instanceMarkAttr, true)
+                .addClass(CssClasses.CONTAINER)
+            ;
+        }
+
+        /**
          * Get container instance for given element
          */
         findInstance(element: HTMLElement): ContainerInterface {
@@ -152,37 +177,36 @@ module imatic.view.ajaxify.container {
                     containerElement = this.getElementFromSelector(target);
                 }
 
-                return this.getInstance(containerElement);
+                // get instance
+                var container;
+                if (this.hasInstance(containerElement)) {
+                    container = this.getInstance(containerElement);
+                } else {
+                    container = this.containerFactory.create(containerElement);
+                    this.setInstance(containerElement, container);
+                }
+
+                return container;
             }
         }
-
-        /**
-         * Get container instance
-         */
-        getInstance(containerElement: HTMLElement): ContainerInterface {
-            var container = this.jQuery(containerElement).data(this.instanceDataKey);
-            if (!container) {
-                // instance not created
-                container = this.containerFactory.create(containerElement);
-                this.jQuery(containerElement)
-                    .data(this.instanceDataKey, container)
-                    .attr(this.instanceMarkAttr, true)
-                ;
-            }
-
-            return container;
-        }
-
         /**
          * Get container element from given element's context
          */
-        getElementFromContext(element: HTMLElement): HTMLElement {
-            var parentContainers = this.jQuery(element).parents(this.selector);
-            if (parentContainers.length < 1) {
-                throw new ContainerNotFoundException('Could not determine the container from context');
+        getElementFromContext(element: HTMLElement, parentsOnly = false): HTMLElement {
+            var containerElement;
+
+            if (!parentsOnly && this.jQuery(element).is(this.selector)) {
+                containerElement = element;
+            } else {
+                var parentContainers = this.jQuery(element).parents(this.selector);
+                if (parentContainers.length < 1) {
+                    throw new ContainerNotFoundException('Could not determine the container from context');
+                }
+
+                containerElement = parentContainers[0];
             }
 
-            return parentContainers[0];
+            return containerElement;
         }
 
         /**
@@ -207,12 +231,12 @@ module imatic.view.ajaxify.container {
             var self = this;
             var containers: ContainerInterface[] = [];
 
-            if (this.isValidElement(element)) {
+            if (this.isValidElement(element) && this.hasInstance(element)) {
                 containers.push(this.getInstance(element));
             }
 
             this.jQuery('[' + this.instanceMarkAttr + ']', element).each(function () {
-                containers.push(self.jQuery(this).data(self.instanceDataKey));
+                containers.push(self.getInstance(this));
             });
 
             return containers;
@@ -271,14 +295,15 @@ module imatic.view.ajaxify.container {
         }
 
         /**
-         * Get container's element ID
+         * Get HTML content selector
          */
-        getId(): string {
-            if (this.element) {
-                return this.element.id;
-            } else {
-                return null;
+        getHtmlContentSelector(): string {
+            var contentSelector = this.getConfiguration().contentSelector;
+            if (!contentSelector && this.element && this.element.id) {
+                contentSelector = '#' + this.element.id;
             }
+            
+            return contentSelector;
         }
 
         /**
@@ -336,11 +361,10 @@ module imatic.view.ajaxify.container {
             var fragment = new HtmlFragment(html, this.jQuery);
             var content;
 
-            var id = this.getId();
-            if (id) {
-                var containerSelector = '#' + id;
-                if (fragment.contains(containerSelector)) {
-                    content = fragment.find(containerSelector);
+            var contentSelector = this.getHtmlContentSelector();
+            if (contentSelector) {
+                if (fragment.contains(contentSelector)) {
+                    content = fragment.find(contentSelector);
                 }
             }
 

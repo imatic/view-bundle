@@ -27,14 +27,19 @@ module imatic.view.ajaxify.ajax {
         /**
          * Execute the request
          */
-        execute(options: any) {
-            var onSuccess = options.success;
-
-            options.success = function (data, status, xhr) {
-                if (onSuccess) {
-                    var serverResponse = new ServerResponseFactory().create(this.jQuery, data, xhr);
-                    onSuccess(serverResponse);
-                }
+        execute(url: string, method: string, data: any, onComplete?: (response: ServerResponse) => void) {
+            var options = {
+                url: url,
+                type: method,
+                dataType: 'text',
+                data: data,
+                cache: false,
+                complete: function (xhr: XMLHttpRequest, textStatus: string) {
+                    if (onComplete) {
+                        var serverResponse = new ServerResponseFactory().create(this.jQuery, xhr);
+                        onComplete(serverResponse);
+                    }
+                },
             };
 
             this.xhr = this.jQuery.ajax(options);
@@ -49,12 +54,13 @@ module imatic.view.ajaxify.ajax {
         /**
          * Create server response
          */
-        create(jQuery: any, data: any, xhr: XMLHttpRequest) {
+        create(jQuery: any, xhr: XMLHttpRequest) {
             var response = new ServerResponse();
 
-            response.title = xhr.getResponseHeader('X-Title') || '';
             response.flashes = [];
-            response.data = data;
+            response.data = xhr.responseText;
+            response.valid = this.isValidStatus(xhr.status);
+            response.successful = this.isSuccessfulStatus(xhr.status);
 
             var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
             if (flashesJson) {
@@ -63,6 +69,23 @@ module imatic.view.ajaxify.ajax {
 
             return response;
         }
+
+        /**
+         * Determine valid state based on status
+         */
+        private isValidStatus(status: number): boolean {
+            return
+                status >= 200 && status < 300
+                || 400 === status
+            ;
+        }
+
+        /**
+         * Determine success state based on status
+         */
+        private isSuccessfulStatus(status: number): boolean {
+            return status >= 200 && status < 300;
+        }
     }
 
     /**
@@ -70,9 +93,10 @@ module imatic.view.ajaxify.ajax {
      */
     export class ServerResponse
     {
-        title: string;
         flashes: FlashMessageInterface[];
         data: any;
+        successful: boolean;
+        valid: boolean;
     }
 
 }

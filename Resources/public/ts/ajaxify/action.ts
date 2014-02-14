@@ -64,8 +64,13 @@ module imatic.view.ajaxify.action {
          * Constructor
          */
         constructor(
+            private initiator: WidgetInterface,
             private jQuery: any,
-            private options: {url: string}
+            private options: {
+                url: string;
+                method: string;
+                data: {[name: string]: any};
+            }
         ) {}
 
         /**
@@ -86,33 +91,39 @@ module imatic.view.ajaxify.action {
          * Execute the action
          */
         execute(container: ContainerInterface): void {
-            var response;
             this.request = new AjaxRequest(this.jQuery);
 
             this.events.dispatch('begin', new Event({action: this}));
 
-            this.request.execute({
-                type: 'GET',
-                dataType: 'html',
-                url: this.options.url,
-                cache: false,
-                success: (serverResponse: ServerResponse): void => {
-                    this.successful = true;
-                    response = serverResponse;
-                },
-                complete: (): void => {
+            this.request.execute(
+                this.options.url,
+                this.options.method,
+                this.options.data,
+                (response: ServerResponse): void => {
                     this.complete = true;
+                    this.successful = response.successful;
 
-                    if (this.successful) {
-                        container.setHtml(response.data);
+                    // handle response
+                    if (response.valid) {
+                        var event = this.events.dispatch('apply', new Event({
+                            proceed: true,
+                            response: response,
+                            initiator: this.initiator,
+                        }));
+
+                        if (event['proceed']) {
+                            container.setHtml(response.data);
+                        }
                     }
 
+                    // complete event
                     this.events.dispatch('complete', new Event({
                         action: this,
                         response: response,
+                        initiator: this.initiator,
                     }));
-                },
-            });
+                }
+            );
         }
 
         /**

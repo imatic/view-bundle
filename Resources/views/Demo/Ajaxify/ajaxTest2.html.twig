@@ -4,21 +4,11 @@
 
     <h1>Modal test title</h1>
 
-    <a data-target="#test-containerxx" href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">load</a>
-    <div id="test-containerxx" data-role="container">
-        initial
-    </div>
+    <a href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">load</a>
 
-    <div id="test-footer">
-        I am a footer
-    </div>
+    <form action="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">
+        <input type="submit" value="I am a form">
+    </form>
 
-    <h2>Link to modal</h2>
-    <a
-        href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}"
-        data-target="modal"
-    >
-        modal
-    </a>
 
 {% endblock %}

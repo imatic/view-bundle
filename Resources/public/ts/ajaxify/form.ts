@@ -18,8 +18,10 @@ module imatic.view.ajaxify.form {
     import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
+    import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
     import EventDispatcher      = imatic.view.ajaxify.event.EventDispatcher;
-    import Event                = imatic.view.ajaxify.event.Event;
+    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
+    import CssClasses           = imatic.view.ajaxify.css.CssClasses;
 
     /**
      * Form handler
@@ -82,7 +84,7 @@ module imatic.view.ajaxify.form {
             var form = new Form(
                 this.configBuilder,
                 container,
-                element,
+                <HTMLFormElement> element,
                 this.jQuery
             );
 
@@ -101,7 +103,7 @@ module imatic.view.ajaxify.form {
         constructor(
             private configBuilder: ConfigurationBuilder,
             private container: ContainerInterface,
-            private element: HTMLElement,
+            private element: HTMLFormElement,
             private jQuery: any
         ) {}
 
@@ -125,55 +127,27 @@ module imatic.view.ajaxify.form {
          * Create action
          */
         createAction(): ActionInterface {
-            return new SubmitFormAction(this, this.jQuery);
-        }
-    }
+            var action = new LoadHtmlAction(this, this.jQuery, {
+                url: this.element.action,
+                method: this.element.method || 'GET',
+                data: this.jQuery(this.element).serialize(),
+            });
 
-    /**
-     * Submit form action
-     */
-    export class SubmitFormAction implements ActionInterface
-    {
-        public events = new EventDispatcher();
+            action.events.addCallback('begin', (event: EventInterface): void => {
+                this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+            });
+            action.events.addCallback('complete', (event: EventInterface): void => {
+                this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+            });
 
-        private complete = false;
-        private successful = false;
-        private onComplete: (action: ActionInterface) => void;
-
-        /**
-         * Constructor
-         */
-        constructor(
-            private widget: WidgetInterface,
-            private jQuery: any
-        ) {}
-
-        /**
-         * See if the action is complete
-         */
-        isComplete(): boolean {
-            return this.complete;
+            return action;
         }
 
         /**
-         * See if the action was successful
+         * Get widget's element
          */
-        isSuccessful(): boolean {
-            return this.successful;
-        }
-
-        /**
-         * Execute the action
-         */
-        execute(container: ContainerInterface): void {
-
-        }
-
-        /**
-         * Abort the action
-         */
-        abort(): void {
-
+        getElement(): HTMLElement {
+            return this.element;
         }
     }
 

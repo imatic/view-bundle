@@ -46,7 +46,7 @@ module imatic.view.ajaxify.event {
         /**
          * Dispatch an event
          */
-        dispatch: (eventName: string, event?: EventInterface) => void;
+        dispatch: (eventName: string, event?: EventInterface) => EventInterface;
     }
 
     /**
@@ -159,7 +159,7 @@ module imatic.view.ajaxify.event {
         /**
          * Dispatch an event
          */
-        dispatch(eventName: string, event?: EventInterface): void {
+        dispatch(eventName: string, event?: EventInterface): EventInterface {
             if (!event) {
                 event = new Event();
             }
@@ -173,6 +173,8 @@ module imatic.view.ajaxify.event {
                     break;
                 }
             }
+
+            return event;
         }
     }
 

@@ -1,4 +1,5 @@
 /// <reference path="action.ts"/>
+/// <reference path="css.ts"/>
 
 /**
  * Imatic view ajaxify widget module
@@ -10,6 +11,7 @@ module imatic.view.ajaxify.widget {
     "use_strict";
 
     import ActionInterface = imatic.view.ajaxify.action.ActionInterface;
+    import CssClasses      = imatic.view.ajaxify.css.CssClasses;
 
     /**
      * Widget interface
@@ -31,6 +33,11 @@ module imatic.view.ajaxify.widget {
          * Create action
          */
         createAction: () => ActionInterface;
+
+        /**
+         * Get widget's element
+         */
+        getElement: () => HTMLElement;
     }
 
     /**
@@ -72,6 +79,7 @@ module imatic.view.ajaxify.widget {
             this.jQuery(widgetElement)
                 .data(this.instanceDataKey, widget)
                 .attr(this.instanceMarkAttr, true)
+                .addClass(CssClasses.WIDGET)
             ;
         }
 
@@ -83,12 +91,12 @@ module imatic.view.ajaxify.widget {
             var selector = '[' + this.instanceMarkAttr + ']';
             var widgets: WidgetInterface[] = [];
 
-            if (this.jQuery(element).is(selector)) {
+            if (this.jQuery(element).is(selector) && this.hasInstance(element)) {
                 widgets.push(this.getInstance(element));
             }
 
             this.jQuery(selector, element).each(function () {
-                widgets.push(self.jQuery(this).data(self.instanceDataKey));
+                widgets.push(self.getInstance(this));
             });
 
             return widgets;
