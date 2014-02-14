@@ -74,10 +74,7 @@ module imatic.view.ajaxify.ajax {
          * Determine valid state based on status
          */
         private isValidStatus(status: number): boolean {
-            return
-                status >= 200 && status < 300
-                || 400 === status
-            ;
+            return status >= 200 && status < 300 || 400 === status;
         }
 
         /**
