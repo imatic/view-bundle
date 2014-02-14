@@ -11,7 +11,6 @@ class ComponentExtension extends Twig_Extension
         return [
             new \Twig_SimpleFunction('imatic_view_table_columns', [$this, 'getTableColumns']),
             new \Twig_SimpleFunction('imatic_view_table', [$this, 'getTable']),
-            new \Twig_SimpleFunction('imatic_view_format', [$this, 'format']),
             new \Twig_SimpleFunction('imatic_view_action', [$this, 'action']),
         ];
     }
@@ -57,11 +56,6 @@ class ComponentExtension extends Twig_Extension
         }
 
         return $table;
-    }
-
-    public function format($value)
-    {
-        return $value;
     }
 
     public function action($value)

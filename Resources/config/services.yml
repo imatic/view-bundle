@@ -38,21 +38,9 @@ services:
         tags:
             - { name: 'twig.extension' }
 
-    imatic_view.twig.extension.application:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ApplicationExtension
-        arguments:    [ @service_container ]
-        tags:
-            - { name: 'twig.extension' }
-
     imatic_view.twig.extension.menu:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension
         arguments:    [ @imatic_view.menu.factory, @knp_menu.renderer.twig ]
-        tags:
-            - { name: 'twig.extension' }
-
-    imatic_view.twig.extension.configuration:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ConfigurationExtension
-        arguments:    [ @service_container ]
         tags:
             - { name: 'twig.extension' }
 
@@ -61,13 +49,15 @@ services:
         tags:
             - { name: 'twig.extension' }
 
-    imatic_view.twig.extension.html:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\HtmlExtension
+    imatic_view.twig.extension.component:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
         tags:
             - { name: 'twig.extension' }
 
-    imatic_view.twig.extension.component:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
+    imatic_view.twig.extension.format:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\FormatExtension
+        arguments:
+            - @imatic_view.templating.helper.format
         tags:
             - { name: 'twig.extension' }
 
@@ -76,3 +66,27 @@ services:
         class:        Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
         tags:
             - { name: 'twig.loader' }
+
+    # Formatters
+    imatic_view.twig.extension.format.twig:
+        class:        Imatic\Bundle\ViewBundle\Templating\Helper\Format\TwigFormatter
+        arguments:
+            - @twig
+        tags:
+            - { name: imatic_view.formatter, alias: date }
+            - { name: imatic_view.formatter, alias: number }
+
+    imatic_view.twig.extension.format.common:
+        class:        Imatic\Bundle\ViewBundle\Templating\Helper\Format\CommonFormatter
+        arguments:
+            - @translator
+        tags:
+            - { name: imatic_view.formatter, alias: url }
+            - { name: imatic_view.formatter, alias: phone }
+            - { name: imatic_view.formatter, alias: email }
+            - { name: imatic_view.formatter, alias: text }
+            - { name: imatic_view.formatter, alias: boolean }
+
+    # Templating Helpers
+    imatic_view.templating.helper.format:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper

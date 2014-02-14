@@ -55,6 +55,33 @@ header .navbar {
     .header-font()
 }
 
+// === Classes ===
+.yes {
+    .glyphicon;
+    .glyphicon-ok;
+    .text-success;
+}
+
+.no {
+    .glyphicon;
+    .glyphicon-remove;
+    .text-danger;
+}
+
+table {
+    th {
+        .text-center;
+    }
+    td {
+        &.number, &.money {
+            .text-right;
+        }
+        &.boolean {
+            .text-center;
+        }
+    }
+}
+
 // === Variables ===
 @orange: #f60;
 @white: #fff;
@@ -68,4 +95,4 @@ header .navbar {
 @navbar-inverse-link-color: @white;
 @navbar-inverse-link-hover-color: @orange;
 
-@icon-font-path: "../../../vendor/bootstrap/font/";
+@icon-font-path: "../../../vendor/bootstrap/fonts/";

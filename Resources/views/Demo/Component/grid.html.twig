@@ -3,7 +3,7 @@
 {% block action %}
 
     {% set table = {'selectable': {'enabled': true, 'column': 'id'} } %}
-    {% set columns = [{'name': 'name', 'format': 'text'}, {'name': 'age'}, {'name': 'active'}] %}
+    {% set columns = [{'name': 'name', 'format': 'text'}, {'name': 'age', 'format': 'number'}, {'name': 'active', 'format': 'boolean'}] %}
 
     {{ include('ImaticViewBundle:Component:table.html.twig') }}
     {{ include('ImaticViewBundle:Component:grid.html.twig') }}
