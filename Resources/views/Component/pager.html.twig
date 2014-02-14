@@ -1,0 +1,18 @@
+{% set route = app.request.get('_route') %}
+
+{% if displayCriteria is defined and displayCriteria.pager.haveToPaginate %}
+    <ul class="pagination">
+        <li class="{% if pager.isFirstPage() %}disabled{% endif %}">
+            <a href="{{ path(route, {'page': pager.getFirstPage()}, true) }}">{{ 'first'|trans }}</a></li>
+        <li class="{% if pager.isFirstPage() %}disabled{% endif %}">
+            <a href="{{ path(route, {'page': pager.getPreviousPage()}, true) }}">{{ 'previous'|trans }}</a></li>
+        {% for page in pager.links %}
+            <li class="{% if pager.isCurrentPage(page) %}active{% endif %}">
+                <a href="{{ path(route, {'page': page}, true) }}">{{ page }}</a></li>
+        {% endfor %}
+        <li class="{% if pager.isLastPage() %}disabled{% endif %}">
+            <a href="{{ path(route, {'page': pager.getNextPage()}, true) }}">{{ 'next'|trans }}</a></li>
+        <li class="{% if pager.isLastPage() %}disabled{% endif %}">
+            <a href="{{ path(route, {'page': pager.getLastPage()}, true) }}">{{ 'last'|trans }}</a></li>
+    </ul>
+{% endif %}

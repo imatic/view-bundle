@@ -6,52 +6,71 @@
 #}
 
 {% block table %}
-    <table class="table table-condensed">
-        {% block table_head %}
-            <thead>
-            <tr>
-                {% for column in columns %}
-                    <th>{{ column.name }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
-        {% endblock %}
-        {% block table_body %}
-            <tbody>
-            {% for item in items %}
-                {% block table_row %}
-                    <tr>
-                        {# da se vygenerovat na zacatku a tady jen replacnout ID #}
-                        {% block table_row_select %}
-                            {% if columns.selectable %}
-                                <td>
-                                    <input type="checkbox"
-                                           name="selected[]"
-                                           value="{{ attribute(item, columns.selectableColumn) }}">
-                                </td>
-                            {% endif %}
-                        {% endblock %}
-                        {% block table_row_values %}
-                            {% for column in columns %}
-                                <td>
-                                    {{ imatic_view_format(attribute(item, column), column.format, column.format_options) }}
-                                </td>
+    {% set columns = imatic_view_table_columns(columns | default([])) %}
+    {% set table   = imatic_view_table(table | default([])) %}
+
+    {% spaceless %}
+        <table class="table table-condensed">
+            <caption></caption>
+            {% block table_head %}
+                <thead>
+                <tr>
+                    {% if table.selectable.enabled %}
+                        <th>
+                        </th>
+                    {% endif %}
+                    {% for column in columns %}
+                        <th class="{{ column.format }} {{ column.class }}">{{ column.name }}</th>
+                    {% endfor %}
+                    {% if table.actions %}
+                        <th>
+                            actions
+                            {% for action in table.actions %}
+                                {{ imatic_view_action(action) }}
                             {% endfor %}
-                        {% endblock %}
-                        {# da se vygenerovat na zacatku a tady jen replacnout ID #}
-                        {% block table_row_actions %}
-                            {% if columns.actions %}
-                                <td>
-                                    {% for action in columns.actions %}
-                                        {{ imatic_view_action(action) }}
-                                    {% endfor %}
-                                </td>
-                            {% endif %}
-                        {% endblock %}
-                    </tr>
-                {% endblock %}
-            {% endfor %}
-            </tbody>
-        {% endblock %}
-    </table>
+                        </th>
+                    {% endif %}
+                </tr>
+                </thead>
+            {% endblock %}
+            {% block table_body %}
+                <tbody>
+                {% for item in items %}
+                    {% block table_row %}
+                        <tr>
+                            {# da se vygenerovat na zacatku a tady jen replacnout ID #}
+                            {% block table_row_select %}
+                                {% if table.selectable.enabled %}
+                                    <td>
+                                        <input type="checkbox"
+                                               name="selected[]"
+                                               value="{{ attribute(item, table.selectable.column) }}">
+                                    </td>
+                                {% endif %}
+                            {% endblock %}
+                            {% block table_row_values %}
+                                {% for column in columns %}
+                                    <td class="{{ column.format }} {{ column.class }}">
+                                        {{ imatic_view_format(attribute(item, column.name), column.format, column.formatOptions) }}
+                                    </td>
+                                {% endfor %}
+                            {% endblock %}
+                            {# da se vygenerovat na zacatku a tady jen replacnout ID #}
+                            {% block table_row_actions %}
+                                {% if table.actions %}
+                                    <td>
+                                        {% for action in table.actions %}
+                                            {{ imatic_view_action(action) }}
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                            {% endblock %}
+                        </tr>
+                    {% endblock %}
+                {% endfor %}
+                </tbody>
+            {% endblock %}
+        </table>
+    {% endspaceless %}
+    {{ include('ImaticViewBundle:Component:pager.html.twig') }}
 {% endblock %}

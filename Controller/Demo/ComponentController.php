@@ -2,6 +2,7 @@
 
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
+use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TableData;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -16,6 +17,8 @@ class ComponentController extends Controller
      */
     public function gridAction()
     {
-        return array();
+        $data = new TableData();
+
+        return ['items' => $data];
     }
 }

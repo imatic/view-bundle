@@ -1,0 +1,42 @@
+{% macro message(type, message, close, use_raw, domain) %}
+    <div class="alert{{ type ? ' alert-'~type : '' }}">
+        {% if close|default(false) %}
+            <a class="close" data-dismiss="alert" href="#">×</a>
+        {% endif %}
+        {% if use_raw|default(false) %}
+            {{ message|trans({}, domain|default('messages'))|raw }}
+        {% else %}
+            {{ message|trans({}, domain|default('messages')) }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro block_message(type, heading, message, close, use_raw, domain) %}
+    <div class="alert{{ type ? ' alert-'~type : '' }} alert-block">
+        {% if close|default(false) %}
+            <a class="close" data-dismiss="alert" href="#">×</a>
+        {% endif %}
+        {% if heading|default(false) %}
+            <h4 class="alert-heading">{{ heading }}</h4>
+        {% endif %}
+        {% if use_raw|default(false) %}
+            {{ message|trans({}, domain|default('messages'))|raw }}
+        {% else %}
+            {{ message|trans({}, domain|default('messages')) }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro session_message(close, use_raw, domain) %}
+    {% if app.session.flashbag.peekAll|length > 0 %}
+        {% for type, messages in app.session.flashbag.all %}
+            {% for message in messages %}
+                {% if type == 'fos_user_success' %}
+                    {% set type = 'success' %}
+                    {% set domain = 'FOSUserBundle' %}
+                {% endif %}
+                {{ _self.message(type, message, close, use_raw, domain) }}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
