@@ -19,6 +19,7 @@ module imatic.view.ajaxify.document {
     import DomEvents                    = imatic.view.ajaxify.event.DomEvents;
     import ContainerInterface           = imatic.view.ajaxify.container.ContainerInterface;
     import ContainerHandler             = imatic.view.ajaxify.container.ContainerHandler;
+    import ContainerNotFoundException   = imatic.view.ajaxify.container.ContainerNotFoundException;
     import WidgetInterface              = imatic.view.ajaxify.widget.WidgetInterface;
     import WidgetHandler                = imatic.view.ajaxify.widget.WidgetHandler;
     import ModalContainerHandler        = imatic.view.ajaxify.modal.ModalContainerHandler;
@@ -97,15 +98,21 @@ module imatic.view.ajaxify.document {
         private onClick = (event: MouseEvent): void => {
             var element = <HTMLElement> event.target;
 
-            if (
-                this.linkHandler.isValidElement(element)
-                && this.linkHandler.isValidEvent(event)
-            ) {
-                var container = this.containerHandler.findInstance(element);
-                var link = this.linkHandler.getInstance(container, element);
+            try {
+                if (
+                    this.linkHandler.isValidElement(element)
+                    && this.linkHandler.isValidEvent(event)
+                ) {
+                    var container = this.containerHandler.findInstance(element);
+                    var link = this.linkHandler.getInstance(container, element);
 
-                this.dispatch(container, link);
-                event.preventDefault();
+                    this.dispatch(container, link);
+                    event.preventDefault();
+                }
+            } catch (e) {
+                if (!(e instanceof ContainerNotFoundException)) {
+                    throw e;
+                }
             }
         }
 
@@ -115,12 +122,18 @@ module imatic.view.ajaxify.document {
         private onSubmit = (event: Event): void => {
             var element = <HTMLElement> event.target;
 
-            if (this.formHandler.isValidElement(element)) {
-                var container = this.containerHandler.findInstance(element);
-                var form = this.formHandler.getInstance(container, element);
+            try {
+                if (this.formHandler.isValidElement(element)) {
+                    var container = this.containerHandler.findInstance(element);
+                    var form = this.formHandler.getInstance(container, element);
 
-                this.dispatch(container, form);
-                event.preventDefault();
+                    this.dispatch(container, form);
+                    event.preventDefault();
+                }
+            } catch (e) {
+                if (!(e instanceof ContainerNotFoundException)) {
+                    throw e;
+                }
             }
         }
 

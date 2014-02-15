@@ -139,8 +139,10 @@ module imatic.view.ajaxify.link {
          * Create action
          */
         createAction(): ActionInterface {
-            var action = new LoadHtmlAction(this.jQuery, {
+            var action = new LoadHtmlAction(this, this.jQuery, {
                 url: this.url,
+                method: 'GET',
+                data: null,
             });
 
             action.events.addCallback('begin', (event: EventInterface): void => {
@@ -151,6 +153,13 @@ module imatic.view.ajaxify.link {
             });
 
             return action;
+        }
+
+        /**
+         * Get widget's element
+         */
+        getElement(): HTMLElement {
+            return this.element;
         }
     }
 

@@ -2,6 +2,7 @@
 /// <reference path="event.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="action.ts"/>
+/// <reference path="form.ts"/>
 
 /**
  * Imatic view ajaxify modal module
@@ -15,12 +16,14 @@ module imatic.view.ajaxify.modal {
     import ConfigurationBuilder             = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
     import DomEvents                        = imatic.view.ajaxify.event.DomEvents;
+    import EventInterface                   = imatic.view.ajaxify.event.EventInterface;
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
     import Container                        = imatic.view.ajaxify.container.Container;
     import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
     import ContainerNotFoundException       = imatic.view.ajaxify.container.ContainerNotFoundException;
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
+    import Form                             = imatic.view.ajaxify.form.Form;
 
     /**
      * Modal configuration interface
@@ -79,6 +82,7 @@ module imatic.view.ajaxify.modal {
     {
         private containerFactory = new ModalContainerFactory(
             this.configBuilder,
+            this.containerHandler,
             this.document,
             this.jQuery
         );
@@ -104,11 +108,11 @@ module imatic.view.ajaxify.modal {
          * Return container instance for given target and element
          */
         findContainer(target: string, element: HTMLElement): ContainerInterface {
-            var container = this.jQuery(element).data(this.containerHandler.instanceDataKey);
+            var container;
 
-            if (!container) {
-
-                // find contextual container element
+            if (this.containerHandler.hasInstance(element)) {
+                container = this.containerHandler.getInstance(element);
+            } else {
                 var contextualContainerElement;
                 try {
                     contextualContainerElement = this.containerHandler.getElementFromContext(element);
@@ -118,12 +122,8 @@ module imatic.view.ajaxify.modal {
                     }
                 }
 
-                // create container
                 container = this.containerFactory.create(element, contextualContainerElement);
-                this.jQuery(element)
-                    .data(this.containerHandler.instanceDataKey, container)
-                    .attr(this.containerHandler.instanceMarkAttr, true)
-                ;
+                this.containerHandler.setInstance(element, container);
             }
 
             return container;
@@ -140,6 +140,7 @@ module imatic.view.ajaxify.modal {
          */
         constructor(
             private configBuilder: ConfigurationBuilder,
+            private containerHandler: ContainerHandler,
             private document: HTMLDocument,
             private jQuery: any
         ) {}
@@ -148,14 +149,18 @@ module imatic.view.ajaxify.modal {
          * Create container instance
          */
         create(owningElement: HTMLElement, contextualElement?: HTMLElement): ContainerInterface {
-            return new ModalContainer(
+            var container = new ModalContainer(
                 this.configBuilder,
                 this.document,
                 this.jQuery,
-                null,
-                contextualElement,
-                owningElement
+                null
             );
+
+            container.handler = this.containerHandler;
+            container.owningElement = owningElement;
+            container.contextualElement = contextualElement;
+
+            return container;
         }
     }
 
@@ -164,18 +169,11 @@ module imatic.view.ajaxify.modal {
      */
     export class ModalContainer extends Container
     {
-        private modal = new Modal(this.jQuery, this.document);
+        handler: ContainerHandler;
+        contextualElement: HTMLElement;
+        owningElement: HTMLElement;
 
-        constructor(
-            public configBuilder: ConfigurationBuilder,
-            public document: HTMLDocument,
-            public jQuery: any,
-            public element?: HTMLElement,
-            public contextualElement?: HTMLElement,
-            public owningElement?: HTMLElement
-        ) {
-            super(configBuilder, document, jQuery, element);
-        }
+        private modal = new Modal(this.jQuery, this.document);
 
         /**
          * Destructor
@@ -185,10 +183,22 @@ module imatic.view.ajaxify.modal {
         }
 
         /**
-         * Get container's element ID
+         * Handle given action
          */
-        getId(): string {
-            return null;
+        handleAction(action: ActionInterface): void {
+            action.events.addCallback('apply', (event: EventInterface): void => {
+                if (
+                    event['response'].successful
+                    && event['initiator'] instanceof Form
+                    && this.jQuery(this.modal.getElement()).has(event['initiator'].getElement()).length > 0
+                ) {
+                    event['proceed'] = false;
+
+                    this.modal.hide();
+                }
+            });
+
+            super.handleAction(action);
         }
 
         /**
@@ -210,9 +220,11 @@ module imatic.view.ajaxify.modal {
             var title = '';
             var footer = null;
 
+            // configure modal
             this.modal.setSize(config.modalSize);
             this.modal.setClosable(config.modalClosable);
 
+            // find title
             var titleElement;
             if (config.modalTitle) {
                 titleElement = this.jQuery(config.modalTitle, content).get(0);
@@ -222,6 +234,7 @@ module imatic.view.ajaxify.modal {
                 }
             }
 
+            // find footer
             if (config.modalFooter) {
                 footer = this.jQuery(config.modalFooter, content);
                 if (footer.length > 0) {
@@ -231,14 +244,19 @@ module imatic.view.ajaxify.modal {
                 }
             }
 
-            /*if (!title && this.metadata.title) {
-                title = this.metadata.title;
-            }*/
+            // attach container instance to the modal's element
+            var modalElement = this.modal.getElement();
+            if (!this.handler.hasInstance(modalElement)) {
+                this.jQuery(modalElement).attr('data-role', 'container');
+                this.handler.setInstance(modalElement, this);
+            }
 
+            // set contents
             this.modal.setTitle(title);
             this.modal.setFooter(footer ? footer.contents() : null);
             this.modal.setBody(content.contents());
 
+            // show the modal
             this.modal.show();
         }
     }
@@ -290,6 +308,17 @@ module imatic.view.ajaxify.modal {
                 this.jQuery(this.element).remove();
                 this.element = null;
             }
+        }
+
+        /**
+         * Get modal's element
+         */
+        getElement(): HTMLElement {
+            if (!this.element) {
+                this.create();
+            }
+
+            return this.element;
         }
 
         /**
@@ -370,11 +399,21 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            this.jQuery('div.modal-footer', this.element)
+            var footer = this.jQuery('div.modal-footer', this.element);
+
+            footer
                 .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
                 .empty()
-                .append(content)
             ;
+
+            if (content) {
+                footer
+                    .append(content)
+                    .show()
+                ;
+            } else {
+                footer.hide();
+            }
         }
 
         /**

@@ -1,5 +1,17 @@
-/* Busy component */
+/* Busy generic */
 .imatic-view-ajaxify-busy {
     cursor: wait;
-    opacity: .5;
+}
+
+/* Containers */
+.imatic-view-ajaxify-container.imatic-view-ajaxify-busy {
+    opacity: 0.5;
+}
+
+/* Widgets */
+.imatic-view-ajaxify-widget.imatic-view-ajaxify-busy {
+    opacity: 0.5;
+}
+.imatic-view-ajaxify-container.imatic-view-ajaxify-busy .imatic-view-ajaxify-widget {
+    opacity: 1;
 }

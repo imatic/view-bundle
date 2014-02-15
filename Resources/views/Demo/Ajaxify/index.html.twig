@@ -2,7 +2,12 @@
 
 {% block action %}
 
-    <h1>Ajaxify</h1>
+    <h1>AJAXIFY Component</h1>
+
+    <p>
+        The AJAXIFY component is a javascript solution that provides simple
+        way to convert existing HTML markup into XHR driven components.
+    </p>
 
     <h2>Loading dedicated content</h2>
 
@@ -28,5 +33,14 @@
     >
         modal
     </a>
+
+
+    <h2>Form</h2>
+    <div data-role="container" id="form-container">
+        <form method="post">
+            <input type="submit">
+            {{ value }}
+        </form>
+    </div>
 
 {% endblock %}
