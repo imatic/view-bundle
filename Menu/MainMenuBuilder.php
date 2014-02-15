@@ -2,10 +2,6 @@
 
 namespace Imatic\Bundle\ViewBundle\Menu;
 
-use Imatic\Bundle\ViewBundle\Menu\Factory;
-use Imatic\Bundle\ViewBundle\Menu\Helper;
-use Imatic\Bundle\ViewBundle\Menu\ContainerProvider;
-
 class MainMenuBuilder
 {
     /**
@@ -22,8 +18,8 @@ class MainMenuBuilder
     }
 
     /**
-     * @param  Factory                 $factory
-     * @param  Helper                  $helper
+     * @param  Factory $factory
+     * @param  Helper $helper
      * @return \Knp\Menu\ItemInterface
      */
     public function getMenu($factory, $helper)
@@ -34,8 +30,8 @@ class MainMenuBuilder
     }
 
     /**
-     * @param  Factory                 $factory
-     * @param  Helper                  $helper
+     * @param  Factory $factory
+     * @param  Helper $helper
      * @return \Knp\Menu\ItemInterface
      */
     public function getSideMenu($factory, $helper)

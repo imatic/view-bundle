@@ -1,3 +1,4 @@
+{% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,14 +80,8 @@
                         <div class="collapse navbar-collapse">
                             <div class="nav-collapse">
                                 {% block header_menu %}
-                                    {#{{ menu.menu('imatic.main') }}#}
-                                    {#{{ menu.menu('imatic.main_side', null, null, { 'class': 'pull-right' }) }}#}
-
-                                    <ul class="nav navbar-nav">
-                                        <li><a href="{{ path('imatic_view_demo_component_grid') }}">Grid</a></li>
-                                        <li><a href="{{ path('imatic_view_demo_ajaxify_index') }}">Ajaxify</a></li>
-                                    </ul>
-
+                                    {{ menu.menu('imatic.main') }}
+                                    {{ menu.menu('imatic.main_side', null, null, { 'class': 'navbar-right' }) }}
                                 {% endblock %}
                             </div>
                         </div>

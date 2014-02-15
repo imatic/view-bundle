@@ -1,13 +1,13 @@
 {#
     variables:
     - items: table rows (array of objects or hashes)
-    - columns: table columns ([name, format, formatOptions, class])
-    - table: table configuration (caption, class, actions, header, sortable, selectable, rowActions)
+    - columns: table columns (Imatic\Bundle\ViewBundle\Templating\Grid\ColumnOptions)
+    - table: table configuration (Imatic\Bundle\ViewBundle\Templating\Grid\TableOptions)
 #}
 
 {% block table %}
-    {% set columns = imatic_view_table_columns(columns | default([])) %}
     {% set table   = imatic_view_table(table | default([])) %}
+    {% set columns = imatic_view_table_columns(columns | default([])) %}
 
     {% spaceless %}
         <table class="table table-condensed">
@@ -15,7 +15,7 @@
             {% block table_head %}
                 <thead>
                 <tr>
-                    {% if table.selectable.enabled %}
+                    {% if table.selectable %}
                         <th>
                         </th>
                     {% endif %}
@@ -40,11 +40,11 @@
                         <tr>
                             {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                             {% block table_row_select %}
-                                {% if table.selectable.enabled %}
+                                {% if table.selectable %}
                                     <td>
                                         <input type="checkbox"
                                                name="selected[]"
-                                               value="{{ attribute(item, table.selectable.column) }}">
+                                               value="{{ attribute(item, table.selectableColumn) }}">
                                     </td>
                                 {% endif %}
                             {% endblock %}

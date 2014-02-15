@@ -9,8 +9,7 @@ class StringExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('imatic_format', 'sprintf'),
-            new \Twig_SimpleFilter('imatic_slug', 'Imatic\Bundle\ViewBundle\Util\String::slugify')
+            new \Twig_SimpleFilter('imatic_slug', 'Imatic\Bundle\ViewBundle\Templating\Utils\String::slugify')
         ];
     }
 

@@ -30,7 +30,8 @@ services:
         class: Imatic\Bundle\ViewBundle\Menu\DemoMenuBuilder
         tags:
             - { name: imatic_view.menu, alias: imatic.demo }
-            - { name: imatic_view.menu, alias: imatic.demo_sub, method: getMenuSub }
+            - { name: imatic_view.menu, alias: imatic.demo_normal, method: getNormalMenu }
+            - { name: imatic_view.menu, alias: imatic.demo_sub, method: getSubMenu }
 
     # Twig extensions
     imatic_view.twig.extension.debug:
@@ -51,6 +52,8 @@ services:
 
     imatic_view.twig.extension.component:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
+        arguments:
+            - @imatic_view.templating.helper.grid
         tags:
             - { name: 'twig.extension' }
 
@@ -90,3 +93,6 @@ services:
     # Templating Helpers
     imatic_view.templating.helper.format:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper
+
+    imatic_view.templating.helper.grid:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper

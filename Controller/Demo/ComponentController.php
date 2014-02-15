@@ -12,6 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ComponentController extends Controller
 {
     /**
+     * @Config\Route()
+     * @Config\Template()
+     */
+    public function indexAction()
+    {
+        return [];
+    }
+
+    /**
      * @Config\Route("/grid")
      * @Config\Template()
      */
@@ -20,5 +29,23 @@ class ComponentController extends Controller
         $data = new TableData();
 
         return ['items' => $data];
+    }
+
+    /**
+     * @Config\Route("/form")
+     * @Config\Template()
+     */
+    public function formAction()
+    {
+        return [];
+    }
+
+    /**
+     * @Config\Route("/show")
+     * @Config\Template()
+     */
+    public function showAction()
+    {
+        return [];
     }
 }

@@ -73,7 +73,7 @@ class Helper
             ->setAttribute('class', 'dropdown')
             ->setChildrenAttribute('class', 'dropdown-menu');
 
-        $dropDownItem->setLabel($dropDownItem->getLabel() . '<span class="caret"></span>');
+        $dropDownItem->setLabel($dropDownItem->getLabel() . '<b class="caret"></b>');
         $dropDownItem->setExtra('safe_label', true);
     }
 

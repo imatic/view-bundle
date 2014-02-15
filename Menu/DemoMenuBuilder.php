@@ -2,17 +2,63 @@
 
 namespace Imatic\Bundle\ViewBundle\Menu;
 
-use Imatic\Bundle\ViewBundle\Menu\Factory;
-use Imatic\Bundle\ViewBundle\Menu\Helper;
-
 class DemoMenuBuilder
 {
     /**
-     * @param  Factory                 $factory
-     * @param  Helper                  $helper
+     * @param  Factory $factory
+     * @param  Helper $helper
      * @return \Knp\Menu\ItemInterface
      */
     public function getMenu(Factory $factory, Helper $helper)
+    {
+        // Create root item
+        $menu = $factory->createItem('root');
+
+        // Add menu items
+        $menu->addChild('Home', ['route' => 'imatic_view_demo_demo_index']);
+        $componentIndex = $menu->addChild('Components', ['route' => 'imatic_view_demo_component_index']);
+        $helper->setDropdown($componentIndex);
+        $componentIndex->addChild($factory->createItem('Grid', ['route' => 'imatic_view_demo_component_grid']));
+        $componentIndex->addChild($factory->createItem('Form', ['route' => 'imatic_view_demo_component_form']));
+        $componentIndex->addChild($factory->createItem('Show', ['route' => 'imatic_view_demo_component_show']));
+
+        $menu->addChild('Ajaxify', array('route' => 'imatic_view_demo_ajaxify_index'));
+
+        return $menu;
+    }
+
+    /**
+     * @param  Factory $factory
+     * @param  Helper $helper
+     * @return \Knp\Menu\ItemInterface
+     */
+    public function getSubMenu(Factory $factory, Helper $helper)
+    {
+        $menu = $this->getNormalMenu($factory, $helper);
+        $products = $menu->getChild('Products');
+
+        // Add header
+        $helper->addHeader($products, 'Products A');
+        // Set submenu for products
+        $helper->setSubmenu($products);
+        $products->addChild('Product 1', array('route' => 'homepage'));
+        $products->addChild('Product 2', array('route' => 'homepage'));
+        $products->addChild('Product 3', array('route' => 'homepage'));
+        // Add header
+        $helper->addHeader($products, 'Products B');
+        $products->addChild('Product 4', array('route' => 'homepage'));
+        $products->addChild('Product 5', array('route' => 'homepage'));
+        $products->addChild('Product 6', array('route' => 'homepage'));
+
+        return $menu;
+    }
+
+    /**
+     * @param  Factory $factory
+     * @param  Helper $helper
+     * @return \Knp\Menu\ItemInterface
+     */
+    public function getNormalMenu(Factory $factory, Helper $helper)
     {
         // Create root item
         $menu = $factory->createItem('root');
@@ -37,32 +83,6 @@ class DemoMenuBuilder
         // Add horizontal divider
         $helper->addDivider($contact);
         $contact->addChild('Test 3', array('uri' => 'http://www.imatic.cz'));
-
-        return $menu;
-    }
-
-    /**
-     * @param  Factory                 $factory
-     * @param  Helper                  $helper
-     * @return \Knp\Menu\ItemInterface
-     */
-    public function getMenuSub(Factory $factory, Helper $helper)
-    {
-        $menu = $this->getMenu($factory, $helper);
-        $products = $menu->getChild('Products');
-
-        // Add header
-        $helper->addHeader($products, 'Products A');
-        // Set submenu for products
-        $helper->setSubmenu($products);
-        $products->addChild('Product 1', array('route' => 'homepage'));
-        $products->addChild('Product 2', array('route' => 'homepage'));
-        $products->addChild('Product 3', array('route' => 'homepage'));
-        // Add header
-        $helper->addHeader($products, 'Products B');
-        $products->addChild('Product 4', array('route' => 'homepage'));
-        $products->addChild('Product 5', array('route' => 'homepage'));
-        $products->addChild('Product 6', array('route' => 'homepage'));
 
         return $menu;
     }

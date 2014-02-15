@@ -26,7 +26,16 @@ class TableData implements \IteratorAggregate
     public function generate()
     {
         for ($i = 1; $i <= $this->total; $i++) {
-            $this->data[$i] = ['id' => $i, 'name' => 'User ' . $i, 'age' => rand(15, 80), 'active' => $i % 2 == 0];
+            $this->data[$i] = [
+                'id' => $i,
+                'name' => 'User ' . $i,
+                'age' => rand(15, 80),
+                'active' => $i % 2 == 0,
+                'lastOnline' => new \DateTime(),
+                'phone' => 123456789,
+                'email' => 'user-' . $i . '@example.com',
+                'url' => 'http://www.example.com'
+            ];
         }
     }
 
