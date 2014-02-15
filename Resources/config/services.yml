@@ -54,6 +54,7 @@ services:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
         arguments:
             - @imatic_view.templating.helper.grid
+            - @imatic_view.templating.helper.show
         tags:
             - { name: 'twig.extension' }
 
@@ -96,3 +97,6 @@ services:
 
     imatic_view.templating.helper.grid:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper
+
+    imatic_view.templating.helper.show:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper

@@ -1,0 +1,19 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Show component' %}
+
+{% block action %}
+
+    {% set fields = [
+        {'name': 'name', 'format': 'text'},
+        {'name': 'age', 'format': 'number'},
+        {'name': 'active', 'format': 'boolean'},
+        {'name': 'lastOnline', 'format': 'date'},
+        {'name': 'phone', 'format': 'phone'},
+        {'name': 'email', 'format': 'email'},
+        {'name': 'url', 'format': 'url'}
+    ] %}
+
+    {{ include('ImaticViewBundle:Component:show.html.twig') }}
+
+{% endblock %}

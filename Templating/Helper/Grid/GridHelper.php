@@ -12,7 +12,7 @@ class GridHelper
 
         $return = [];
         foreach ($columns as $column) {
-            $return[] = $columnOptions = new ColumnOptions($column);
+            $return[] = new ColumnOptions($column);
         }
 
         return $return;

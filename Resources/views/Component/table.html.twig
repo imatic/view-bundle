@@ -10,6 +10,7 @@
     {% set columns = imatic_view_table_columns(columns | default([])) %}
 
     {% spaceless %}
+        <div class="imatic-view-table">
         <table class="table table-condensed">
             <caption></caption>
             {% block table_head %}
@@ -73,4 +74,5 @@
         </table>
     {% endspaceless %}
     {{ include('ImaticViewBundle:Component:pager.html.twig') }}
+    </div>
 {% endblock %}

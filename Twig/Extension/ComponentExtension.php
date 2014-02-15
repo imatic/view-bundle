@@ -3,6 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper;
+use Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper;
 use Twig_Extension;
 
 class ComponentExtension extends Twig_Extension
@@ -12,9 +13,15 @@ class ComponentExtension extends Twig_Extension
      */
     private $gridHelper;
 
-    public function __construct(GridHelper $gridHelper)
+    /**
+     * @var ShowHelper
+     */
+    private $showHelper;
+
+    public function __construct(GridHelper $gridHelper, ShowHelper $showHelper)
     {
         $this->gridHelper = $gridHelper;
+        $this->showHelper = $showHelper;
     }
 
     public function getFunctions()
@@ -22,6 +29,8 @@ class ComponentExtension extends Twig_Extension
         return [
             new \Twig_SimpleFunction('imatic_view_table_columns', [$this->gridHelper, 'getColumnsOptions']),
             new \Twig_SimpleFunction('imatic_view_table', [$this->gridHelper, 'getTableOptions']),
+            new \Twig_SimpleFunction('imatic_view_show_fields', [$this->showHelper, 'getFieldsOptions']),
+            new \Twig_SimpleFunction('imatic_view_show', [$this->showHelper, 'getShowOptions']),
             new \Twig_SimpleFunction('imatic_view_action', [$this, 'action']),
         ];
     }

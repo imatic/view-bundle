@@ -1,8 +1,24 @@
 {#
     variables:
     - item
+    - show
+    - fields
 #}
 
 {% block show %}
+    <div class="imatic-view-show">
+        {% set fields = imatic_view_show_fields(fields | default([])) %}
+        {#{% set show = imatic_view_show(fields | default([])) %}#}
 
+        <h2>{{ item }}</h2>
+
+        <table class="table table-condensed">
+            {% for field in fields %}
+                <tr class="{{ field.format }} {{ field.class }}">
+                    <th>{{ field.name }}</th>
+                    <td>{{ imatic_view_format(attribute(item, field.name), field.format, field.formatOptions) }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

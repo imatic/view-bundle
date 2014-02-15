@@ -26,7 +26,7 @@ class TableData implements \IteratorAggregate
     public function generate()
     {
         for ($i = 1; $i <= $this->total; $i++) {
-            $this->data[$i] = [
+            $this->data[$i] = new User([
                 'id' => $i,
                 'name' => 'User ' . $i,
                 'age' => rand(15, 80),
@@ -35,7 +35,7 @@ class TableData implements \IteratorAggregate
                 'phone' => 123456789,
                 'email' => 'user-' . $i . '@example.com',
                 'url' => 'http://www.example.com'
-            ];
+            ]);
         }
     }
 
@@ -55,5 +55,10 @@ class TableData implements \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->getData());
+    }
+
+    public function get($key)
+    {
+        return $this->data[$key];
     }
 }
