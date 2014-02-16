@@ -1,13 +1,10 @@
-================
 ImaticViewBundle
 ================
 
-************
 Installation
-************
+------------
 
 1. Download ImaticViewBundle using composer
-===========================================
 
 .. sourcecode:: yaml
 
@@ -17,7 +14,6 @@ Installation
     }
 
 2. Enable the bundle
-====================
 
 .. sourcecode:: php
 
@@ -33,7 +29,6 @@ Installation
     }
 
 3. Configure the bundle
-=======================
 
 .. sourcecode:: yaml
 
@@ -52,16 +47,26 @@ Installation
     #                foo: "bar" # will be available as _remote.foo inside the template
 
 
-****************
 Remote templates
-****************
+----------------
 
 This bundle provides functionality to load Twig templates from a remote source.
 
-See the example in the bundle configuration above. 
+See the example in the bundle configuration above.
 
 Custom metadata
-===============
+^^^^^^^^^^^^^^^
 
 Any custom values set under the "metadata" key of each template will be available
 inside that template as an object called "_remote".
+
+
+TODO
+----
+
+Component
+^^^^^^^^^
+- form groups
+- show groups
+- nested shows
+- show/form/table simple configuration (simple 1D array of keys)

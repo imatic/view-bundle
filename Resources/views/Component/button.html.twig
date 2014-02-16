@@ -1,0 +1,78 @@
+{% macro _button(button) %}{% spaceless %}
+    {% set url = button.route is defined ? path(button.route | default(null), button.routeParams | default({})) : '#' %}
+    <a
+            href="{{ url }}"
+            class="btn btn-{{ button.type | default('default') }} {{ button.class | default('') }}"
+            {% if button.data is defined and button.data is iterable %}
+                {% for dataName, dataValue in button.data %}
+                    data-{{ dataName }}="{{ dataValue }}"
+                {% endfor %}
+            {% endif %}
+            >{{ button.label|raw }}</a>
+{% endspaceless %}{% endmacro %}
+
+{% macro button(button) %}{% spaceless %}
+    {% if button.nested is defined and button.nested is iterable %}
+        {{ _self.nested(button) }}
+    {% else %}
+        {{ _self._button(button) }}
+    {% endif %}
+{% endspaceless %}{% endmacro %}
+
+{% macro nested(button) %}
+    <div class="btn-group">
+        {% if button.route is defined %}
+            {{ _self._button(button) }}
+            <button type="button"
+                    class="btn btn-{{ button.type | default('default') }} dropdown-toggle"
+                    data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+        {% else %}
+            {% set toMerge = {label: button.label ~ ' <span class="caret"></span>', data: {toggle: 'dropdown'}, class: 'dropdown-toggle'} %}
+            {% set button = button | merge(toMerge) %}
+            {{ _self._button(button) }}
+        {% endif %}
+        <ul class="dropdown-menu" role="menu">
+            {% for nested in button.nested %}
+                {#<li>{{ _self._button(nested) }}</li>#}
+                <li><a href="#">{{ nested.label }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro group(buttons) %}{% spaceless %}
+    <div class="btn-group">
+        {% for button in buttons %}
+            {{ _self.button(button) }}
+        {% endfor %}
+    </div>
+{% endspaceless %}{% endmacro %}
+
+{% macro toolbar(buttonGroups) %}{% spaceless %}
+    <div class="btn-toolbar" role="toolbar">
+        {% for buttons in buttonGroups %}
+            {{ _self.group(buttons) }}
+        {% endfor %}
+    </div>
+{% endspaceless %}{% endmacro %}
+
+{# Detect type and render button | group | toolbar #}
+{% macro print(config) %}{% spaceless %}
+
+{% endspaceless %}{% endmacro %}
+
+{# todo:
+- size (lg, sm, ..)
+- block (true|false)
+- disabled (true|false)
+- tag (a|button|input)
+
+- method (asi pres data => neresit)
+- route + params (route: user_show, params: {'id': '~id'})
+- role(s)
+- separators
+- headers?
+#}

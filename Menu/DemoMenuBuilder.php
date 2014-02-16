@@ -16,8 +16,9 @@ class DemoMenuBuilder
 
         // Add menu items
         $menu->addChild('Home', ['route' => 'imatic_view_demo_demo_index']);
-        $componentIndex = $menu->addChild('Components', ['route' => 'imatic_view_demo_component_index']);
+        $componentIndex = $menu->addChild('Components', ['uri' => '#']);
         $helper->setDropdown($componentIndex);
+        $componentIndex->addChild($factory->createItem('Basic', ['route' => 'imatic_view_demo_component_index']));
         $componentIndex->addChild($factory->createItem('Grid', ['route' => 'imatic_view_demo_component_grid']));
         $componentIndex->addChild($factory->createItem('Form', ['route' => 'imatic_view_demo_component_form']));
         $componentIndex->addChild($factory->createItem('Show', ['route' => 'imatic_view_demo_component_show']));

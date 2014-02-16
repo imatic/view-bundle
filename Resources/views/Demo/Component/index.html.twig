@@ -1,6 +1,47 @@
 {% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+{% import 'ImaticViewBundle:Component:button.html.twig' as button %}
+
+{% block headline 'Basic components' %}
 
 {% block action %}
+    {% set route = 'imatic_view_demo_component_index' %}
 
+    <h2>Button</h2>
 
+    <h3>Basic button</h3>
+
+    {{ button.button({label: 'Standard button', route: route}) }}
+    {{ button.button({label: 'Success button', route: route, type: 'success'}) }}
+    {{ button.button({label: 'Danger button', route: route, type: 'danger'}) }}
+    {{ button.button({label: 'Info button', route: route, type: 'info'}) }}
+    {{ button.button({label: 'Warning button', route: route, type: 'warning'}) }}
+    {{ button.button({label: 'Primary button', route: route, type: 'primary'}) }}
+    {{ button.button({label: 'Link button', route: route, type: 'link'}) }}
+
+    <h3>Dropdown group</h3>
+
+    {{ button.group([{label: 'Button 1', route: route}, {label: 'Button 2', route: route}, {label: 'Button 3', route: route}]) }}
+
+    <h3>Toolbar</h3>
+
+    {{ button.toolbar([
+    [{label: 'Button 1', route: route}, {label: 'Button 2', route: route, type: 'success'}],
+    [{label: 'Button 3', route: route}, {label: 'Button 4', route: route}, {label: 'Button 5', route: route}]
+    ]) }}
+
+    <h3>Dropdown button</h3>
+
+    {{ button.button({label: 'Dropdown button', nested: [
+    {label: 'Nested A', route: route},
+    {label: 'Nested B', route: route},
+    {label: 'Nested C', route: route}
+    ]}) }}
+
+    {{ button.button({label: 'Success with default action', type: 'success', route: route, nested: [
+    {label: 'Nested 1', route: route},
+    {label: 'Nested 2', route: route},
+    {label: 'Nested 3', route: route}
+    ]}) }}
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock %}

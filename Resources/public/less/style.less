@@ -74,11 +74,16 @@ header .navbar {
         .text-center;
     }
     td {
+        vertical-align: middle !important;
+
         &.number, &.money, &.date {
             .text-right;
         }
-        &.boolean {
+        &.boolean, &.actions {
             .text-center;
+            * {
+                .text-right;
+            }
         }
     }
 }

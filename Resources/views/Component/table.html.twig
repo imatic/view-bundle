@@ -5,13 +5,15 @@
     - table: table configuration (Imatic\Bundle\ViewBundle\Templating\Grid\TableOptions)
 #}
 
+{% import 'ImaticViewBundle:Component:button.html.twig' as button %}
+
 {% block table %}
     {% set table   = imatic_view_table(table | default([])) %}
     {% set columns = imatic_view_table_columns(columns | default([])) %}
 
     {% spaceless %}
-        <div class="imatic-view-table">
-        <table class="table table-condensed">
+        <div class="imatic-view-table table-responsive">
+        <table class="table">
             <caption></caption>
             {% block table_head %}
                 <thead>
@@ -23,13 +25,8 @@
                     {% for column in columns %}
                         <th class="{{ column.format }} {{ column.class }}">{{ column.name }}</th>
                     {% endfor %}
-                    {% if table.actions %}
-                        <th>
-                            actions
-                            {% for action in table.actions %}
-                                {{ imatic_view_action(action) }}
-                            {% endfor %}
-                        </th>
+                    {% if table.actions is defined %}
+                        <th>actions</th>
                     {% endif %}
                 </tr>
                 </thead>
@@ -58,11 +55,9 @@
                             {% endblock %}
                             {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                             {% block table_row_actions %}
-                                {% if table.actions %}
-                                    <td>
-                                        {% for action in table.actions %}
-                                            {{ imatic_view_action(action) }}
-                                        {% endfor %}
+                                {% if table.actions is defined %}
+                                    <td class="actions">
+                                        {{ button.group(table.actions) }}
                                     </td>
                                 {% endif %}
                             {% endblock %}
