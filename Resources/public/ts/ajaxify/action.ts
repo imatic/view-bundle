@@ -70,6 +70,7 @@ module imatic.view.ajaxify.action {
                 url: string;
                 method: string;
                 data: {[name: string]: any};
+                contentSelector: string;
             }
         ) {}
 
@@ -112,7 +113,10 @@ module imatic.view.ajaxify.action {
                         }));
 
                         if (event['proceed']) {
-                            container.setHtml(response.data);
+                            container.setHtml(
+                                response.data,
+                                this.options.contentSelector
+                            );
                         }
                     }
 

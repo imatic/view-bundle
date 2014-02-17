@@ -6,7 +6,7 @@
     {{ parent() }}
     {% javascripts
     'bundles/imaticview/ts/ajaxify/init.ts'
-    output='js/javascript.js' %}
+    output='js/ajaxify.js' %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 {% endblock %}
@@ -15,7 +15,7 @@
     {{ parent() }}
     {% stylesheets
     'bundles/imaticview/css/demo/ajaxify/ajaxify.css'
-    output='css/style.css' -%}
+    output='css/ajaxify.css' -%}
     <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
     {% endstylesheets %}
 {% endblock %}

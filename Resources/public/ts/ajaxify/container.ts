@@ -57,7 +57,7 @@ module imatic.view.ajaxify.container {
         /**
          * Set container's HTML content
          */
-        setHtml: (html: string) => void;
+        setHtml: (html: string, contentSelector?: string) => void;
     }
 
     /**
@@ -357,11 +357,13 @@ module imatic.view.ajaxify.container {
         /**
          * Set container's HTML content
          */
-        setHtml(html: string): void {
+        setHtml(html: string, contentSelector?: string): void {
             var fragment = new HtmlFragment(html, this.jQuery);
             var content;
 
-            var contentSelector = this.getHtmlContentSelector();
+            if (!contentSelector) {
+                contentSelector = this.getHtmlContentSelector();
+            }
             if (contentSelector) {
                 if (fragment.contains(contentSelector)) {
                     content = fragment.find(contentSelector);

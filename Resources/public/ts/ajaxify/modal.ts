@@ -26,20 +26,6 @@ module imatic.view.ajaxify.modal {
     import Form                             = imatic.view.ajaxify.form.Form;
 
     /**
-     * Modal configuration interface
-     * Represents a set of options required for modal dialogs.
-     */
-    export interface ModalConfigurationInterface
-    {
-        modalSize: ModalSize;
-        modalClosable: boolean;
-        modalActions: string;
-        modalTitle: string;
-        modalHeader: string;
-        modalFooter: string;
-    }
-
-    /**
      * Modal size
      */
     export enum ModalSize {
@@ -54,7 +40,7 @@ module imatic.view.ajaxify.modal {
     export var ModalConfigurationDefaults = {
         modalSize: ModalSize.NORMAL,
         modalClosable: true,
-        modalActions: '',
+        //modalActions: '',
         modalTitle: '',
         modalFooter: '',
     };
@@ -69,7 +55,7 @@ module imatic.view.ajaxify.modal {
          */
         process(config: any): void {
             if (typeof config.modalSize === 'string') {
-                config.modalSize = ModalSize[config.modalSize.toUpper()];
+                config.modalSize = ModalSize[config.modalSize.toUpperCase()];
             }
         }
     }
@@ -269,6 +255,7 @@ module imatic.view.ajaxify.modal {
         static uidCounter = 0;
         private element: HTMLElement;
         private uid: number;
+        private closable: boolean = true;
 
         /**
          * Constructor
@@ -288,7 +275,14 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            this.jQuery(this.element).modal();
+            var options: {[key: string]: any} = {};
+
+            if (!this.closable) {
+                options['backdrop'] = 'static';
+                options['keyboard'] = false;
+            }
+
+            this.jQuery(this.element).modal(options);
         }
 
         /**
@@ -325,24 +319,29 @@ module imatic.view.ajaxify.modal {
          * Set modal's size
          */
         setSize(size: ModalSize): void {
-            var smallClass = 'bs-modal-sm';
-            var largeClass = 'bs-modal-lg';
+            if (!this.element) {
+                this.create();
+            }
+
+            var smallClass = 'modal-sm';
+            var largeClass = 'modal-lg';
+            var dialog = this.jQuery('div.modal-dialog', this.element);
 
             switch (size) {
                 case ModalSize.SMALL:
-                    this.jQuery(this.element)
+                      dialog
                         .removeClass(largeClass)
                         .addClass(smallClass)
                     ;
                     break;
                 case ModalSize.NORMAL:
-                    this.jQuery(this.element)
+                    dialog
                         .removeClass(smallClass)
                         .removeClass(largeClass)
                     ;
                     break;
                 case ModalSize.LARGE:
-                    this.jQuery(this.element)
+                    dialog
                         .removeClass(smallClass)
                         .addClass(largeClass)
                     ;
@@ -354,8 +353,13 @@ module imatic.view.ajaxify.modal {
          * Set modal's closable state
          */
         setClosable(closable: boolean): void {
-            var closeButton = this.jQuery('div.modal-header > button.close', this.element);
+            if (!this.element) {
+                this.create();
+            }
 
+            this.closable = closable;
+
+            var closeButton = this.jQuery('div.modal-header > button.close', this.element);
             if (closable) {
                 closeButton.show();
             } else {
@@ -422,16 +426,15 @@ module imatic.view.ajaxify.modal {
         private create(): void {
             var html = '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imatic_view_ajaxify_modal_title_' + this.uid + '" aria-hidden="true">'
                 + '<div class="modal-dialog">'
-                  + '<div class="modal-dialog">'
                     + '<div class="modal-content">'
-                      + '<div class="modal-header">'
-                        + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                        + '<h4 class="modal-title" id="imatic_view_ajaxify_modal_title_' + this.uid + '">Modal title</h4>'
-                      + '</div>'
-                      + '<div class="modal-body"></div>'
-                      + '<div class="modal-footer"></div>'
+                        + '<div class="modal-header">'
+                            + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                            + '<h4 class="modal-title" id="imatic_view_ajaxify_modal_title_' + this.uid + '">Modal title</h4>'
+                        + '</div>'
+                        + '<div class="modal-body"></div>'
+                        + '<div class="modal-footer"></div>'
                     + '</div>'
-                  + '</div>'
+                + '</div>'
                 + '</div>'
             ;
 

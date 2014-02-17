@@ -127,10 +127,13 @@ module imatic.view.ajaxify.form {
          * Create action
          */
         createAction(): ActionInterface {
+            var config = this.getConfiguration();
+
             var action = new LoadHtmlAction(this, this.jQuery, {
                 url: this.element.action,
                 method: this.element.method || 'GET',
                 data: this.jQuery(this.element).serialize(),
+                contentSelector: config.contentSelector || null,
             });
 
             action.events.addCallback('begin', (event: EventInterface): void => {

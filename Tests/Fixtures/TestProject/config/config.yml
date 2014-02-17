@@ -1,6 +1,6 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: @ImaticViewBundle/Resources/config/config.yml }
+    - { resource: '@ImaticViewBundle/Resources/config/config.yml' }
 
 framework:
     secret:                     test
@@ -75,6 +75,10 @@ security:
         - { path: ^/admin, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
 
 assetic:
+    debug: false
+    use_controller:
+        enabled:              false
+        profiler:             false
     read_from: '%kernel.root_dir%/web'
     filters:
         cssrewrite:

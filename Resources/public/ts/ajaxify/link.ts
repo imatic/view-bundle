@@ -44,7 +44,17 @@ module imatic.view.ajaxify.link {
          * Validate given element
          */
         isValidElement(element: HTMLElement): boolean {
-            return -1 !== this.linkTagNames.indexOf(element.tagName);
+            if (
+                -1 !== this.linkTagNames.indexOf(element.tagName)
+                && (
+                    this.jQuery(element).attr('href')
+                    || this.jQuery(element).data('href')
+                )
+            ) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         /**
@@ -139,10 +149,13 @@ module imatic.view.ajaxify.link {
          * Create action
          */
         createAction(): ActionInterface {
+            var config = this.getConfiguration();
+
             var action = new LoadHtmlAction(this, this.jQuery, {
                 url: this.url,
                 method: 'GET',
                 data: null,
+                contentSelector: config.contentSelector || null,
             });
 
             action.events.addCallback('begin', (event: EventInterface): void => {
