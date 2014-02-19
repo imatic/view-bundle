@@ -25,6 +25,11 @@ class ActionHelper
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
+    /**
+     * @param ActionOptions|array $actionOptions
+     * @param array|null $contextOptions
+     * @return HtmlElement
+     */
     public function create($actionOptions, $contextOptions = null)
     {
         if (!($actionOptions instanceof ActionOptions)) {
@@ -34,15 +39,7 @@ class ActionHelper
             $contextOptions = [];
         }
 
-        $url = $actionOptions->url;
-        if (!$url && $actionOptions->route) {
-            $routeParameters = $actionOptions->routeParams;
-            if (array_key_exists('item', $contextOptions)) {
-                $routeParameters = $this->applyParameters($contextOptions['item'], $routeParameters);
-            }
-            $url = $this->urlGenerator->generate($actionOptions->route, $routeParameters);
-        }
-
+        $url = $this->getActionUrl($actionOptions, $contextOptions);
         $element = new HtmlElement('a', $actionOptions->label, ['href' => $url]);
 
         foreach ($actionOptions->data as $dataKey => $dataValue) {
@@ -53,6 +50,11 @@ class ActionHelper
         return $element;
     }
 
+    /**
+     * @param object|array $object
+     * @param array $parameters
+     * @return array
+     */
     public function applyParameters($object, array $parameters)
     {
         foreach ($parameters as $name => $value) {
@@ -66,6 +68,10 @@ class ActionHelper
         return $parameters;
     }
 
+    /**
+     * @param ActionOptions|array $action
+     * @return ActionOptions
+     */
     public function getActionOptions($action)
     {
         if (!($action instanceof ActionOptions)) {
@@ -73,5 +79,24 @@ class ActionHelper
         }
 
         return $action;
+    }
+
+    /**
+     * @param ActionOptions $actionOptions
+     * @param array $contextOptions
+     * @return string
+     */
+    public function getActionUrl(ActionOptions $actionOptions, array $contextOptions)
+    {
+        $url = $actionOptions->url;
+        if (!$url && $actionOptions->route) {
+            $routeParameters = $actionOptions->routeParams;
+            if (array_key_exists('item', $contextOptions)) {
+                $routeParameters = $this->applyParameters($contextOptions['item'], $routeParameters);
+            }
+            $url = $this->urlGenerator->generate($actionOptions->route, $routeParameters);
+        }
+
+        return $url;
     }
 }
