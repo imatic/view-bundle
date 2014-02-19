@@ -1,43 +1,41 @@
-{% macro _button(button) %}{% spaceless %}
-    {% set url = button.route is defined ? path(button.route | default(null), button.routeParams | default({})) : '#' %}
-    <a
-            href="{{ url }}"
-            class="btn btn-{{ button.type | default('default') }} {{ button.class | default('') }}"
-            {% if button.data is defined and button.data is iterable %}
-                {% for dataName, dataValue in button.data %}
-                    data-{{ dataName }}="{{ dataValue }}"
-                {% endfor %}
-            {% endif %}
-            >{{ button.label|raw }}</a>
-{% endspaceless %}{% endmacro %}
+{% macro action(action, context) %}
+    {{ imatic_view_action_create(imatic_view_action(action), context)|raw }}
+{% endmacro %}
 
-{% macro button(button) %}{% spaceless %}
-    {% if button.nested is defined and button.nested is iterable %}
-        {{ _self.nested(button) }}
+{% macro button(action, context) %}{% spaceless %}
+    {% set action = imatic_view_action(action) %}
+    {% set element = imatic_view_action_create(action, context) %}
+    {% if action.nested is not empty %}
+        {{ _self._nested(element, action, context) }}
     {% else %}
-        {{ _self._button(button) }}
+        {{ _self._button(element, action) }}
     {% endif %}
 {% endspaceless %}{% endmacro %}
 
-{% macro nested(button) %}
+{% macro _button(element, action) %}{% spaceless %}
+    {% do element.classes.add('btn btn-' ~ action.type | default('default')) %}
+    {{ element|raw }}
+{% endspaceless %}{% endmacro %}
+
+{% macro _nested(element, action) %}
     <div class="btn-group">
-        {% if button.route is defined %}
-            {{ _self._button(button) }}
+        {% if action.url is not empty %}
+            {{ _self._button(element, action) }}
             <button type="button"
-                    class="btn btn-{{ button.type | default('default') }} dropdown-toggle"
+                    class="btn btn-{{ action.type | default('default') }} dropdown-toggle"
                     data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
         {% else %}
-            {% set toMerge = {label: button.label ~ ' <span class="caret"></span>', data: {toggle: 'dropdown'}, class: 'dropdown-toggle'} %}
-            {% set button = button | merge(toMerge) %}
-            {{ _self._button(button) }}
+            {% do element.setValue(action.label ~ ' <span class="caret"></span>') %}
+            {% do element.data.set('toggle', 'dropdown') %}
+            {% do element.classes.add('dropdown-toggle') %}
+            {{ _self._button(element, action) }}
         {% endif %}
         <ul class="dropdown-menu" role="menu">
-            {% for nested in button.nested %}
-                {#<li>{{ _self._button(nested) }}</li>#}
-                <li><a href="#">{{ nested.label }}</a></li>
+            {% for nested in action.nested %}
+                <li>{{ _self.action(nested) }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -59,20 +57,16 @@
     </div>
 {% endspaceless %}{% endmacro %}
 
-{# Detect type and render button | group | toolbar #}
-{% macro print(config) %}{% spaceless %}
-
-{% endspaceless %}{% endmacro %}
-
 {# todo:
+- route + params (route: user_show, params: {'id': '~id'})
+- role(s)
+- method (asi pres data => neresit)
 - size (lg, sm, ..)
+- config validation
+
 - block (true|false)
 - disabled (true|false)
 - tag (a|button|input)
-
-- method (asi pres data => neresit)
-- route + params (route: user_show, params: {'id': '~id'})
-- role(s)
 - separators
 - headers?
 #}

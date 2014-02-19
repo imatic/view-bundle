@@ -13,8 +13,9 @@ abstract class AbstractOptions
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
-
-        $this->options = $resolver->resolve($options);
+        $options = $resolver->resolve($options);
+        $options = $this->configure($options);
+        $this->options = $options;
     }
 
     public function __get($name)
@@ -29,6 +30,11 @@ abstract class AbstractOptions
     public function __isset($name)
     {
         return array_key_exists($name, $this->options);
+    }
+
+    protected function configure(array $options)
+    {
+        return $options;
     }
 
     abstract protected function configureOptions(OptionsResolverInterface $resolver);

@@ -1,7 +1,7 @@
 <?php
-namespace Imatic\Bundle\ViewBundle\Tests\Util;
+namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
-use Imatic\Bundle\ViewBundle\Util\String;
+use Imatic\Bundle\ViewBundle\Templating\Utils\String;
 
 class StringTest extends \PHPUnit_Framework_TestCase
 {

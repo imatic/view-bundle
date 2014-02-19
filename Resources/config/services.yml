@@ -55,6 +55,8 @@ services:
         arguments:
             - @imatic_view.templating.helper.grid
             - @imatic_view.templating.helper.show
+            - @imatic_view.templating.helper.action
+
         tags:
             - { name: 'twig.extension' }
 
@@ -100,3 +102,8 @@ services:
 
     imatic_view.templating.helper.show:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper
+
+    imatic_view.templating.helper.action:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper
+        arguments:
+            - @router

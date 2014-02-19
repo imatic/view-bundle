@@ -1,5 +1,5 @@
 <?php
-namespace Imatic\Bundle\ViewBundle\Templating\Util;
+namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 
 class String
 {
