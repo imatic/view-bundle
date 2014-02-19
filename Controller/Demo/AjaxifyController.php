@@ -52,7 +52,22 @@ class AjaxifyController extends Controller
      */
     public function modalTestAction()
     {
-        return array(
-        );
+        return array();
+    }
+    
+    /**
+     * @Config\Route("/test/flashes")
+     * @Config\Template()
+     */
+    public function flashesTestAction()
+    {
+        $flashBag = $this->get('session')->getFlashBag();
+        
+        $flashBag->add('success', 'I am a success!');
+        $flashBag->add('info', 'I am an information!');
+        $flashBag->add('warning', 'I am a warning!');
+        $flashBag->add('danger', 'I am a danger!');
+
+        return array();
     }
 }

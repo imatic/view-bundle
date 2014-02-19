@@ -84,7 +84,7 @@ module imatic.view.ajaxify.link {
     /**
      * Link factory
      */
-    export class LinkFactory
+    class LinkFactory
     {
         /**
          * Constructor

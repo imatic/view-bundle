@@ -34,7 +34,7 @@ module imatic.view.ajaxify.ajax {
                 dataType: 'text',
                 data: data,
                 cache: false,
-                complete: function (xhr: XMLHttpRequest, textStatus: string) {
+                complete: (xhr: XMLHttpRequest, textStatus: string): void => {
                     if (onComplete) {
                         var serverResponse = new ServerResponseFactory().create(this.jQuery, xhr);
                         onComplete(serverResponse);

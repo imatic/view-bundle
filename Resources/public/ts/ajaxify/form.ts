@@ -26,7 +26,6 @@ module imatic.view.ajaxify.form {
     /**
      * Form handler
      */
-
     export class FormHandler
     {
         private formFactory = new FormFactory(this.configBuilder, this.jQuery);
@@ -67,7 +66,7 @@ module imatic.view.ajaxify.form {
     /**
      * Form factory
      */
-    export class FormFactory
+    class FormFactory
     {
         /**
          * Constructor
