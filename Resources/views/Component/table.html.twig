@@ -57,7 +57,7 @@
                             {% block table_row_actions %}
                                 {% if table.actions is defined %}
                                     <td class="actions">
-                                        {{ button.group(table.actions) }}
+                                        {{ button.group(table.actions, {item: item}) }}
                                     </td>
                                 {% endif %}
                             {% endblock %}

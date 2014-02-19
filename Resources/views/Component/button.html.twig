@@ -19,7 +19,7 @@
 
 {% macro _nested(element, action) %}
     <div class="btn-group">
-        {% if action.url is not empty %}
+        {% if action.url is not empty or action.route is not empty %}
             {{ _self._button(element, action) }}
             <button type="button"
                     class="btn btn-{{ action.type | default('default') }} dropdown-toggle"
@@ -41,18 +41,18 @@
     </div>
 {% endmacro %}
 
-{% macro group(buttons) %}{% spaceless %}
+{% macro group(buttons, context) %}{% spaceless %}
     <div class="btn-group">
         {% for button in buttons %}
-            {{ _self.button(button) }}
+            {{ _self.button(button, context) }}
         {% endfor %}
     </div>
 {% endspaceless %}{% endmacro %}
 
-{% macro toolbar(buttonGroups) %}{% spaceless %}
+{% macro toolbar(buttonGroups, context) %}{% spaceless %}
     <div class="btn-toolbar" role="toolbar">
         {% for buttons in buttonGroups %}
-            {{ _self.group(buttons) }}
+            {{ _self.group(buttons, context) }}
         {% endfor %}
     </div>
 {% endspaceless %}{% endmacro %}
