@@ -4,7 +4,8 @@
 /// <reference path="widget.ts"/>
 /// <reference path="link.ts"/>
 /// <reference path="form.ts"/>
-/// <reference path="modal.ts"/>
+/// <reference path="modal_container.ts"/>
+/// <reference path="void_container.ts"/>
 
 /**
  * Imatic view ajaxify document module
@@ -22,9 +23,10 @@ module imatic.view.ajaxify.document {
     import ContainerNotFoundException   = imatic.view.ajaxify.container.ContainerNotFoundException;
     import WidgetInterface              = imatic.view.ajaxify.widget.WidgetInterface;
     import WidgetHandler                = imatic.view.ajaxify.widget.WidgetHandler;
-    import ModalContainerHandler        = imatic.view.ajaxify.modal.ModalContainerHandler;
-    import ModalConfigurationDefaults   = imatic.view.ajaxify.modal.ModalConfigurationDefaults;
-    import ModalConfigurationProcessor  = imatic.view.ajaxify.modal.ModalConfigurationProcessor;
+    import ModalContainerHandler        = imatic.view.ajaxify.modalContainer.ModalContainerHandler;
+    import ModalConfigurationDefaults   = imatic.view.ajaxify.modalContainer.ModalConfigurationDefaults;
+    import ModalConfigurationProcessor  = imatic.view.ajaxify.modalContainer.ModalConfigurationProcessor;
+    import VoidContainerHandler         = imatic.view.ajaxify.voidContainer.VoidContainerHandler;
     import LinkHandler                  = imatic.view.ajaxify.link.LinkHandler;
     import FormHandler                  = imatic.view.ajaxify.form.FormHandler;
 
@@ -79,6 +81,15 @@ module imatic.view.ajaxify.document {
                 this.jQuery
             );
             this.containerHandler.addTargetHandler(modalContainerHandler);
+
+            // void container handler
+            var voidContainerHandler = new VoidContainerHandler(
+                this.containerHandler,
+                this.configBuilder,
+                this.document,
+                this.jQuery
+            );
+            this.containerHandler.addTargetHandler(voidContainerHandler);
         }
 
         /**
@@ -93,6 +104,13 @@ module imatic.view.ajaxify.document {
         }
 
         /**
+         * Validate given element
+         */
+        private isValidElement(element: HTMLElement): boolean {
+            return false !== this.jQuery(element).data('ajaxify');
+        }
+
+        /**
          * Handle onclick event
          */
         private onClick = (event: MouseEvent): void => {
@@ -101,6 +119,7 @@ module imatic.view.ajaxify.document {
             try {
                 if (
                     this.linkHandler.isValidElement(element)
+                    && this.isValidElement(element)
                     && this.linkHandler.isValidEvent(event)
                 ) {
                     var container = this.containerHandler.findInstance(element);
@@ -123,7 +142,10 @@ module imatic.view.ajaxify.document {
             var element = <HTMLElement> event.target;
 
             try {
-                if (this.formHandler.isValidElement(element)) {
+                if (
+                    this.formHandler.isValidElement(element)
+                    && this.isValidElement(element)
+                ) {
                     var container = this.containerHandler.findInstance(element);
                     var form = this.formHandler.getInstance(container, element);
 

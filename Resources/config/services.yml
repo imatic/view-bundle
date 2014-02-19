@@ -7,21 +7,21 @@ services:
     imatic_view.menu.provider_container:
         class: Imatic\Bundle\ViewBundle\Menu\ContainerProvider
         arguments:
-          - @service_container
+          - '@service_container'
         tags:
           - { name: knp_menu.provider }
 
     imatic_view.menu.factory:
         class: Imatic\Bundle\ViewBundle\Menu\Factory
-        arguments: [ @knp_menu.factory ]
+        arguments: [ '@knp_menu.factory' ]
 
     imatic_view.menu.helper:
         class: Imatic\Bundle\ViewBundle\Menu\Helper
-        arguments: [ @translator, @?security.context ]
+        arguments: [ '@translator', '@?security.context' ]
 
     imatic_view.menu.main:
         class: %imatic_view.menu.main.class%
-        arguments: [ @imatic_view.menu.provider_container ]
+        arguments: [ '@imatic_view.menu.provider_container' ]
         tags:
             - { name: imatic_view.menu, alias: imatic.main }
             - { name: imatic_view.menu, alias: imatic.main_side, method: getSideMenu }
@@ -41,7 +41,7 @@ services:
 
     imatic_view.twig.extension.menu:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension
-        arguments:    [ @imatic_view.menu.factory, @knp_menu.renderer.twig ]
+        arguments:    [ '@imatic_view.menu.factory', '@knp_menu.renderer.twig' ]
         tags:
             - { name: 'twig.extension' }
 
@@ -53,17 +53,23 @@ services:
     imatic_view.twig.extension.component:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
         arguments:
-            - @imatic_view.templating.helper.grid
-            - @imatic_view.templating.helper.show
-            - @imatic_view.templating.helper.action
+            - '@imatic_view.templating.helper.grid'
+            - '@imatic_view.templating.helper.show'
+            - '@imatic_view.templating.helper.action'
+        tags:
+            - { name: 'twig.extension' }
 
+    imatic_view.twig.extension.layout:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\LayoutExtension
+        arguments:
+            - '@imatic_view.templating.helper.layout'
         tags:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.format:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\FormatExtension
         arguments:
-            - @imatic_view.templating.helper.format
+            - '@imatic_view.templating.helper.format'
         tags:
             - { name: 'twig.extension' }
 
@@ -77,7 +83,7 @@ services:
     imatic_view.twig.extension.format.twig:
         class:        Imatic\Bundle\ViewBundle\Templating\Helper\Format\TwigFormatter
         arguments:
-            - @twig
+            - '@twig'
         tags:
             - { name: imatic_view.formatter, alias: date }
             - { name: imatic_view.formatter, alias: number }
@@ -85,7 +91,7 @@ services:
     imatic_view.twig.extension.format.common:
         class:        Imatic\Bundle\ViewBundle\Templating\Helper\Format\CommonFormatter
         arguments:
-            - @translator
+            - '@translator'
         tags:
             - { name: imatic_view.formatter, alias: url }
             - { name: imatic_view.formatter, alias: phone }
@@ -103,7 +109,21 @@ services:
     imatic_view.templating.helper.show:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper
 
+    imatic_view.templating.helper.layout:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper
+        arguments:
+            - '@request_stack'
+
     imatic_view.templating.helper.action:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper
         arguments:
-            - @router
+            - '@router'
+
+    # Event listners
+    imatic_view.event_listener.kernel_response:
+        class: Imatic\Bundle\ViewBundle\EventListener\KernelResponseListener
+        arguments:
+            - '@imatic_view.templating.helper.layout'
+            - '@session'
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

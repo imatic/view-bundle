@@ -1,0 +1,46 @@
+<?php
+
+namespace Imatic\Bundle\ViewBundle\Twig\Extension;
+
+use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
+use Twig_Extension;
+use Twig_SimpleFunction;
+
+/**
+ * Layout extension
+ *
+ * @author Pavel Batecko <pavel.batecko@imatic.cz>
+ */
+class LayoutExtension extends Twig_Extension
+{
+    /** @var LayoutHelper */
+    private $layoutHelper;
+
+    /**
+     * Constructor
+     *
+     * @param LayoutHelper $layoutHelper
+     */
+    public function __construct(LayoutHelper $layoutHelper)
+    {
+        $this->layoutHelper = $layoutHelper;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFunctions()
+    {
+        return array(
+            new Twig_SimpleFunction('imatic_view_has_layout', array($this->layoutHelper, 'hasLayout')),
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return 'imatic_view_layout';
+    }
+}

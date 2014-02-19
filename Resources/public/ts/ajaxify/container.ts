@@ -2,8 +2,10 @@
 /// <reference path="configuration.ts"/>
 /// <reference path="event.ts"/>
 /// <reference path="action.ts"/>
+/// <reference path="message.ts"/>
 /// <reference path="html.ts"/>
 /// <reference path="css.ts"/>
+/// <reference path="modal.ts"/>
 
 /**
  * Imatic view ajaxify container module
@@ -19,8 +21,11 @@ module imatic.view.ajaxify.container {
     import DomEvents                = imatic.view.ajaxify.event.DomEvents;
     import EventInterface           = imatic.view.ajaxify.event.EventInterface;
     import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
+    import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
     import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
     import CssClasses               = imatic.view.ajaxify.css.CssClasses;
+    import ModalSize                = imatic.view.ajaxify.modal.ModalSize;
+    import Modal                    = imatic.view.ajaxify.modal.Modal;
 
     /**
      * Container not found exception
@@ -45,9 +50,14 @@ module imatic.view.ajaxify.container {
         getConfiguration: () => any;
 
         /**
-         * Handle given action
+         * Handle action
          */
         handleAction: (action: ActionInterface) => void;
+
+        /**
+         * Handle flash messages
+         */
+        handleFlashes: (flashes: FlashMessageInterface[]) => void;
 
         /**
          * Set container's content
@@ -314,7 +324,7 @@ module imatic.view.ajaxify.container {
         }
 
         /**
-         * Handle given action
+         * Handle action
          */
         handleAction(action: ActionInterface): void {
             // abort current action
@@ -329,18 +339,52 @@ module imatic.view.ajaxify.container {
 
             // listen to action's events
             action.events.addCallback('begin', (event: EventInterface): void => {
+                // add busy class
                 if (this.element) {
                     this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
                 }
             });
             action.events.addCallback('complete', (event: EventInterface): void => {
+                // remove busy class
                 if (this.element) {
                     this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                }
+
+                // handle flash messages
+                if (event['response'].flashes.length > 0) {
+                    this.handleFlashes(event['response'].flashes);
+                } else if (!event['response'].valid) {
+                    this.handleFlashes([{
+                        type: 'danger',
+                        message: 'An error occured',
+                    }]);
                 }
             });
 
             // execute action
             action.execute(this);
+        }
+
+        /**
+         * Handle flash messages
+         */
+        handleFlashes(flashes: FlashMessageInterface[]): void {
+            var modal = new Modal(this.jQuery, this.document);
+
+            var body = '';
+
+            for (var i = 0; i < flashes.length; ++i) {
+                body += '<div class="alert alert-' + flashes[i].type + '">'
+                    + this.jQuery('<div/>').text(flashes[i].message).html()
+                    + '</div>'
+                ;
+            }
+
+            modal.setBody(body);
+            modal.setFooter('<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>');
+            modal.setSize(ModalSize.SMALL);
+
+            modal.show();
         }
 
         /**

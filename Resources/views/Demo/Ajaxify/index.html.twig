@@ -24,6 +24,8 @@
                 </ol>
             </li>
             <li><a href="#modals">Modal dialogs</a></li>
+            <li><a href="#flashes">Flash messages</a></li>
+            <li><a href="#void">Void containers</a></li>
             <li><a href="#css">CSS classes</a></li>
         </ol>
 
@@ -98,18 +100,36 @@
                     <td><code>data-target</code></td>
                     <td>specifies the container</td>
                     <td>
-                        <ul>
-                            <li>. (a dot) or empty =&gt; parent container</li>
-                            <li>modal =&gt; <a href="#modals">modal dialog</a></li>
-                            <li>a selector =&gt; targeted element</li>
-                        </ul>
+                        <table class="table table-condensed table-bordered table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>. (a dot) or empty</th>
+                                    <td>auto-determined from DOM context (parent)</td>
+                                </tr>
+                                <tr>
+                                    <th>modal</th>
+                                    <td><a href="#modals">modal dialog</a></td>
+                                </tr>
+                                <tr>
+                                    <th>void</th>
+                                    <td><a href="#void">void container</a></td>
+                                </tr>
+                                <tr>
+                                    <th>a selector</th>
+                                    <td>targeted container element</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                     <td>empty</td>
-                    <td><code>#my-container</code></td>
+                    <td>#my-container</td>
                 </tr>
                 <tr>
-                    <td><code>data-*</code></td>
-                    <td colspan="4"><a href="#configuration">see configuration</a></td>
+                    <td><code>data-ajaxify</code></td>
+                    <td>toggle XHR functionality of the widget</td>
+                    <td>true or false</td>
+                    <td>true</td>
+                    <td>false</td>
                 </tr>
             </tbody>
         </table>
@@ -191,7 +211,6 @@
                 <tr>
                     <th>Attribute</th>
                     <th>Meaning</th>
-                    <th>Example</th>
                     <th>Default</th>
                 </tr>
             </thead>
@@ -200,17 +219,15 @@
                     <td><code>href</code> or <code>data-href</code></td>
                     <td>the URL to load</td>
                     <td>/example.html</td>
-                    <td>-</td>
                 </tr>
                 <tr>
                     <td><code>data-target</code></td>
                     <td>specifies the container</td>
-                    <td colspan="2"><a href="#widgets">see widgets</a></td>
+                    <td><a href="#widgets">see widgets</a></td>
                 </tr>
                 <tr>
                     <td><code>data-content-selector</code></td>
                     <td>response content selector</td>
-                    <td>-</td>
                     <td>container's ID if any</td>
                 </tr>
             </tbody>
@@ -396,6 +413,82 @@
                 </tr>
             </tbody>
         </table>
+
+
+        <hr>
+
+
+        <!-- flashes -->
+        <h3 id="flashes">Flash messages</h3>
+
+        <p>
+            If the request is done via XHR, flash messages are handled server-side
+            and returned as a HTTP header <code>X-Flash-Messages</code>.
+        </p>
+
+        <h4>Displaying flash messages</h4>
+
+        <p>
+            Each container implementation is responsible for handling of the received
+            flash messages.
+        </p>
+
+        <p>
+            By default, the flash messages are displayed inside a modal dialog.
+        </p>
+
+        <h4>Example</h4>
+
+        <div class="well">
+            <a
+                href="{{ path('imatic_view_demo_ajaxify_flashestest') }}"
+                data-target="void"
+            >
+                Click me
+            </a>
+        </div>
+
+        <pre>
+{%- filter escape -%}{% verbatim %}
+<a
+    href="{{ path('imatic_view_demo_ajaxify_flashestest') }}"
+    data-target="void"
+>
+    Click me
+</a>
+{% endverbatim %}{%- endfilter -%}
+        </pre>
+
+
+        <hr>
+
+
+        <!-- void -->
+        <h3 id="void">Void containers</h3>
+
+        <p>
+            Void containers are used by setting the <code>data-target</code> attribute
+            of a <a href="#widgets">widget</a> to <code>void</code>. Void containers do
+            not exist as DOM elements in the page and thus do not display the response contents.
+        </p>
+
+        <p>
+            Void containers are useful in cases when you wish to perform a background action
+            but do not want reload a physical container in the page.
+        </p>
+
+        <div class="alert alert-info">
+            <p>
+                Flash messages are still displayed for void containers.
+            </p>
+        </div>
+
+        <h3>Example</h3>
+
+        <p>
+            The example in the <a href="#flashes">flash messages</a> section makes use
+            of a void container.
+        </p>
 
 
         <hr>
