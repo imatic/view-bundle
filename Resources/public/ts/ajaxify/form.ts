@@ -3,6 +3,7 @@
 /// <reference path="widget.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="event.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify form module
@@ -22,21 +23,21 @@ module imatic.view.ajaxify.form {
     import EventDispatcher      = imatic.view.ajaxify.event.EventDispatcher;
     import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
+    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Form handler
      */
     export class FormHandler
     {
-        private formFactory = new FormFactory(this.configBuilder, this.jQuery);
+        private formFactory = new FormFactory(this.configBuilder);
 
         /**
          * Constructor
          */
         constructor(
             private widgetHandler: WidgetHandler,
-            private configBuilder: ConfigurationBuilder,
-            private jQuery: any
+            private configBuilder: ConfigurationBuilder
         ) {}
 
         /**
@@ -49,13 +50,13 @@ module imatic.view.ajaxify.form {
         /**
          * Get form instance for given element
          */
-        getInstance(container: ContainerInterface, element: HTMLElement): Form {
+        getInstance(element: HTMLElement, containerElement?: HTMLElement): Form {
             var form;
 
             if (this.widgetHandler.hasInstance(element)) {
                 form = this.widgetHandler.getInstance(element);
             } else {
-                form = this.formFactory.create(container, element);
+                form = this.formFactory.create(element, containerElement);
                 this.widgetHandler.setInstance(element, form);
             }
 
@@ -72,19 +73,17 @@ module imatic.view.ajaxify.form {
          * Constructor
          */
         constructor(
-            private configBuilder: ConfigurationBuilder,
-            private jQuery: any
+            private configBuilder: ConfigurationBuilder
         ) {}
 
         /**
          * Create form
          */
-        create(container: ContainerInterface, element: HTMLElement): Form {
+        create(element: HTMLElement, containerElement?: HTMLElement): Form {
             var form = new Form(
                 this.configBuilder,
-                container,
                 <HTMLFormElement> element,
-                this.jQuery
+                containerElement
             );
 
             return form;
@@ -101,9 +100,8 @@ module imatic.view.ajaxify.form {
          */
         constructor(
             private configBuilder: ConfigurationBuilder,
-            private container: ContainerInterface,
             private element: HTMLFormElement,
-            private jQuery: any
+            private containerElement: HTMLElement
         ) {}
 
         /**
@@ -118,7 +116,7 @@ module imatic.view.ajaxify.form {
         getConfiguration(): any {
             return this.configBuilder.build(
                 this.element,
-                this.container.getConfiguration()
+                this.containerElement ? [this.containerElement] : []
             );
         }
 
@@ -128,18 +126,18 @@ module imatic.view.ajaxify.form {
         createAction(): ActionInterface {
             var config = this.getConfiguration();
 
-            var action = new LoadHtmlAction(this, this.jQuery, {
+            var action = new LoadHtmlAction(this, {
                 url: this.element.action,
                 method: this.element.method || 'GET',
-                data: this.jQuery(this.element).serialize(),
+                data: jQuery(this.element).serialize(),
                 contentSelector: config.contentSelector || null,
             });
 
             action.events.addCallback('begin', (event: EventInterface): void => {
-                this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
             });
             action.events.addCallback('complete', (event: EventInterface): void => {
-                this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
             });
 
             return action;

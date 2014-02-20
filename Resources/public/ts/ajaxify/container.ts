@@ -6,6 +6,7 @@
 /// <reference path="html.ts"/>
 /// <reference path="css.ts"/>
 /// <reference path="modal.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify container module
@@ -26,6 +27,7 @@ module imatic.view.ajaxify.container {
     import CssClasses               = imatic.view.ajaxify.css.CssClasses;
     import ModalSize                = imatic.view.ajaxify.modal.ModalSize;
     import Modal                    = imatic.view.ajaxify.modal.Modal;
+    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Container not found exception
@@ -48,6 +50,21 @@ module imatic.view.ajaxify.container {
          * Get container's configuration
          */
         getConfiguration: () => any;
+
+        /**
+         * See if the container is contextual
+         *
+         * Contextual containers live as real elements in the DOM even
+         * before their respective instances are created.
+         */
+        isContextual: () => boolean;
+
+        /**
+         * Get container's element
+         *
+         * NULL may be returned.
+         */
+        getElement: () => HTMLElement;
 
         /**
          * Handle action
@@ -97,8 +114,7 @@ module imatic.view.ajaxify.container {
 
         private containerFactory = new ContainerFactory(
             this.configBuilder,
-            this.document,
-            this.jQuery
+            this.document
         );
 
         private targetHandlers: TargetHandlerInterface[] = [];
@@ -108,8 +124,7 @@ module imatic.view.ajaxify.container {
          */
         constructor(
             private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument,
-            private jQuery: any
+            private document: HTMLDocument
         ) {}
 
         /**
@@ -123,21 +138,21 @@ module imatic.view.ajaxify.container {
          * Validate given element
          */
         isValidElement(element: HTMLElement): ContainerInterface {
-            return this.jQuery(element).is(this.selector);
+            return jQuery(element).is(this.selector);
         }
 
         /**
          * Check for container instance
          */
         hasInstance(containerElement: HTMLElement): boolean {
-            return this.jQuery(containerElement).data(this.instanceDataKey) ? true : false;
+            return jQuery(containerElement).data(this.instanceDataKey) ? true : false;
         }
 
         /**
          * Get container instance
          */
         getInstance(containerElement: HTMLElement): ContainerInterface {
-            var container = this.jQuery(containerElement).data(this.instanceDataKey);
+            var container = jQuery(containerElement).data(this.instanceDataKey);
             if (!container) {
                 throw new ContainerNotFoundException('Container instance not found');
             }
@@ -149,7 +164,7 @@ module imatic.view.ajaxify.container {
          * Set container instance
          */
         setInstance(containerElement: HTMLElement, container: ContainerInterface): void {
-            this.jQuery(containerElement)
+            jQuery(containerElement)
                 .data(this.instanceDataKey, container)
                 .attr(this.instanceMarkAttr, true)
                 .addClass(CssClasses.CONTAINER)
@@ -161,7 +176,7 @@ module imatic.view.ajaxify.container {
          */
         findInstance(element: HTMLElement): ContainerInterface {
             var container;
-            var target = this.jQuery(element).data('target');
+            var target = jQuery(element).data('target');
 
             // choose target handler
             var targetHandler;
@@ -199,16 +214,17 @@ module imatic.view.ajaxify.container {
                 return container;
             }
         }
+
         /**
          * Get container element from given element's context
          */
         getElementFromContext(element: HTMLElement, parentsOnly = false): HTMLElement {
             var containerElement;
 
-            if (!parentsOnly && this.jQuery(element).is(this.selector)) {
+            if (!parentsOnly && jQuery(element).is(this.selector)) {
                 containerElement = element;
             } else {
-                var parentContainers = this.jQuery(element).parents(this.selector);
+                var parentContainers = jQuery(element).parents(this.selector);
                 if (parentContainers.length < 1) {
                     throw new ContainerNotFoundException('Could not determine the container from context');
                 }
@@ -223,7 +239,7 @@ module imatic.view.ajaxify.container {
          * Get container element using given selector
          */
         getElementFromSelector(selector: string): ContainerInterface {
-            var containerElement = this.jQuery(selector, this.document)[0];
+            var containerElement = jQuery(selector, this.document)[0];
             if (!containerElement) {
                 throw new ContainerNotFoundException('Container specified by selector "' + selector + '" was not found');
             }
@@ -245,7 +261,7 @@ module imatic.view.ajaxify.container {
                 containers.push(this.getInstance(element));
             }
 
-            this.jQuery('[' + this.instanceMarkAttr + ']', element).each(function () {
+            jQuery('[' + this.instanceMarkAttr + ']', element).each(function () {
                 containers.push(self.getInstance(this));
             });
 
@@ -263,8 +279,7 @@ module imatic.view.ajaxify.container {
          */
         constructor(
             private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument,
-            private jQuery: any
+            private document: HTMLDocument
         ) {}
 
         /**
@@ -274,7 +289,7 @@ module imatic.view.ajaxify.container {
             return new Container(
                 this.configBuilder,
                 this.document,
-                this.jQuery,
+                jQuery,
                 element
             );
         }
@@ -294,7 +309,7 @@ module imatic.view.ajaxify.container {
             public configBuilder: ConfigurationBuilder,
             public document: HTMLDocument,
             public jQuery: any,
-            public element?: HTMLElement
+            public element: HTMLElement = null
         ) {}
 
         /**
@@ -324,6 +339,22 @@ module imatic.view.ajaxify.container {
         }
 
         /**
+         * See if the container is contextual
+         */
+        isContextual(): boolean {
+            return true;
+        }
+
+        /**
+         * Get container's element
+         *
+         * NULL may be returned.
+         */
+        getElement(): HTMLElement {
+            return this.element;
+        }
+
+        /**
          * Handle action
          */
         handleAction(action: ActionInterface): void {
@@ -341,13 +372,14 @@ module imatic.view.ajaxify.container {
             action.events.addCallback('begin', (event: EventInterface): void => {
                 // add busy class
                 if (this.element) {
-                    this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                    jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
                 }
-            });
+            }, 100);
+
             action.events.addCallback('complete', (event: EventInterface): void => {
                 // remove busy class
                 if (this.element) {
-                    this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                    jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
                 }
 
                 // handle flash messages
@@ -359,7 +391,7 @@ module imatic.view.ajaxify.container {
                         message: 'An error occured',
                     }]);
                 }
-            });
+            }, 100);
 
             // execute action
             action.execute(this);
@@ -369,13 +401,13 @@ module imatic.view.ajaxify.container {
          * Handle flash messages
          */
         handleFlashes(flashes: FlashMessageInterface[]): void {
-            var modal = new Modal(this.jQuery, this.document);
+            var modal = new Modal(this.document);
 
             var body = '';
 
             for (var i = 0; i < flashes.length; ++i) {
                 body += '<div class="alert alert-' + flashes[i].type + '">'
-                    + this.jQuery('<div/>').text(flashes[i].message).html()
+                    + jQuery('<div/>').text(flashes[i].message).html()
                     + '</div>'
                 ;
             }
@@ -391,7 +423,7 @@ module imatic.view.ajaxify.container {
          * Set container's content
          */
         setContent(content: any): void {
-            this.jQuery(this.element)
+            jQuery(this.element)
                 .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content.contents())
@@ -402,7 +434,7 @@ module imatic.view.ajaxify.container {
          * Set container's HTML content
          */
         setHtml(html: string, contentSelector?: string): void {
-            var fragment = new HtmlFragment(html, this.jQuery);
+            var fragment = new HtmlFragment(html, jQuery);
             var content;
 
             if (!contentSelector) {

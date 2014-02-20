@@ -2,47 +2,47 @@
 
 {% block action %}
 
-    <div class="container">
+<div class="container">
 
-        <h2>AJAXIFY Component</h2>
+    <h2>AJAXIFY Component</h2>
 
-        <p>
-            The AJAXIFY component is a javascript solution that provides simple
-            way to convert existing HTML markup into XHR driven components.
-        </p>
+    <p>
+        The AJAXIFY component is a javascript solution that provides simple
+        way to convert existing HTML markup into XHR driven components.
+    </p>
 
+    
+    <!-- contents -->
+    <h3>Contents</h3>
 
-        <!-- contents -->
-        <h3>Contents</h3>
-
-        <ol>
-            <li><a href="#containers">Containers</a></li>
-            <li><a href="#widgets">Widgets</a>
-                <ol>
-                    <li><a href="#link">Link</a></li>
-                    <li><a href="#form">Form</a></li>
-                </ol>
-            </li>
-            <li><a href="#modals">Modal dialogs</a></li>
-            <li><a href="#flashes">Flash messages</a></li>
-            <li><a href="#void">Void containers</a></li>
-            <li><a href="#css">CSS classes</a></li>
-        </ol>
-
-
-        <hr>
+    <ol>
+        <li><a href="#containers">Containers</a></li>
+        <li><a href="#widgets">Widgets</a>
+            <ol>
+                <li><a href="#link">Link</a></li>
+                <li><a href="#form">Form</a></li>
+            </ol>
+        </li>
+        <li><a href="#modals">Modal dialogs</a></li>
+        <li><a href="#flashes">Flash messages</a></li>
+        <li><a href="#void">Void containers</a></li>
+        <li><a href="#css">CSS classes</a></li>
+    </ol>
 
 
-        <!-- containers -->
-        <h3 id="containers">Containers</h3>
+    <hr>
 
-        <p>
-            Containers are elements that are affected by actions coming from
-            widgets. Any element that has the <code>data-role="container"</code>
-            attribute specified is considered a container.
-        </p>
 
-        <pre>
+    <!-- containers -->
+    <h3 id="containers">Containers</h3>
+
+    <p>
+        Containers are elements that are affected by actions coming from
+        widgets. Any element that has the <code>data-role="container"</code>
+        attribute specified is considered a container.
+    </p>
+
+    <pre>
 {%- filter escape -%}
 <div data-role="container">
     I am a container
@@ -50,7 +50,7 @@
 {%- endfilter -%}
         </pre>
 
-        
+
         <hr>
 
 
@@ -164,31 +164,31 @@
     <a href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">I am a link widget :)</a>
 </div>
 {% endverbatim %}{%- endfilter -%}
-        </pre>
+            </pre>
 
-        
-        <h4>Example outside of container</h4>
 
-        <p>
-            As noted in the <a href="#widgets">widgets section</a>, any widget
-            can live outside of its container and specify it using the
-            <code>data-target</code> attribute.
-        </p>
+            <h4>Example outside of container</h4>
 
-        <div class="well">
-            <a
-                href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}"
-                data-target="#link-example2-container"
-            >
-                I am a link widget outside of its container :)
-            </a>
+            <p>
+                As noted in the <a href="#widgets">widgets section</a>, any widget
+                can live outside of its container and specify it using the
+                <code>data-target</code> attribute.
+            </p>
 
-            <hr>
+            <div class="well">
+                <a
+                    href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}"
+                    data-target="#link-example2-container"
+                    >
+                    I am a link widget outside of its container :)
+                </a>
 
-            <div id="link-example2-container" data-role="container"></div>
-        </div>
+                <hr>
 
-        <pre>
+                <div id="link-example2-container" data-role="container"></div>
+            </div>
+
+            <pre>
 {%- filter escape -%}{% verbatim %}
 <a
     href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}"
@@ -201,63 +201,63 @@
 
 <div id="link-example2-container" data-role="container"></div>
 {% endverbatim %}{%- endfilter -%}
-        </pre>
+                </pre>
 
 
-        <h4>Supported attributes</h4>
+                <h4>Supported attributes</h4>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Attribute</th>
-                    <th>Meaning</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>href</code> or <code>data-href</code></td>
-                    <td>the URL to load</td>
-                    <td>/example.html</td>
-                </tr>
-                <tr>
-                    <td><code>data-target</code></td>
-                    <td>specifies the container</td>
-                    <td><a href="#widgets">see widgets</a></td>
-                </tr>
-                <tr>
-                    <td><code>data-content-selector</code></td>
-                    <td>response content selector</td>
-                    <td>container's ID if any</td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <hr>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Meaning</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>href</code> or <code>data-href</code></td>
+                            <td>the URL to load</td>
+                            <td>/example.html</td>
+                        </tr>
+                        <tr>
+                            <td><code>data-target</code></td>
+                            <td>specifies the container</td>
+                            <td><a href="#widgets">see widgets</a></td>
+                        </tr>
+                        <tr>
+                            <td><code>data-content-selector</code></td>
+                            <td>response content selector</td>
+                            <td>container's ID if any</td>
+                        </tr>
+                    </tbody>
+                </table>
 
 
-        <!-- form -->
-        <h3 id="form">Form</h3>
-
-        <p>All <code>&lt;form&gt;</code> tags are considered to be instances of the Form widget.</p>
-
-        <p>
-            Forms that are inside (or target) a container will be submitted using XHR and the resulting
-            HTML contents will be loaded into that container.
-        </p>
+                <hr>
 
 
-        <h4>Example</h4>
+                <!-- form -->
+                <h3 id="form">Form</h3>
 
-        <div class="well" data-role="container">
-            <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post">
-                Your name: <input type="text" name="name" value="Bob" required>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
+                <p>All <code>&lt;form&gt;</code> tags are considered to be instances of the Form widget.</p>
 
-        <pre>
+                <p>
+                    Forms that are inside (or target) a container will be submitted using XHR and the resulting
+                    HTML contents will be loaded into that container.
+                </p>
+
+
+                <h4>Example</h4>
+
+                <div class="well" data-role="container">
+                    <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post">
+                        Your name: <input type="text" name="name" value="Bob" required>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+
+                <pre>
 {%- filter escape -%}{% verbatim %}
 <div data-role="container">
     <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post">
@@ -266,97 +266,91 @@
     </form>
 </div>
 {% endverbatim %}{%- endfilter -%}
-        </pre>
+                    </pre>
 
 
-        <h4>Supported attributes</h4>
+                    <h4>Supported attributes</h4>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Attribute</th>
-                    <th>Meaning</th>
-                    <th>Default</th>
-                    <th>Example</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>action</code></td>
-                    <td>submission URL</td>
-                    <td>the current page</td>
-                    <td>/example.html</td>
-                </tr>
-                <tr>
-                    <td><code>method</code></td>
-                    <td>HTTP method</td>
-                    <td>GET</td>
-                    <td>POST</td>
-                </tr>
-                <tr>
-                    <td><code>data-target</code></td>
-                    <td>specifies the container</td>
-                    <td colspan="2"><a href="#widgets">see widgets</a></td>
-                </tr>
-                <tr>
-                    <td><code>data-content-selector</code></td>
-                    <td>response content selector</td>
-                    <td>-</td>
-                    <td>container's ID if any</td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <hr>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Meaning</th>
+                                <th>Default</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>action</code></td>
+                                <td>submission URL</td>
+                                <td>the current page</td>
+                                <td>/example.html</td>
+                            </tr>
+                            <tr>
+                                <td><code>method</code></td>
+                                <td>HTTP method</td>
+                                <td>GET</td>
+                                <td>POST</td>
+                            </tr>
+                            <tr>
+                                <td><code>data-target</code></td>
+                                <td>specifies the container</td>
+                                <td colspan="2"><a href="#widgets">see widgets</a></td>
+                            </tr>
+                            <tr>
+                                <td><code>data-content-selector</code></td>
+                                <td>response content selector</td>
+                                <td>-</td>
+                                <td>container's ID if any</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
 
-        <!-- modals -->
-        <h3 id="modals">Modal dialogs</h3>
-
-        <p>
-            Setting the <code>data-target</code> attribute of a widget
-            to <code>modal</code> causes the result to be opened
-            in a modal dialog.
-        </p>
-
-        <div class="alert alert-info">
-            <p>
-                All widget and container functionality is available inside
-                modals as well.
-            </p>
-        </div>
-
-        <div class="alert alert-info">
-            <p>
-                The modal dialog acts as a parent container for its contents.
-                Any widgets that are not contained in / targeted into another
-                container will be loaded into the modal dialog using the original
-                options, replacing its contents.
-            </p>
-        </div>
-
-        <div class="alert alert-info">
-            <p>
-                If a form submission action takes place in the modal's container
-                and the response code is 200, the dialog will close itself.
-            </p>
-        </div>
+                    <hr>
 
 
-        <h4>Example</h4>
+                    <!-- modals -->
+                    <h3 id="modals">Modal dialogs</h3>
 
-        <div class="well">
-            <a
-                href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
-                data-target="modal"
-                data-modal-title="h2"
-            >
-                Modal link
-            </a>
-        </div>
+                    <p>
+                        Setting the <code>data-target</code> attribute of a widget
+                        to <code>modal</code> causes the result to be opened
+                        in a modal dialog.
+                    </p>
 
-        <pre>
+                    <h4>Behaviour</h4>
+                    <ul>
+                        <li>
+                            All widget and container functionality is available inside
+                            modals as well.
+                        </li>
+                        <li>
+                            The modal dialog acts as a parent container for its contents.
+                            Any widgets that are not contained in / targeted into another
+                            container will be targeted into the modal dialog.
+                        </li>
+                        <li>
+                            If a form submission action takes place in the modal's container
+                            and the response code is 200, the dialog will close itself.
+                        </li>
+                    </ul>
+
+
+                    <h4>Example</h4>
+
+                    <div class="well">
+                        <a
+                            href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
+                            data-target="modal"
+                            data-modal-title="h2"
+                            >
+                            Modal link
+                        </a>
+                    </div>
+
+                    <pre>
 {%- filter escape -%}{% verbatim %}
 <a
     href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
@@ -366,89 +360,89 @@
     Modal link
 </a>
 {% endverbatim %}{%- endfilter -%}
-        </pre>
+                        </pre>
 
 
-        <h4>Modal configuration</h4>
+                        <h4>Modal configuration</h4>
 
-        <p>
-            The modal options can be set on the widget, container or the document's
-            body element. All options are cascaded together. The order
-            of priority is: widget > container > document's body element.
-        </p>
+                        <p>
+                            The modal options can be set on the widget, container or the document's
+                            body element. All options are cascaded together. The order
+                            of priority is: widget > container > document's body element.
+                        </p>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Attribute</th>
-                    <th>Meaning</th>
-                    <th>Possible values</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>data-modal-size</code></td>
-                    <td>defines size of the modal</td>
-                    <td>small, normal or large</td>
-                    <td>normal</td>
-                </tr>
-                <tr>
-                    <td><code>data-modal-closable</code></td>
-                    <td>close the modal on ESC key / button / backdrop click</td>
-                    <td>true or false</td>
-                    <td>true</td>
-                </tr>
-                <tr>
-                    <td><code>data-modal-title</code></td>
-                    <td>selector for element in the response to use as title (text contents)</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td><code>data-modal-footer</code></td>
-                    <td>selector for element in the response to use as footer (contents)</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <hr>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Attribute</th>
+                                    <th>Meaning</th>
+                                    <th>Possible values</th>
+                                    <th>Default</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>data-modal-size</code></td>
+                                    <td>defines size of the modal</td>
+                                    <td>small, normal or large</td>
+                                    <td>normal</td>
+                                </tr>
+                                <tr>
+                                    <td><code>data-modal-closable</code></td>
+                                    <td>close the modal on ESC key / button / backdrop click</td>
+                                    <td>true or false</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td><code>data-modal-title</code></td>
+                                    <td>selector for element in the response to use as title (text contents)</td>
+                                    <td>selector or <code>none</code> to disable</td>
+                                    <td>the <code>X-Title</code> response header</td>
+                                </tr>
+                                <tr>
+                                    <td><code>data-modal-footer</code></td>
+                                    <td>selector for element in the response to use as footer (contents)</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
 
-        <!-- flashes -->
-        <h3 id="flashes">Flash messages</h3>
+                        <hr>
 
-        <p>
-            If the request is done via XHR, flash messages are handled server-side
-            and returned as a HTTP header <code>X-Flash-Messages</code>.
-        </p>
 
-        <h4>Displaying flash messages</h4>
+                        <!-- flashes -->
+                        <h3 id="flashes">Flash messages</h3>
 
-        <p>
-            Each container implementation is responsible for handling of the received
-            flash messages.
-        </p>
+                        <p>
+                            If the request is done via XHR, flash messages are handled server-side
+                            and returned as a HTTP header <code>X-Flash-Messages</code>.
+                        </p>
 
-        <p>
-            By default, the flash messages are displayed inside a modal dialog.
-        </p>
+                        <h4>Displaying flash messages</h4>
 
-        <h4>Example</h4>
+                        <p>
+                            Each container implementation is responsible for handling of the received
+                            flash messages.
+                        </p>
 
-        <div class="well">
-            <a
-                href="{{ path('imatic_view_demo_ajaxify_flashestest') }}"
-                data-target="void"
-            >
-                Click me
-            </a>
-        </div>
+                        <p>
+                            By default, the flash messages are displayed inside a modal dialog.
+                        </p>
 
-        <pre>
+                        <h4>Example</h4>
+
+                        <div class="well">
+                            <a
+                                href="{{ path('imatic_view_demo_ajaxify_flashestest') }}"
+                                data-target="void"
+                                >
+                                Click me
+                            </a>
+                        </div>
+
+                        <pre>
 {%- filter escape -%}{% verbatim %}
 <a
     href="{{ path('imatic_view_demo_ajaxify_flashestest') }}"
@@ -457,69 +451,69 @@
     Click me
 </a>
 {% endverbatim %}{%- endfilter -%}
-        </pre>
+                            </pre>
 
 
-        <hr>
+                            <hr>
 
 
-        <!-- void -->
-        <h3 id="void">Void containers</h3>
+                            <!-- void -->
+                            <h3 id="void">Void containers</h3>
 
-        <p>
-            Void containers are used by setting the <code>data-target</code> attribute
-            of a <a href="#widgets">widget</a> to <code>void</code>. Void containers do
-            not exist as DOM elements in the page and thus do not display the response contents.
-        </p>
+                            <p>
+                                Void containers are used by setting the <code>data-target</code> attribute
+                                of a <a href="#widgets">widget</a> to <code>void</code>. Void containers do
+                                not exist as DOM elements in the page and thus do not display the response contents.
+                            </p>
 
-        <p>
-            Void containers are useful in cases when you wish to perform a background action
-            but do not want reload a physical container in the page.
-        </p>
+                            <p>
+                                Void containers are useful in cases when you wish to perform a background action
+                                but do not want reload a physical container in the page.
+                            </p>
 
-        <div class="alert alert-info">
-            <p>
-                Flash messages are still displayed for void containers.
-            </p>
-        </div>
+                            <div class="alert alert-info">
+                                <p>
+                                    Flash messages are still displayed for void containers.
+                                </p>
+                            </div>
 
-        <h3>Example</h3>
+                            <h3>Example</h3>
 
-        <p>
-            The example in the <a href="#flashes">flash messages</a> section makes use
-            of a void container.
-        </p>
-
-
-        <hr>
+                            <p>
+                                The example in the <a href="#flashes">flash messages</a> section makes use
+                                of a void container.
+                            </p>
 
 
-        <!-- css -->
-        <h3 id="css">CSS classes</h3>
+                            <hr>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Class</th>
-                    <th>Meaning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>imatic-view-ajaxify-busy</code></td>
-                    <td>Container or a widget that is currently performing an action.</td>
-                </tr>
-                <tr>
-                    <td><code>imatic-view-ajaxify-container</code></td>
-                    <td>Element holding a Container instance. Useful in conjunction with <code>imatic-view-ajaxify-busy</code>.</td>
-                </tr>
-                <tr>
-                    <td><code>imatic-view-ajaxify-widget</code></td>
-                    <td>Element holding a Widget instance. Useful in conjunction with <code>imatic-view-ajaxify-busy</code>.</td>
-                </tr>
-            </tbody>
-        </table>
 
-    </div>
+                            <!-- css -->
+                            <h3 id="css">CSS classes</h3>
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Class</th>
+                                        <th>Meaning</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>imatic-view-ajaxify-busy</code></td>
+                                        <td>Container or a widget that is currently performing an action.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>imatic-view-ajaxify-container</code></td>
+                                        <td>Element holding a Container instance. Useful in conjunction with <code>imatic-view-ajaxify-busy</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>imatic-view-ajaxify-widget</code></td>
+                                        <td>Element holding a Widget instance. Useful in conjunction with <code>imatic-view-ajaxify-busy</code>.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
 
 {% endblock %}

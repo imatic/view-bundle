@@ -4,6 +4,7 @@
 /// <reference path="event.ts"/>
 /// <reference path="css.ts"/>
 /// <reference path="action.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify link module
@@ -22,13 +23,14 @@ module imatic.view.ajaxify.link {
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
+    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Link handler
      */
     export class LinkHandler
     {
-        private linkFactory = new LinkFactory(this.configBuilder, this.jQuery);
+        private linkFactory = new LinkFactory(this.configBuilder);
         private linkTagNames = ['A', 'BUTTON'];
 
         /**
@@ -36,8 +38,7 @@ module imatic.view.ajaxify.link {
          */
         constructor(
             private widgetHandler: WidgetHandler,
-            private configBuilder: ConfigurationBuilder,
-            private jQuery: any
+            private configBuilder: ConfigurationBuilder
         ) {}
 
         /**
@@ -47,8 +48,8 @@ module imatic.view.ajaxify.link {
             if (
                 -1 !== this.linkTagNames.indexOf(element.tagName)
                 && (
-                    this.jQuery(element).attr('href')
-                    || this.jQuery(element).data('href')
+                    jQuery(element).attr('href')
+                    || jQuery(element).data('href')
                 )
             ) {
                 return true;
@@ -67,13 +68,13 @@ module imatic.view.ajaxify.link {
         /**
          * Get link instance for given element
          */
-        getInstance(container: ContainerInterface, element: HTMLElement): Link {
+        getInstance(element: HTMLElement, containerElement?: HTMLElement): Link {
             var link;
 
             if (this.widgetHandler.hasInstance(element)) {
                 link = this.widgetHandler.getInstance(element);
             } else {
-                link = this.linkFactory.create(container, element);
+                link = this.linkFactory.create(element, containerElement);
                 this.widgetHandler.setInstance(element, link);
             }
 
@@ -90,22 +91,20 @@ module imatic.view.ajaxify.link {
          * Constructor
          */
         constructor(
-            private configBuilder: ConfigurationBuilder,
-            private jQuery: any
+            private configBuilder: ConfigurationBuilder
         ) {}
 
         /**
          * Create a link
          */
-        create(container: ContainerInterface, element: HTMLElement): Link {
+        create(element: HTMLElement, containerElement?: HTMLElement): Link {
             var link = new Link(
                 this.configBuilder,
-                container,
                 element,
-                this.jQuery
+                containerElement
             );
 
-            link.url = this.jQuery(element).attr('href') || this.jQuery(element).data('href');
+            link.url = jQuery(element).attr('href') || jQuery(element).data('href');
 
             return link;
         }
@@ -124,9 +123,8 @@ module imatic.view.ajaxify.link {
          */
         constructor(
             private configBuilder: ConfigurationBuilder,
-            private container: ContainerInterface,
             private element: HTMLElement,
-            private jQuery: any
+            private containerElement: HTMLElement
         ) {}
 
         /**
@@ -141,7 +139,7 @@ module imatic.view.ajaxify.link {
         getConfiguration(): any {
             return this.configBuilder.build(
                 this.element,
-                this.container.getConfiguration()
+                this.containerElement ? [this.containerElement] : []
             );
         }
 
@@ -151,7 +149,7 @@ module imatic.view.ajaxify.link {
         createAction(): ActionInterface {
             var config = this.getConfiguration();
 
-            var action = new LoadHtmlAction(this, this.jQuery, {
+            var action = new LoadHtmlAction(this, {
                 url: this.url,
                 method: 'GET',
                 data: null,
@@ -159,10 +157,10 @@ module imatic.view.ajaxify.link {
             });
 
             action.events.addCallback('begin', (event: EventInterface): void => {
-                this.jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
             });
             action.events.addCallback('complete', (event: EventInterface): void => {
-                this.jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
             });
 
             return action;

@@ -1,5 +1,6 @@
 /// <reference path="action.ts"/>
 /// <reference path="css.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify widget module
@@ -10,8 +11,9 @@ module imatic.view.ajaxify.widget {
 
     "use_strict";
 
-    import ActionInterface = imatic.view.ajaxify.action.ActionInterface;
-    import CssClasses      = imatic.view.ajaxify.css.CssClasses;
+    import ActionInterface  = imatic.view.ajaxify.action.ActionInterface;
+    import CssClasses       = imatic.view.ajaxify.css.CssClasses;
+    import jQuery           = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Widget interface
@@ -49,22 +51,17 @@ module imatic.view.ajaxify.widget {
         public instanceMarkAttr = 'data-has-widget-instance';
 
         /**
-         * Constructor
-         */
-        constructor(private jQuery) {}
-
-        /**
          * Check for widget instance
          */
         hasInstance(widgetElement: HTMLElement): boolean {
-            return this.jQuery(widgetElement).data(this.instanceDataKey) ? true : false;
+            return jQuery(widgetElement).data(this.instanceDataKey) ? true : false;
         }
 
         /**
          * Get widget instance
          */
         getInstance(widgetElement: HTMLElement): WidgetInterface {
-            var widget = this.jQuery(widgetElement).data(this.instanceDataKey);
+            var widget = jQuery(widgetElement).data(this.instanceDataKey);
             if (!widget) {
                 throw new Error('Widget instance not found'); // TODO: cutom exception?
             }
@@ -76,7 +73,7 @@ module imatic.view.ajaxify.widget {
          * Set widget instance
          */
         setInstance(widgetElement: HTMLElement, widget: WidgetInterface): void {
-            this.jQuery(widgetElement)
+            jQuery(widgetElement)
                 .data(this.instanceDataKey, widget)
                 .attr(this.instanceMarkAttr, true)
                 .addClass(CssClasses.WIDGET)
@@ -91,11 +88,11 @@ module imatic.view.ajaxify.widget {
             var selector = '[' + this.instanceMarkAttr + ']';
             var widgets: WidgetInterface[] = [];
 
-            if (this.jQuery(element).is(selector) && this.hasInstance(element)) {
+            if (jQuery(element).is(selector) && this.hasInstance(element)) {
                 widgets.push(this.getInstance(element));
             }
 
-            this.jQuery(selector, element).each(function () {
+            jQuery(selector, element).each(function () {
                 widgets.push(self.getInstance(this));
             });
 

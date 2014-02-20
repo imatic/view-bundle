@@ -6,6 +6,7 @@
 /// <reference path="form.ts"/>
 /// <reference path="modal_container.ts"/>
 /// <reference path="void_container.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify document module
@@ -29,6 +30,7 @@ module imatic.view.ajaxify.document {
     import VoidContainerHandler         = imatic.view.ajaxify.voidContainer.VoidContainerHandler;
     import LinkHandler                  = imatic.view.ajaxify.link.LinkHandler;
     import FormHandler                  = imatic.view.ajaxify.form.FormHandler;
+    import jQuery                       = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * HTML document handler
@@ -38,7 +40,6 @@ module imatic.view.ajaxify.document {
     export class HTMLDocumentHandler
     {
         private document: HTMLDocument;
-        private jQuery: any;
         private configBuilder: ConfigurationBuilder;
         private containerHandler: ContainerHandler;
         private widgetHandler: WidgetHandler;
@@ -48,37 +49,34 @@ module imatic.view.ajaxify.document {
         /**
          * Constructor
          */
-        constructor(document: HTMLDocument, jQuery: any) {
+        constructor(document: HTMLDocument) {
             this.document = document;
-            this.jQuery = jQuery;
 
             // config builder
-            this.configBuilder = new ConfigurationBuilder(document, jQuery);
+            this.configBuilder = new ConfigurationBuilder(document);
             this.configBuilder.addDefaults(ModalConfigurationDefaults);
             this.configBuilder.addProcessor(new ModalConfigurationProcessor());
 
             // widget handler
-            this.widgetHandler = new WidgetHandler(this.jQuery);
+            this.widgetHandler = new WidgetHandler();
 
             // link handler
-            this.linkHandler = new LinkHandler(this.widgetHandler, this.configBuilder, this.jQuery);
+            this.linkHandler = new LinkHandler(this.widgetHandler, this.configBuilder);
 
             // form handler
-            this.formHandler = new FormHandler(this.widgetHandler, this.configBuilder, this.jQuery);
+            this.formHandler = new FormHandler(this.widgetHandler, this.configBuilder);
 
             // container handler
             this.containerHandler = new ContainerHandler(
                 this.configBuilder,
-                this.document,
-                this.jQuery
+                this.document
             );
 
             // modal container handler
             var modalContainerHandler = new ModalContainerHandler(
                 this.containerHandler,
                 this.configBuilder,
-                this.document,
-                this.jQuery
+                this.document
             );
             this.containerHandler.addTargetHandler(modalContainerHandler);
 
@@ -86,8 +84,7 @@ module imatic.view.ajaxify.document {
             var voidContainerHandler = new VoidContainerHandler(
                 this.containerHandler,
                 this.configBuilder,
-                this.document,
-                this.jQuery
+                this.document
             );
             this.containerHandler.addTargetHandler(voidContainerHandler);
         }
@@ -96,7 +93,7 @@ module imatic.view.ajaxify.document {
          * Attach the handler
          */
         attach(): void {
-            this.jQuery(this.document)
+            jQuery(this.document)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
                 .on(DomEvents.ON_BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
@@ -107,7 +104,7 @@ module imatic.view.ajaxify.document {
          * Validate given element
          */
         private isValidElement(element: HTMLElement): boolean {
-            return false !== this.jQuery(element).data('ajaxify');
+            return false !== jQuery(element).data('ajaxify');
         }
 
         /**
@@ -122,10 +119,10 @@ module imatic.view.ajaxify.document {
                     && this.isValidElement(element)
                     && this.linkHandler.isValidEvent(event)
                 ) {
-                    var container = this.containerHandler.findInstance(element);
-                    var link = this.linkHandler.getInstance(container, element);
+                    var context = this.getContainerContext(element);
+                    var link = this.linkHandler.getInstance(element, context.containerElement);
 
-                    this.dispatch(container, link);
+                    this.dispatch(context.container, link);
                     event.preventDefault();
                 }
             } catch (e) {
@@ -146,10 +143,10 @@ module imatic.view.ajaxify.document {
                     this.formHandler.isValidElement(element)
                     && this.isValidElement(element)
                 ) {
-                    var container = this.containerHandler.findInstance(element);
-                    var form = this.formHandler.getInstance(container, element);
+                    var context = this.getContainerContext(element);
+                    var form = this.formHandler.getInstance(element, context.containerElement);
 
-                    this.dispatch(container, form);
+                    this.dispatch(context.container, form);
                     event.preventDefault();
                 }
             } catch (e) {
@@ -157,6 +154,36 @@ module imatic.view.ajaxify.document {
                     throw e;
                 }
             }
+        }
+
+        /**
+         * Get container context for given element
+         *
+         * This method finds the related container instance and also
+         * the contextual container's element.
+         */
+        private getContainerContext(element: HTMLElement): {
+            container: ContainerInterface;
+            containerElement: HTMLElement;
+        } {
+            var container = this.containerHandler.findInstance(element);
+            var containerElement;
+
+            try {
+                containerElement = (container.isContextual()
+                    ? container.getElement()
+                    : this.containerHandler.getElementFromContext(element)
+                );
+            } catch (e) {
+                if (!(e instanceof ContainerNotFoundException)) {
+                    throw e;
+                }
+            }
+
+            return {
+                container: container,
+                containerElement: containerElement,
+            };
         }
 
         /**

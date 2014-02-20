@@ -1,4 +1,5 @@
 /// <reference path="message.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify ajax module
@@ -9,7 +10,8 @@ module imatic.view.ajaxify.ajax {
 
     "use_strict";
 
-    import FlashMessageInterface = imatic.view.ajaxify.message.FlashMessageInterface;
+    import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
+    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Ajax request
@@ -18,11 +20,6 @@ module imatic.view.ajaxify.ajax {
     export class AjaxRequest
     {
         xhr: XMLHttpRequest;
-
-        /**
-         * Constructor
-         */
-        constructor(private jQuery: any) {}
 
         /**
          * Execute the request
@@ -36,13 +33,13 @@ module imatic.view.ajaxify.ajax {
                 cache: false,
                 complete: (xhr: XMLHttpRequest, textStatus: string): void => {
                     if (onComplete) {
-                        var serverResponse = new ServerResponseFactory().create(this.jQuery, xhr);
+                        var serverResponse = new ServerResponseFactory().create(xhr);
                         onComplete(serverResponse);
                     }
                 },
             };
 
-            this.xhr = this.jQuery.ajax(options);
+            this.xhr = jQuery.ajax(options);
         }
     }
 
@@ -54,9 +51,10 @@ module imatic.view.ajaxify.ajax {
         /**
          * Create server response
          */
-        create(jQuery: any, xhr: XMLHttpRequest) {
+        create(xhr: XMLHttpRequest) {
             var response = new ServerResponse();
 
+            response.title = xhr.getResponseHeader('X-Title') || '';
             response.flashes = [];
             response.data = xhr.responseText;
             response.valid = this.isValidStatus(xhr.status);
@@ -90,6 +88,7 @@ module imatic.view.ajaxify.ajax {
      */
     export class ServerResponse
     {
+        title: string;
         flashes: FlashMessageInterface[];
         data: any;
         successful: boolean;

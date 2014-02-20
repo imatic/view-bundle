@@ -1,4 +1,5 @@
 /// <reference path="event.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify modal module
@@ -10,6 +11,7 @@ module imatic.view.ajaxify.modal {
     "use_strict";
 
     import DomEvents = imatic.view.ajaxify.event.DomEvents;
+    import jQuery    = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Modal size
@@ -33,10 +35,7 @@ module imatic.view.ajaxify.modal {
         /**
          * Constructor
          */
-        constructor(
-            private jQuery: any,
-            private document: HTMLDocument
-        ) {
+        constructor(private document: HTMLDocument) {
             this.uid = ++Modal.uidCounter;
         }
 
@@ -49,7 +48,7 @@ module imatic.view.ajaxify.modal {
             }
 
             // toggle footer
-            var footer = this.jQuery(this.getFooterElement());
+            var footer = jQuery(this.getFooterElement());
             if (footer.is(':empty')) {
                 footer.hide();
             } else {
@@ -57,8 +56,8 @@ module imatic.view.ajaxify.modal {
             }
 
             // toggle header
-            var title = this.jQuery(this.getTitleElement());
-            var header = this.jQuery(this.getHeaderElement());
+            var title = jQuery(this.getTitleElement());
+            var header = jQuery(this.getHeaderElement());
             if (title.is(':empty')) {
                 header.hide();
             } else {
@@ -73,7 +72,7 @@ module imatic.view.ajaxify.modal {
                 options['keyboard'] = false;
             }
 
-            this.jQuery(this.element).modal(options);
+            jQuery(this.element).modal(options);
         }
 
         /**
@@ -81,7 +80,7 @@ module imatic.view.ajaxify.modal {
          */
         hide(): void {
             if (this.element) {
-                this.jQuery(this.element).modal('hide');
+                jQuery(this.element).modal('hide');
             }
         }
 
@@ -90,7 +89,7 @@ module imatic.view.ajaxify.modal {
          */
         destroy(): void {
             if (this.element) {
-                this.jQuery(this.element).remove();
+                jQuery(this.element).remove();
                 this.element = null;
             }
         }
@@ -116,7 +115,7 @@ module imatic.view.ajaxify.modal {
 
             var smallClass = 'modal-sm';
             var largeClass = 'modal-lg';
-            var dialog = this.jQuery('div.modal-dialog', this.element);
+            var dialog = jQuery('div.modal-dialog', this.element);
 
             switch (size) {
                 case ModalSize.SMALL:
@@ -150,7 +149,7 @@ module imatic.view.ajaxify.modal {
 
             this.closable = closable;
 
-            var closeButton = this.jQuery('div.modal-header > button.close', this.element);
+            var closeButton = jQuery('div.modal-header > button.close', this.element);
             if (closable) {
                 closeButton.show();
             } else {
@@ -166,7 +165,7 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            return this.jQuery('div.modal-header', this.element).get(0);
+            return jQuery('div.modal-header', this.element).get(0);
         }
 
         /**
@@ -177,14 +176,14 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            return this.jQuery('div.modal-header > h4.modal-title', this.element).get(0);
+            return jQuery('div.modal-header > h4.modal-title', this.element).get(0);
         }
 
         /**
          * Set modal's title
          */
         setTitle(title: string): void {
-            this.jQuery(this.getTitleElement())
+            jQuery(this.getTitleElement())
                 .text(title)
             ;
         }
@@ -197,14 +196,14 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            return this.jQuery('div.modal-body', this.element).get(0);
+            return jQuery('div.modal-body', this.element).get(0);
         }
 
         /**
          * Set modal's body content
          */
         setBody(content: any): void {
-            this.jQuery(this.getBodyElement())
+            jQuery(this.getBodyElement())
                 .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content)
@@ -219,14 +218,14 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            return this.jQuery('div.modal-footer', this.element).get(0);
+            return jQuery('div.modal-footer', this.element).get(0);
         }
 
         /**
          * Set modal's footer content
          */
         setFooter(content: any): void {
-            var footer = this.jQuery(this.getFooterElement());
+            var footer = jQuery(this.getFooterElement());
 
             footer
                 .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
@@ -253,9 +252,9 @@ module imatic.view.ajaxify.modal {
                 + '</div>'
             ;
 
-            this.element = this.jQuery(html, this.document).appendTo(this.document.body)[0];
+            this.element = jQuery(html, this.document).appendTo(this.document.body)[0];
 
-            this.jQuery(this.element).on('hidden.bs.modal', (): void => {
+            jQuery(this.element).on('hidden.bs.modal', (): void => {
                 this.destroy();
             });
         }

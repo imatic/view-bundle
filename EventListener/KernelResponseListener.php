@@ -37,9 +37,9 @@ class KernelResponseListener
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (!$this->layoutHelper->hasFlashMessages()) {
+        $response = $event->getResponse();
 
-            $response = $event->getResponse();
+        if (!$this->layoutHelper->hasFlashMessages()) {
             $flashBag = $this->session->getFlashBag();
 
             $flashes = array();
@@ -57,6 +57,13 @@ class KernelResponseListener
                 json_encode($flashes)
             );
 
+        }
+
+        if ($this->layoutHelper->hasTitle()) {
+            $response->headers->set(
+                'X-Title',
+                $this->layoutHelper->getTitle()
+            );
         }
     }
 }

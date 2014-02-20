@@ -1,3 +1,5 @@
+/// <reference path="jquery.ts"/>
+
 /**
  * Imatic view ajaxify configuration module
  *
@@ -6,6 +8,8 @@
 module imatic.view.ajaxify.configuration {
 
     "use_strict";
+
+    import jQuery = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Configuration processor interface
@@ -29,7 +33,7 @@ module imatic.view.ajaxify.configuration {
         /**
          * Constructor
          */
-        constructor(private document: HTMLDocument, private jQuery: any) {}
+        constructor(private document: HTMLDocument) {}
 
         /**
          * Add configuration processor
@@ -42,24 +46,27 @@ module imatic.view.ajaxify.configuration {
          * Add default configuration
          */
         addDefaults(config: any): void {
-            this.jQuery.extend(this.defaults, config);
+            jQuery.extend(this.defaults, config);
         }
 
         /**
-         * Build configuration for given element
+         * Build configuration for given elements
          */
-        build(element?: HTMLElement, parentConfig?: any) {
+        build(element?: HTMLElement, parentElements: HTMLElement[] = []) {
             // default
-            var config = this.jQuery.extend({}, this.defaults);
+            var config = jQuery.extend({}, this.defaults);
 
-            // parent
-            if (parentConfig) {
-                this.jQuery.extend(config, parentConfig);
+            // parents
+            if (parentElements.length > 0) {
+                for (var i = parentElements.length - 1; i >= 0; --i) {
+                    jQuery.extend(config, jQuery(parentElements[i]).data());
+                }
+                
             }
 
             // local
             if (element) {
-                this.jQuery.extend(config, this.jQuery(element).data());
+                jQuery.extend(config, jQuery(element).data());
             }
 
             this.process(config);

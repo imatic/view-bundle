@@ -3,7 +3,9 @@
 /// <reference path="container.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="form.ts"/>
+/// <reference path="widget.ts"/>
 /// <reference path="modal.ts"/>
+/// <reference path="jquery.ts"/>
 
 /**
  * Imatic view ajaxify modal container module
@@ -24,8 +26,10 @@ module imatic.view.ajaxify.modalContainer {
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
     import Form                             = imatic.view.ajaxify.form.Form;
+    import WidgetInterface                  = imatic.view.ajaxify.widget.WidgetInterface;
     import ModalSize                        = imatic.view.ajaxify.modal.ModalSize;
     import Modal                            = imatic.view.ajaxify.modal.Modal;
+    import jQuery                           = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Modal configuration defaults
@@ -33,7 +37,6 @@ module imatic.view.ajaxify.modalContainer {
     export var ModalConfigurationDefaults = {
         modalSize: ModalSize.NORMAL,
         modalClosable: true,
-        //modalActions: '',
         modalTitle: '',
         modalFooter: '',
     };
@@ -62,8 +65,7 @@ module imatic.view.ajaxify.modalContainer {
         private containerFactory = new ModalContainerFactory(
             this.configBuilder,
             this.containerHandler,
-            this.document,
-            this.jQuery
+            this.document
         );
 
         /**
@@ -72,8 +74,7 @@ module imatic.view.ajaxify.modalContainer {
         constructor(
             private containerHandler: ContainerHandler,
             private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument,
-            private jQuery: any
+            private document: HTMLDocument
         ) {}
 
         /**
@@ -87,25 +88,7 @@ module imatic.view.ajaxify.modalContainer {
          * Return container instance for given target and element
          */
         findContainer(target: string, element: HTMLElement): ContainerInterface {
-            var container;
-
-            if (this.containerHandler.hasInstance(element)) {
-                container = this.containerHandler.getInstance(element);
-            } else {
-                var contextualContainerElement;
-                try {
-                    contextualContainerElement = this.containerHandler.getElementFromContext(element);
-                } catch (e) {
-                    if (!(e instanceof ContainerNotFoundException)) {
-                        throw e;
-                    }
-                }
-
-                container = this.containerFactory.create(element, contextualContainerElement);
-                this.containerHandler.setInstance(element, container);
-            }
-
-            return container;
+            return this.containerFactory.create();
         }
     }
 
@@ -120,24 +103,20 @@ module imatic.view.ajaxify.modalContainer {
         constructor(
             private configBuilder: ConfigurationBuilder,
             private containerHandler: ContainerHandler,
-            private document: HTMLDocument,
-            private jQuery: any
+            private document: HTMLDocument
         ) {}
 
         /**
          * Create container instance
          */
-        create(owningElement: HTMLElement, contextualElement?: HTMLElement): ContainerInterface {
+        create(): ContainerInterface {
             var container = new ModalContainer(
                 this.configBuilder,
                 this.document,
-                this.jQuery,
                 null
             );
 
             container.handler = this.containerHandler;
-            container.owningElement = owningElement;
-            container.contextualElement = contextualElement;
 
             return container;
         }
@@ -149,10 +128,10 @@ module imatic.view.ajaxify.modalContainer {
     export class ModalContainer extends Container
     {
         handler: ContainerHandler;
-        contextualElement: HTMLElement;
-        owningElement: HTMLElement;
 
-        private modal = new Modal(this.jQuery, this.document);
+        private modal = new Modal(this.document);
+        private initiator: WidgetInterface;
+        private responseTitle: string;
 
         /**
          * Destructor
@@ -166,14 +145,20 @@ module imatic.view.ajaxify.modalContainer {
          */
         handleAction(action: ActionInterface): void {
             action.events.addCallback('apply', (event: EventInterface): void => {
-                if (
-                    event['response'].successful
-                    && event['initiator'] instanceof Form
-                    && this.jQuery(this.modal.getElement()).has(event['initiator'].getElement()).length > 0
-                ) {
-                    event['proceed'] = false;
+                if (event['response'].valid) {
+                    this.initiator = event['initiator'];
+                    this.responseTitle = event['response'].title || null;
 
-                    this.modal.hide();
+                    // close modal on form submit
+                    if (
+                        event['response'].successful
+                        && this.initiator instanceof Form
+                        && jQuery(this.modal.getElement()).has(this.initiator.getElement()).length > 0
+                    ) {
+                        event['proceed'] = false;
+                        this.modal.hide();
+                    }
+
                 }
             });
 
@@ -184,10 +169,27 @@ module imatic.view.ajaxify.modalContainer {
          * Get container's configuration
          */
         getConfiguration(): any {
-            return this.configBuilder.build(
-                this.owningElement,
-                this.configBuilder.build(this.contextualElement)
-            );
+            if (this.initiator) {
+                return this.initiator.getConfiguration();
+            } else {
+                return {};
+            }
+        }
+
+        /**
+         * See if the container is contextual
+         */
+        isContextual(): boolean {
+            return false;
+        }
+
+        /**
+         * Get container's element
+         *
+         * NULL may be returned.
+         */
+        getElement(): HTMLElement {
+            return null;
         }
 
         /**
@@ -205,17 +207,22 @@ module imatic.view.ajaxify.modalContainer {
 
             // find title
             var titleElement;
-            if (config.modalTitle) {
-                titleElement = this.jQuery(config.modalTitle, content).get(0);
+            if (config.modalTitle && 'none' !== config.modalTitle) {
+                titleElement = jQuery(config.modalTitle, content).get(0);
                 if (titleElement) {
-                    title = this.jQuery(titleElement).text();
-                    this.jQuery(titleElement).remove();
+                    title = jQuery(titleElement).text();
+                    jQuery(titleElement).remove();
                 }
+            }
+
+            // use response title
+            if ('' === title && !config.modalTitle && this.responseTitle) {
+                title = this.responseTitle;
             }
 
             // find footer
             if (config.modalFooter) {
-                footer = this.jQuery(config.modalFooter, content);
+                footer = jQuery(config.modalFooter, content);
                 if (footer.length > 0) {
                     footer.detach();
                 } else {
@@ -226,7 +233,7 @@ module imatic.view.ajaxify.modalContainer {
             // attach container instance to the modal's element
             var modalElement = this.modal.getElement();
             if (!this.handler.hasInstance(modalElement)) {
-                this.jQuery(modalElement).attr('data-role', 'container');
+                jQuery(modalElement).attr('data-role', 'container');
                 this.handler.setInstance(modalElement, this);
             }
 

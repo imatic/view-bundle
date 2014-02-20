@@ -65,7 +65,6 @@ module imatic.view.ajaxify.action {
          */
         constructor(
             private initiator: WidgetInterface,
-            private jQuery: any,
             private options: {
                 url: string;
                 method: string;
@@ -92,9 +91,12 @@ module imatic.view.ajaxify.action {
          * Execute the action
          */
         execute(container: ContainerInterface): void {
-            this.request = new AjaxRequest(this.jQuery);
+            this.request = new AjaxRequest();
 
-            this.events.dispatch('begin', new Event({action: this}));
+            this.events.dispatch('begin', new Event({
+                action: this,
+                initiator: this.initiator,
+            }));
 
             this.request.execute(
                 this.options.url,
@@ -107,9 +109,10 @@ module imatic.view.ajaxify.action {
                     // handle response
                     if (response.valid) {
                         var event = this.events.dispatch('apply', new Event({
-                            proceed: true,
-                            response: response,
+                            action: this,
                             initiator: this.initiator,
+                            response: response,
+                            proceed: true,
                         }));
 
                         if (event['proceed']) {
@@ -123,8 +126,8 @@ module imatic.view.ajaxify.action {
                     // complete event
                     this.events.dispatch('complete', new Event({
                         action: this,
-                        response: response,
                         initiator: this.initiator,
+                        response: response,
                     }));
                 }
             );

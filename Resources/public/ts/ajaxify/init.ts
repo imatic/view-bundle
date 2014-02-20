@@ -1,12 +1,17 @@
 /// <reference path="document.ts"/>
 
+/**
+ * Imatic view ajaxify module
+ *
+ * @author Pavel Batecko <pavel.batecko@imatic.cz>
+ */
 module imatic.view.ajaxify {
 
-    import HTMLDocumentHandler = imatic.view.ajaxify.document.HTMLDocumentHandler;
+    import HTMLDocumentHandler  = imatic.view.ajaxify.document.HTMLDocumentHandler;
 
-    export function init(document: HTMLDocument, jQuery: any)
+    export function init(document: HTMLDocument)
     {
-        var handler = new HTMLDocumentHandler(document, jQuery);
+        var handler = new HTMLDocumentHandler(document);
 
         handler.attach();
     }
@@ -14,6 +19,5 @@ module imatic.view.ajaxify {
 }
 
 declare var document: HTMLDocument;
-declare var jQuery: any;
 
-imatic.view.ajaxify.init(document, jQuery);
+imatic.view.ajaxify.init(document);

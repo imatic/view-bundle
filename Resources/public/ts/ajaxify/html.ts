@@ -1,3 +1,5 @@
+/// <reference path="jquery.ts"/>
+
 /**
  * Imatic view ajaxify html module
  *
@@ -6,6 +8,8 @@
 module imatic.view.ajaxify.html {
 
     "use_strict";
+
+    import jQuery = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * HTML fragment

@@ -13,6 +13,8 @@ class LayoutHelper
 {
     /** @var RequestStack */
     private $requestStack;
+    /** @var string|null */
+    private $title;
 
     /**
      * Constructor
@@ -52,4 +54,34 @@ class LayoutHelper
     {
         return $this->hasLayout();
     }
+
+    /**
+     * Get title
+     *
+     * @return string|null
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Check for title
+     *
+     * @return bool
+     */
+    public function hasTitle()
+    {
+        return null !== $this->title;
+    }
+
+    /**
+     * Set title
+     * @param string|null $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = ('' !== $title ? $title : null);
+    }
+
 }

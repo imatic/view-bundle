@@ -265,7 +265,7 @@ module imatic.view.ajaxify.event {
         private sortListeners(eventName: string): void
         {
             this.listeners[eventName].sort(function (a: ListenerInterface, b: ListenerInterface): number {
-                return a.priority - b.priority;
+                return b.priority - a.priority;
             });
 
             this.sortStates[eventName] = true;
