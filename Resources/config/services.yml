@@ -60,6 +60,7 @@ services:
         arguments:
             - '@imatic_view.templating.helper.grid'
             - '@imatic_view.templating.helper.show'
+            - '@imatic_view.templating.helper.action'
         tags:
             - { name: 'twig.extension' }
 
@@ -117,6 +118,11 @@ services:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper
         arguments:
             - '@request_stack'
+
+    imatic_view.templating.helper.action:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper
+        arguments:
+            - '@router'
 
     # Event listners
     imatic_view.event_listener.kernel_response:

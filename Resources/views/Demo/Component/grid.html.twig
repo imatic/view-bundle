@@ -4,10 +4,11 @@
 
 {% block action %}
     {% set route = app.request.get('_route') %}
+    {% set routeParams = {'id': '#id'} %}
 
     {% set table = {
     'selectable': false,
-    'actions': [{'label': 'Show', route: route, nested: [{label: 'Edit', route: route}, {label: 'Delete', route: route}]}],
+    'actions': [{'label': 'Show', route: route, routeParams: routeParams, nested: [{label: 'Edit', route: route}, {label: 'Delete', route: route}]}],
     'selectableColumn': 'id',
     'sortable':true} %}
 

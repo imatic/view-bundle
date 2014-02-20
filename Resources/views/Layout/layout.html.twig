@@ -1,4 +1,5 @@
 {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+{% import 'ImaticViewBundle:Component:button.html.twig' as button %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +8,8 @@
     {% block stylesheets %}
         {%- stylesheets
         'bundles/imaticview/less/style.less'
-        'vendor/jquery-ui/themes/flick/jquery-ui.css'
         'vendor/select2/select2.css'
+        'bundles/imaticview/css/demo/ajaxify/ajaxify.css'
         output='css/style.css' -%}
         <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
         {% endstylesheets %}
@@ -17,8 +18,8 @@
     {% block javascripts %}
         {% javascripts
         'vendor/jquery/jquery.js'
-        'vendor/jquery-ui/ui/jquery-ui.js'
-        'vendor/jquery-ui/ui/i18n/jquery-ui-i18n.js'
+        'vendor/bootstrap-3-datepicker/js/bootstrap-datepicker.js'
+        'vendor/bootstrap-3-datepicker/js/locales/bootstrap-datepicker.cs.js'
         'vendor/bootstrap/js/affix.js'
         'vendor/bootstrap/js/alert.js'
         'vendor/bootstrap/js/button.js'
@@ -32,6 +33,7 @@
         'vendor/bootstrap/js/tab.js'
         'vendor/bootstrap/js/transition.js'
         'vendor/select2/select2.js'
+        'bundles/imaticview/ts/ajaxify/init.ts'
         output='js/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
@@ -72,7 +74,7 @@
                             </button>
                             {% block header_logo %}
                                 <a class="navbar-brand" href="{{ path('homepage') }}">
-                                    {% block header_logo_text %}Imatic IS{% endblock %}
+                                    {% block header_brand %}{{ block('application_name') }}{% endblock %}
                                 </a>
                             {% endblock %}
                         </div>
@@ -91,7 +93,7 @@
 
             <div class="headline">
                 <div class="container-fluid">
-                    <div class="pull-right">{% block headline_side %}{% block page_actions %}{% endblock %}{% endblock %}</div>
+                    <div class="pull-right">{% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([])) }}{% endblock %}{% endblock %}</div>
                     <h1>{% spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endspaceless %}</h1>
 
                     {% block breadcrumbs %}
