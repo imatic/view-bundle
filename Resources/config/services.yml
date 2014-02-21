@@ -52,6 +52,10 @@ services:
 
     imatic_view.twig.extension.example:
         class:        Imatic\Bundle\ViewBundle\Twig\Extension\ExampleExtension
+        arguments:
+            - '@templating.name_parser'
+            - '@templating.locator'
+
         tags:
             - { name: 'twig.extension' }
 

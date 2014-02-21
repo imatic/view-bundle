@@ -18,6 +18,7 @@ module imatic.view.ajaxify.modalContainer {
 
     import ConfigurationBuilder             = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
+    import DomEvents                        = imatic.view.ajaxify.event.DomEvents;
     import EventInterface                   = imatic.view.ajaxify.event.EventInterface;
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
     import Container                        = imatic.view.ajaxify.container.Container;
@@ -25,7 +26,9 @@ module imatic.view.ajaxify.modalContainer {
     import ContainerNotFoundException       = imatic.view.ajaxify.container.ContainerNotFoundException;
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
+    import LoadHtmlAction                   = imatic.view.ajaxify.action.LoadHtmlAction;
     import Form                             = imatic.view.ajaxify.form.Form;
+    import WidgetHandler                    = imatic.view.ajaxify.widget.WidgetHandler;
     import WidgetInterface                  = imatic.view.ajaxify.widget.WidgetInterface;
     import ModalSize                        = imatic.view.ajaxify.modal.ModalSize;
     import Modal                            = imatic.view.ajaxify.modal.Modal;
@@ -39,6 +42,7 @@ module imatic.view.ajaxify.modalContainer {
         modalClosable: true,
         modalTitle: '',
         modalFooter: '',
+        modalOnClose: '',
     };
 
     /**
@@ -49,10 +53,26 @@ module imatic.view.ajaxify.modalContainer {
         /**
          * Process configuration
          */
-        process(config: any): void {
-            if (typeof config.modalSize === 'string') {
-                config.modalSize = ModalSize[config.modalSize.toUpperCase()];
+        process(config: {[key: string]: any;}): void {
+            // modal-size
+            if ('string' === typeof config['modalSize']) {
+                config['modalSize'] = ModalSize[config['modalSize'].toUpperCase()];
+            } else {
+                config['modalSize'] = ModalSize.NORMAL;
             }
+
+            // modal-on-close
+            var modalOnClose = null;
+            if ('string' === typeof config['modalOnClose'] && config['modalOnClose']) {
+                if ('reload' === config['modalOnClose']) {
+                    config['modalOnClose'] = 'load:';
+                }
+                modalOnClose = config['modalOnClose'].split(':', 2);
+                if (2 !== modalOnClose.length || 'load' !== modalOnClose[0]) {
+                    modalOnClose = null;
+                }
+            }
+            config['modalOnClose'] = modalOnClose;
         }
     }
 
@@ -65,6 +85,7 @@ module imatic.view.ajaxify.modalContainer {
         private containerFactory = new ModalContainerFactory(
             this.configBuilder,
             this.containerHandler,
+            this.widgetHandler,
             this.document
         );
 
@@ -73,6 +94,7 @@ module imatic.view.ajaxify.modalContainer {
          */
         constructor(
             private containerHandler: ContainerHandler,
+            private widgetHandler: WidgetHandler,
             private configBuilder: ConfigurationBuilder,
             private document: HTMLDocument
         ) {}
@@ -88,7 +110,7 @@ module imatic.view.ajaxify.modalContainer {
          * Return container instance for given target and element
          */
         findContainer(target: string, element: HTMLElement): ContainerInterface {
-            return this.containerFactory.create();
+            return this.containerFactory.create(element);
         }
     }
 
@@ -103,20 +125,23 @@ module imatic.view.ajaxify.modalContainer {
         constructor(
             private configBuilder: ConfigurationBuilder,
             private containerHandler: ContainerHandler,
+            private widgetHandler: WidgetHandler,
             private document: HTMLDocument
         ) {}
 
         /**
          * Create container instance
          */
-        create(): ContainerInterface {
+        create(trigger: HTMLElement): ContainerInterface {
             var container = new ModalContainer(
                 this.configBuilder,
                 this.document,
                 null
             );
 
-            container.handler = this.containerHandler;
+            container.containerHandler = this.containerHandler;
+            container.widgetHandler = this.widgetHandler;
+            container.originalTrigger = trigger;
 
             return container;
         }
@@ -127,17 +152,52 @@ module imatic.view.ajaxify.modalContainer {
      */
     export class ModalContainer extends Container
     {
-        handler: ContainerHandler;
+        containerHandler: ContainerHandler;
+        widgetHandler: WidgetHandler;
+        originalTrigger: HTMLElement;
 
         private modal = new Modal(this.document);
-        private initiator: WidgetInterface;
+        private actionInitiator: WidgetInterface;
         private responseTitle: string;
 
         /**
          * Destructor
          */
         destroy(): void {
-            this.modal.destroy();
+            if (this.modal.hasElement()) {
+                this.modal.destroy();
+            }
+
+            if (this.originalTrigger && this.widgetHandler.hasInstance(this.originalTrigger)) {
+                var originalTriggerWidget = this.widgetHandler.getInstance(this.originalTrigger);
+                var originalTriggerWidgetConfig = originalTriggerWidget.getConfiguration();
+                if (originalTriggerWidgetConfig['modalOnClose']) {
+                    this.executeOnClose(originalTriggerWidget, originalTriggerWidgetConfig['modalOnClose']);
+                }
+            }
+        }
+
+        /**
+         * Execute on close action
+         */
+        private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: string[]) {
+            var action;
+
+            if ('load' === onClose[0]) {
+                action = new LoadHtmlAction(originalTriggerWidget, {
+                    url: onClose[1] || originalTriggerWidget.getElement().ownerDocument.location.toString().split('#', 2)[0],
+                    method: 'GET',
+                    data: null,
+                    contentSelector: null,
+                });
+            }
+
+            if (action) {
+                jQuery(originalTriggerWidget.getElement()).trigger(
+                    DomEvents.ACTION,
+                    [action]
+                );
+            }
         }
 
         /**
@@ -146,14 +206,14 @@ module imatic.view.ajaxify.modalContainer {
         handleAction(action: ActionInterface): void {
             action.events.addCallback('apply', (event: EventInterface): void => {
                 if (event['response'].valid) {
-                    this.initiator = event['initiator'];
+                    this.actionInitiator = event['initiator'];
                     this.responseTitle = event['response'].title || null;
 
                     // close modal on form submit
                     if (
                         event['response'].successful
-                        && this.initiator instanceof Form
-                        && jQuery(this.modal.getElement()).has(this.initiator.getElement()).length > 0
+                        && this.actionInitiator instanceof Form
+                        && jQuery(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
                     ) {
                         event['proceed'] = false;
                         this.modal.hide();
@@ -168,9 +228,9 @@ module imatic.view.ajaxify.modalContainer {
         /**
          * Get container's configuration
          */
-        getConfiguration(): any {
-            if (this.initiator) {
-                return this.initiator.getConfiguration();
+        getConfiguration(): {[key: string]: any;} {
+            if (this.actionInitiator) {
+                return this.actionInitiator.getConfiguration();
             } else {
                 return {};
             }
@@ -202,13 +262,13 @@ module imatic.view.ajaxify.modalContainer {
             var footer = null;
 
             // configure modal
-            this.modal.setSize(config.modalSize);
-            this.modal.setClosable(config.modalClosable);
+            this.modal.setSize(config['modalSize']);
+            this.modal.setClosable(config['modalClosable']);
 
             // find title
             var titleElement;
-            if (config.modalTitle && 'none' !== config.modalTitle) {
-                titleElement = jQuery(config.modalTitle, content).get(0);
+            if (config['modalTitle'] && 'none' !== config['modalTitle']) {
+                titleElement = jQuery(config['modalTitle'], content).get(0);
                 if (titleElement) {
                     title = jQuery(titleElement).text();
                     jQuery(titleElement).remove();
@@ -216,13 +276,13 @@ module imatic.view.ajaxify.modalContainer {
             }
 
             // use response title
-            if ('' === title && !config.modalTitle && this.responseTitle) {
+            if ('' === title && !config['modalTitle'] && this.responseTitle) {
                 title = this.responseTitle;
             }
 
             // find footer
-            if (config.modalFooter) {
-                footer = jQuery(config.modalFooter, content);
+            if (config['modalFooter']) {
+                footer = jQuery(config['modalFooter'], content);
                 if (footer.length > 0) {
                     footer.detach();
                 } else {
@@ -232,9 +292,9 @@ module imatic.view.ajaxify.modalContainer {
 
             // attach container instance to the modal's element
             var modalElement = this.modal.getElement();
-            if (!this.handler.hasInstance(modalElement)) {
+            if (!this.containerHandler.hasInstance(modalElement)) {
                 jQuery(modalElement).attr('data-role', 'container');
-                this.handler.setInstance(modalElement, this);
+                this.containerHandler.setInstance(modalElement, this);
             }
 
             // set contents

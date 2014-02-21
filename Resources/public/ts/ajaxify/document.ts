@@ -2,6 +2,7 @@
 /// <reference path="event.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="widget.ts"/>
+/// <reference path="action.ts"/>
 /// <reference path="link.ts"/>
 /// <reference path="form.ts"/>
 /// <reference path="modal_container.ts"/>
@@ -24,6 +25,7 @@ module imatic.view.ajaxify.document {
     import ContainerNotFoundException   = imatic.view.ajaxify.container.ContainerNotFoundException;
     import WidgetInterface              = imatic.view.ajaxify.widget.WidgetInterface;
     import WidgetHandler                = imatic.view.ajaxify.widget.WidgetHandler;
+    import ActionInterface              = imatic.view.ajaxify.action.ActionInterface;
     import ModalContainerHandler        = imatic.view.ajaxify.modalContainer.ModalContainerHandler;
     import ModalConfigurationDefaults   = imatic.view.ajaxify.modalContainer.ModalConfigurationDefaults;
     import ModalConfigurationProcessor  = imatic.view.ajaxify.modalContainer.ModalConfigurationProcessor;
@@ -75,6 +77,7 @@ module imatic.view.ajaxify.document {
             // modal container handler
             var modalContainerHandler = new ModalContainerHandler(
                 this.containerHandler,
+                this.widgetHandler,
                 this.configBuilder,
                 this.document
             );
@@ -96,7 +99,8 @@ module imatic.view.ajaxify.document {
             jQuery(this.document)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
-                .on(DomEvents.ON_BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
+                .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
+                .on(DomEvents.ACTION, this.onAction)
             ;
         }
 
@@ -157,6 +161,42 @@ module imatic.view.ajaxify.document {
         }
 
         /**
+         * Handle beforeContentUpdate event
+         */
+        private onBeforeContentUpdate = (event: Event): void => {
+            var element = <HTMLElement> event.target;
+
+            // destroy() all living widget instances in the DOM subtree
+            var widgets = this.widgetHandler.findInstances(element);
+            for (var i = 0; i < widgets.length; ++i) {
+                widgets[i].destroy();
+            }
+
+            // destroy() all living container instances in the DOM subtree
+            var containers = this.containerHandler.findInstances(element);
+            for (var i = 0; i < containers.length; ++i) {
+                containers[i].destroy();
+            }
+        };
+
+        /**
+         * Handle action event
+         */
+        private onAction = (event: Event, action: ActionInterface): void => {
+            var element = <HTMLElement> event.target;
+
+            try {
+                var container = this.containerHandler.findInstance(element, false);
+
+                container.handleAction(action);
+            } catch (e) {
+                if (!(e instanceof ContainerNotFoundException)) {
+                    throw e;
+                }
+            }
+        }
+
+        /**
          * Get container context for given element
          *
          * This method finds the related container instance and also
@@ -187,31 +227,14 @@ module imatic.view.ajaxify.document {
         }
 
         /**
-         * Handle onBeforeContentUpdate event
-         */
-        private onBeforeContentUpdate = (event: Event): void => {
-            var element = <HTMLElement> event.target;
-
-            // destroy() all living widget instances in the DOM subtree
-            var widgets = this.widgetHandler.findInstances(element);
-            for (var i = 0; i < widgets.length; ++i) {
-                widgets[i].destroy();
-            }
-
-            // destroy() all living container instances in the DOM subtree
-            var containers = this.containerHandler.findInstances(element);
-            for (var i = 0; i < containers.length; ++i) {
-                containers[i].destroy();
-            }
-        };
-
-        /**
          * Perform widget <=> container interaction
          */
         private dispatch(container: ContainerInterface, widget: WidgetInterface): void {
             var action = widget.createAction();
 
-            container.handleAction(action);
+            if (action) {
+                container.handleAction(action);
+            }
         }
     }
 

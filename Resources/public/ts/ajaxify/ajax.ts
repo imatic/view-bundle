@@ -25,6 +25,21 @@ module imatic.view.ajaxify.ajax {
          * Execute the request
          */
         execute(url: string, method: string, data: any, onComplete?: (response: ServerResponse) => void) {
+            method = method.toUpperCase();
+            data = data || {};
+
+            // convert methods other than GET and POST into POST + _method
+            if ('GET' !== method && 'POST' !== method) {
+                if ('object' === typeof data) {
+                    data['_method'] = method;
+                } else if ('string' === typeof data) {
+                    data += (data.length > 0 ? '&' : '') + '_method=' + method;
+                }
+
+                method = 'POST';
+            }
+
+            // prepare options
             var options = {
                 url: url,
                 type: method,
@@ -39,6 +54,7 @@ module imatic.view.ajaxify.ajax {
                 },
             };
 
+            // execute request
             this.xhr = jQuery.ajax(options);
         }
     }
@@ -59,6 +75,7 @@ module imatic.view.ajaxify.ajax {
             response.data = xhr.responseText;
             response.valid = this.isValidStatus(xhr.status);
             response.successful = this.isSuccessfulStatus(xhr.status);
+            response.aborted = (0 === xhr.status && 'abort' === xhr.statusText);
 
             var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
             if (flashesJson) {
@@ -93,6 +110,7 @@ module imatic.view.ajaxify.ajax {
         data: any;
         successful: boolean;
         valid: boolean;
+        aborted: boolean;
     }
 
 }

@@ -3,6 +3,8 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Twig\TokenParser\ExampleTokenParser;
+use Symfony\Component\Templating\TemplateNameParserInterface;
+use Symfony\Component\Config\FileLocatorInterface;
 
 /**
  * Example extension
@@ -11,13 +13,35 @@ use Imatic\Bundle\ViewBundle\Twig\TokenParser\ExampleTokenParser;
  */
 class ExampleExtension extends \Twig_Extension
 {
+    /** @var TemplateNameParserInterface */
+    private $templatingNameParser;
+    /** @var FileLocatorInterface */
+    private $templatingLocator;
+
+    /**
+     * Constructor
+     *
+     * @param TemplateNameParserInterface $templatingNameParser
+     * @param FileLocatorInterface        $templatingLocator
+     */
+    public function __construct(
+        TemplateNameParserInterface $templatingNameParser,
+        FileLocatorInterface $templatingLocator
+    ) {
+        $this->templatingNameParser = $templatingNameParser;
+        $this->templatingLocator = $templatingLocator;
+    }
+
     /**
      * {@inheritDoc}
      */
     public function getTokenParsers()
     {
         return array(
-            new ExampleTokenParser(),
+            new ExampleTokenParser(
+                $this->templatingNameParser,
+                $this->templatingLocator
+            ),
         );
     }
 

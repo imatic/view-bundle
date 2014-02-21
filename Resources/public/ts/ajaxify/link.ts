@@ -1,7 +1,6 @@
 /// <reference path="configuration.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="widget.ts"/>
-/// <reference path="event.ts"/>
 /// <reference path="css.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="jquery.ts"/>
@@ -17,9 +16,8 @@ module imatic.view.ajaxify.link {
 
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
-    import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
+    import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
-    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
@@ -114,63 +112,20 @@ module imatic.view.ajaxify.link {
     /**
      * Link
      */
-    export class Link implements WidgetInterface
+    export class Link extends Widget
     {
         url: string;
 
         /**
-         * Constructor
+         * Create action instance
          */
-        constructor(
-            private configBuilder: ConfigurationBuilder,
-            private element: HTMLElement,
-            private containerElement: HTMLElement
-        ) {}
-
-        /**
-         * Destructor
-         */
-        destroy(): void {
-        }
-
-        /**
-         * Get link's configuration
-         */
-        getConfiguration(): any {
-            return this.configBuilder.build(
-                this.element,
-                this.containerElement ? [this.containerElement] : []
-            );
-        }
-
-        /**
-         * Create action
-         */
-        createAction(): ActionInterface {
-            var config = this.getConfiguration();
-
-            var action = new LoadHtmlAction(this, {
+        doCreateAction(config: {[key: string]: any;}): ActionInterface {
+            return new LoadHtmlAction(this, {
                 url: this.url,
-                method: 'GET',
+                method: config['method'] || 'GET',
                 data: null,
-                contentSelector: config.contentSelector || null,
+                contentSelector: config['contentSelector'] || null,
             });
-
-            action.events.addCallback('begin', (event: EventInterface): void => {
-                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
-            });
-            action.events.addCallback('complete', (event: EventInterface): void => {
-                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
-            });
-
-            return action;
-        }
-
-        /**
-         * Get widget's element
-         */
-        getElement(): HTMLElement {
-            return this.element;
         }
     }
 

@@ -1,0 +1,31 @@
+/* Example */
+div.example {
+    margin: 1em 0;
+    padding: 0.5em;
+    border-radius: 4px;
+    background-color: #dcdcdc;
+}
+div.example:before {
+    content: "Example";
+    display: block;
+    margin-bottom: 0.7em;
+    opacity: 0.5;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+div.example > div.preview,
+div.example > pre.source {
+    background-color: #fff;
+    border-radius: 4px;
+}
+div.example > div.preview {
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+}
+div.example > pre.source {
+    border: none;
+    margin: 0;
+}
+div.example > pre.source > code.hljs {
+    background: none;
+}

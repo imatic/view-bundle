@@ -3,8 +3,10 @@
     "version": "0.0.0",
     "private": true,
     "dependencies": {
-        "less": "~1.6.2",
+        "less": "~1.6.3",
         "bower": "~1.2.8",
+        "uglifycss": "~0.0.8",
+        "uglify-js": "~2.4.12",
         "typescript": "~0.9.5"
     }
 }
