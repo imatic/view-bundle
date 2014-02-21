@@ -1,3 +1,5 @@
+/// <reference path="jquery.d.ts"/>
+
 /**
  * Imatic view ajaxify jquery module
  *
@@ -11,6 +13,7 @@ module imatic.view.ajaxify.jquery {
         throw new Error('jQuery is not available');
     }
 
+//    export var jQuery = <JQueryStatic>window['jQuery'];
     export var jQuery = window['jQuery'];
 
 }
