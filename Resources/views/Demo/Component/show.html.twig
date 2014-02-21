@@ -4,6 +4,8 @@
 
 {% block action %}
 
+    {% example %}
+    {# item var is provided by controller #}
     {% set fields = [
         {'name': 'name', 'format': 'text'},
         {'name': 'age', 'format': 'number'},
@@ -15,5 +17,6 @@
     ] %}
 
     {{ include('ImaticViewBundle:Component:show.html.twig') }}
+    {% endexample %}
 
 {% endblock %}
