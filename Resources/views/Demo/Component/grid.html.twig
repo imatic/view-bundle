@@ -6,6 +6,23 @@
     {% set route = app.request.get('_route') %}
     {% set routeParams = {'id': '#id'} %}
 
+    <h3>Simple table</h3>
+    {% example %}
+    {{ include('ImaticViewBundle:Component:table.html.twig', {
+        'items': [
+            {name: 'Jan', age: 30, email: 'jan@example.com'},
+            {name: 'Steve', age: 34, email: 'steve@example.com'},
+            {name: 'Mary', age: 25, email: 'mary@example.com'}
+        ],
+        'columns': ['name', 'email', 'age']
+    }, with_context = false) }}
+
+    {% endexample %}
+
+    <h3>Advanced table</h3>
+    {% example %}
+    {# items var is passed in the controller #}
+
     {% set table = {
     'selectable': false,
     'actions': [{'label': 'Show', route: route, routeParams: routeParams, nested: [{label: 'Edit', route: route}, {label: 'Delete', route: route}]}],
@@ -23,6 +40,6 @@
     ] %}
 
     {{ include('ImaticViewBundle:Component:table.html.twig') }}
-    {{ include('ImaticViewBundle:Component:grid.html.twig') }}
+    {% endexample %}
 
 {% endblock %}

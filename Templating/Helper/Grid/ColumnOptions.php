@@ -8,6 +8,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ColumnOptions extends AbstractOptions
 {
+    protected function prepare($options)
+    {
+        if (is_string($options)) {
+            $options = ['name' => $options];
+        }
+
+        return $options;
+    }
+
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setRequired(['name']);

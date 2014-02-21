@@ -9,10 +9,11 @@ abstract class AbstractOptions
 {
     private $options;
 
-    public function __construct(array $options = [])
+    public function __construct($options)
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
+        $options = $this->prepare($options);
         $options = $resolver->resolve($options);
         $options = $this->configure($options);
         $this->options = $options;
@@ -33,6 +34,11 @@ abstract class AbstractOptions
     }
 
     protected function configure(array $options)
+    {
+        return $options;
+    }
+
+    protected function prepare($options)
     {
         return $options;
     }

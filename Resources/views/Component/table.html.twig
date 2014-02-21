@@ -25,7 +25,7 @@
                     {% for column in columns %}
                         <th class="{{ column.format }} {{ column.class }}">{{ column.name }}</th>
                     {% endfor %}
-                    {% if table.actions is defined %}
+                    {% if table.actions is not empty %}
                         <th>actions</th>
                     {% endif %}
                 </tr>
@@ -55,7 +55,7 @@
                             {% endblock %}
                             {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                             {% block table_row_actions %}
-                                {% if table.actions is defined %}
+                                {% if table.actions is not empty %}
                                     <td class="actions">
                                         {{ button.group(table.actions, {item: item}) }}
                                     </td>
