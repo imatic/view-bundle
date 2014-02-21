@@ -49,7 +49,7 @@ module imatic.view.ajaxify.container {
         /**
          * Get container's configuration
          */
-        getConfiguration: () => any;
+        getConfiguration: () => {[key: string]: any;};
 
         /**
          * See if the container is contextual
@@ -174,16 +174,21 @@ module imatic.view.ajaxify.container {
         /**
          * Get container instance for given element
          */
-        findInstance(element: HTMLElement): ContainerInterface {
+        findInstance(element: HTMLElement, considerTarget = true): ContainerInterface {
             var container;
-            var target = jQuery(element).data('target');
+            var target;
+            if (considerTarget) {
+                target = jQuery(element).data('target');
+            }
 
             // choose target handler
             var targetHandler;
-            for (var i = 0; i < this.targetHandlers.length; ++i) {
-                if (this.targetHandlers[i].supports(target, element)) {
-                    targetHandler = this.targetHandlers[i];
-                    break;
+            if (considerTarget) {
+                for (var i = 0; i < this.targetHandlers.length; ++i) {
+                    if (this.targetHandlers[i].supports(target, element)) {
+                        targetHandler = this.targetHandlers[i];
+                        break;
+                    }
                 }
             }
 
@@ -323,7 +328,7 @@ module imatic.view.ajaxify.container {
          * Get HTML content selector
          */
         getHtmlContentSelector(): string {
-            var contentSelector = this.getConfiguration().contentSelector;
+            var contentSelector = this.getConfiguration()['contentSelector'];
             if (!contentSelector && this.element && this.element.id) {
                 contentSelector = '#' + this.element.id;
             }
@@ -334,7 +339,7 @@ module imatic.view.ajaxify.container {
         /**
          * Get container's configuration
          */
-        getConfiguration(): any {
+        getConfiguration(): {[key: string]: any;} {
             return this.configBuilder.build(this.element);
         }
 
@@ -385,7 +390,7 @@ module imatic.view.ajaxify.container {
                 // handle flash messages
                 if (event['response'].flashes.length > 0) {
                     this.handleFlashes(event['response'].flashes);
-                } else if (!event['response'].valid) {
+                } else if (!event['response'].valid && !event['response'].aborted) {
                     this.handleFlashes([{
                         type: 'danger',
                         message: 'An error occured',
@@ -424,7 +429,7 @@ module imatic.view.ajaxify.container {
          */
         setContent(content: any): void {
             jQuery(this.element)
-                .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
+                .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content.contents())
             ;

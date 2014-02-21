@@ -9,7 +9,7 @@ module imatic.view.ajaxify.jquery {
 
     declare var window: Window;
 
-    if (typeof window['jQuery'] === 'undefined') {
+    if ('undefined' === typeof window['jQuery']) {
         throw new Error('jQuery is not available');
     }
 

@@ -17,12 +17,13 @@ class ExampleNode extends Twig_Node
      * Constructor
      *
      * @param Twig_NodeInterface $body
+     * @param string             $rawBody
      * @param int                $lineno
      * @param string             $tag
      */
-    public function __construct(Twig_NodeInterface $body, $lineno, $tag = 'spaceless')
+    public function __construct(Twig_NodeInterface $body, $rawBody, $lineno, $tag = 'spaceless')
     {
-        parent::__construct(array('body' => $body), array(), $lineno, $tag);
+        parent::__construct(array('body' => $body), array('raw_body' => $rawBody), $lineno, $tag);
     }
 
     /**
@@ -39,37 +40,12 @@ class ExampleNode extends Twig_Node
             ->write('$content = ob_get_clean();')
             ->write('echo "<div class=\"example\">";')
             ->write('echo "<div class=\"preview\">", $content, "</div>";')
-            ->write('echo "<pre class=\"code\">", htmlspecialchars(\Imatic\Bundle\ViewBundle\Twig\Node\ExampleNode::trim($content), ENT_QUOTES), "</pre>";')
+            ->write('echo "<pre class=\"source django\"><code>", ')
+            ->string(htmlspecialchars($this->getAttribute('raw_body'), ENT_QUOTES))
+            ->write(', "</code></pre>";')
             ->write('echo "</div>";')
+            ->write('unset($content);')
         ;
-    }
 
-    /**
-     *
-     */
-    public static function trim($string)
-    {
-        $out = '';
-        $lines = preg_split('/\n|\r\n?/', $string);
-
-        if (!empty($lines)) {
-            preg_match('/^\s*/', $lines[0], $match);
-            if (isset($match[0])) {
-                $indentLen = strlen($match[0]);
-            }
-
-            foreach ($lines as $line) {
-                if (substr($line, 0, $indentLen) === $match[0]) {
-                    $out .= substr($line, $indentLen);
-                } else {
-                    $out .= $line;
-                }
-                $out .= "\n";
-            }
-
-            return trim($out);
-        } else {
-            return $string;
-        }
     }
 }

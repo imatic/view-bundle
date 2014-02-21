@@ -13,9 +13,14 @@ module imatic.view.ajaxify.event {
     export class DomEvents
     {
         /**
-         * Event trigger before contents of an element are replaced
+         * Event triggered before contents of an element are replaced or removed
          */
-        static ON_BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.on_before_content_update';
+        static BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.before_content_update';
+
+        /**
+         * Event triggered by code to execute action in a context
+         */
+        static ACTION = 'imatic.view.ajaxify.event.action';
     }
 
     /**

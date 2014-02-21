@@ -67,7 +67,7 @@ module imatic.view.ajaxify.voidContainer {
         /**
          * Get container's configuration
          */
-        getConfiguration(): any {
+        getConfiguration(): {[key: string]: any;} {
             return {};
         }
 

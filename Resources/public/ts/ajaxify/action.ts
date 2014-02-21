@@ -22,7 +22,7 @@ module imatic.view.ajaxify.action {
 
     /**
      * Action interface
-     * Represents an interaction between Widget and its Container
+     * Represents an interaction between Widget and its Container.
      */
     export interface ActionInterface
     {

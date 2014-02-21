@@ -2,7 +2,6 @@
 /// <reference path="configuration.ts"/>
 /// <reference path="widget.ts"/>
 /// <reference path="action.ts"/>
-/// <reference path="event.ts"/>
 /// <reference path="jquery.ts"/>
 
 /**
@@ -16,12 +15,10 @@ module imatic.view.ajaxify.form {
 
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
-    import WidgetInterface      = imatic.view.ajaxify.widget.WidgetInterface;
+    import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
-    import EventDispatcher      = imatic.view.ajaxify.event.EventDispatcher;
-    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
@@ -93,61 +90,27 @@ module imatic.view.ajaxify.form {
     /**
      * Form
      */
-    export class Form implements WidgetInterface
+    export class Form extends Widget
     {
         /**
-         * Constructor
+         * Create action instance
          */
-        constructor(
-            private configBuilder: ConfigurationBuilder,
-            private element: HTMLFormElement,
-            private containerElement: HTMLElement
-        ) {}
+        doCreateAction(config: {[key: string]: any;}): ActionInterface {
+            var form = <HTMLFormElement> this.element;
 
-        /**
-         * Destructor
-         */
-        destroy(): void {
+            return new LoadHtmlAction(this, {
+                url: form.action,
+                method: form.method || 'GET',
+                data: jQuery(form).serialize(),
+                contentSelector: config['contentSelector'] || null,
+            });
         }
 
         /**
-         * Get form's configuration
+         * Get default confirmation message
          */
-        getConfiguration(): any {
-            return this.configBuilder.build(
-                this.element,
-                this.containerElement ? [this.containerElement] : []
-            );
-        }
-
-        /**
-         * Create action
-         */
-        createAction(): ActionInterface {
-            var config = this.getConfiguration();
-
-            var action = new LoadHtmlAction(this, {
-                url: this.element.action,
-                method: this.element.method || 'GET',
-                data: jQuery(this.element).serialize(),
-                contentSelector: config.contentSelector || null,
-            });
-
-            action.events.addCallback('begin', (event: EventInterface): void => {
-                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
-            });
-            action.events.addCallback('complete', (event: EventInterface): void => {
-                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
-            });
-
-            return action;
-        }
-
-        /**
-         * Get widget's element
-         */
-        getElement(): HTMLElement {
-            return this.element;
+        getDefaultConfirmMessage(): string {
+            return 'Are you sure you want to submit the entered data?';
         }
     }
 

@@ -89,9 +89,21 @@ module imatic.view.ajaxify.modal {
          */
         destroy(): void {
             if (this.element) {
-                jQuery(this.element).remove();
+                var element = this.element;
                 this.element = null;
+
+                jQuery(element)
+                    .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
+                    .remove()
+                ;
             }
+        }
+
+        /**
+         * See if the modal has an existing DOM element
+         */
+        hasElement(): boolean {
+            return this.element ? true : false;
         }
 
         /**
@@ -204,7 +216,7 @@ module imatic.view.ajaxify.modal {
          */
         setBody(content: any): void {
             jQuery(this.getBodyElement())
-                .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
+                .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content)
             ;
@@ -228,7 +240,7 @@ module imatic.view.ajaxify.modal {
             var footer = jQuery(this.getFooterElement());
 
             footer
-                .trigger(DomEvents.ON_BEFORE_CONTENT_UPDATE)
+                .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content)
             ;

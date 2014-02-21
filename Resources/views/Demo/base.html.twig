@@ -1,5 +1,25 @@
 {% extends '::base.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    'vendor/highlightjs/highlight.pack.js'
+    output='js/demo-combined.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    'bundles/imaticview/css/demo/demo.css'
+    'vendor/highlightjs/styles/default.css'
+    output='css/demo-combined.css' -%}
+    <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
+    {% endstylesheets %}
+{% endblock %}
+
 {% block header_menu %}
     {{ menu.menu('imatic.demo') }}
 {% endblock %}

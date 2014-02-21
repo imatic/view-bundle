@@ -19,7 +19,7 @@ module imatic.view.ajaxify.configuration {
         /**
          * Process configuration
          */
-        process: (config: any) => void;
+        process: (config: {[key: string]: any;}) => void;
     }
 
     /**
@@ -52,7 +52,7 @@ module imatic.view.ajaxify.configuration {
         /**
          * Build configuration for given elements
          */
-        build(element?: HTMLElement, parentElements: HTMLElement[] = []) {
+        build(element?: HTMLElement, parentElements: HTMLElement[] = []): {[key: string]: any;} {
             // default
             var config = jQuery.extend({}, this.defaults);
 
@@ -77,7 +77,7 @@ module imatic.view.ajaxify.configuration {
         /**
          * Process loaded configuration
          */
-        private process(config): void {
+        private process(config: {[key: string]: any;}): void {
             for (var i = 0; i < this.processors.length; ++i) {
                 this.processors[i].process(config);
             }
