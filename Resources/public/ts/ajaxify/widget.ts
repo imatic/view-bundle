@@ -81,7 +81,7 @@ module imatic.view.ajaxify.widget {
         setInstance(widgetElement: HTMLElement, widget: WidgetInterface): void {
             jQuery(widgetElement)
                 .data(this.instanceDataKey, widget)
-                .attr(this.instanceMarkAttr, true)
+                .attr(this.instanceMarkAttr, 'true')
                 .addClass(CssClasses.WIDGET)
             ;
         }

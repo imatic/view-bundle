@@ -139,7 +139,7 @@ module imatic.view.ajaxify.document {
         /**
          * Handle onsubmit event
          */
-        private onSubmit = (event: Event): void => {
+        private onSubmit = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
             try {
@@ -163,7 +163,7 @@ module imatic.view.ajaxify.document {
         /**
          * Handle beforeContentUpdate event
          */
-        private onBeforeContentUpdate = (event: Event): void => {
+        private onBeforeContentUpdate = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
             // destroy() all living widget instances in the DOM subtree
@@ -182,13 +182,13 @@ module imatic.view.ajaxify.document {
         /**
          * Handle action event
          */
-        private onAction = (event: Event, action: ActionInterface): void => {
+        private onAction = (event: JQueryEventObject, ...args: any[]): any => {
             var element = <HTMLElement> event.target;
 
             try {
                 var container = this.containerHandler.findInstance(element, false);
 
-                container.handleAction(action);
+                container.handleAction(<ActionInterface> arguments[1]);
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
                     throw e;

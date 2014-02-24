@@ -137,7 +137,7 @@ module imatic.view.ajaxify.container {
         /**
          * Validate given element
          */
-        isValidElement(element: HTMLElement): ContainerInterface {
+        isValidElement(element: HTMLElement): boolean {
             return jQuery(element).is(this.selector);
         }
 
@@ -166,7 +166,7 @@ module imatic.view.ajaxify.container {
         setInstance(containerElement: HTMLElement, container: ContainerInterface): void {
             jQuery(containerElement)
                 .data(this.instanceDataKey, container)
-                .attr(this.instanceMarkAttr, true)
+                .attr(this.instanceMarkAttr, 'true')
                 .addClass(CssClasses.CONTAINER)
             ;
         }
@@ -243,7 +243,7 @@ module imatic.view.ajaxify.container {
         /**
          * Get container element using given selector
          */
-        getElementFromSelector(selector: string): ContainerInterface {
+        getElementFromSelector(selector: string): HTMLElement {
             var containerElement = jQuery(selector, this.document)[0];
             if (!containerElement) {
                 throw new ContainerNotFoundException('Container specified by selector "' + selector + '" was not found');

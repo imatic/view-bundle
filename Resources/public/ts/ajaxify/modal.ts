@@ -72,7 +72,7 @@ module imatic.view.ajaxify.modal {
                 options['keyboard'] = false;
             }
 
-            jQuery(this.element).modal(options);
+            jQuery(this.element)['modal'](options);
         }
 
         /**
@@ -80,7 +80,7 @@ module imatic.view.ajaxify.modal {
          */
         hide(): void {
             if (this.element) {
-                jQuery(this.element).modal('hide');
+                jQuery(this.element)['modal']('hide');
             }
         }
 

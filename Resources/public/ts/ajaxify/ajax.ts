@@ -79,7 +79,7 @@ module imatic.view.ajaxify.ajax {
 
             var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
             if (flashesJson) {
-                response.flashes = jQuery.parseJSON(flashesJson);
+                response.flashes = <FlashMessageInterface[]> jQuery.parseJSON(flashesJson);
             }
 
             return response;

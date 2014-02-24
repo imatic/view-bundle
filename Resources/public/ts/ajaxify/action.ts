@@ -68,7 +68,7 @@ module imatic.view.ajaxify.action {
             private options: {
                 url: string;
                 method: string;
-                data: {[name: string]: any};
+                data: any;
                 contentSelector: string;
             }
         ) {}
