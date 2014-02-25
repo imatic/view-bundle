@@ -97,8 +97,22 @@ header .navbar {
     }
 }
 
+.panel-app {
+    .panel-variant(@panel-default-border; @white; @gray-dark; @orange);
+
+    .panel-heading {
+        border-width: 2px;
+        #gradient > .vertical(lighten(@gray-dark, 10%), @gray-dark);
+
+        h1 {
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
 // === Variables ===
-@orange: #f60;
+@orange: #F89406;
 @white: #fff;
 
 @border-radius-base: 0;

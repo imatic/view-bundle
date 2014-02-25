@@ -1,0 +1,29 @@
+{#
+    variables:
+    - panel {type: type}
+#}
+
+{% block panel %}
+    <div class="panel panel-{{ panel.type|default('default') }}">
+        {% set panel_header = block('panel_header') %}
+        {% set panel_title = block('panel_title') %}
+        {% if panel_header is not empty or panel_title is not empty %}
+            <div class="panel-heading">
+                {% if panel_title is not empty %}
+                    <h3 class="panel-title">{{ panel_title | raw }}</h3>
+                {% else %}
+                    {{ panel_header | raw }}
+                {% endif %}
+            </div>
+        {% endif %}
+        <div class="panel-body">
+            {% block panel_body %}{% endblock %}
+        </div>
+        {% set panel_footer = block('panel_footer') %}
+        {% if panel_footer is not empty %}
+            <div class="panel-footer">
+                {{ panel_footer | raw }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

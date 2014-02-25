@@ -1,0 +1,90 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Layouts' %}
+
+    {% block action %}
+        {% set text %}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum porttitor elit non adipiscing.
+        Vestibulum quis velit vitae neque fermentum semper. Etiam sed elit tincidunt lectus varius congue.
+        Fusce at ligula ut enim volutpat sodales. Aliquam posuere egestas sodales.
+        Donec ac suscipit velit, a tincidunt felis.
+        {% endset %}
+
+        <h2>One coll layout</h2>
+        <h3>Default one col layout</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:layout1col.html.twig' %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h2>Two coll layout</h2>
+
+        <h3>Default two col layout</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:layout2col.html.twig' %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Two col layout with size</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:layout2col.html.twig' with {'first': {size: 6}, 'second': {size:6 } } %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Two col layout with size and offset</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:layout2col.html.twig' with {'first': {size: 4, offset: 3}, 'second': {size:4 } } %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h2>Tree coll layout</h2>
+        <h3>Default tree col layout</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:layout3col.html.twig' %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block third %}
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+    {% endblock %}
