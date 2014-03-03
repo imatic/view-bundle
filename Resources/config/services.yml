@@ -94,7 +94,7 @@ services:
         arguments:
             - '@twig'
         tags:
-            - { name: imatic_view.formatter, alias: date }
+            - { name: imatic_view.formatter, alias: date, is_safe: true }
             - { name: imatic_view.formatter, alias: number }
 
     imatic_view.twig.extension.format.common:
@@ -106,7 +106,7 @@ services:
             - { name: imatic_view.formatter, alias: phone }
             - { name: imatic_view.formatter, alias: email }
             - { name: imatic_view.formatter, alias: text }
-            - { name: imatic_view.formatter, alias: boolean }
+            - { name: imatic_view.formatter, alias: boolean, is_safe: true }
 
     # Templating Helpers
     imatic_view.templating.helper.format:

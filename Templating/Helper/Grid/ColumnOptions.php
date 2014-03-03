@@ -26,6 +26,9 @@ class ColumnOptions extends AbstractOptions
             'class' => '',
             'label' => function (Options $options) {
                     return $options['name'];
+                },
+            'propertyPath' => function (Options $options) {
+                    return $options['name'];
                 }
         ]);
         $resolver->setAllowedTypes([
@@ -34,6 +37,7 @@ class ColumnOptions extends AbstractOptions
             'formatOptions' => 'array',
             'class' => 'string',
             'label' => 'string',
+            'propertyPath' => 'string',
         ]);
     }
 }

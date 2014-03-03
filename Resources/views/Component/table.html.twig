@@ -49,7 +49,7 @@
                             {% block table_row_values %}
                                 {% for column in columns %}
                                     <td class="{{ column.format }} {{ column.class }}">
-                                        {{ imatic_view_format(attribute(item, column.name), column.format, column.formatOptions) }}
+                                        {{ imatic_view_render_value(item, column.propertyPath, column.format, column.formatOptions) }}
                                     </td>
                                 {% endfor %}
                             {% endblock %}

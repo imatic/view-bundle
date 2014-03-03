@@ -19,13 +19,9 @@ class FormatExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('imatic_view_format', [$this, 'format'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('imatic_view_format', [$this->formatHelper, 'format'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('imatic_view_render_value', [$this->formatHelper, 'renderValue'], ['is_safe' => ['html']]),
         ];
-    }
-
-    public function format($value, $format, array $options = [])
-    {
-        return $this->formatHelper->format($value, $format, $options);
     }
 
     /**
