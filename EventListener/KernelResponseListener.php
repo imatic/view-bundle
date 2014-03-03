@@ -39,7 +39,7 @@ class KernelResponseListener
     {
         $response = $event->getResponse();
 
-        if (!$this->layoutHelper->hasFlashMessages()) {
+        if (!$this->layoutHelper->hasFlashMessages() && !$response->isRedirection()) {
             $flashBag = $this->session->getFlashBag();
 
             $flashes = array();

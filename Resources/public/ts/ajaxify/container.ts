@@ -332,7 +332,7 @@ module imatic.view.ajaxify.container {
             if (!contentSelector && this.element && this.element.id) {
                 contentSelector = '#' + this.element.id;
             }
-            
+
             return contentSelector;
         }
 
@@ -393,7 +393,7 @@ module imatic.view.ajaxify.container {
                 } else if (!event['response'].valid && !event['response'].aborted) {
                     this.handleFlashes([{
                         type: 'danger',
-                        message: 'An error occured',
+                        message: 'An error occured'
                     }]);
                 }
             }, 100);

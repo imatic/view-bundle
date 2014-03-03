@@ -13,7 +13,7 @@
 
     {% spaceless %}
         <div class="imatic-view-table table-responsive">
-        <table class="table">
+        <table class="table"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
             <caption></caption>
             {% block table_head %}
                 <thead>
