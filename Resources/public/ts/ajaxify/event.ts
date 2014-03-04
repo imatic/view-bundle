@@ -31,7 +31,7 @@ module imatic.view.ajaxify.event {
         /**
          * Add a callback
          */
-        addCallback: (eventName: string, callback: ListenerCallbackInterface, priority: number = 0) => void;
+        addCallback: (eventName: string, callback: ListenerCallbackInterface, priority?: number) => void;
 
         /**
          * Remove a callback
