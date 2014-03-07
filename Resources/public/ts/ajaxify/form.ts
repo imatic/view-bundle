@@ -97,11 +97,25 @@ module imatic.view.ajaxify.form {
          */
         doCreateAction(config: {[key: string]: any;}): ActionInterface {
             var form = <HTMLFormElement> this.element;
+            var formData = jQuery(form).serializeArray();
+
+            // determine used submit button
+            var submitButton = jQuery('input[type=submit][name]:focus', form);
+            if (submitButton.length < 1) {
+                submitButton = jQuery('input[type=submit][name]');
+            }
+
+            if (submitButton.length > 0) {
+                formData.push({
+                    name: submitButton.attr('name'),
+                    value: submitButton.attr('value') || '1'
+                });
+            }
 
             return new LoadHtmlAction(this, {
-                url: form.action,
-                method: form.method || 'GET',
-                data: jQuery(form).serialize(),
+                url: jQuery(form).attr('action'),
+                method: jQuery(form).attr('method') || 'GET',
+                data: formData,
                 contentSelector: config['contentSelector'] || null,
             });
         }
