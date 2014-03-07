@@ -1,0 +1,47 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Tab component' %}
+
+{% block action %}
+    {% set text %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum porttitor elit non adipiscing.
+    Vestibulum quis velit vitae neque fermentum semper. Etiam sed elit tincidunt lectus varius congue.
+    Fusce at ligula ut enim volutpat sodales. Aliquam posuere egestas sodales.
+    Donec ac suscipit velit, a tincidunt felis.
+    {% endset %}
+
+    <h2>Horizontal tabs</h2>
+
+    <h3>Simple horizontal tabs</h3>
+    {% example %}
+
+    {% set tab_config = {profile: {label: 'Profile'}, settings: {label: 'Settings'} } %}
+    {% embed 'ImaticViewBundle:Component:tabs.html.twig' with {tabs: tab_config} %}
+        {% block profile %}
+            <p>{{ text }}</p>
+        {% endblock %}
+        {% block settings %}
+            <p>{{ text }}</p>
+            <p>{{ text }}</p>
+        {% endblock %}
+    {% endembed %}
+
+    {% endexample %}
+
+    <h3>Horizontal tabs with active tab</h3>
+    {% example %}
+
+    {% set tab_config = {profile: {label: 'Profile'}, settings: {label: 'Settings', active: true} } %}
+    {% embed 'ImaticViewBundle:Component:tabs.html.twig' with {tabs: tab_config, id: 'another-tabs'} %}
+        {% block profile %}
+            <p>{{ text }}</p>
+        {% endblock %}
+        {% block settings %}
+            <p>{{ text }}</p>
+            <p>{{ text }}</p>
+        {% endblock %}
+    {% endembed %}
+
+    {% endexample %}
+
+{% endblock %}

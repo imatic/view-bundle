@@ -51,6 +51,15 @@ class ComponentController extends Controller
     }
 
     /**
+     * @Config\Route("/tabs")
+     * @Config\Template()
+     */
+    public function tabsAction()
+    {
+        return [];
+    }
+
+    /**
      * @Config\Route("/form")
      * @Config\Template()
      */

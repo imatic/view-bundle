@@ -36,7 +36,13 @@ class CommonFormatter implements FormatterInterface
 
     public function formatEmail($value, array $options = [])
     {
-        return sprintf('<a href="mailto:%s">%s</a>', $value, $value);
+        if (isset($options['text'])) {
+            $text = $options['text'];
+        } else {
+            $text = $value;
+        }
+
+        return sprintf('<a href="mailto:%s">%s</a>', $value, $text);
     }
 
     public function formatUrl($value, array $options = [])

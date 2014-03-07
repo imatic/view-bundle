@@ -1,0 +1,39 @@
+<div class="imatic-view-tabs">
+    {% set id = 'tabs-' ~ id | default(random()) %}
+    {% block tabs %}
+        {% block tabs_nav %}
+            <ul id="{{ id }}" class="nav nav-tabs">
+                {% for tab_name, tab in tabs %}
+                    <li class="{{ tab.active | default('') ? 'active' }}">
+                        <a href="#tab-{{ id }}-{{ tab_name }}" data-toggle="tab">{{ tab.label }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endblock %}
+        {% block tabs_pannels %}
+            <div class="tab-content">
+                {% for tab_name, tab in tabs %}
+                    <div class="tab-pane {{ tab.active | default('') ? 'active' }}"
+                         id="tab-{{ id }}-{{ tab_name }}">{{ block(tab_name) }}</div>
+                {% endfor %}
+            </div>
+        {% endblock %}
+    {% endblock %}
+    <script>
+        $('#{{ id }} a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+
+        })
+
+        {% set has_active_tab = false %}
+        {% for tab_name, tab in tabs %}
+        {% if tab.active | default(false) %}
+        {% set has_active_tab = true %}
+        {% endif %}
+        {% endfor %}
+        {% if not has_active_tab %}
+        $('#{{ id }} a:first').tab('show')
+        {% endif %}
+    </script>
+</div>

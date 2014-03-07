@@ -24,6 +24,7 @@ class DemoMenuBuilder
         $componentIndex->addChild($factory->createItem('Grid', ['route' => 'imatic_view_demo_component_grid']));
         $componentIndex->addChild($factory->createItem('Form', ['route' => 'imatic_view_demo_component_form']));
         $componentIndex->addChild($factory->createItem('Show', ['route' => 'imatic_view_demo_component_show']));
+        $componentIndex->addChild($factory->createItem('Tabs', ['route' => 'imatic_view_demo_component_tabs']));
 
         $menu->addChild('Ajaxify', array('route' => 'imatic_view_demo_ajaxify_index'));
 
