@@ -13,7 +13,7 @@
 
     {% spaceless %}
         <div class="imatic-view-table table-responsive">
-        <table class="table">
+        <table class="table"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
             <caption></caption>
             {% block table_head %}
                 <thead>
@@ -49,7 +49,7 @@
                             {% block table_row_values %}
                                 {% for column in columns %}
                                     <td class="{{ column.format }} {{ column.class }}">
-                                        {{ imatic_view_format(attribute(item, column.name), column.format, column.formatOptions) }}
+                                        {{ imatic_view_render_value(item, column.propertyPath, column.format, column.formatOptions) }}
                                     </td>
                                 {% endfor %}
                             {% endblock %}

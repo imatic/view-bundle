@@ -1,0 +1,20 @@
+{% block layout %}
+    <div class="layout layout-grid">
+        {% for row_options in rows %}
+            {% block row %}
+                <div class="row {{ row_options.class | default('') }}">
+                    {% if row_options.cols is not empty %}
+                        {% for col_name, col_options in row_options.cols %}
+                            {% block col %}
+                                {% set class = 'col-md-' ~ col_options.size|default(12) ~ (col_options.offset|default('') ? ' col-md-offset-' ~ col_options.offset : '') %}
+                                <div class="{{ class }}">
+                                    {{ block(col_name) }}
+                                </div>
+                            {% endblock %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endblock %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Panels' %}
+
+    {% block action %}
+        <h2>Panel</h2>
+
+        <h3>Basic panel</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% block panel_body %}
+                I am panel.
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Panel with header</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% block panel_header %}
+                I am a <strong>Header</strong>
+            {% endblock %}
+            {% block panel_body %}
+                I am panel with header.
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Panel with title</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% block panel_title %}
+                I am a title
+            {% endblock %}
+            {% block panel_body %}
+                I am panel with title.
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Panel with footer</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% block panel_body %}
+                I am panel with footer.
+            {% endblock %}
+            {% block panel_footer %}
+                I am footer..
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Panel types</h3>
+        {% example %}
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% set panel = {type: 'success'} %}
+            {% block panel_title %}Succes panel{% endblock %}
+            {% block panel_body %}
+                I am success panel.
+            {% endblock %}
+        {% endembed %}
+
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% block panel_title %}Primary panel{% endblock %}
+            {% set panel = {type: 'primary'} %}
+            {% block panel_body %}
+                I am primary panel.
+            {% endblock %}
+        {% endembed %}
+
+        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+            {% block panel_title %}App panel{% endblock %}
+            {% set panel = {type: 'app'} %}
+            {% block panel_body %}
+                I am app panel.
+            {% endblock %}
+            {% block panel_footer %}
+                Footer.
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+    {% endblock %}

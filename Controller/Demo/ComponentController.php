@@ -22,6 +22,24 @@ class ComponentController extends Controller
     }
 
     /**
+     * @Config\Route("/panel")
+     * @Config\Template()
+     */
+    public function panelAction()
+    {
+        return [];
+    }
+
+    /**
+     * @Config\Route("/layout")
+     * @Config\Template()
+     */
+    public function layoutAction()
+    {
+        return [];
+    }
+
+    /**
      * @Config\Route("/grid")
      * @Config\Template()
      */

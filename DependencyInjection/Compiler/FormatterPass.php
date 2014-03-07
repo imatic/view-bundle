@@ -17,9 +17,15 @@ class FormatterPass implements CompilerPassInterface
 
         foreach ($formatters as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
+
+                $options = $attributes;
+                unset($options['name']);
+                unset($options['alias']);
+
                 $formatterDef->addMethodCall('addFormatter', [
                     $attributes['alias'],
                     new Reference($id),
+                    $options
                 ]);
             }
         }

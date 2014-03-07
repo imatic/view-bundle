@@ -30,6 +30,8 @@ class TableOptions extends AbstractOptions
             'sortable' => false,
             'selectable' => false,
             'selectableColumn' => '',
+            'ajaxify' => false,
+            'id' => '',
         ]);
         $resolver->setAllowedTypes([
             'class' => 'string',
@@ -38,6 +40,8 @@ class TableOptions extends AbstractOptions
             'sortable' => 'bool',
             'selectable' => 'bool',
             'selectableColumn' => 'string',
+            'ajaxify' => 'bool',
+            'id' => 'string',
         ]);
     }
 }

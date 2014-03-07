@@ -17,7 +17,7 @@
     {{ element|raw }}
 {% endspaceless %}{% endmacro %}
 
-{% macro _nested(element, action) %}
+{% macro _nested(element, action, context) %}
     <div class="btn-group">
         {% if action.url is not empty or action.route is not empty %}
             {{ _self._button(element, action) }}
@@ -35,7 +35,7 @@
         {% endif %}
         <ul class="dropdown-menu" role="menu">
             {% for nested in action.nested %}
-                <li>{{ _self.action(nested) }}</li>
+                <li>{{ _self.action(nested, context) }}</li>
             {% endfor %}
         </ul>
     </div>

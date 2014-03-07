@@ -114,7 +114,7 @@ module imatic.view.ajaxify.document {
         /**
          * Handle onclick event
          */
-        private onClick = (event: MouseEvent): void => {
+        private onClick = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
             try {

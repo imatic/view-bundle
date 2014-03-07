@@ -1,0 +1,97 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Layouts' %}
+
+    {% block action %}
+        {% set text %}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum porttitor elit non adipiscing.
+        Vestibulum quis velit vitae neque fermentum semper. Etiam sed elit tincidunt lectus varius congue.
+        Fusce at ligula ut enim volutpat sodales. Aliquam posuere egestas sodales.
+        Donec ac suscipit velit, a tincidunt felis.
+        {% endset %}
+
+        <h2>Grid layout</h2>
+        <h3>One col layout</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {main: {} } }] } %}
+            {% block main %}
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Two col layout</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {first: {size: 3}, second: {size:9} } }] } %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Two col layout with offset</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {first: {size: 4, offset: 3}, second: {size:4 } } }] } %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+        <h3>Tree col layout</h3>
+        {% example %}
+
+        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {first: {size: 3}, second: {size:6}, third: {size:3} } }] } %}
+            {% block first %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block second %}
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block third %}
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+
+        <h3>Multi row layout</h3>
+        {% example %}
+        {% set rows = [{ cols: {col11: {size:3}, col12: {size:9} } }, { cols: {col21: {size:9}, col22: {size:3} } }] %}
+        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: rows } %}
+            {% block col11 %}
+                <h5>Col 1-1</h5>
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block col12 %}
+                <h5>Col 1-2</h5>
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block col21 %}
+                <h5>Col 2-1</h5>
+                <p>{{ text }}</p>
+            {% endblock %}
+            {% block col22 %}
+                <h5>Col 2-2</h5>
+                <p>{{ text }}</p>
+            {% endblock %}
+        {% endembed %}
+
+        {% endexample %}
+
+    {% endblock %}

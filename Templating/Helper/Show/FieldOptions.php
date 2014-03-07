@@ -17,6 +17,9 @@ class FieldOptions extends AbstractOptions
             'class' => '',
             'label' => function (Options $options) {
                     return $options['name'];
+                },
+            'propertyPath' => function (Options $options) {
+                    return $options['name'];
                 }
         ]);
         $resolver->setAllowedTypes([
@@ -25,6 +28,7 @@ class FieldOptions extends AbstractOptions
             'formatOptions' => 'array',
             'class' => 'string',
             'label' => 'string',
+            'propertyPath' => 'string',
         ]);
     }
 }

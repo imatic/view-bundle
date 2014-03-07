@@ -14,7 +14,7 @@
             {name: 'Steve', age: 34, email: 'steve@example.com'},
             {name: 'Mary', age: 25, email: 'mary@example.com'}
         ],
-        'columns': ['name', 'email', 'age']
+        'columns': ['[name]', '[email]', '[age]']
     }, with_context = false) }}
 
     {% endexample %}
@@ -24,19 +24,20 @@
     {# items var is provided by controller #}
 
     {% set table = {
-    'selectable': false,
-    'actions': [{'label': 'Show', route: route, routeParams: routeParams, nested: [{label: 'Edit', route: route}, {label: 'Delete', route: route}]}],
-    'selectableColumn': 'id',
-    'sortable':true} %}
+        'selectable': false,
+        'actions': [{'label': 'Show', route: route, routeParams: routeParams, nested: [{label: 'Edit', route: route}, {label: 'Delete', route: route}]}],
+        'selectableColumn': 'id',
+        'sortable':true}
+    %}
 
     {% set columns = [
-    {'name': 'name', 'format': 'text'},
-    {'name': 'age', 'format': 'number'},
-    {'name': 'active', 'format': 'boolean'},
-    {'name': 'lastOnline', 'format': 'date'},
-    {'name': 'phone', 'format': 'phone'},
-    {'name': 'email', 'format': 'email'},
-    {'name': 'url', 'format': 'url'}
+        {name: 'name', format: 'text'},
+        {name: 'age', format: 'number'},
+        {name: 'active', format: 'boolean'},
+        {name: 'lastOnline', format: 'date'},
+        {name: 'phone', format: 'phone'},
+        {name: 'email', format: 'email'},
+        {name: 'url', format: 'url'}
     ] %}
 
     {{ include('ImaticViewBundle:Component:table.html.twig') }}

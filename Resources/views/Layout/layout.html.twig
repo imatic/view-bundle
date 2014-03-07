@@ -1,4 +1,5 @@
 {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+{% import 'ImaticViewBundle:Component:message.html.twig' as message %}
 {% import 'ImaticViewBundle:Component:button.html.twig' as button %}
 <!DOCTYPE html>
 <html>
@@ -104,6 +105,8 @@
     {% endblock %}
 
     <div class="container-fluid">
+        {{ message.session_message() }}
+
         {% block action %}{% endblock %}
     </div>
 
