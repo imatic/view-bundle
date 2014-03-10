@@ -28,6 +28,8 @@ class ActionOptions extends AbstractOptions
             'routeParams' => [],
             'url' => '',
             'nested' => [],
+            'condition' => '',
+            'security' => '',
         ]);
         $resolver->setAllowedTypes([
             'label' => 'string',
@@ -38,6 +40,8 @@ class ActionOptions extends AbstractOptions
             'routeParams' => 'array',
             'url' => 'string',
             'nested' => 'array',
+            'security' => 'string',
+            'condition' => 'string',
         ]);
     }
 }

@@ -82,6 +82,13 @@ services:
         tags:
             - { name: 'twig.extension' }
 
+    imatic_view.twig.extension.condition:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ConditionExtension
+        arguments:
+            - '@imatic_view.templating.helper.condition'
+        tags:
+            - { name: 'twig.extension' }
+
     # Twig loaders
     imatic_view.twig.loader.remote:
         class:        Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
@@ -127,6 +134,11 @@ services:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper
         arguments:
             - '@router'
+
+    imatic_view.templating.helper.condition:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper
+        arguments:
+            - '@security.context'
 
     # Event listners
     imatic_view.event_listener.kernel_response:

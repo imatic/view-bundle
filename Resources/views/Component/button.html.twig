@@ -4,11 +4,13 @@
 
 {% macro button(action, context) %}{% spaceless %}
     {% set action = imatic_view_action(action) %}
-    {% set element = imatic_view_action_create(action, context) %}
-    {% if action.nested is not empty %}
-        {{ _self._nested(element, action, context) }}
-    {% else %}
-        {{ _self._button(element, action) }}
+    {% if imatic_view_condition_evaluate(action.condition|default(''), context|default({})) %}
+        {% set element = imatic_view_action_create(action, context) %}
+        {% if action.nested is not empty %}
+            {{ _self._nested(element, action, context) }}
+        {% else %}
+            {{ _self._button(element, action) }}
+        {% endif %}
     {% endif %}
 {% endspaceless %}{% endmacro %}
 
@@ -35,7 +37,9 @@
         {% endif %}
         <ul class="dropdown-menu" role="menu">
             {% for nested in action.nested %}
-                <li>{{ _self.action(nested, context) }}</li>
+                {% if imatic_view_condition_evaluate(nested.condition|default(''), context|default({})) %}
+                    <li>{{ _self.action(nested, context) }}</li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
