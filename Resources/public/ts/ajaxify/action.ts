@@ -51,6 +51,8 @@ module imatic.view.ajaxify.action {
 
     /**
      * Load HTML action
+     *
+     * Loads remote contents.
      */
     export class LoadHtmlAction implements ActionInterface
     {
@@ -140,6 +142,79 @@ module imatic.view.ajaxify.action {
             if (!this.complete) {
                 this.request.xhr.abort();
             }
+        }
+    }
+
+    /**
+     * Response action
+     *
+     * Uses already existing response.
+     */
+    export class ResponseAction implements ActionInterface
+    {
+        public events = new EventDispatcher();
+
+        /**
+         * Constructor
+         */
+        constructor(
+            private initiator: WidgetInterface,
+            private response: ServerResponse,
+            private contentSelector?: string
+        ) {}
+
+        /**
+         * See if the action is complete
+         */
+        isComplete(): boolean {
+            return true;
+        }
+
+        /**
+         * See if the action was successful
+         */
+        isSuccessful(): boolean {
+            return this.response.valid && this.response.successful;
+        }
+
+        /**
+         * Execute the action
+         */
+        execute(container: ContainerInterface): void {
+            this.events.dispatch('begin', new Event({
+                action: this,
+                initiator: this.initiator,
+            }));
+
+            // handle response
+            if (this.response.valid) {
+                var event = this.events.dispatch('apply', new Event({
+                    action: this,
+                    initiator: this.initiator,
+                    response: this.response,
+                    proceed: true,
+                }));
+
+                if (event['proceed']) {
+                    container.setHtml(
+                        this.response.data,
+                        this.contentSelector
+                    );
+                }
+            }
+
+            // complete event
+            this.events.dispatch('complete', new Event({
+                action: this,
+                initiator: this.initiator,
+                response: this.response,
+            }));
+        }
+
+        /**
+         * Abort the action
+         */
+        abort(): void {
         }
     }
 

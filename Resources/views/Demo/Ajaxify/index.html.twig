@@ -330,7 +330,6 @@
                 href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
                 data-target="modal"
                 data-modal-title="h2"
-                data-modal-on-close="reload"
             >
                 Modal link
             </a>
@@ -397,6 +396,25 @@
                         </table>
                     </td>
                     <td>no action</td>
+                </tr>
+                <tr>
+                    <td><code>data-modal-close-on-form-success</code></td>
+                    <td>close the modal when a form is successfully submitted into it's container</td>
+                    <td>true / false</td>
+                    <td>true</td>
+                </tr>
+                <tr>
+                    <td><code>data-modal-resend-form-response</code></td>
+                    <td>
+                        <p>resend successful form response that was submitted into the modal's container</p>
+                        <ul>
+                            <li>the action is triggered in the original widget's context</li>
+                            <li>the action is trigered after the modal is closed</li>
+                            <li>the action surpresses <code>data-modal-on-close</code></li>
+                        </ul>
+                    </td>
+                    <td>true / false</td>
+                    <td>true</td>
                 </tr>
             </tbody>
         </table>

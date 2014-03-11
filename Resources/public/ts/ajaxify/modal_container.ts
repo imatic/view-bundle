@@ -1,5 +1,6 @@
 /// <reference path="configuration.ts"/>
 /// <reference path="event.ts"/>
+/// <reference path="ajax.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="form.ts"/>
@@ -20,6 +21,7 @@ module imatic.view.ajaxify.modalContainer {
     import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
     import DomEvents                        = imatic.view.ajaxify.event.DomEvents;
     import EventInterface                   = imatic.view.ajaxify.event.EventInterface;
+    import ServerResponse                   = imatic.view.ajaxify.ajax.ServerResponse;
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
     import Container                        = imatic.view.ajaxify.container.Container;
     import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
@@ -27,6 +29,7 @@ module imatic.view.ajaxify.modalContainer {
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
     import LoadHtmlAction                   = imatic.view.ajaxify.action.LoadHtmlAction;
+    import ResponseAction                   = imatic.view.ajaxify.action.ResponseAction;
     import Form                             = imatic.view.ajaxify.form.Form;
     import WidgetHandler                    = imatic.view.ajaxify.widget.WidgetHandler;
     import WidgetInterface                  = imatic.view.ajaxify.widget.WidgetInterface;
@@ -43,6 +46,8 @@ module imatic.view.ajaxify.modalContainer {
         modalTitle: '',
         modalFooter: '',
         modalOnClose: '',
+        modalCloseOnFormSuccess: true,
+        modalResendFormResponse: true
     };
 
     /**
@@ -159,6 +164,7 @@ module imatic.view.ajaxify.modalContainer {
         private modal = new Modal(this.document);
         private actionInitiator: WidgetInterface;
         private responseTitle: string;
+        private resendResponse: ServerResponse;
 
         /**
          * Destructor
@@ -171,9 +177,8 @@ module imatic.view.ajaxify.modalContainer {
             if (this.originalTrigger && this.widgetHandler.hasInstance(this.originalTrigger)) {
                 var originalTriggerWidget = this.widgetHandler.getInstance(this.originalTrigger);
                 var originalTriggerWidgetConfig = originalTriggerWidget.getConfiguration();
-                if (originalTriggerWidgetConfig['modalOnClose']) {
-                    this.executeOnClose(originalTriggerWidget, originalTriggerWidgetConfig['modalOnClose']);
-                }
+
+                this.executeOnClose(originalTriggerWidget, originalTriggerWidgetConfig['modalOnClose']);
             }
         }
 
@@ -183,7 +188,12 @@ module imatic.view.ajaxify.modalContainer {
         private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: string[]) {
             var action;
 
-            if ('load' === onClose[0]) {
+            if (this.resendResponse) {
+                // resend response
+                action = new ResponseAction(originalTriggerWidget, this.resendResponse);
+                this.resendResponse = null;
+            } else if (onClose && 'load' === onClose[0]) {
+                // load on close
                 action = new LoadHtmlAction(originalTriggerWidget, {
                     url: onClose[1] || originalTriggerWidget.getElement().ownerDocument.location.toString().split('#', 2)[0],
                     method: 'GET',
@@ -206,17 +216,28 @@ module imatic.view.ajaxify.modalContainer {
         handleAction(action: ActionInterface): void {
             action.events.addCallback('apply', (event: EventInterface): void => {
                 if (event['response'].valid) {
+                    var config = this.getConfiguration();
+
                     this.actionInitiator = event['initiator'];
                     this.responseTitle = event['response'].title || null;
+                    this.resendResponse = null;
 
-                    // close modal on form submit
+                    // handle successful form submit
                     if (
                         event['response'].successful
                         && this.actionInitiator instanceof Form
                         && jQuery(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
                     ) {
-                        event['proceed'] = false;
-                        this.modal.hide();
+                        // store response for resend
+                        if (config['modalResendFormResponse']) {
+                            this.resendResponse = event['response'];
+                        }
+
+                        // close modal
+                        if (config['modalCloseOnFormSuccess']) {
+                            event['proceed'] = false;
+                            this.modal.hide();
+                        }
                     }
 
                 }
