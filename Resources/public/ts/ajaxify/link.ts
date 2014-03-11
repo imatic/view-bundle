@@ -60,7 +60,7 @@ module imatic.view.ajaxify.link {
          * Validate given event
          */
         isValidEvent(event: JQueryEventObject): boolean {
-            return event.which && 1 == event.which;
+            return event.which && 1 == event.which && !event.shiftKey && !event.ctrlKey && !event.metaKey;
         }
 
         /**
