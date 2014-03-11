@@ -239,12 +239,14 @@
 
 
         {% example %}
-            <div data-role="container">
-                <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post">
-                    Your name: <input type="text" name="name" value="Bob" required>
-                    <input type="submit" name="action" value="Submit">
-                </form>
-            </div>
+            <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post" data-target="#demo-form-result">
+                Your name: <input type="text" name="name" value="Bob" required>
+                <input type="submit" name="a" value="Submit A">
+                <button type="submit" name="b" value="rofl">Submit B</button>
+            </form>
+
+            <hr>
+            <div data-role="container" id="demo-form-result"></div>
         {% endexample %}
 
 

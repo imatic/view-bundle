@@ -100,9 +100,9 @@ module imatic.view.ajaxify.form {
             var formData = jQuery(form).serializeArray();
 
             // determine used submit button
-            var submitButton = jQuery('input[type=submit][name]:focus', form);
+            var submitButton = jQuery('input[type=submit][name]:focus, button[type=submit]:focus', form);
             if (submitButton.length < 1) {
-                submitButton = jQuery('input[type=submit][name]');
+                submitButton = jQuery('input[type=submit][name], button[type=submit]');
             }
 
             if (submitButton.length > 0) {

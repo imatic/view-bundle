@@ -41,8 +41,17 @@ class AjaxifyController extends Controller
      */
     public function formTestAction(Request $request)
     {
+        if ($request->request->has('a')) {
+            $pressedButton = 'A';
+        } elseif ($request->request->has('b')) {
+            $pressedButton = 'B';
+        } else {
+            $pressedButton = '?';
+        }
+
         return array(
             'name' => $request->request->get('name'),
+            'pressed_button' => $pressedButton,
         );
     }
 
