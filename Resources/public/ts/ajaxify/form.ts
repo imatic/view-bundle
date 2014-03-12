@@ -18,7 +18,7 @@ module imatic.view.ajaxify.form {
     import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
+    import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
@@ -112,7 +112,7 @@ module imatic.view.ajaxify.form {
                 });
             }
 
-            return new LoadHtmlAction(this, {
+            return new RequestAction(this, {
                 url: jQuery(form).attr('action'),
                 method: jQuery(form).attr('method') || 'GET',
                 data: formData,

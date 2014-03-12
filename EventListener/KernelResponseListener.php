@@ -65,5 +65,12 @@ class KernelResponseListener
                 $this->layoutHelper->getTitle()
             );
         }
+
+        if ($this->layoutHelper->hasFullTitle()) {
+            $response->headers->set(
+                'X-Full-Title',
+                $this->layoutHelper->getFullTitle()
+            );
+        }
     }
 }

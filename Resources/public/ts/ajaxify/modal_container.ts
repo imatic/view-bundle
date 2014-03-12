@@ -21,14 +21,15 @@ module imatic.view.ajaxify.modalContainer {
     import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
     import DomEvents                        = imatic.view.ajaxify.event.DomEvents;
     import EventInterface                   = imatic.view.ajaxify.event.EventInterface;
-    import ServerResponse                   = imatic.view.ajaxify.ajax.ServerResponse;
+    import Response                         = imatic.view.ajaxify.ajax.Response;
+    import RequestHelper                    = imatic.view.ajaxify.ajax.RequestHelper;
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
     import Container                        = imatic.view.ajaxify.container.Container;
     import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
     import ContainerNotFoundException       = imatic.view.ajaxify.container.ContainerNotFoundException;
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
-    import LoadHtmlAction                   = imatic.view.ajaxify.action.LoadHtmlAction;
+    import RequestAction                    = imatic.view.ajaxify.action.RequestAction;
     import ResponseAction                   = imatic.view.ajaxify.action.ResponseAction;
     import Form                             = imatic.view.ajaxify.form.Form;
     import WidgetHandler                    = imatic.view.ajaxify.widget.WidgetHandler;
@@ -65,19 +66,6 @@ module imatic.view.ajaxify.modalContainer {
             } else {
                 config['modalSize'] = ModalSize.NORMAL;
             }
-
-            // modal-on-close
-            var modalOnClose = null;
-            if ('string' === typeof config['modalOnClose'] && config['modalOnClose']) {
-                if ('reload' === config['modalOnClose']) {
-                    config['modalOnClose'] = 'load:';
-                }
-                modalOnClose = config['modalOnClose'].split(':', 2);
-                if (2 !== modalOnClose.length || 'load' !== modalOnClose[0]) {
-                    modalOnClose = null;
-                }
-            }
-            config['modalOnClose'] = modalOnClose;
         }
     }
 
@@ -164,7 +152,7 @@ module imatic.view.ajaxify.modalContainer {
         private modal = new Modal(this.document);
         private actionInitiator: WidgetInterface;
         private responseTitle: string;
-        private resendResponse: ServerResponse;
+        private resendResponse: Response;
 
         /**
          * Destructor
@@ -185,20 +173,22 @@ module imatic.view.ajaxify.modalContainer {
         /**
          * Execute on close action
          */
-        private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: string[]) {
+        private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: any) {
             var action;
 
             if (this.resendResponse) {
                 // resend response
                 action = new ResponseAction(originalTriggerWidget, this.resendResponse);
                 this.resendResponse = null;
-            } else if (onClose && 'load' === onClose[0]) {
+            } else if (onClose) {
                 // load on close
-                action = new LoadHtmlAction(originalTriggerWidget, {
-                    url: onClose[1] || originalTriggerWidget.getElement().ownerDocument.location.toString().split('#', 2)[0],
-                    method: 'GET',
-                    data: null,
-                    contentSelector: null,
+                var requestData = RequestHelper.parseRequestString(onClose);
+
+                action = new RequestAction(originalTriggerWidget, {
+                    url: requestData.url,
+                    method: requestData.method,
+                    data: requestData.data,
+                    contentSelector: requestData.contentSelector,
                 });
             }
 

@@ -7,6 +7,8 @@
  */
 module imatic.view.ajaxify {
 
+    "use_strict";
+
     import HTMLDocumentHandler  = imatic.view.ajaxify.document.HTMLDocumentHandler;
 
     export function init(document: HTMLDocument)

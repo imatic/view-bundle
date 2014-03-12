@@ -3,6 +3,7 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts
+    'vendor/history.js/scripts/bundled/html5/native.history.js'
     'vendor/highlightjs/highlight.pack.js'
     output='js/demo-combined.js' %}
     <script src="{{ asset_url }}" type="text/javascript"></script>

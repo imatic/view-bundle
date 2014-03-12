@@ -15,6 +15,8 @@ class LayoutHelper
     private $requestStack;
     /** @var string|null */
     private $title;
+    /** @var string|null */
+    private $fullTitle;
 
     /**
      * Constructor
@@ -84,4 +86,32 @@ class LayoutHelper
         $this->title = ('' !== $title ? $title : null);
     }
 
+    /**
+     * Get full title
+     *
+     * @return string|null
+     */
+    public function getFullTitle()
+    {
+        return $this->fullTitle;
+    }
+
+    /**
+     * Check for full title
+     *
+     * @return bool
+     */
+    public function hasFullTitle()
+    {
+        return null !== $this->fullTitle;
+    }
+
+    /**
+     * Set full title
+     * @param string|null $fullTitle
+     */
+    public function setFullTitle($fullTitle)
+    {
+        $this->fullTitle = ('' !== $fullTitle ? $fullTitle : null);
+    }
 }

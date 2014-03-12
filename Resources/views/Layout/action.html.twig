@@ -1,2 +1,8 @@
-{{ block('action') }}
-{% do imatic_view_set_title(block('headline')) %}
+{% extends 'ImaticViewBundle:Layout:layout.html.twig' %}
+
+{% block document %}
+    {{ block('action') }}
+{% endblock %}
+
+{% do imatic_view_set_title(block('title')) %}
+{% do imatic_view_set_full_title(block('title_top')) %}

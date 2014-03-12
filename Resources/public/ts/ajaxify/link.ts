@@ -19,7 +19,7 @@ module imatic.view.ajaxify.link {
     import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import LoadHtmlAction       = imatic.view.ajaxify.action.LoadHtmlAction;
+    import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
@@ -120,7 +120,7 @@ module imatic.view.ajaxify.link {
          * Create action instance
          */
         doCreateAction(config: {[key: string]: any;}): ActionInterface {
-            return new LoadHtmlAction(this, {
+            return new RequestAction(this, {
                 url: this.url,
                 method: config['method'] || 'GET',
                 data: null,

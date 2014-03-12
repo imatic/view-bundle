@@ -7,6 +7,9 @@
 /// <reference path="css.ts"/>
 /// <reference path="modal.ts"/>
 /// <reference path="jquery.ts"/>
+/// <reference path="history.ts"/>
+/// <reference path="ajax.ts"/>
+
 
 /**
  * Imatic view ajaxify container module
@@ -22,12 +25,15 @@ module imatic.view.ajaxify.container {
     import DomEvents                = imatic.view.ajaxify.event.DomEvents;
     import EventInterface           = imatic.view.ajaxify.event.EventInterface;
     import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
+    import RequestAction            = imatic.view.ajaxify.action.RequestAction;
     import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
     import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
     import CssClasses               = imatic.view.ajaxify.css.CssClasses;
     import ModalSize                = imatic.view.ajaxify.modal.ModalSize;
     import Modal                    = imatic.view.ajaxify.modal.Modal;
     import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
+    import HistoryHandler           = imatic.view.ajaxify.history.HistoryHandler;
+    import RequestHelper            = imatic.view.ajaxify.ajax.RequestHelper;
 
     /**
      * Container not found exception
@@ -41,6 +47,11 @@ module imatic.view.ajaxify.container {
      */
     export interface ContainerInterface
     {
+        /**
+         * Reset the container
+         */
+        reset: () => void;
+
         /**
          * Destructor
          */
@@ -67,6 +78,11 @@ module imatic.view.ajaxify.container {
         getElement: () => HTMLElement;
 
         /**
+         * Get UID of current request, if any
+         */
+        getCurrentRequestUid: () => number;
+
+        /**
          * Handle action
          */
         handleAction: (action: ActionInterface) => void;
@@ -79,7 +95,7 @@ module imatic.view.ajaxify.container {
         /**
          * Set container's content
          */
-        setContent: (content: any) => void;
+        setContent: (content: any, usedContentSelector?: string) => void;
 
         /**
          * Set container's HTML content
@@ -305,7 +321,9 @@ module imatic.view.ajaxify.container {
      */
     export class Container implements ContainerInterface
     {
-        public currentAction: ActionInterface;
+        private currentAction: ActionInterface;
+        private currentRequestUid: number;
+        private currentContentSelector: string;
 
         /**
          * Constructor
@@ -316,6 +334,30 @@ module imatic.view.ajaxify.container {
             public jQuery: any,
             public element: HTMLElement = null
         ) {}
+
+        /**
+         * Reset the container
+         */
+        reset(): void {
+            var config = this.getConfiguration();
+            var element = this.getElement();
+            var elementId = (element ? jQuery(element).attr('id') : null);
+
+            if (this.currentRequestUid && config['history'] && elementId) {
+                this.currentRequestUid = null;
+
+                var requestData = RequestHelper.parseRequestString(config['historyInitial']);
+
+                var action = new RequestAction(null, {
+                    url: requestData.url,
+                    method: requestData.method,
+                    data: requestData.data,
+                    contentSelector: requestData.contentSelector,
+                });
+
+                this.handleAction(action);
+            }
+        }
 
         /**
          * Destructor
@@ -360,6 +402,13 @@ module imatic.view.ajaxify.container {
         }
 
         /**
+         * Get UID of current request, if any
+         */
+        getCurrentRequestUid(): number {
+            return this.currentRequestUid;
+        }
+
+        /**
          * Handle action
          */
         handleAction(action: ActionInterface): void {
@@ -381,25 +430,46 @@ module imatic.view.ajaxify.container {
                 }
             }, 100);
 
-            action.events.addCallback('complete', (event: EventInterface): void => {
-                // remove busy class
-                if (this.element) {
-                    jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
-                }
-
-                // handle flash messages
-                if (event['response'].flashes.length > 0) {
-                    this.handleFlashes(event['response'].flashes);
-                } else if (!event['response'].valid && !event['response'].aborted) {
-                    this.handleFlashes([{
-                        type: 'danger',
-                        message: 'An error occured'
-                    }]);
-                }
-            }, 100);
+            action.events.addCallback('complete', this.handleActionCompletion, 100);
 
             // execute action
             action.execute(this);
+        }
+
+        /**
+         * Handle action's completion
+         */
+        handleActionCompletion = (event: EventInterface): void => {
+            var config = this.getConfiguration();
+            var element = this.getElement();
+            var elementId = (element ? jQuery(element).attr('id') : null);
+
+            // update current request UID
+            this.currentRequestUid = event['response'].request.uid;
+
+            // remove busy class
+            if (this.element) {
+                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+            }
+
+            // handle flash messages
+            if (event['response'].flashes.length > 0) {
+                this.handleFlashes(event['response'].flashes);
+            } else if (!event['response'].valid && !event['response'].aborted) {
+                this.handleFlashes([{
+                    type: 'danger',
+                    message: 'An error occured'
+                }]);
+            }
+
+            // handle history
+            if (config['history'] && event['initiator'] && elementId) {
+                HistoryHandler.containerStateChange(
+                    elementId,
+                    event['response'],
+                    this.currentContentSelector
+                );
+            }
         }
 
         /**
@@ -427,7 +497,9 @@ module imatic.view.ajaxify.container {
         /**
          * Set container's content
          */
-        setContent(content: any): void {
+        setContent(content: any, usedContentSelector?: string): void {
+            this.currentContentSelector = usedContentSelector;
+
             jQuery(this.element)
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
@@ -445,6 +517,7 @@ module imatic.view.ajaxify.container {
             if (!contentSelector) {
                 contentSelector = this.getHtmlContentSelector();
             }
+
             if (contentSelector) {
                 if (fragment.contains(contentSelector)) {
                     content = fragment.find(contentSelector);
@@ -455,7 +528,7 @@ module imatic.view.ajaxify.container {
                 content = fragment.root();
             }
 
-            this.setContent(content);
+            this.setContent(content, contentSelector);
         }
     }
 

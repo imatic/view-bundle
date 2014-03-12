@@ -26,7 +26,9 @@
             <li><a href="#modals">Modal dialogs</a></li>
             <li><a href="#flashes">Flash messages</a></li>
             <li><a href="#void">Void containers</a></li>
+            <li><a href="#history">Browser history</a></li>
             <li><a href="#css">CSS classes</a></li>
+            <li><a href="#request-strings">Request strings</a></li>
         </ol>
 
 
@@ -47,6 +49,33 @@
             I am a container
         </div>
         {% endexample %}
+
+        <h4>Supported attributes</h4>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Meaning</th>
+                    <th>Possible values</th>
+                    <th>Default</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>data-history</code></td>
+                    <td>enable <a href="#history">browser history</a> for this container</td>
+                    <td>true or false</td>
+                    <td>false</td>
+                </tr>
+                <tr>
+                    <td><code>data-history-initial</code></td>
+                    <td>initial request for history</td>
+                    <td><a href="#request-strings">a request string</a></td>
+                    <td>current URL as a GET request</td>
+                </tr>
+            </tbody>
+        </table>
 
 
         <hr>
@@ -330,6 +359,7 @@
                 href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
                 data-target="modal"
                 data-modal-title="h2"
+                data-modal-on-close=""
             >
                 Modal link
             </a>
@@ -380,22 +410,9 @@
                 </tr>
                 <tr>
                     <td><code>data-modal-on-close</code></td>
-                    <td>action to perform when the modal closes</td>
-                    <td>
-                        <table class="table table-condensed table-bordered table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>reload</th>
-                                    <td>reload current URL in the trigger widget's context</td>
-                                </tr>
-                                <tr>
-                                    <th>load:<code>...</code></th>
-                                    <td>load given URL in the trigger widget's context</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td>no action</td>
+                    <td>perform a request when the modal is closed</td>
+                    <td><a href="#request-strings">a request string</a></td>
+                    <td>-</td>
                 </tr>
                 <tr>
                     <td><code>data-modal-close-on-form-success</code></td>
@@ -487,6 +504,26 @@
         <hr>
 
 
+        <!-- history -->
+        <h3 id="history">Browser history</h3>
+
+        <p>
+            Containers will affect browser history if the <code>data-history</code>
+            option is set to <code>true</code>.
+            (See <a href="#containers">supported attributes in the Containers section</a>).
+        </p>
+
+        {% example %}
+        <div id="history-example" data-role="container" data-history="true">
+            <a href="{{ path('imatic_view_demo_ajaxify_index_1', {counter: next_counter_value}) }}">Click me</a>
+            <p>{{ current_counter_value }}</p>
+        </div>
+        {% endexample %}
+
+
+        <hr>
+
+
         <!-- css -->
         <h3 id="css">CSS classes</h3>
 
@@ -512,6 +549,74 @@
                 </tr>
             </tbody>
         </table>
+
+
+        <hr>
+
+
+        <!-- request strings -->
+        <h3 id="request-strings">Request strings</h3>
+
+        <p>
+            Some options have the form of a &quot;request string&quot;. Abstract
+            definition of the format is:
+        </p>
+
+        <p>
+            <code>URL</code>;
+            <code>method</code>;
+            <code>content selector</code>
+        </p>
+
+        <p>
+            All of the segments can be empty and have default values.
+        </p>
+        
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Segment</th>
+                    <th>Meaning</th>
+                    <th>Default</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>URL</code></td>
+                    <td>the URL to load, can be empty (= current URL)</td>
+                    <td>empty</td>
+                </tr>
+                <tr>
+                    <td><code>method</code></td>
+                    <td>the request method (POST, GET, ...)</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td><code>content selector</code></td>
+                    <td>response content selector</td>
+                    <td>the container's ID if any</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Examples</h4>
+
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Syntax</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>/example</code></td><td>GET /example (default selector)</td></tr>
+                <tr><td><code>/foo/bar;POST</code></td><td>POST /foo/bar (default selector)</td></tr>
+                <tr><td><code>/colors/orange;GET;#colors</code></td><td>GET /colors/orange (find #colors)</td></tr>
+                <tr><td><code>;POST</code></td><td>POST current URL (default selector)</td></tr>
+                <tr><td><code>;;#container</code></td><td>GET current URL (find #container)</td></tr>
+                <tr><td>(an empty string)</td><td>GET current URL (default selector)</td></tr>
+            </tbody>
+        </ul>
 
     </div>
 

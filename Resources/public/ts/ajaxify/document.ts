@@ -99,8 +99,9 @@ module imatic.view.ajaxify.document {
             jQuery(this.document)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
-                .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
                 .on(DomEvents.ACTION, this.onAction)
+                .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
+                .on(DomEvents.HISTORY_INITIAL_STATE, this.onHistoryInitialState)
             ;
         }
 
@@ -161,6 +162,23 @@ module imatic.view.ajaxify.document {
         }
 
         /**
+         * Handle action event
+         */
+        private onAction = (event: JQueryEventObject, ...args: any[]): any => {
+            var element = <HTMLElement> event.target;
+
+            try {
+                var container = this.containerHandler.findInstance(element, false);
+
+                container.handleAction(<ActionInterface> arguments[1]);
+            } catch (e) {
+                if (!(e instanceof ContainerNotFoundException)) {
+                    throw e;
+                }
+            }
+        }
+
+        /**
          * Handle beforeContentUpdate event
          */
         private onBeforeContentUpdate = (event: JQueryEventObject): void => {
@@ -180,19 +198,13 @@ module imatic.view.ajaxify.document {
         };
 
         /**
-         * Handle action event
+         * Handle onHistoryInitialState event
          */
-        private onAction = (event: JQueryEventObject, ...args: any[]): any => {
-            var element = <HTMLElement> event.target;
-
-            try {
-                var container = this.containerHandler.findInstance(element, false);
-
-                container.handleAction(<ActionInterface> arguments[1]);
-            } catch (e) {
-                if (!(e instanceof ContainerNotFoundException)) {
-                    throw e;
-                }
+        private onHistoryInitialState = (event: JQueryEventObject): void => {
+            // reset() all living container instances in the document
+            var containers = this.containerHandler.findInstances(this.document.body);
+            for (var i = 0; i < containers.length; ++i) {
+                containers[i].reset();
             }
         }
 

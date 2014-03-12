@@ -13,12 +13,14 @@ class AjaxifyController extends Controller
 {
     /**
      * @Config\Route()
+     * @Config\Route("/counter/{counter}")
      * @Config\Template()
      */
-    public function indexAction()
+    public function indexAction($counter = 0)
     {
         return array(
-            'value' => uniqid('', true),
+            'current_counter_value' => $counter,
+            'next_counter_value' => $counter + 1,
         );
     }
 
@@ -29,7 +31,7 @@ class AjaxifyController extends Controller
     public function ajaxTestAction()
     {
         return array(
-            'value' => uniqid('', true),
+            'uniqid' => uniqid('', true),
         );
     }
 

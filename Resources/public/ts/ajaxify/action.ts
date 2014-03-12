@@ -13,8 +13,8 @@ module imatic.view.ajaxify.action {
     "use_strict";
 
     import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
-    import AjaxRequest              = imatic.view.ajaxify.ajax.AjaxRequest;
-    import ServerResponse           = imatic.view.ajaxify.ajax.ServerResponse;
+    import Request                  = imatic.view.ajaxify.ajax.Request;
+    import Response                 = imatic.view.ajaxify.ajax.Response;
     import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
     import EventDispatcherInterface = imatic.view.ajaxify.event.EventDispatcherInterface;
     import EventDispatcher          = imatic.view.ajaxify.event.EventDispatcher;
@@ -50,24 +50,23 @@ module imatic.view.ajaxify.action {
     }
 
     /**
-     * Load HTML action
+     * Request action
      *
      * Loads remote contents.
      */
-    export class LoadHtmlAction implements ActionInterface
+    export class RequestAction implements ActionInterface
     {
-        public events = new EventDispatcher();
-
-        private complete = false;
-        private successful = false;
-        private request: AjaxRequest;
+        events = new EventDispatcher();
+        complete = false;
+        successful = false;
+        request: Request;
 
         /**
          * Constructor
          */
         constructor(
-            private initiator: WidgetInterface,
-            private options: {
+            public initiator: WidgetInterface,
+            public options: {
                 url: string;
                 method: string;
                 data: any;
@@ -93,46 +92,45 @@ module imatic.view.ajaxify.action {
          * Execute the action
          */
         execute(container: ContainerInterface): void {
-            this.request = new AjaxRequest();
+            this.request = new Request(
+                this.options.url,
+                this.options.method,
+                this.options.data
+            );
 
             this.events.dispatch('begin', new Event({
                 action: this,
                 initiator: this.initiator,
             }));
 
-            this.request.execute(
-                this.options.url,
-                this.options.method,
-                this.options.data,
-                (response: ServerResponse): void => {
-                    this.complete = true;
-                    this.successful = response.successful;
+            this.request.execute((response: Response): void => {
+                this.complete = true;
+                this.successful = response.successful;
 
-                    // handle response
-                    if (response.valid) {
-                        var event = this.events.dispatch('apply', new Event({
-                            action: this,
-                            initiator: this.initiator,
-                            response: response,
-                            proceed: true,
-                        }));
-
-                        if (event['proceed']) {
-                            container.setHtml(
-                                response.data,
-                                this.options.contentSelector
-                            );
-                        }
-                    }
-
-                    // complete event
-                    this.events.dispatch('complete', new Event({
+                // handle response
+                if (response.valid) {
+                    var event = this.events.dispatch('apply', new Event({
                         action: this,
                         initiator: this.initiator,
                         response: response,
+                        proceed: true,
                     }));
+
+                    if (event['proceed']) {
+                        container.setHtml(
+                            response.data,
+                            this.options.contentSelector
+                        );
+                    }
                 }
-            );
+
+                // complete event
+                this.events.dispatch('complete', new Event({
+                    action: this,
+                    initiator: this.initiator,
+                    response: response,
+                }));
+            });
         }
 
         /**
@@ -140,7 +138,7 @@ module imatic.view.ajaxify.action {
          */
         abort(): void {
             if (!this.complete) {
-                this.request.xhr.abort();
+                this.request.getXhr().abort();
             }
         }
     }
@@ -159,7 +157,7 @@ module imatic.view.ajaxify.action {
          */
         constructor(
             private initiator: WidgetInterface,
-            private response: ServerResponse,
+            private response: Response,
             private contentSelector?: string
         ) {}
 
