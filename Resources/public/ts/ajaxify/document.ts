@@ -41,12 +41,12 @@ module imatic.view.ajaxify.document {
      */
     export class HTMLDocumentHandler
     {
-        private document: HTMLDocument;
-        private configBuilder: ConfigurationBuilder;
-        private containerHandler: ContainerHandler;
-        private widgetHandler: WidgetHandler;
-        private linkHandler: LinkHandler;
-        private formHandler: FormHandler;
+        document: HTMLDocument;
+        configBuilder: ConfigurationBuilder;
+        containerHandler: ContainerHandler;
+        widgetHandler: WidgetHandler;
+        linkHandler: LinkHandler;
+        formHandler: FormHandler;
 
         /**
          * Constructor
@@ -101,7 +101,6 @@ module imatic.view.ajaxify.document {
                 .on('submit', this.onSubmit)
                 .on(DomEvents.ACTION, this.onAction)
                 .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
-                .on(DomEvents.HISTORY_INITIAL_STATE, this.onHistoryInitialState)
             ;
         }
 
@@ -196,17 +195,6 @@ module imatic.view.ajaxify.document {
                 containers[i].destroy();
             }
         };
-
-        /**
-         * Handle onHistoryInitialState event
-         */
-        private onHistoryInitialState = (event: JQueryEventObject): void => {
-            // reset() all living container instances in the document
-            var containers = this.containerHandler.findInstances(this.document.body);
-            for (var i = 0; i < containers.length; ++i) {
-                containers[i].reset();
-            }
-        }
 
         /**
          * Get container context for given element

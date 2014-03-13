@@ -14,10 +14,12 @@ module imatic.view.ajaxify.history {
 
     "use_strict";
 
-    import Response             = imatic.view.ajaxify.ajax.Response;
+    import Ajaxify              = imatic.view.ajaxify;
+    import RequestHelper        = imatic.view.ajaxify.ajax.RequestHelper;
     import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
     import DomEvents            = imatic.view.ajaxify.event.DomEvents;
+    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
 
@@ -29,25 +31,118 @@ module imatic.view.ajaxify.history {
     export var History = <Historyjs> window['History'];
 
     /**
+     * Container state interface
+     */
+    interface ContainerStateInterface
+    {
+        id: string;
+        request: RequestInfo;
+    }
+
+    /**
+     * History data interface
+     */
+    interface HistoryDataInterface
+    {
+        containerStates: ContainerStateInterface[];
+    }
+
+    /**
      * History handler
      */
     export class HistoryHandler
     {
         /**
-         * Handle container state change
+         * Initialize the handler
          */
-        static containerStateChange(containerId: string, response: Response, currentContentSelector: string): void {
+        static initialize(): void {
+            History.replaceState(
+                HistoryHandler.getCurrentData(),
+                window.document.title,
+                window.location.toString()
+            );
+        }
+
+        /**
+         * Handle browser state change
+         */
+        static onStateChange(): void {
+            var state = History.getState();
+            var documentHandler = Ajaxify.getDocumentHandler();
+            var containerHandler = documentHandler.containerHandler;
+
+            if (state.data && state.data.containerStates) {
+                for (var i = 0; i < state.data.containerStates.length; ++i) {
+                    var containerState = state.data.containerStates[i];
+                    var containerElement = documentHandler.document.getElementById(containerState.id);
+
+                    if (containerElement && containerHandler.hasInstance(containerElement)) {
+                        var container = containerHandler.getInstance(containerElement);
+
+                        // get request information
+                        var requestInfo;
+                        if (containerState.request) {
+                            // from state
+                            requestInfo = containerState.request;
+                        } else {
+                            // initial
+                            requestInfo = RequestHelper.parseRequestString(
+                                container.getConfiguration()['historyInitial']
+                            );
+                        }
+
+                        // trigger action
+                        var action = HistoryStateChangeAction.createFromRequestInfo(requestInfo);
+                        jQuery(containerElement).trigger(
+                            DomEvents.ACTION,
+                            [action]
+                        );
+                    }
+                }
+            }
+        }
+
+        /**
+         * Record container state change
+         */
+        static containerStateChange(containerId: string, title: string, requestInfo: RequestInfo): void {
             if (History) {
                 History.pushState(
-                    {
-                        ajaxifyContainerId: containerId,
-                        ajaxifyRequestInfo: response.request,
-                        ajaxifyContentSelector: currentContentSelector,
-                    },
-                    response.fullTitle || window.document.title,
-                    response.request.url
+                    HistoryHandler.getCurrentData(),
+                    title || window.document.title,
+                    requestInfo.url
                 );
             }
+        }
+
+        /**
+         * Get current data
+         */
+        static getCurrentData(): any {
+            var data: HistoryDataInterface = {containerStates: []};
+            var containerHandler = Ajaxify.getDocumentHandler().containerHandler;
+            var containerElements = containerHandler.findElements();
+
+            // find all containers with enabled history
+            for (var i = 0; i < containerElements.length; ++i) {
+                var containerElementId = containerHandler.getId(containerElements[i]);
+                if (containerElementId && jQuery(containerElements[i]).data('history')) {
+                    // store current state
+                    var currentContainerRequest;
+                    if (containerHandler.hasInstance(containerElements[i])) {
+                        currentContainerRequest = containerHandler.getInstance(containerElements[i]).getCurrentRequest();
+                    } else {
+                        currentContainerRequest = null;
+                    }
+
+                    data.containerStates.push({
+                        id: containerElementId,
+                        request: currentContainerRequest,
+                    });
+                }
+            }
+
+            return data;
         }
     }
 
@@ -61,13 +156,8 @@ module imatic.view.ajaxify.history {
         /**
          * Create from request info
          */
-        static createFromRequestInfo(requestInfo: RequestInfo, contentSelector: string): HistoryStateChangeAction {
-            var action = new HistoryStateChangeAction(null, {
-                url: requestInfo.url,
-                method: requestInfo.method,
-                data: requestInfo.data,
-                contentSelector: contentSelector,
-            });
+        static createFromRequestInfo(requestInfo: RequestInfo): HistoryStateChangeAction {
+            var action = new HistoryStateChangeAction(null, requestInfo);
 
             action.requestUid = requestInfo.uid;
 
@@ -78,12 +168,19 @@ module imatic.view.ajaxify.history {
          * Execute the action
          */
         execute(container: ContainerInterface): void {
-            // check container's current request UID
-            if (this.requestUid && this.requestUid !== container.getCurrentRequestUid()) {
-                // the current UID request is different, proceed
+            // check container's current request
+            var currentRequest = container.getCurrentRequest();
+            if (this.requestUid != (currentRequest ? currentRequest.uid : null)) {
+
+                // set request UID to NULL if reverting to initial state
+                if (!this.requestUid) {
+                    this.events.addCallback('complete', (event: EventInterface): void => {
+                        event['container'].getCurrentRequest().uid = null;
+                    }, -100);
+                }
+
                 super.execute(container);
             } else {
-                // the current UID request is the same, do nothing
                 this.complete = true;
                 this.successful = true;
             }
@@ -93,48 +190,11 @@ module imatic.view.ajaxify.history {
     // initialize on document ready
     if (History) {
         jQuery(window.document).ready(function () {
-
-            // setup initial state
-            History.replaceState(
-                {},
-                window.document.title,
-                window.location.toString()
-            );
+            // initialize
+            HistoryHandler.initialize();
 
             // bind to the "statechange" event
-            History.Adapter.bind(window, 'statechange', function () {
-                var target, event, eventArgs = [];
-                var state = History.getState();
-
-                // determine type of state
-                if (state.data && state.data.ajaxifyContainerId) {
-                    console.log('container state change');
-                    // container state change
-                    target = jQuery('#' + state.data.ajaxifyContainerId);
-                    if (target.length > 0) {
-                        event = DomEvents.ACTION;
-                        eventArgs.push(
-                            HistoryStateChangeAction.createFromRequestInfo(
-                                state.data.ajaxifyRequestInfo,
-                                state.data.ajaxifyContentSelector
-                            )
-                        );
-                    }
-                } else {
-                    // detect initial state
-                    // TODO: detection
-                    target = jQuery(window.document.body);
-                    event = DomEvents.HISTORY_INITIAL_STATE;
-                }
-
-                // trigger event
-                if (event) {
-                    target.trigger(
-                        event,
-                        eventArgs
-                    );
-                }
-            });
+            History.Adapter.bind(window, 'statechange', HistoryHandler.onStateChange);
         });
     }
 

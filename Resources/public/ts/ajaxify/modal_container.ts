@@ -127,12 +127,12 @@ module imatic.view.ajaxify.modalContainer {
          */
         create(trigger: HTMLElement): ContainerInterface {
             var container = new ModalContainer(
+                this.containerHandler,
                 this.configBuilder,
                 this.document,
                 null
             );
 
-            container.containerHandler = this.containerHandler;
             container.widgetHandler = this.widgetHandler;
             container.originalTrigger = trigger;
 
@@ -145,7 +145,6 @@ module imatic.view.ajaxify.modalContainer {
      */
     export class ModalContainer extends Container
     {
-        containerHandler: ContainerHandler;
         widgetHandler: WidgetHandler;
         originalTrigger: HTMLElement;
 
@@ -182,14 +181,9 @@ module imatic.view.ajaxify.modalContainer {
                 this.resendResponse = null;
             } else if (onClose) {
                 // load on close
-                var requestData = RequestHelper.parseRequestString(onClose);
+                var requestInfo = RequestHelper.parseRequestString(onClose);
 
-                action = new RequestAction(originalTriggerWidget, {
-                    url: requestData.url,
-                    method: requestData.method,
-                    data: requestData.data,
-                    contentSelector: requestData.contentSelector,
-                });
+                action = new RequestAction(originalTriggerWidget, requestInfo);
             }
 
             if (action) {

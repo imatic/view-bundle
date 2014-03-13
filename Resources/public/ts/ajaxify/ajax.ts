@@ -1,4 +1,5 @@
 /// <reference path="message.ts"/>
+/// <reference path="html.ts"/>
 /// <reference path="jquery.ts"/>
 
 /**
@@ -11,7 +12,18 @@ module imatic.view.ajaxify.ajax {
     "use_strict";
 
     import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
+    import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
     import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
+
+    /**
+     * Data types
+     */
+    export enum DataType
+    {
+        TEXT,
+        HTML,
+        JSON
+    }
 
     /**
      * Request helper
@@ -23,13 +35,9 @@ module imatic.view.ajaxify.ajax {
         /**
          * Parse request string
          */
-        static parseRequestString(requestString: string): {
-            url: string;
-            method: string;
-            data: any;
-            contentSelector: string;
-        } {
+        static parseRequestString(requestString: string): RequestInfo {
             var parts;
+            var requestInfo = new RequestInfo();
 
             if (typeof requestString === 'string') {
                 parts = requestString.split(';', 3);
@@ -37,12 +45,13 @@ module imatic.view.ajaxify.ajax {
                 parts = [];
             }
 
-            return {
-                url: parts[0] || '',
-                method: parts[1] || 'GET',
-                data: null,
-                contentSelector: parts[2] || null,
-            };
+            requestInfo.uid = null;
+            requestInfo.url = parts[0] || '';
+            requestInfo.method = parts[1] || 'GET';
+            requestInfo.data = null;
+            requestInfo.contentSelector = parts[2] || null;
+            
+            return requestInfo;
         }
     }
 
@@ -64,9 +73,14 @@ module imatic.view.ajaxify.ajax {
         constructor(
             private url?: string,
             private method?: string,
-            private data?: any
+            private data?: any,
+            private dataType?: DataType,
+            private contentSelector?: string
         ) {
             this.uid = ++Request.uidSequence;
+            if (!this.dataType) {
+                this.dataType = DataType.HTML;
+            }
         }
 
         /**
@@ -83,31 +97,45 @@ module imatic.view.ajaxify.ajax {
          */
         getXhr(): XMLHttpRequest {
             if (!this.xhr) {
-                throw new Error('Request not executed - XHR is not available');
+                throw new Error('Request not yet executed - XHR is not available');
             }
 
             return this.xhr;
         }
 
         /**
-         * Get request URL
+         * Get URL
          */
         getUrl(): string {
             return this.url || '';
         }
 
         /**
-         * Get request method
+         * Get method
          */
         getMethod(): string {
             return this.method ? this.method.toUpperCase() : 'GET';
         }
 
         /**
-         * Get request data
+         * Get data
          */
         getData(): any {
             return this.data || {};
+        }
+
+        /**
+         * Get data type
+         */
+        getDataType(): DataType {
+            return this.dataType;
+        }
+
+        /**
+         * Get content selector
+         */
+        getContentSelector(): any {
+            return this.contentSelector || null;
         }
 
         /**
@@ -120,6 +148,7 @@ module imatic.view.ajaxify.ajax {
             requestInfo.url = this.getUrl();
             requestInfo.method = this.getMethod();
             requestInfo.data = this.getData();
+            requestInfo.contentSelector = this.getContentSelector();
             
             return requestInfo;
         }
@@ -174,6 +203,7 @@ module imatic.view.ajaxify.ajax {
         url: string;
         method: string;
         data: any;
+        contentSelector: string;
     }
 
     /**
@@ -187,22 +217,64 @@ module imatic.view.ajaxify.ajax {
         create(request: Request): Response {
             var response = new Response();
             var xhr = request.getXhr();
+            var data;
+            var flashes = [];
 
+            // process data according to it's expected type
+            switch (request.getDataType()) {
+                case DataType.TEXT:
+                    data = xhr.responseText;
+                    break;
+                case DataType.HTML:
+                    data = this.processHtmlData(xhr.responseText, request.getContentSelector());
+                    break;
+                case DataType.JSON:
+                    if (xhr.responseText) {
+                        data = jQuery.parseJSON(xhr.responseText);
+                    } else {
+                        data = null;
+                    }
+                    break;
+                default:
+                    throw new Error('Invalid data type');
+            }
+
+            // process flash messages
+            var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
+            if (flashesJson) {
+                flashes = <FlashMessageInterface[]> jQuery.parseJSON(flashesJson);
+            }
+
+            // populate the response object
             response.title = xhr.getResponseHeader('X-Title') || '';
             response.fullTitle = xhr.getResponseHeader('X-Full-Title') || '';
-            response.flashes = [];
-            response.data = xhr.responseText;
+            response.data = data;
+            response.dataType = request.getDataType();
             response.valid = this.isValidStatus(xhr.status);
             response.successful = this.isSuccessfulStatus(xhr.status);
             response.aborted = (0 === xhr.status && 'abort' === xhr.statusText);
             response.request = request.getInfo();
-
-            var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
-            if (flashesJson) {
-                response.flashes = <FlashMessageInterface[]> jQuery.parseJSON(flashesJson);
-            }
+            response.flashes = flashes;
 
             return response;
+        }
+
+        /**
+         * Process HTML data
+         */
+        private processHtmlData(html: string, contentSelector: string): JQuery {
+            var result;
+            var fragment = new HtmlFragment(html);
+
+            if (contentSelector && fragment.contains(contentSelector)) {
+                result = fragment.find(contentSelector);
+            }
+
+            if (!result) {
+                result = fragment.root();
+            }
+
+            return result;
         }
 
         /**
@@ -231,6 +303,7 @@ module imatic.view.ajaxify.ajax {
         fullTitle: string;
         flashes: FlashMessageInterface[];
         data: any;
+        dataType: DataType;
         successful: boolean;
         valid: boolean;
         aborted: boolean;

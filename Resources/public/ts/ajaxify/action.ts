@@ -13,6 +13,7 @@ module imatic.view.ajaxify.action {
     "use_strict";
 
     import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
+    import DataType                 = imatic.view.ajaxify.ajax.DataType;
     import Request                  = imatic.view.ajaxify.ajax.Request;
     import Response                 = imatic.view.ajaxify.ajax.Response;
     import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
@@ -52,7 +53,7 @@ module imatic.view.ajaxify.action {
     /**
      * Request action
      *
-     * Loads remote contents.
+     * Loads remote HTML contents.
      */
     export class RequestAction implements ActionInterface
     {
@@ -95,12 +96,15 @@ module imatic.view.ajaxify.action {
             this.request = new Request(
                 this.options.url,
                 this.options.method,
-                this.options.data
+                this.options.data,
+                DataType.HTML,
+                this.options.contentSelector || container.getContentSelector()
             );
 
             this.events.dispatch('begin', new Event({
                 action: this,
                 initiator: this.initiator,
+                container: container,
             }));
 
             this.request.execute((response: Response): void => {
@@ -112,15 +116,13 @@ module imatic.view.ajaxify.action {
                     var event = this.events.dispatch('apply', new Event({
                         action: this,
                         initiator: this.initiator,
+                        container: container,
                         response: response,
                         proceed: true,
                     }));
 
                     if (event['proceed']) {
-                        container.setHtml(
-                            response.data,
-                            this.options.contentSelector
-                        );
+                        container.setContent(response.data);
                     }
                 }
 
@@ -128,6 +130,7 @@ module imatic.view.ajaxify.action {
                 this.events.dispatch('complete', new Event({
                     action: this,
                     initiator: this.initiator,
+                    container: container,
                     response: response,
                 }));
             });
@@ -146,7 +149,7 @@ module imatic.view.ajaxify.action {
     /**
      * Response action
      *
-     * Uses already existing response.
+     * Uses already existing HTML response.
      */
     export class ResponseAction implements ActionInterface
     {
@@ -159,7 +162,11 @@ module imatic.view.ajaxify.action {
             private initiator: WidgetInterface,
             private response: Response,
             private contentSelector?: string
-        ) {}
+        ) {
+            if (DataType.HTML !== response.dataType) {
+                throw new Error('Expected response with data type "HTML"');
+            }
+        }
 
         /**
          * See if the action is complete
@@ -182,6 +189,7 @@ module imatic.view.ajaxify.action {
             this.events.dispatch('begin', new Event({
                 action: this,
                 initiator: this.initiator,
+                container: container,
             }));
 
             // handle response
@@ -189,15 +197,13 @@ module imatic.view.ajaxify.action {
                 var event = this.events.dispatch('apply', new Event({
                     action: this,
                     initiator: this.initiator,
+                    container: container,
                     response: this.response,
                     proceed: true,
                 }));
 
                 if (event['proceed']) {
-                    container.setHtml(
-                        this.response.data,
-                        this.contentSelector
-                    );
+                    container.setContent(this.response.data);
                 }
             }
 
@@ -205,6 +211,7 @@ module imatic.view.ajaxify.action {
             this.events.dispatch('complete', new Event({
                 action: this,
                 initiator: this.initiator,
+                container: container,
                 response: this.response,
             }));
         }

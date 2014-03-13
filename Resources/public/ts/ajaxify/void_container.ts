@@ -51,7 +51,7 @@ module imatic.view.ajaxify.voidContainer {
             if (this.containerHandler.hasInstance(element)) {
                 container = this.containerHandler.getInstance(element);
             } else {
-                container = new VoidContainer(this.configBuilder, this.document, null);
+                container = new VoidContainer(this.containerHandler, this.configBuilder, this.document, null);
                 this.containerHandler.setInstance(element, container);
             }
 

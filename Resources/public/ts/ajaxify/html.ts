@@ -21,7 +21,7 @@ module imatic.view.ajaxify.html {
         /**
          * Constructor
          */
-        constructor(html: string, jQuery: any) {
+        constructor(html: string) {
             this.dom = jQuery('<div />')
                 .append(jQuery.parseHTML(html))
             ;
@@ -30,14 +30,14 @@ module imatic.view.ajaxify.html {
         /**
          * Get the root element
          */
-        root(): any {
+        root(): JQuery {
             return this.dom;
         }
 
         /**
          * Get all elements
          */
-        all(): any {
+        all(): JQuery {
             return this.dom.contents();
         }
 
@@ -51,7 +51,7 @@ module imatic.view.ajaxify.html {
         /**
          * Get set of elements matching given selector
          */
-        find(selector: string): any {
+        find(selector: string): JQuery {
             return this.dom.find(selector);
         }
     }

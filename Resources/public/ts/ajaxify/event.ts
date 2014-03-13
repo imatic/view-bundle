@@ -21,11 +21,6 @@ module imatic.view.ajaxify.event {
          * Event triggered before contents of an element are replaced or removed
          */
         static BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.before_content_update';
-
-        /**
-         * Event triggered by code to signal history initial state restoration
-         */
-        static HISTORY_INITIAL_STATE = 'imatic.view.ajaxify.event.history_initial_state';
     }
 
     /**

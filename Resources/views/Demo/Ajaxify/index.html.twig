@@ -508,11 +508,27 @@
         <h3 id="history">Browser history</h3>
 
         <p>
-            Containers will affect browser history if the <code>data-history</code>
-            option is set to <code>true</code>.
-            (See <a href="#containers">supported attributes in the Containers section</a>).
+            Containers will affect browser history if all of the following conditions are met:
         </p>
 
+        <ul>
+            <li>the container has an <code>id</code> attribute</li>
+            <li>the <code>data-history</code> attribute is set to <code>true</code></li>
+            <li><a href="https://github.com/browserstate/history.js">History.js</a> is available</li>
+        </ul>
+
+        <p>
+            See <a href="#containers">supported attributes in the Containers section</a>.
+        </p>
+
+
+        <div class="alert alert-info">
+            <p>
+                Anchors may interfere with correct behaviour. See <a href="https://github.com/browserstate/history.js/issues/276">https://github.com/browserstate/history.js/issues/276</a>.
+            </p>
+        </div>
+
+        
         {% example %}
         <div id="history-example" data-role="container" data-history="true">
             <a href="{{ path('imatic_view_demo_ajaxify_index_1', {counter: next_counter_value}) }}">Click me</a>
