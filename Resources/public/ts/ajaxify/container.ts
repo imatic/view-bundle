@@ -350,7 +350,6 @@ module imatic.view.ajaxify.container {
                 this.containerHandler,
                 this.configBuilder,
                 this.document,
-                jQuery,
                 element
             );
         }
@@ -371,7 +370,6 @@ module imatic.view.ajaxify.container {
             public containerHandler: ContainerHandler,
             public configBuilder: ConfigurationBuilder,
             public document: HTMLDocument,
-            public jQuery: any,
             public element: HTMLElement = null
         ) {
             this.currentRequest = null;
