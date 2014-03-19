@@ -12,8 +12,8 @@
     {% set columns = imatic_view_table_columns(columns | default([])) %}
 
     {% spaceless %}
-        <div class="imatic-view-table table-responsive">
-        <table class="table"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
+        <div class="imatic-view-table table-responsive"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
+        <table class="table">
             <caption></caption>
             {% block table_head %}
                 <thead>
