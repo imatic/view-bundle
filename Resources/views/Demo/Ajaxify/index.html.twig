@@ -421,9 +421,9 @@
                     <td>true</td>
                 </tr>
                 <tr>
-                    <td><code>data-modal-resend-form-response</code></td>
+                    <td><code>data-modal-forward-form-response</code></td>
                     <td>
-                        <p>resend successful form response that was submitted into the modal's container</p>
+                        <p>forward successful form response that was submitted into the modal's container</p>
                         <ul>
                             <li>the action is triggered in the original widget's context</li>
                             <li>the action is trigered after the modal is closed</li>
@@ -579,13 +579,13 @@
         </p>
 
         <p>
+            <code>method</code>
             <code>URL</code>;
-            <code>method</code>;
-            <code>content selector</code>
+            <code>content-selector</code>
         </p>
 
         <p>
-            All of the segments can be empty and have default values.
+            All of the segments are optional and have default values.
         </p>
         
         <table class="table table-bordered">
@@ -598,17 +598,17 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><code>URL</code></td>
-                    <td>the URL to load, can be empty (= current URL)</td>
-                    <td>empty</td>
-                </tr>
-                <tr>
                     <td><code>method</code></td>
                     <td>the request method (POST, GET, ...)</td>
                     <td>GET</td>
                 </tr>
                 <tr>
-                    <td><code>content selector</code></td>
+                    <td><code>URL</code></td>
+                    <td>the URL to load, can be empty or the <code>@current</code> keyword (both equal to current URL)</td>
+                    <td>current</td>
+                </tr>
+                <tr>
+                    <td><code>content-selector</code></td>
                     <td>response content selector</td>
                     <td>the container's ID if any</td>
                 </tr>
@@ -617,22 +617,24 @@
 
         <h4>Examples</h4>
 
-        <table class="table table-bordered table-condensed">
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Syntax</th>
-                    <th>Result</th>
+                    <th>Example</th>
+                    <th>Preferred syntax</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td><code>/example</code></td><td>GET /example (default selector)</td></tr>
-                <tr><td><code>/foo/bar;POST</code></td><td>POST /foo/bar (default selector)</td></tr>
-                <tr><td><code>/colors/orange;GET;#colors</code></td><td>GET /colors/orange (find #colors)</td></tr>
-                <tr><td><code>;POST</code></td><td>POST current URL (default selector)</td></tr>
-                <tr><td><code>;;#container</code></td><td>GET current URL (find #container)</td></tr>
-                <tr><td>(an empty string)</td><td>GET current URL (default selector)</td></tr>
+                <tr><td><code>POST /hello;#container</code></td><td>-</td></tr>
+                <tr><td><code>GET /foo</code></td><td>-</td></tr>
+                <tr><td><code>POST ;#container</code></td><td><code>POST @current;#container</code></td></tr>
+                <tr><td><code>GET&nbsp;</code></td><td><code>GET @current</code></td></tr>
+                <tr><td><code>/bar;#container</code></td><td>-</td></tr>
+                <tr><td><code>/foobar</code></td><td>-</td></tr>
+                <tr><td><code>;#container</code></td><td><code>@current;#container</code></td></tr>
+                <tr><td>an empty string)</td><td><code>@current</code></td></tr>
             </tbody>
-        </ul>
+        </table>
 
     </div>
 

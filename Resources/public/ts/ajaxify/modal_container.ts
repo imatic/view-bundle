@@ -48,7 +48,7 @@ module imatic.view.ajaxify.modalContainer {
         modalFooter: '',
         modalOnClose: '',
         modalCloseOnFormSuccess: true,
-        modalResendFormResponse: true
+        modalForwardFormResponse: true
     };
 
     /**
@@ -214,7 +214,7 @@ module imatic.view.ajaxify.modalContainer {
                         && jQuery(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
                     ) {
                         // store response for resend
-                        if (config['modalResendFormResponse']) {
+                        if (config['modalForwardFormResponse']) {
                             this.resendResponse = event['response'];
                         }
 

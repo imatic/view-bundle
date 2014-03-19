@@ -36,20 +36,32 @@ module imatic.view.ajaxify.ajax {
          * Parse request string
          */
         static parseRequestString(requestString: string): RequestInfo {
-            var parts;
             var requestInfo = new RequestInfo();
 
-            if (typeof requestString === 'string') {
-                parts = requestString.split(';', 3);
-            } else {
-                parts = [];
+            if (typeof requestString !== 'string') {
+                requestString = '';
             }
 
+            // parse
+            var method, url, contentSelector;
+            var match = requestString.match(/^(?:([A-Z]+)\s)?(.*?)(?:;(.*))?$/);
+
+            if (match) {
+                method = match[1];
+                url = match[2];
+                contentSelector = match[3];
+            }
+
+            if ('@current' === url) {
+                url = '';
+            }
+
+            // populate instance
             requestInfo.uid = null;
-            requestInfo.url = parts[0] || '';
-            requestInfo.method = parts[1] || 'GET';
+            requestInfo.url = url || '';
+            requestInfo.method = method || 'GET';
             requestInfo.data = null;
-            requestInfo.contentSelector = parts[2] || null;
+            requestInfo.contentSelector = contentSelector || null;
             
             return requestInfo;
         }
@@ -180,6 +192,8 @@ module imatic.view.ajaxify.ajax {
                 data: data,
                 cache: false,
                 complete: (xhr: XMLHttpRequest, textStatus: string): void => {
+                    this.xhr = xhr;
+
                     if (onComplete) {
                         var response = new ResponseFactory().create(this);
                         onComplete(response);
@@ -188,7 +202,7 @@ module imatic.view.ajaxify.ajax {
             };
 
             // execute request
-            this.xhr = jQuery.ajax(options);
+            jQuery.ajax(options);
         }
     }
 
