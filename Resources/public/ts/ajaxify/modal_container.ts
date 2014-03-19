@@ -177,6 +177,7 @@ module imatic.view.ajaxify.modalContainer {
 
             if (this.resendResponse) {
                 // resend response
+                this.resendResponse.flashes = [];
                 action = new ResponseAction(originalTriggerWidget, this.resendResponse);
                 this.resendResponse = null;
             } else if (onClose) {

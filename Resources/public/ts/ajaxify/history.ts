@@ -31,6 +31,13 @@ module imatic.view.ajaxify.history {
     export var History = <Historyjs> window['History'];
 
     /**
+     * Function to verify History.js availability
+     */
+    function historyjsIsAvailable(): boolean {
+        return History && 'undefined' !== typeof History.Adapter;
+    }
+
+    /**
      * Container state interface
      */
     interface ContainerStateInterface
@@ -56,11 +63,13 @@ module imatic.view.ajaxify.history {
          * Initialize the handler
          */
         static initialize(): void {
-            History.replaceState(
-                HistoryHandler.getCurrentData(),
-                window.document.title,
-                window.location.toString()
-            );
+            if (historyjsIsAvailable()) {
+                History.replaceState(
+                    HistoryHandler.getCurrentData(),
+                    window.document.title,
+                    window.location.toString()
+                );
+            }
         }
 
         /**
@@ -106,7 +115,7 @@ module imatic.view.ajaxify.history {
          * Record container state change
          */
         static containerStateChange(containerId: string, title: string, requestInfo: RequestInfo): void {
-            if (History) {
+            if (historyjsIsAvailable()) {
                 History.pushState(
                     HistoryHandler.getCurrentData(),
                     title || window.document.title,
@@ -188,7 +197,7 @@ module imatic.view.ajaxify.history {
     }
 
     // initialize on document ready
-    if (History) {
+    if (historyjsIsAvailable()) {
         jQuery(window.document).ready(function () {
             // initialize
             HistoryHandler.initialize();
