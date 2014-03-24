@@ -59,17 +59,20 @@ class KernelResponseListener
 
         }
 
+        $title = array();
+
         if ($this->layoutHelper->hasTitle()) {
-            $response->headers->set(
-                'X-Title',
-                $this->layoutHelper->getTitle()
-            );
+            $title['title'] = $this->layoutHelper->getTitle();
         }
 
         if ($this->layoutHelper->hasFullTitle()) {
+            $title['fullTitle'] = $this->layoutHelper->getFullTitle();
+        }
+
+        if (!empty($title)) {
             $response->headers->set(
-                'X-Full-Title',
-                $this->layoutHelper->getFullTitle()
+                'X-Title',
+                json_encode($title)
             );
         }
     }
