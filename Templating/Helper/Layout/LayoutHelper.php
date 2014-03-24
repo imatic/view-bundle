@@ -13,8 +13,10 @@ class LayoutHelper
 {
     /** @var RequestStack */
     private $requestStack;
+
     /** @var string|null */
     private $title;
+
     /** @var string|null */
     private $fullTitle;
 
@@ -40,7 +42,8 @@ class LayoutHelper
         if (
             $request->isXmlHttpRequest()
             || 'off' === $request->get('_layout')
-         ) {
+            || $this->requestStack->getCurrentRequest() !== $this->requestStack->getMasterRequest()
+        ) {
             return false;
         } else {
             return true;
@@ -68,6 +71,16 @@ class LayoutHelper
     }
 
     /**
+     * Set title
+     *
+     * @param string|null $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = ('' !== $title ? $title : null);
+    }
+
+    /**
      * Check for title
      *
      * @return bool
@@ -75,15 +88,6 @@ class LayoutHelper
     public function hasTitle()
     {
         return null !== $this->title;
-    }
-
-    /**
-     * Set title
-     * @param string|null $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = ('' !== $title ? $title : null);
     }
 
     /**
@@ -97,6 +101,16 @@ class LayoutHelper
     }
 
     /**
+     * Set full title
+     *
+     * @param string|null $fullTitle
+     */
+    public function setFullTitle($fullTitle)
+    {
+        $this->fullTitle = ('' !== $fullTitle ? $fullTitle : null);
+    }
+
+    /**
      * Check for full title
      *
      * @return bool
@@ -104,14 +118,5 @@ class LayoutHelper
     public function hasFullTitle()
     {
         return null !== $this->fullTitle;
-    }
-
-    /**
-     * Set full title
-     * @param string|null $fullTitle
-     */
-    public function setFullTitle($fullTitle)
-    {
-        $this->fullTitle = ('' !== $fullTitle ? $fullTitle : null);
     }
 }

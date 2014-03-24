@@ -13,6 +13,10 @@
 
     {% spaceless %}
         <div class="imatic-view-table table-responsive"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
+        {% for action in table.actions %}
+            {{ button.button(action) }}
+        {% endfor %}
+
         <table class="table">
             <caption></caption>
             {% block table_head %}
@@ -25,7 +29,7 @@
                     {% for column in columns %}
                         <th class="{{ column.format }} {{ column.class }}">{{ column.name }}</th>
                     {% endfor %}
-                    {% if table.actions is not empty %}
+                    {% if table.rowActions is not empty %}
                         <th>actions</th>
                     {% endif %}
                 </tr>
@@ -55,9 +59,9 @@
                             {% endblock %}
                             {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                             {% block table_row_actions %}
-                                {% if table.actions is not empty %}
+                                {% if table.rowActions is not empty %}
                                     <td class="actions">
-                                        {{ button.group(table.actions, {item: item}) }}
+                                        {{ button.group(table.rowActions, {item: item}) }}
                                     </td>
                                 {% endif %}
                             {% endblock %}
