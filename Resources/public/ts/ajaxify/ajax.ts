@@ -253,15 +253,24 @@ module imatic.view.ajaxify.ajax {
                     throw new Error('Invalid data type');
             }
 
-            // process flash messages
+            // parse flash messages
             var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
             if (flashesJson) {
                 flashes = <FlashMessageInterface[]> jQuery.parseJSON(flashesJson);
             }
 
+            // parse title
+            var title, fullTitle;
+            var titleJson = xhr.getResponseHeader('X-Title');
+            if (titleJson) {
+                var titles = jQuery.parseJSON(titleJson);
+                title = titles['title'];
+                fullTitle = titles['fullTitle'];
+            }
+
             // populate the response object
-            response.title = xhr.getResponseHeader('X-Title') || '';
-            response.fullTitle = xhr.getResponseHeader('X-Full-Title') || '';
+            response.title = title || '';
+            response.fullTitle = fullTitle || '';
             response.data = data;
             response.dataType = request.getDataType();
             response.valid = this.isValidStatus(xhr.status);

@@ -1,3 +1,8 @@
 mopa_bootstrap:
     form:
         show_legend: false
+        collection:
+            widget_remove_btn:
+                icon: trash
+            widget_add_btn:
+                icon: plus-sign
