@@ -12,10 +12,12 @@ class ShowOptions extends AbstractOptions
         $resolver->setDefaults([
             'class' => '',
             'actions' => [],
+            'translationDomain' => 'messages',
         ]);
         $resolver->setAllowedTypes([
             'class' => 'string',
             'actions' => 'array',
+            'translationDomain' => 'string',
         ]);
     }
 }

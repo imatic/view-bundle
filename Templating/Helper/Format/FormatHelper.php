@@ -2,6 +2,7 @@
 
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -23,8 +24,16 @@ class FormatHelper implements FormatterInterface
      */
     private $resolver;
 
-    public function __construct()
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
     {
+        // need a container instance, because circular reference
+        $this->container = $container;
+
         $this->formatters = [];
         $this->formaterOptions = [];
 
@@ -59,17 +68,20 @@ class FormatHelper implements FormatterInterface
     public function renderValue($objectOrArray, $propertyPath, $format, array $options = [])
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $value = $accessor->getValue($objectOrArray, $propertyPath);
-
-        if (is_null($value)) {
-            if (!empty($options['template'])) {
-                // todo: Implement template etc..
-                throw new \Exception('Not implemented:(');
-            } else {
-                return null;
-            }
+        if (is_null($propertyPath)) {
+            $value = $objectOrArray;
+        } else {
+            $value = $accessor->getValue($objectOrArray, $propertyPath);
         }
 
-        return $this->format($value, $format, $options);
+        if (!empty($options['collection']) && true === $options['collection']) {
+            return $this->container->get('templating')->render('ImaticViewBundle:Field:collection.html.twig', ['value' => $value, 'options' => $options, 'format' => $format]);
+        } elseif (!empty($options['template'])) {
+            return $this->container->get('templating')->render($options['template'], array_merge($options, ['value' => $value, 'options' => $options, 'format' => $format]));
+        } elseif (is_null($value)) {
+            return null;
+        } else {
+            return $this->format($value, $format, $options);
+        }
     }
 }

@@ -118,6 +118,8 @@ services:
     # Templating Helpers
     imatic_view.templating.helper.format:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper
+        arguments:
+            - '@service_container'
 
     imatic_view.templating.helper.grid:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper

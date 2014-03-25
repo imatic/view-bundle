@@ -32,6 +32,7 @@ class TableOptions extends AbstractOptions
             'selectableColumn' => '',
             'ajaxify' => false,
             'id' => '',
+            'translationDomain' => 'messages',
         ]);
         $resolver->setAllowedTypes([
             'class' => 'string',
@@ -42,6 +43,7 @@ class TableOptions extends AbstractOptions
             'selectableColumn' => 'string',
             'ajaxify' => 'bool',
             'id' => 'string',
+            'translationDomain' => 'string',
         ]);
     }
 }

@@ -27,10 +27,10 @@
                         </th>
                     {% endif %}
                     {% for column in columns %}
-                        <th class="{{ column.format }} {{ column.class }}">{{ column.name }}</th>
+                        <th class="{{ column.format }} {{ column.class }}">{{ column.label|humanize|trans({}, table.translationDomain) }}</th>
                     {% endfor %}
                     {% if table.rowActions is not empty %}
-                        <th>actions</th>
+                        <th>{{ 'Actions'|trans({}, 'ImaticViewBundle') }}</th>
                     {% endif %}
                 </tr>
                 </thead>
