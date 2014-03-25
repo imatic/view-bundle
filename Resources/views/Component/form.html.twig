@@ -6,5 +6,6 @@
 {% block form %}
     <div class="imatic-view-form form-horizontal">
         {{ form(form, {attr: {novalidate: 'novalidate' } }) }}
+        {{ form_javascript(form) }}
     </div>
 {% endblock %}
