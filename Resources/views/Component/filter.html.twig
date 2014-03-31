@@ -1,0 +1,39 @@
+{% block filter %}
+    {% spaceless %}
+        {% set uri = app.request.uri %}
+        {% if filter is not defined and display_criteria is defined %}
+            {% set filter = display_criteria.filter %}
+        {% endif %}
+
+        {% if filter is defined and filter.form is not empty %}
+            {% set form = filter.form.createView() %}
+        {% endif %}
+        {% if form is defined %}
+            <div class="imatic-view-filter">
+                <fieldset>
+                    <legend>{{ 'Filter'|trans({}, 'ImaticViewBundle') }}</legend>
+                    {{ form_start(form, {action: uri, method: 'get'}) }}
+                    {% for field in form %}
+                        <div class="form-group row">
+                            <div class="col-xs-2">
+                                <label for="{{ field.value.vars.id }}">{{ field.vars.name|humanize|trans({}, field.value.vars.translation_domain) }}</label>
+                            </div>
+                            <div class="col-xs-1">
+                                {{ form_widget(field.operator, {horizontal: false}) }}
+                            </div>
+                            <div class="col-xs-3">
+                                {{ form_widget(field.value, {horizontal: false}) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <input type="submit" value="{{ 'Do filter'|trans({}, 'ImaticViewBundle') }}" class="btn">
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </fieldset>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

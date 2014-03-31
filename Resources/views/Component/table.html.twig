@@ -12,7 +12,10 @@
     {% set columns = imatic_view_table_columns(columns | default([])) %}
 
     {% spaceless %}
-        <div class="imatic-view-table table-responsive"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
+        <div data-history="true" class="imatic-view-table table-responsive"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
+
+        {{ include('ImaticViewBundle:Component:filter.html.twig') }}
+
         {% for action in table.actions %}
             {{ button.button(action) }}
         {% endfor %}
