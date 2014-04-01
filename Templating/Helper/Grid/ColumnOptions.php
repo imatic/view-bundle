@@ -24,6 +24,7 @@ class ColumnOptions extends AbstractOptions
             'format' => 'text',
             'formatOptions' => [],
             'class' => '',
+            'sortable' => false,
             'label' => function (Options $options) {
                     return $options['name'];
                 },

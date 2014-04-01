@@ -3,6 +3,8 @@
     - items: table rows (array of objects or hashes)
     - columns: table columns (Imatic\Bundle\ViewBundle\Templating\Grid\ColumnOptions)
     - table: table configuration (Imatic\Bundle\ViewBundle\Templating\Grid\TableOptions)
+    - uri: uri for generating pager, filter and sorter links (default current uri)
+    - display_criteria or pager, filter, sorter
 #}
 
 {% import 'ImaticViewBundle:Component:button.html.twig' as button %}
@@ -10,6 +12,10 @@
 {% block table %}
     {% set table   = imatic_view_table(table | default([])) %}
     {% set columns = imatic_view_table_columns(columns | default([])) %}
+    {% set uri = uri|default(app.request.uri) %}
+    {% if sorter is not defined and display_criteria is defined %}
+        {% set sorter = display_criteria.sorter %}
+    {% endif %}
 
     {% spaceless %}
         <div data-history="true" class="imatic-view-table table-responsive"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
@@ -30,7 +36,18 @@
                         </th>
                     {% endif %}
                     {% for column in columns %}
-                        <th class="{{ column.format }} {{ column.class }}">{{ column.label|humanize|trans({}, table.translationDomain) }}</th>
+                        {% block table_column_header %}
+                            <th class="{{ column.format }} {{ column.class }}">
+                                {% if sorter is defined and column.sortable %}
+                                <a href="{{ imatic_view_update_sorter_url(uri, column.name, sorter.reverseDirection(column.name, true)) }}"
+                                   class="{{ sorter.sorted(column.name) ? 'sorted '~sorter.direction(column.name, true) : '' }}">
+                                    {% endif %}
+                                    {{ column.label|humanize|trans({}, table.translationDomain) }}
+                                    {% if sorter is defined and column.sortable %}
+                                </a>
+                                {% endif %}
+                            </th>
+                        {% endblock %}
                     {% endfor %}
                     {% if table.rowActions is not empty %}
                         <th>{{ 'Actions'|trans({}, 'ImaticViewBundle') }}</th>

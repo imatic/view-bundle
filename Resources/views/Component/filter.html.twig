@@ -1,6 +1,11 @@
+{#
+    variables:
+    - uri: uri for generating form filter action (default current uri)
+    - display_criteria or filter
+#}
 {% block filter %}
     {% spaceless %}
-        {% set uri = app.request.uri %}
+        {% set uri = uri|default(app.request.uri) %}
         {% if filter is not defined and display_criteria is defined %}
             {% set filter = display_criteria.filter %}
         {% endif %}
@@ -12,7 +17,7 @@
             <div class="imatic-view-filter">
                 <fieldset>
                     <legend>{{ 'Filter'|trans({}, 'ImaticViewBundle') }}</legend>
-                    {{ form_start(form, {action: uri, method: 'get'}) }}
+                    {{ form_start(form, {action: imatic_view_update_filter_url(uri), method: 'get'}) }}
                     {% for field in form %}
                         <div class="form-group row">
                             <div class="col-xs-2">

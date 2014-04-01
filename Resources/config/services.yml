@@ -45,8 +45,10 @@ services:
         tags:
             - { name: 'twig.extension' }
 
-    imatic_view.twig.extension.string:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\StringExtension
+    imatic_view.twig.extension.url:
+        class:        Imatic\Bundle\ViewBundle\Twig\Extension\UrlExtension
+        arguments:
+            - '@imatic_view.templating.helper.url'
         tags:
             - { name: 'twig.extension' }
 
@@ -141,6 +143,9 @@ services:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper
         arguments:
             - '@security.context'
+
+    imatic_view.templating.helper.url:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper
 
     # Event listners
     imatic_view.event_listener.kernel_response:
