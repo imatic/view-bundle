@@ -20,4 +20,4 @@ Confirm:                Opravdu chcete provést tuto akci?
 Actions:                Akce
 
 Do filter:              Filtrovat
-Filter:                 Filtr
+Filter:                 "{0}Filtr|[1,Inf]Filtr (%count% filtrů je nastaveno)"

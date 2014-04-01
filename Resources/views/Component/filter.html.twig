@@ -16,27 +16,31 @@
         {% if form is defined %}
             <div class="imatic-view-filter">
                 <fieldset>
-                    <legend>{{ 'Filter'|trans({}, 'ImaticViewBundle') }}</legend>
-                    {{ form_start(form, {action: imatic_view_update_filter_url(uri), method: 'get'}) }}
-                    {% for field in form %}
+                    <legend>{{ 'Filter'|transchoice(filter.count, {'%count%': filter.count}, 'ImaticViewBundle') }}</legend>
+                    <div class="imatic-view-filter-content">
+                        {{ form_start(form, {action: imatic_view_update_filter_url(uri), method: 'get'}) }}
+                        {% for field in form %}
+                            <div class="form-group row">
+                                <div class="col-xs-2">
+                                    <label for="{{ field.value.vars.id }}">{{ field.vars.name|humanize|trans({}, field.value.vars.translation_domain) }}</label>
+                                </div>
+                                <div class="col-xs-1">
+                                    {{ form_widget(field.operator, {horizontal: false}) }}
+                                </div>
+                                <div class="col-xs-3">
+                                    {{ form_widget(field.value, {horizontal: false}) }}
+                                </div>
+                            </div>
+                        {% endfor %}
                         <div class="form-group row">
-                            <div class="col-xs-2">
-                                <label for="{{ field.value.vars.id }}">{{ field.vars.name|humanize|trans({}, field.value.vars.translation_domain) }}</label>
-                            </div>
-                            <div class="col-xs-1">
-                                {{ form_widget(field.operator, {horizontal: false}) }}
-                            </div>
-                            <div class="col-xs-3">
-                                {{ form_widget(field.value, {horizontal: false}) }}
+                            <div class="col-xs-12">
+                                <input type="submit"
+                                       value="{{ 'Do filter'|trans({}, 'ImaticViewBundle') }}"
+                                       class="btn">
                             </div>
                         </div>
-                    {% endfor %}
-                    <div class="form-group row">
-                        <div class="col-xs-12">
-                            <input type="submit" value="{{ 'Do filter'|trans({}, 'ImaticViewBundle') }}" class="btn">
-                        </div>
+                        {{ form_end(form) }}
                     </div>
-                    {{ form_end(form) }}
                 </fieldset>
             </div>
         {% endif %}
