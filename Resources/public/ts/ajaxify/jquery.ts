@@ -1,4 +1,4 @@
-/// <reference path="jquery.d.ts"/>
+/// <reference path="../jquery/jquery.d.ts"/>
 
 /**
  * Imatic view ajaxify jquery module
