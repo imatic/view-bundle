@@ -52,7 +52,7 @@ module imatic.view.ajaxify.ajax {
                 contentSelector = match[3];
             }
 
-            if ('@current' === url) {
+            if ('@page' === url) {
                 url = '';
             }
 
@@ -123,10 +123,32 @@ module imatic.view.ajaxify.ajax {
         }
 
         /**
+         * Set URL
+         */
+        setUrl(url: string): void {
+            if (this.xhr) {
+                throw new Error('Cannot change already executed request');
+            }
+
+            this.url = url;
+        }
+
+        /**
          * Get method
          */
         getMethod(): string {
             return this.method ? this.method.toUpperCase() : 'GET';
+        }
+
+        /**
+         * Set method
+         */
+        setMethod(method: string): void {
+            if (this.xhr) {
+                throw new Error('Cannot change already executed request');
+            }
+
+            this.method = method;
         }
 
         /**
@@ -137,6 +159,17 @@ module imatic.view.ajaxify.ajax {
         }
 
         /**
+         * Set data
+         */
+        setData(data: any): void {
+            if (this.xhr) {
+                throw new Error('Cannot change already executed request');
+            }
+
+            this.data = data;
+        }
+
+        /**
          * Get data type
          */
         getDataType(): DataType {
@@ -144,10 +177,32 @@ module imatic.view.ajaxify.ajax {
         }
 
         /**
+         * Set data type
+         */
+        setDataType(dataType: DataType): void {
+            if (this.xhr) {
+                throw new Error('Cannot change already executed request');
+            }
+
+            this.dataType = dataType;
+        }
+
+        /**
          * Get content selector
          */
         getContentSelector(): any {
             return this.contentSelector || null;
+        }
+
+        /**
+         * Set content selector
+         */
+        setContentSelector(contentSelector: string): void {
+            if (this.xhr) {
+                throw new Error('Cannot change already executed request');
+            }
+
+            this.contentSelector = contentSelector;
         }
 
         /**
@@ -163,6 +218,18 @@ module imatic.view.ajaxify.ajax {
             requestInfo.contentSelector = this.getContentSelector();
             
             return requestInfo;
+        }
+
+        /**
+         * Apply request info
+         *
+         * UID is not applied.
+         */
+        applyInfo(requestInfo: RequestInfo): void {
+            this.url = requestInfo.url;
+            this.method = requestInfo.method;
+            this.data = requestInfo.data;
+            this.contentSelector = requestInfo.contentSelector;
         }
 
         /**

@@ -105,6 +105,7 @@ module imatic.view.ajaxify.action {
                 action: this,
                 initiator: this.initiator,
                 container: container,
+                request: this.request,
             }));
 
             this.request.execute((response: Response): void => {
@@ -190,6 +191,7 @@ module imatic.view.ajaxify.action {
                 action: this,
                 initiator: this.initiator,
                 container: container,
+                request: null,
             }));
 
             // handle response

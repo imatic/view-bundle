@@ -175,16 +175,16 @@ module imatic.view.ajaxify.modalContainer {
         private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: any) {
             var action;
 
-            if (this.resendResponse) {
-                // resend response
-                this.resendResponse.flashes = [];
-                action = new ResponseAction(originalTriggerWidget, this.resendResponse);
-                this.resendResponse = null;
-            } else if (onClose) {
+            if (onClose) {
                 // load on close
                 var requestInfo = RequestHelper.parseRequestString(onClose);
 
                 action = new RequestAction(originalTriggerWidget, requestInfo);
+            } else if (this.resendResponse) {
+                // resend response
+                this.resendResponse.flashes = [];
+                action = new ResponseAction(originalTriggerWidget, this.resendResponse);
+                this.resendResponse = null;
             }
 
             if (action) {

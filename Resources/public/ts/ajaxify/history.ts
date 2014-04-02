@@ -1,4 +1,4 @@
-/// <reference path="history.d.ts"/>
+/// <reference path="../history/history.d.ts"/>
 /// <reference path="jquery.ts"/>
 /// <reference path="event.ts"/>
 /// <reference path="ajax.ts"/>

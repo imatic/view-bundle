@@ -471,6 +471,24 @@ module imatic.view.ajaxify.container {
                 if (this.element) {
                     jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
                 }
+
+                // modify request if @current was used
+                if (
+                    event['request']
+                    && '@current' === event['request'].getUrl()
+                ) {
+                    var requestInfo;
+
+                    if (this.currentRequest) {
+                        requestInfo = this.currentRequest;
+                    } else {
+                        requestInfo = RequestHelper.parseRequestString(
+                            this.getConfiguration()['historyInitial']
+                        );
+                    }
+
+                    event['request'].applyInfo(requestInfo);
+                }
             }, 100);
 
             action.events.addCallback('complete', this.handleActionCompletion, 100);

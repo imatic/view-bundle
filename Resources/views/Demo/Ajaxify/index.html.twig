@@ -359,7 +359,6 @@
                 href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
                 data-target="modal"
                 data-modal-title="h2"
-                data-modal-on-close=""
             >
                 Modal link
             </a>
@@ -427,7 +426,7 @@
                         <ul>
                             <li>the action is triggered in the original widget's context</li>
                             <li>the action is trigered after the modal is closed</li>
-                            <li>the action surpresses <code>data-modal-on-close</code></li>
+                            <li>the action is surpressesed by <code>data-modal-on-close</code></li>
                         </ul>
                     </td>
                     <td>true / false</td>
@@ -604,7 +603,13 @@
                 </tr>
                 <tr>
                     <td><code>URL</code></td>
-                    <td>the URL to load, can be empty or the <code>@current</code> keyword (both equal to current URL)</td>
+                    <td>
+                        <ul>
+                            <li>the URL to load</li>
+                            <li>empty string or the <code>@page</code> keyword (= current document URL)</li>
+                            <li>the <code>@current</code> keyword (= replicate the target container's current request)</li>
+                        </ul>
+                    </td>
                     <td>current</td>
                 </tr>
                 <tr>
