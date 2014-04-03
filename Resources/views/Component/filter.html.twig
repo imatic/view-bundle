@@ -6,6 +6,7 @@
 {% block filter %}
     {% spaceless %}
         {% set uri = uri|default(app.request.uri) %}
+        {% set uri = imatic_view_update_filter_url(uri) %}
         {% if filter is not defined and display_criteria is defined %}
             {% set filter = display_criteria.filter %}
         {% endif %}
@@ -16,9 +17,9 @@
         {% if form is defined %}
             <div class="imatic-view-filter">
                 <fieldset>
-                    <legend>{{ 'Filter'|transchoice(filter.count, {'%count%': filter.count}, 'ImaticViewBundle') }}</legend>
+                    <legend data-toggle=".imatic-view-filter-content">{{ 'Filter'|transchoice(filter.count, {'%count%': filter.count}, 'ImaticViewBundle') }}</legend>
                     <div class="imatic-view-filter-content">
-                        {{ form_start(form, {action: imatic_view_update_filter_url(uri), method: 'get'}) }}
+                        {{ form_start(form, {action: uri, method: 'get'}) }}
                         {% for field in form %}
                             <div class="form-group row">
                                 <div class="col-xs-2">
@@ -36,7 +37,9 @@
                             <div class="col-xs-12">
                                 <input type="submit"
                                        value="{{ 'Do filter'|trans({}, 'ImaticViewBundle') }}"
-                                       class="btn">
+                                       class="btn btn-primary">
+
+                                <a href="{{ uri }}" class="btn">{{ 'Reset filter'|trans({}, 'ImaticViewBundle') }}</a>
                             </div>
                         </div>
                         {{ form_end(form) }}
