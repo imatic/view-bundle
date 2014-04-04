@@ -18,7 +18,7 @@
     {% endif %}
 
     {% spaceless %}
-        <div data-history="true" class="imatic-view-table table-responsive"{{ table.ajaxify ? ' data-role="container"' }}{{ (table.id ? ' id="' ~ table.id | e ~ '"') | raw }}>
+        <div {{ table.attr|imatic_html_attributes({class: 'imatic-view-table table-responsive'}) }}>
 
         {{ include('ImaticViewBundle:Component:filter.html.twig') }}
 

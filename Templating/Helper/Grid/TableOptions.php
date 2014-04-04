@@ -24,23 +24,19 @@ class TableOptions extends AbstractOptions
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'class' => '',
             'actions' => [],
             'rowActions' => [],
             'selectable' => false,
             'selectableColumn' => '',
-            'ajaxify' => false,
-            'id' => '',
+            'attr' => [],
             'translationDomain' => 'messages',
         ]);
         $resolver->setAllowedTypes([
-            'class' => 'string',
             'actions' => 'array',
             'rowActions' => 'array',
             'selectable' => 'bool',
             'selectableColumn' => 'string',
-            'ajaxify' => 'bool',
-            'id' => 'string',
+            'attr' => 'array',
             'translationDomain' => 'string',
         ]);
     }
