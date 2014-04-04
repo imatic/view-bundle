@@ -1,7 +1,7 @@
 {% macro navbar(menu, options, renderer, config) %}
-    <nav class="navbar">
-        <div class="navbar-inner">
-            {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar' })) }}
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
         </div>
     </nav>
 {% endmacro %}
@@ -12,16 +12,16 @@
 
 {% macro side(menu, options, renderer, config) %}
     <nav class="sidebar-nav">
-        {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'list' })) }}
+        {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills nav-stacked' })) }}
     </nav>
 {% endmacro %}
 
 {% macro tabs(menu, options, renderer, config) %}
-    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'tabs' })) }}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-tabs' })) }}
 {% endmacro %}
 
 {% macro pills(menu, options, renderer, config) %}
-    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'pills' })) }}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills' })) }}
 {% endmacro %}
 
 {%- macro _menu(menu, options, renderer, config) -%}

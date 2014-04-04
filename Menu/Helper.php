@@ -3,7 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Knp\Menu\ItemInterface;
-use Imatic\Bundle\ViewBundle\Util\String;
+use Imatic\Bundle\ViewBundle\Templating\Utils\String;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;

@@ -4,7 +4,7 @@
     "description": "Imatic View Bundle",
     "keywords": [],
     "homepage": "http://imatic.cz",
-    "license": "Imatic",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Stepan Koci",
@@ -25,7 +25,7 @@
         "php":">=5.3.3",
         "symfony/framework-bundle": "2.4.*",
         "sensio/framework-extra-bundle": "3.0.*",
-        "knplabs/knp-menu-bundle": "~1.1",
+        "knplabs/knp-menu-bundle": "2.0.*",
         "genemu/form-bundle": "2.2.*",
         "mopa/bootstrap-bundle": "3.0.*"
     },

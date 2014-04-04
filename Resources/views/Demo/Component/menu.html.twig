@@ -1,0 +1,26 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Menu component' %}
+
+{% block action %}
+
+    {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+
+    <h2>Menu</h2>
+
+    <h3>Tabs</h3>
+    {{ menu.tabs('imatic.demo_normal') }}
+
+    <h3>Pills</h3>
+    {{ menu.pills('imatic.demo_normal') }}
+
+    <h3>Sidebar</h3>
+    {{ menu.side('imatic.demo_sub') }}
+
+    <h3>Menu from template</h3>
+    {{ menu.tabs([{'name': 'Item 1', 'uri': 'http://www.imatic.cz'}, {'name': 'Item 2', 'route': 'homepage'}, {'name': 'Item 3', 'uri': '#'}]) }}
+
+    <h2>Navbar</h2>
+    {{ menu.navbar('imatic.demo_normal') }}
+
+{% endblock %}

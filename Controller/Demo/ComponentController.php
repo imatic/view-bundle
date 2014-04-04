@@ -83,4 +83,13 @@ class ComponentController extends Controller
 
         return ['item' => $item];
     }
+
+    /**
+     * @Config\Route("/menu")
+     * @Config\Template()
+     */
+    public function menuAction()
+    {
+        return [];
+    }
 }
