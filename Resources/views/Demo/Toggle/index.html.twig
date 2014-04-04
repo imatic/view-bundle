@@ -1,0 +1,41 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Toggle' %}
+
+{% block action %}
+
+    <div class="container">
+
+        <h2>TOGGLE component</h2>
+
+        <p>
+            The TOGGLE component is a simple javascript utility that enables
+            you to quickly implement a show / hide functionality.
+        </p>
+
+
+        <h3>Usage</h3>
+
+        <p>
+            Add the <code>data-toggle</code> attribute to any clickable element.
+            Its value should be a selector.
+        </p>
+
+        {% example %}
+            <button data-toggle="#toggle-example-target">Toggle!</button>
+
+            <p id="toggle-example-target">
+                Lorem ipsum dolor sit amet consectetuer pulvinar elit dui enim nunc.
+                Phasellus Morbi et sodales consequat feugiat eu ultrices risus Curabitur id.
+                Quis consequat tincidunt volutpat sapien convallis Donec justo a Cum pede.
+            </p>
+        {% endexample %}
+
+        <div class="alert alert-info">
+            <p>
+                If you want the element to be initialy hidden, add <code>display: none</code>
+                to its CSS rules.
+            </p>
+        </div>
+
+{% endblock %}

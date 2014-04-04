@@ -27,7 +27,10 @@ class DemoMenuBuilder
         $componentIndex->addChild($factory->createItem('Tabs', ['route' => 'imatic_view_demo_component_tabs']));
         $componentIndex->addChild($factory->createItem('Menu', ['route' => 'imatic_view_demo_component_menu']));
 
-        $menu->addChild('Ajaxify', array('route' => 'imatic_view_demo_ajaxify_index'));
+        $javaScriptIndex = $menu->addChild('JavaScript', array('uri' => '#'));
+        $helper->setDropdown($javaScriptIndex);
+        $javaScriptIndex->addChild('Ajaxify', array('route' => 'imatic_view_demo_ajaxify_index'));
+        $javaScriptIndex->addChild('Toggle', array('route' => 'imatic_view_demo_toggle_index'));
 
         return $menu;
     }
