@@ -27,7 +27,9 @@ module imatic.view.ajaxify.form {
      */
     export class FormHandler
     {
-        private formFactory = new FormFactory(this.configBuilder);
+        public submitMarkAttr = 'data-marked-submit-element';
+        public submitElementSelector = 'input[type=submit], button';
+        private formFactory = new FormFactory(this, this.configBuilder);
 
         /**
          * Constructor
@@ -42,6 +44,28 @@ module imatic.view.ajaxify.form {
          */
         isValidElement(element: HTMLElement): boolean {
             return 'FORM' === element.tagName;
+        }
+
+        /**
+         * Validate given submit element
+         */
+        isValidSubmitElement(element: HTMLElement): boolean {
+            return jQuery(element).is(this.submitElementSelector);
+        }
+
+        /**
+         * Mark submit element
+         */
+        markSubmitElement(element: HTMLElement): void {
+            var form = element['form'];
+            if (form) {
+                var submitElements = jQuery(this.submitElementSelector, form);
+                for (var i = 0; i < submitElements.length; ++i) {
+                    jQuery(submitElements[i]).removeAttr(this.submitMarkAttr);
+                }
+
+                jQuery(element).attr(this.submitMarkAttr, 'true');
+            }
         }
 
         /**
@@ -70,6 +94,7 @@ module imatic.view.ajaxify.form {
          * Constructor
          */
         constructor(
+            private formHandler: FormHandler,
             private configBuilder: ConfigurationBuilder
         ) {}
 
@@ -83,6 +108,8 @@ module imatic.view.ajaxify.form {
                 containerElement
             );
 
+            form.submitMarkAttr = this.formHandler.submitMarkAttr;
+
             return form;
         }
     }
@@ -92,6 +119,8 @@ module imatic.view.ajaxify.form {
      */
     export class Form extends Widget
     {
+        submitMarkAttr: string;
+
         /**
          * Create action instance
          */
@@ -100,7 +129,7 @@ module imatic.view.ajaxify.form {
             var formData = jQuery(form).serializeArray();
 
             // determine used submit button
-            var submitButton = jQuery('input[type=submit][name]:focus, button[type=submit]:focus', form);
+            var submitButton = jQuery('[' + this.submitMarkAttr + ']', form);
             if (submitButton.length < 1) {
                 submitButton = jQuery('input[type=submit][name], button[type=submit]');
             }

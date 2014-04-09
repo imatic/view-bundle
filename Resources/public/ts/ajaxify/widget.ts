@@ -125,6 +125,7 @@ module imatic.view.ajaxify.widget {
          * Destructor
          */
         destroy(): void {
+            this.element = null;
         }
 
         /**

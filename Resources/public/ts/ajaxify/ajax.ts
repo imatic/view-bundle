@@ -259,8 +259,6 @@ module imatic.view.ajaxify.ajax {
                 data: data,
                 cache: false,
                 complete: (xhr: XMLHttpRequest, textStatus: string): void => {
-                    this.xhr = xhr;
-
                     if (onComplete) {
                         var response = new ResponseFactory().create(this);
                         onComplete(response);
@@ -269,7 +267,7 @@ module imatic.view.ajaxify.ajax {
             };
 
             // execute request
-            jQuery.ajax(options);
+            this.xhr = jQuery.ajax(options);
         }
     }
 

@@ -167,6 +167,8 @@ module imatic.view.ajaxify.modalContainer {
 
                 this.executeOnClose(originalTriggerWidget, originalTriggerWidgetConfig['modalOnClose']);
             }
+
+            super.destroy();
         }
 
         /**

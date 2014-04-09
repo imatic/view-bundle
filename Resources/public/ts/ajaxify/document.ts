@@ -128,6 +128,8 @@ module imatic.view.ajaxify.document {
 
                     this.dispatch(context.container, link);
                     event.preventDefault();
+                } else if (this.formHandler.isValidSubmitElement(element)) {
+                    this.formHandler.markSubmitElement(element);
                 }
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
