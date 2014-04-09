@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * @property string label
+ * @property string name
  * @property string class
  * @property string type
  * @property array data
@@ -14,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * @property array routeParams
  * @property string url
  * @property array nested
+ * @property string condition
+ * @property string tag
  */
 class ActionOptions extends AbstractOptions
 {
@@ -21,6 +24,7 @@ class ActionOptions extends AbstractOptions
     {
         $resolver->setDefaults([
             'label' => '',
+            'name' => '',
             'class' => '',
             'type' => '',
             'data' => [],
@@ -29,10 +33,11 @@ class ActionOptions extends AbstractOptions
             'url' => '',
             'nested' => [],
             'condition' => '',
-            'security' => '',
+            'tag' => 'a',
         ]);
         $resolver->setAllowedTypes([
             'label' => 'string',
+            'name' => 'string',
             'class' => 'string',
             'type' => 'string',
             'data' => 'array',
@@ -40,8 +45,8 @@ class ActionOptions extends AbstractOptions
             'routeParams' => 'array',
             'url' => 'string',
             'nested' => 'array',
-            'security' => 'string',
             'condition' => 'string',
+            'tag' => 'string',
         ]);
     }
 }

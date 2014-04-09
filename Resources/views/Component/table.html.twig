@@ -26,6 +26,10 @@
             {{ button.button(action) }}
         {% endfor %}
 
+        {% if table.batchActions is not empty %}
+            <form action="{{ uri }}" method="post">
+        {% endif %}
+
         <table class="table">
             <caption></caption>
             {% block table_head %}
@@ -91,6 +95,14 @@
                 </tbody>
             {% endblock %}
         </table>
+
+        {% if table.batchActions is not empty %}
+            {% for action in table.batchActions %}
+                {% do action.set('tag', 'input') %}
+            {% endfor %}
+            {{ button.group(table.batchActions) }}
+            </form>
+        {% endif %}
     {% endspaceless %}
     {{ include('ImaticViewBundle:Component:pager.html.twig') }}
     </div>

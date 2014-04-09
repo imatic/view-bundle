@@ -14,6 +14,10 @@ class TableOptions extends AbstractOptions
             $options['actions'][$key] = new ActionOptions($action);
         }
 
+        foreach ($options['batchActions'] as $key => $action) {
+            $options['batchActions'][$key] = new ActionOptions($action);
+        }
+
         foreach ($options['rowActions'] as $key => $action) {
             $options['rowActions'][$key] = new ActionOptions($action);
         }
@@ -26,6 +30,7 @@ class TableOptions extends AbstractOptions
         $resolver->setDefaults([
             'actions' => [],
             'rowActions' => [],
+            'batchActions' => [],
             'selectable' => false,
             'selectableColumn' => '',
             'attr' => [],
@@ -34,6 +39,7 @@ class TableOptions extends AbstractOptions
         $resolver->setAllowedTypes([
             'actions' => 'array',
             'rowActions' => 'array',
+            'batchActions' => 'array',
             'selectable' => 'bool',
             'selectableColumn' => 'string',
             'attr' => 'array',

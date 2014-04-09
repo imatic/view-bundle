@@ -19,7 +19,7 @@ abstract class AbstractOptions
         $this->options = $options;
     }
 
-    public function __get($name)
+    public function get($name)
     {
         if (!$this->__isset($name)) {
             throw new \InvalidArgumentException(sprintf('Option "%s" not exists in class "%s"', $name, get_class($this)));
@@ -28,9 +28,29 @@ abstract class AbstractOptions
         return $this->options[$name];
     }
 
-    public function __isset($name)
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    public function __set($name, $value)
+    {
+        $this->set($name, $value);
+    }
+
+    public function set($name, $value)
+    {
+        $this->options[$name] = $value;
+    }
+
+    public function has($name)
     {
         return array_key_exists($name, $this->options);
+    }
+
+    public function __isset($name)
+    {
+        return $this->has($name);
     }
 
     protected function configure(array $options)

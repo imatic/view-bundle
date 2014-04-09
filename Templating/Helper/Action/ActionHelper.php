@@ -40,7 +40,17 @@ class ActionHelper
         }
 
         $url = $this->getActionUrl($actionOptions, $contextOptions);
-        $element = new HtmlElement('a', $actionOptions->label, ['href' => $url]);
+
+        if ('input' == $actionOptions->tag) {
+            $element = new HtmlElement('input', null, [
+                'type' => 'submit',
+                'formaction' => $url ? $url : null,
+                'value' => $actionOptions->label,
+                'name' => $actionOptions->name,
+            ]);
+        } else {
+            $element = new HtmlElement('a', $actionOptions->label, ['href' => $url]);
+        }
 
         foreach ($actionOptions->data as $dataKey => $dataValue) {
             $element->data()->set($dataKey, $dataValue);
