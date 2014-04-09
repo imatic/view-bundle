@@ -26,7 +26,19 @@ class TwigFormatter implements FormatterInterface
         return twig_date_format_filter(
             $this->twig,
             $value,
-            $this->getOption($options, 'format'),
+//            $this->getOption($options, 'format'),
+            'd.m.Y',
+            $this->getOption($options, 'timezone')
+        );
+    }
+
+    protected function formatDateTime($value, array $options)
+    {
+        return twig_date_format_filter(
+            $this->twig,
+            $value,
+//            $this->getOption($options, 'format'),
+            'd.m.Y H:i:s',
             $this->getOption($options, 'timezone')
         );
     }
