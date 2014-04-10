@@ -57,4 +57,12 @@ class CommonFormatter implements FormatterInterface
 
         return sprintf('<span title="%s" class="%s"></span>', $text, $key);
     }
+
+    public function formatLink($value, array $options = [])
+    {
+        $url = $options['url'];
+        $name = $options['name'];
+
+        return sprintf('<a href="%s">%s</a>', $url, $name);
+    }
 }

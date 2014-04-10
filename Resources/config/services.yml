@@ -124,6 +124,7 @@ services:
             - { name: imatic_view.formatter, alias: email }
             - { name: imatic_view.formatter, alias: text }
             - { name: imatic_view.formatter, alias: boolean, is_safe: true }
+            - { name: imatic_view.formatter, alias: link, is_safe: true }
 
     # Templating Helpers
     imatic_view.templating.helper.format:
