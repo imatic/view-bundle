@@ -466,35 +466,45 @@ module imatic.view.ajaxify.container {
             this.currentAction = action;
 
             // listen to action's events
-            action.events.addCallback('begin', (event: EventInterface): void => {
-                // add busy class
-                if (this.element) {
-                    jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
-                }
-
-                // modify request if @current was used
-                if (
-                    event['request']
-                    && '@current' === event['request'].getUrl()
-                ) {
-                    var requestInfo;
-
-                    if (this.currentRequest) {
-                        requestInfo = this.currentRequest;
-                    } else {
-                        requestInfo = RequestHelper.parseRequestString(
-                            this.getConfiguration()['historyInitial']
-                        );
-                    }
-
-                    event['request'].applyInfo(requestInfo);
-                }
-            }, 100);
-
+            action.events.addCallback('begin', this.handleActionStart, 100);
             action.events.addCallback('complete', this.handleActionCompletion, 100);
 
             // execute action
             action.execute(this);
+        }
+
+        /**
+         * Handle action's start
+         */
+        handleActionStart = (event: EventInterface): void => {
+            // add busy class
+            if (this.element) {
+                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+            }
+
+            // modify request if @current or @reload was used
+            if (event['request']) {
+                var requestUrl = event['request'].getUrl();
+                if ('@reload' === requestUrl || '@current' === requestUrl) {
+                    var currentRequest;
+
+                    if (this.currentRequest) {
+                        currentRequest = this.currentRequest;
+                    } else {
+                        currentRequest = RequestHelper.parseRequestString(
+                            this.getConfiguration()['initial']
+                        );
+                    }
+
+                    if ('@reload' === requestUrl) {
+                        // reload using complete current request info
+                        event['request'].applyInfo(currentRequest);
+                    } else {
+                        // change the URL only
+                        event['request'].setUrl(currentRequest.url);
+                    }
+                }
+            }
         }
 
         /**

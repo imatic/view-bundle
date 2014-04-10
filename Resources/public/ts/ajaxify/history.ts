@@ -96,7 +96,7 @@ module imatic.view.ajaxify.history {
                         } else {
                             // initial
                             requestInfo = RequestHelper.parseRequestString(
-                                container.getConfiguration()['historyInitial']
+                                container.getConfiguration()['initial']
                             );
                         }
 
@@ -195,16 +195,16 @@ module imatic.view.ajaxify.history {
             }
         }
     }
-
+ 
     // initialize on document ready
-    if (historyjsIsAvailable()) {
-        jQuery(window.document).ready(function () {
+    jQuery(window.document).ready(function () {
+        if (historyjsIsAvailable()) {
             // initialize
             HistoryHandler.initialize();
 
             // bind to the "statechange" event
             History.Adapter.bind(window, 'statechange', HistoryHandler.onStateChange);
-        });
-    }
+        }
+    });
 
 }

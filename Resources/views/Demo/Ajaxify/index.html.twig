@@ -69,8 +69,13 @@
                     <td>false</td>
                 </tr>
                 <tr>
-                    <td><code>data-history-initial</code></td>
-                    <td>initial request for history</td>
+                    <td><code>data-initial</code></td>
+                    <td>
+                        <ul>
+                            <li>defines the initial request (a request string that loads initial state of the container)</li>
+                            <li>used by history and the <code>@current</code> request string keyword</li>
+                        </ul>
+                    </td>
                     <td><a href="#request-strings">a request string</a></td>
                     <td>current URL as a GET request</td>
                 </tr>
@@ -521,9 +526,9 @@
         </p>
 
 
-        <div class="alert alert-info">
+        <div class="alert alert-warning">
             <p>
-                Anchors may interfere with correct behaviour. See <a href="https://github.com/browserstate/history.js/issues/276">https://github.com/browserstate/history.js/issues/276</a>.
+                Warning! Anchors may interfere with correct behaviour. See <a href="https://github.com/browserstate/history.js/issues/276">https://github.com/browserstate/history.js/issues/276</a>.
             </p>
         </div>
 
@@ -604,13 +609,30 @@
                 <tr>
                     <td><code>URL</code></td>
                     <td>
+                        <p>the URL to load</p>
                         <ul>
-                            <li>the URL to load</li>
-                            <li>empty string or the <code>@page</code> keyword (= current document URL)</li>
-                            <li>the <code>@current</code> keyword (= replicate the target container's current request)</li>
+                            <li>
+                                <p>empty string or the <code>@page</code> keyword (= current document URL)</p>
+                            </li>
+                            <li>
+                                <p>the <code>@current</code> keyword</p>
+                                <ul>
+                                    <li>copies the target container's current request URL</li>
+                                    <li>all other parts of the request string are left intact</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>the <code>@reload</code> keyword</p>
+                                <ul>
+                                    <li>repeats the target container's current request</li>
+                                    <li>the request is copied, even the method and data</li>
+                                    <li>all parts of the request string are discarded</li>
+                                </ul>
+
+                            </li>
                         </ul>
                     </td>
-                    <td>current</td>
+                    <td>@page</td>
                 </tr>
                 <tr>
                     <td><code>content-selector</code></td>
@@ -632,12 +654,12 @@
             <tbody>
                 <tr><td><code>POST /hello;#container</code></td><td>-</td></tr>
                 <tr><td><code>GET /foo</code></td><td>-</td></tr>
-                <tr><td><code>POST ;#container</code></td><td><code>POST @current;#container</code></td></tr>
-                <tr><td><code>GET&nbsp;</code></td><td><code>GET @current</code></td></tr>
+                <tr><td><code>POST ;#container</code></td><td><code>POST @page;#container</code></td></tr>
+                <tr><td><code>GET&nbsp;</code></td><td><code>GET @page</code></td></tr>
                 <tr><td><code>/bar;#container</code></td><td>-</td></tr>
                 <tr><td><code>/foobar</code></td><td>-</td></tr>
-                <tr><td><code>;#container</code></td><td><code>@current;#container</code></td></tr>
-                <tr><td>an empty string)</td><td><code>@current</code></td></tr>
+                <tr><td><code>;#container</code></td><td><code>@page;#container</code></td></tr>
+                <tr><td>an empty string</td><td><code>@page</code></td></tr>
             </tbody>
         </table>
 
