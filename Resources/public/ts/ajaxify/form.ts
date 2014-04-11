@@ -128,22 +128,34 @@ module imatic.view.ajaxify.form {
             var form = <HTMLFormElement> this.element;
             var formData = jQuery(form).serializeArray();
 
-            // determine used submit button
-            var submitButton = jQuery('[' + this.submitMarkAttr + ']', form);
-            if (submitButton.length < 1) {
-                submitButton = jQuery('input[type=submit][name], button[type=submit]');
-            }
-
-            if (submitButton.length > 0) {
+            // add used submit button's name to the data
+            var submitButton = this.getUsedSubmitButton(form);
+            if (submitButton && submitButton.name) {
                 formData.push({
-                    name: submitButton.attr('name'),
-                    value: submitButton.attr('value') || '1'
+                    name: submitButton.name,
+                    value: submitButton.value || '1'
                 });
             }
 
+            // determine url
+            var url;
+            if (submitButton && submitButton.formAction) {
+                url = submitButton.formAction;
+            } else {
+                url = form.action;
+            }
+
+            // determine method
+            var method = 'GET';
+            if (submitButton && submitButton.formMethod) {
+                method = submitButton.formMethod;
+            } else if (form.method) {
+                method = form.method;
+            }
+
             return new RequestAction(this, {
-                url: jQuery(form).attr('action'),
-                method: jQuery(form).attr('method') || 'GET',
+                url: url,
+                method: method,
                 data: formData,
                 contentSelector: config['contentSelector'] || null,
             });
@@ -154,6 +166,20 @@ module imatic.view.ajaxify.form {
          */
         getDefaultConfirmMessage(): string {
             return 'Are you sure you want to submit the entered data?';
+        }
+
+        /**
+         * Determine used submit button
+         */
+        getUsedSubmitButton(form: HTMLFormElement): HTMLButtonElement {
+            var submitButton = jQuery('[' + this.submitMarkAttr + ']', form);
+            if (submitButton.length < 1) {
+                submitButton = jQuery('input[type=submit], button[type=submit]');
+            }
+
+            if (submitButton.length > 0) {
+                return <HTMLButtonElement> submitButton.get(0);
+            }
         }
     }
 

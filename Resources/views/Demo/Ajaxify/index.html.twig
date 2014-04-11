@@ -264,14 +264,6 @@
             HTML contents will be loaded into that container.
         </p>
 
-        <div class="alert alert-info">
-            <p>
-                Submit button is recognized and included in the data as well,
-                provided it has a <code>name</code> attribute.
-            </p>
-        </div>
-
-
         {% example %}
             <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post" data-target="#demo-form-result">
                 Your name: <input type="text" name="name" value="Bob" required>
@@ -282,6 +274,14 @@
             <hr>
             <div data-role="container" id="demo-form-result"></div>
         {% endexample %}
+
+
+        <h4>Submit buttons</h4>
+        
+        <ul>
+            <li>Used submit button's name is included in the request data.</li>
+            <li>The <code>formmethod</code> and <code>formaction</code> attributes are supported.</li>
+        </ul>
 
 
         <h4>Supported attributes</h4>
