@@ -72,10 +72,22 @@ class FormatHelper implements FormatterInterface
             $value = $objectOrArray;
         } else {
             $value = $accessor->getValue($objectOrArray, $propertyPath);
+            $options['object'] = $objectOrArray;
         }
 
         if (!empty($options['collection']) && true === $options['collection']) {
-            return $this->container->get('templating')->render('ImaticViewBundle:Field:collection.html.twig', ['value' => $value, 'options' => $options, 'format' => $format]);
+            unset($options['collection']);
+            $propertyPath = null;
+            if (!empty($options['propertyPath'])) {
+                $propertyPath = $options['propertyPath'];
+            }
+
+            return $this->container->get('templating')->render('ImaticViewBundle:Field:collection.html.twig', [
+                'value' => $value,
+                'options' => $options,
+                'format' => $format,
+                'propertyPath' => $propertyPath,
+            ]);
         } elseif (!empty($options['template'])) {
             return $this->container->get('templating')->render($options['template'], array_merge($options, ['value' => $value, 'options' => $options, 'format' => $format]));
         } elseif (is_null($value)) {
