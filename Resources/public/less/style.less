@@ -125,6 +125,14 @@ header .navbar {
     }
 }
 
+// modal
+@media (min-width: 768px) {
+    .modal-dialog.modal-max {
+        width: 90%; /* fallback */
+        width: ~"calc(100% - 60px) !important";
+    }
+}
+
 // alerts (styling error message type)
 .alert-error {
     .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);

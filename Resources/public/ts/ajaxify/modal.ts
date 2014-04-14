@@ -19,7 +19,8 @@ module imatic.view.ajaxify.modal {
     export enum ModalSize {
         SMALL,
         NORMAL,
-        LARGE
+        LARGE,
+        MAX
     }
 
     /**
@@ -125,29 +126,17 @@ module imatic.view.ajaxify.modal {
                 this.create();
             }
 
-            var smallClass = 'modal-sm';
-            var largeClass = 'modal-lg';
             var dialog = jQuery('div.modal-dialog', this.element);
 
+            dialog
+                .removeClass()
+                .addClass('modal-dialog')
+            ;
+
             switch (size) {
-                case ModalSize.SMALL:
-                      dialog
-                        .removeClass(largeClass)
-                        .addClass(smallClass)
-                    ;
-                    break;
-                case ModalSize.NORMAL:
-                    dialog
-                        .removeClass(smallClass)
-                        .removeClass(largeClass)
-                    ;
-                    break;
-                case ModalSize.LARGE:
-                    dialog
-                        .removeClass(smallClass)
-                        .addClass(largeClass)
-                    ;
-                    break;
+                case ModalSize.SMALL: dialog.addClass('modal-sm'); break;
+                case ModalSize.LARGE: dialog.addClass('modal-lg'); break;
+                case ModalSize.MAX: dialog.addClass('modal-max'); break;
             }
         }
 
