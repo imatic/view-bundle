@@ -4,6 +4,7 @@ namespace Imatic\Bundle\ViewBundle;
 
 use Imatic\Bundle\ViewBundle\DependencyInjection\Compiler\FormatterPass;
 use Imatic\Bundle\ViewBundle\DependencyInjection\Compiler\MenuPass;
+use Imatic\Bundle\ViewBundle\DependencyInjection\Compiler\FormPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -20,5 +21,6 @@ class ImaticViewBundle extends Bundle
 
         $container->addCompilerPass(new MenuPass());
         $container->addCompilerPass(new FormatterPass());
+        $container->addCompilerPass(new FormPass());
     }
 }
