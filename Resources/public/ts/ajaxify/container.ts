@@ -488,6 +488,7 @@ module imatic.view.ajaxify.container {
                 if ('@reload' === requestUrl || '@current' === requestUrl) {
                     var currentRequest;
 
+                    // determine current request
                     if (this.currentRequest) {
                         currentRequest = this.currentRequest;
                     } else {
@@ -496,12 +497,23 @@ module imatic.view.ajaxify.container {
                         );
                     }
 
+                    // modify request
                     if ('@reload' === requestUrl) {
                         // reload using complete current request info
                         event['request'].applyInfo(currentRequest);
                     } else {
-                        // change the URL only
+                        // change the URL
                         event['request'].setUrl(currentRequest.url);
+
+                        // change the data if the request method
+                        // is GET and the request has no data of its own
+                        if (
+                            'GET' === event['request'].getMethod()
+                            && 'GET' === currentRequest.method
+                            && !event['request'].hasData()
+                        ) {
+                            event['request'].setData(currentRequest.data);
+                        }
                     }
                 }
             }

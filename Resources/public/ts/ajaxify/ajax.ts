@@ -159,6 +159,23 @@ module imatic.view.ajaxify.ajax {
         }
 
         /**
+         * Check if data are set
+         */
+        hasData(): boolean {
+            if (
+                this.data
+                && (
+                    'string' === typeof this.data
+                    || !jQuery.isEmptyObject(this.data)
+                )
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
          * Set data
          */
         setData(data: any): void {
