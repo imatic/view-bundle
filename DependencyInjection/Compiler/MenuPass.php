@@ -21,7 +21,7 @@ class MenuPass implements CompilerPassInterface
                 if (empty($attributes['alias'])) {
                     throw new \InvalidArgumentException(sprintf('The alias is not defined in the "imatic_menu.menu" tag for the service "%s"', $id));
                 }
-                $definition->addMethodCall('addService', array($attributes['alias'], array_merge($attributes, array('id' => $id))));
+                $definition->addMethodCall('addService', [$attributes['alias'], array_merge($attributes, ['id' => $id])]);
             }
         }
     }

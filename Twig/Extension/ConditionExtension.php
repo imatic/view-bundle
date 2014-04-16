@@ -23,9 +23,9 @@ class ConditionExtension extends Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new Twig_SimpleFunction('imatic_view_condition_evaluate', array($this->conditionHelper, 'evaluate')),
-        );
+        return [
+            new Twig_SimpleFunction('imatic_view_condition_evaluate', [$this->conditionHelper, 'evaluate']),
+        ];
     }
 
     /**

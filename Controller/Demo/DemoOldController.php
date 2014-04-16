@@ -16,6 +16,6 @@ class DemoOldController extends Controller
      */
     public function indexAction()
     {
-        return array();
+        return [];
     }
 }

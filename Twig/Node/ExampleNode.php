@@ -23,7 +23,7 @@ class ExampleNode extends Twig_Node
      */
     public function __construct(Twig_NodeInterface $body, $rawBody, $lineno, $tag = 'spaceless')
     {
-        parent::__construct(array('body' => $body), array('raw_body' => $rawBody), $lineno, $tag);
+        parent::__construct(['body' => $body], ['raw_body' => $rawBody], $lineno, $tag);
     }
 
     /**

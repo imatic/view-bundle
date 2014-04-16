@@ -30,8 +30,8 @@ class ContainerProvider implements MenuProviderInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->menuInfoCollection = array();
-        $this->menuCollection = array();
+        $this->menuInfoCollection = [];
+        $this->menuCollection = [];
     }
 
     /**
@@ -52,7 +52,7 @@ class ContainerProvider implements MenuProviderInterface
      * @return ItemInterface
      * @throws \InvalidArgumentException if the menu does not exists
      */
-    public function get($name, array $options = array())
+    public function get($name, array $options = [])
     {
         if (!isset($this->menuCollection[$name])) {
             if (!isset($this->menuInfoCollection[$name])) {
@@ -82,7 +82,7 @@ class ContainerProvider implements MenuProviderInterface
      * @param  array  $options
      * @return bool
      */
-    public function has($name, array $options = array())
+    public function has($name, array $options = [])
     {
         return isset($this->menuInfoCollection[$name]);
     }

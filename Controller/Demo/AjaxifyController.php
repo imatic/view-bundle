@@ -18,10 +18,10 @@ class AjaxifyController extends Controller
      */
     public function indexAction($counter = 0)
     {
-        return array(
+        return [
             'current_counter_value' => $counter,
             'next_counter_value' => $counter + 1,
-        );
+        ];
     }
 
     /**
@@ -30,9 +30,9 @@ class AjaxifyController extends Controller
      */
     public function ajaxTestAction()
     {
-        return array(
+        return [
             'uniqid' => uniqid('', true),
-        );
+        ];
     }
 
     /**
@@ -51,10 +51,10 @@ class AjaxifyController extends Controller
             $pressedButton = '?';
         }
 
-        return array(
+        return [
             'name' => $request->request->get('name'),
             'pressed_button' => $pressedButton,
-        );
+        ];
     }
 
     /**
@@ -63,7 +63,7 @@ class AjaxifyController extends Controller
      */
     public function modalTestAction()
     {
-        return array();
+        return [];
     }
     
     /**
@@ -79,6 +79,6 @@ class AjaxifyController extends Controller
         $flashBag->add('warning', 'I am a warning!');
         $flashBag->add('danger', 'I am a danger!');
 
-        return array();
+        return [];
     }
 }

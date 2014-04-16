@@ -49,7 +49,7 @@ class ExampleTokenParser extends Twig_TokenParser
         $lineno = $token->getLine();
 
         $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse(array($this, 'decideExampleEnd'), true);
+        $body = $this->parser->subparse([$this, 'decideExampleEnd'], true);
         $rawBody = $this->parseRawBody($lineno);
         $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);      
 

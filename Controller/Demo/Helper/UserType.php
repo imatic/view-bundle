@@ -23,9 +23,9 @@ class UserType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'Imatic\Bundle\ViewBundle\Controller\Demo\Helper\User',
-        ));
+        ]);
     }
 
     public function getName()

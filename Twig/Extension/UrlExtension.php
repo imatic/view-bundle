@@ -30,12 +30,12 @@ class UrlExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('imatic_view_update_url', array($this->urlHelper, 'updateUrl')),
-            new \Twig_SimpleFunction('imatic_view_update_sorter_url', array($this->urlHelper, 'updateSorterUrl')),
-            new \Twig_SimpleFunction('imatic_view_update_filter_url', array($this->urlHelper, 'updateFilterUrl')),
-            new \Twig_SimpleFunction('imatic_view_update_pager_url', array($this->urlHelper, 'updatePagerUrl')),
-        );
+        return [
+            new \Twig_SimpleFunction('imatic_view_update_url', [$this->urlHelper, 'updateUrl']),
+            new \Twig_SimpleFunction('imatic_view_update_sorter_url', [$this->urlHelper, 'updateSorterUrl']),
+            new \Twig_SimpleFunction('imatic_view_update_filter_url', [$this->urlHelper, 'updateFilterUrl']),
+            new \Twig_SimpleFunction('imatic_view_update_pager_url', [$this->urlHelper, 'updatePagerUrl']),
+        ];
     }
 
     /**

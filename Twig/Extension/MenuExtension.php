@@ -30,14 +30,14 @@ class MenuExtension extends Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-            'imatic_view_menu_render_array' => new Twig_Function_Method($this, 'renderArrayMenu', array('is_safe' => array('html')))
-        );
+        return [
+            'imatic_view_menu_render_array' => new Twig_Function_Method($this, 'renderArrayMenu', ['is_safe' => ['html']])
+        ];
     }
 
     public function renderArrayMenu(array $menu, array $options)
     {
-        $menu = $this->factory->createFromArray(array('name' => 'root', 'children' => $menu));
+        $menu = $this->factory->createFromArray(['name' => 'root', 'children' => $menu]);
 
         return $this->renderer->render($menu, $options);
     }

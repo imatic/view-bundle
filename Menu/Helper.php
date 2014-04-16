@@ -114,7 +114,7 @@ class Helper
      *
      * @return string The translated string
      */
-    public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null)
+    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
     {
         $this->transChoice($id, $number, $parameters, $domain, $locale);
     }
@@ -129,7 +129,7 @@ class Helper
      *
      * @return string The translated string
      */
-    public function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    public function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }

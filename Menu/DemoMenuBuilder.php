@@ -27,10 +27,10 @@ class DemoMenuBuilder
         $componentIndex->addChild($factory->createItem('Tabs', ['route' => 'imatic_view_demo_component_tabs']));
         $componentIndex->addChild($factory->createItem('Menu', ['route' => 'imatic_view_demo_component_menu']));
 
-        $javaScriptIndex = $menu->addChild('JavaScript', array('uri' => '#'));
+        $javaScriptIndex = $menu->addChild('JavaScript', ['uri' => '#']);
         $helper->setDropdown($javaScriptIndex);
-        $javaScriptIndex->addChild('Ajaxify', array('route' => 'imatic_view_demo_ajaxify_index'));
-        $javaScriptIndex->addChild('Toggle', array('route' => 'imatic_view_demo_toggle_index'));
+        $javaScriptIndex->addChild('Ajaxify', ['route' => 'imatic_view_demo_ajaxify_index']);
+        $javaScriptIndex->addChild('Toggle', ['route' => 'imatic_view_demo_toggle_index']);
 
         return $menu;
     }
@@ -49,14 +49,14 @@ class DemoMenuBuilder
         $helper->addHeader($products, 'Products A');
         // Set submenu for products
         $helper->setSubmenu($products);
-        $products->addChild('Product 1', array('route' => 'homepage'));
-        $products->addChild('Product 2', array('route' => 'homepage'));
-        $products->addChild('Product 3', array('route' => 'homepage'));
+        $products->addChild('Product 1', ['route' => 'homepage']);
+        $products->addChild('Product 2', ['route' => 'homepage']);
+        $products->addChild('Product 3', ['route' => 'homepage']);
         // Add header
         $helper->addHeader($products, 'Products B');
-        $products->addChild('Product 4', array('route' => 'homepage'));
-        $products->addChild('Product 5', array('route' => 'homepage'));
-        $products->addChild('Product 6', array('route' => 'homepage'));
+        $products->addChild('Product 4', ['route' => 'homepage']);
+        $products->addChild('Product 5', ['route' => 'homepage']);
+        $products->addChild('Product 6', ['route' => 'homepage']);
 
         return $menu;
     }
@@ -72,25 +72,25 @@ class DemoMenuBuilder
         $menu = $factory->createItem('root');
 
         // Add menu items
-        $menu->addChild('Home', array('route' => 'homepage'));
-        $menu->addChild('About', array('route' => 'homepage'))->setCurrent(true);
-        $products = $menu->addChild('Products', array('route' => 'homepage'));
-        $menu->addChild('Reference', array('route' => 'homepage'))->setAttribute('class', 'disabled');
+        $menu->addChild('Home', ['route' => 'homepage']);
+        $menu->addChild('About', ['route' => 'homepage'])->setCurrent(true);
+        $products = $menu->addChild('Products', ['route' => 'homepage']);
+        $menu->addChild('Reference', ['route' => 'homepage'])->setAttribute('class', 'disabled');
         // Add vertical divider
         $helper->addDivider($menu, true);
-        $contact = $menu->addChild('Contact', array('route' => 'homepage'));
+        $contact = $menu->addChild('Contact', ['route' => 'homepage']);
 
         // Set badge for products
         $helper->setBadge($products, 2, 'important', true);
 
         // Set dropdown menu for contact
         $helper->setDropdown($contact);
-        $contact->addChild('Test 1', array('route' => 'homepage'));
+        $contact->addChild('Test 1', ['route' => 'homepage']);
         $contact->addChild('Test')->setAttribute('class', 'nav-header');
-        $contact->addChild('Test 2', array('route' => 'homepage'));
+        $contact->addChild('Test 2', ['route' => 'homepage']);
         // Add horizontal divider
         $helper->addDivider($contact);
-        $contact->addChild('Test 3', array('uri' => 'http://www.imatic.cz'));
+        $contact->addChild('Test 3', ['uri' => 'http://www.imatic.cz']);
 
         return $menu;
     }

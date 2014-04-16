@@ -22,8 +22,8 @@ class HtmlExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('imatic_html_attributes', array($this->htmlHelper, 'attributes'), ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('imatic_html_data_attributes', array($this->htmlHelper, 'dataAttributes'), ['is_safe' => ['html']])
+            new \Twig_SimpleFilter('imatic_html_attributes', [$this->htmlHelper, 'attributes'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('imatic_html_data_attributes', [$this->htmlHelper, 'dataAttributes'], ['is_safe' => ['html']])
         ];
     }
 

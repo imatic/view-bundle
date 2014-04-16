@@ -42,13 +42,13 @@ class KernelResponseListener
         if (!$this->layoutHelper->hasFlashMessages() && !$response->isRedirection()) {
             $flashBag = $this->session->getFlashBag();
 
-            $flashes = array();
+            $flashes = [];
             foreach ($flashBag->all() as $type => $messages) {
                 for ($i = 0; isset($messages[$i]); ++$i) {
-                    $flashes[] = array(
+                    $flashes[] = [
                         'type' => $type,
                         'message' => $messages[$i],
-                    );
+                    ];
                 }
             }
 
@@ -59,7 +59,7 @@ class KernelResponseListener
 
         }
 
-        $title = array();
+        $title = [];
 
         if ($this->layoutHelper->hasTitle()) {
             $title['title'] = $this->layoutHelper->getTitle();

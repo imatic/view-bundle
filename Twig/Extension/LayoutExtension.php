@@ -31,11 +31,11 @@ class LayoutExtension extends Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new Twig_SimpleFunction('imatic_view_has_layout', array($this->layoutHelper, 'hasLayout')),
-            new Twig_SimpleFunction('imatic_view_set_title', array($this->layoutHelper, 'setTitle')),
-            new Twig_SimpleFunction('imatic_view_set_full_title', array($this->layoutHelper, 'setFullTitle')),
-        );
+        return [
+            new Twig_SimpleFunction('imatic_view_has_layout', [$this->layoutHelper, 'hasLayout']),
+            new Twig_SimpleFunction('imatic_view_set_title', [$this->layoutHelper, 'setTitle']),
+            new Twig_SimpleFunction('imatic_view_set_full_title', [$this->layoutHelper, 'setFullTitle']),
+        ];
     }
 
     /**

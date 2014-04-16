@@ -37,12 +37,12 @@ class ExampleExtension extends \Twig_Extension
      */
     public function getTokenParsers()
     {
-        return array(
+        return [
             new ExampleTokenParser(
                 $this->templatingNameParser,
                 $this->templatingLocator
             ),
-        );
+        ];
     }
 
     /**

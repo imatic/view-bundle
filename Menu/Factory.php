@@ -28,7 +28,7 @@ class Factory implements FactoryInterface
      * @param  array                   $options
      * @return \Knp\Menu\ItemInterface
      */
-    public function createItem($name, array $options = array())
+    public function createItem($name, array $options = [])
     {
         return $this->factory->createItem($name, $options);
     }

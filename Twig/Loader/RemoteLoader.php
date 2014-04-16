@@ -25,12 +25,12 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      */
     public function addTemplate($name, $url, $ttl, array $blocks, array $metadata)
     {
-        $this->templates[$name] = array(
+        $this->templates[$name] = [
             'url' => $url,
             'ttl' => $ttl,
             'blocks' => $blocks,
             'metadata' => $metadata,
-        );
+        ];
     }
 
     /**
@@ -129,8 +129,8 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      */
     private function placeholdersToBlocks(array $blocks, $source)
     {
-        $usedBlockMap = array();
-        $placeholderToBlockMap = array();
+        $usedBlockMap = [];
+        $placeholderToBlockMap = [];
 
         $pattern = '';
         $first = true;
@@ -191,7 +191,7 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         $this->ensureExists($name);
 
         return
-            array('url' => $this->templates[$name]['url'])
+            ['url' => $this->templates[$name]['url']]
             + $this->templates[$name]['metadata']
         ;
     }

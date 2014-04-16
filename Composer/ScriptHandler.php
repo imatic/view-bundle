@@ -43,7 +43,7 @@ class ScriptHandler
         $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
 
-        $arguments = array();
+        $arguments = [];
         $arguments[] = '-e=prod';
 
         if ($options['assetic-dump-force'])
@@ -72,10 +72,10 @@ class ScriptHandler
 
     protected static function getOptions($event)
     {
-        $options = array_merge(array(
+        $options = array_merge([
             'assetic-dump-asset-root' => null,
             'assetic-dump-force' => false,
-        ), $event->getComposer()->getPackage()->getExtra());
+        ], $event->getComposer()->getPackage()->getExtra());
 
         return $options;
     }
