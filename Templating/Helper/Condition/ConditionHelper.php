@@ -36,6 +36,11 @@ class ConditionHelper
             return true;
         }
 
+        $context['user'] = null;
+        if ($this->securityContext->getToken()) {
+            $context['user'] = $this->securityContext->getToken()->getUser();
+        }
+
         return $this->expressionLanguage->evaluate($expression, $context);
     }
 }
