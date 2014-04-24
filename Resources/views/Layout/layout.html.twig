@@ -3,7 +3,7 @@
 {% import 'ImaticViewBundle:Component:button.html.twig' as button %}
 {% block document -%}
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}" data-base-path="{{ app.request.basePath }}">
 <head>
     <meta charset="UTF-8">
 
@@ -33,14 +33,16 @@
         'vendor/bootstrap/js/tab.js'
         'vendor/bootstrap/js/transition.js'
         'vendor/select2/select2.js'
+        'vendor/bootstrap-datepicker/js/bootstrap-datepicker.js'
+        'bundles/imaticview/js/bootstrap-datepicker-config.js'
         'bundles/imaticview/ts/ajaxify/init.ts'
         'bundles/imaticview/ts/toggle/toggle.ts'
-        'bundles/imaticform/js/ajax_choice.js'
-        'bundles/mopabootstrap/js/eyecon-bootstrap-datepicker.js'
+        'bundles/imaticform/js/ajax-choice.js'
         'bundles/mopabootstrap/js/mopabootstrap-collection.js'
         output='js/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
+        <script src="{{ asset('vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.' ~ app.request.locale ~ '.js') }}" type="text/javascript"></script>
     {% endblock %}
 
     <title>{% block title_top %}{% spaceless %}
