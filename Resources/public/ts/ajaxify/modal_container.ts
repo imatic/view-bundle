@@ -263,7 +263,7 @@ module imatic.view.ajaxify.modalContainer {
         /**
          * Set container's content
          */
-        setContent(content: any): void {
+        setContent(content: JQuery): void {
             var config = this.getConfiguration();
 
             var title = '';
