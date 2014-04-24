@@ -21,6 +21,11 @@ module imatic.view.ajaxify.event {
          * Event triggered before contents of an element are replaced or removed
          */
         static BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.before_content_update';
+
+        /**
+         * Event triggered when flash messages are about to be handled
+         */
+        static HANDLE_FLASH_MESSAGES = 'imatic.view.ajaxify.event.handle_flash_messages';
     }
 
     /**

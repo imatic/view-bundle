@@ -561,22 +561,29 @@ module imatic.view.ajaxify.container {
          * Handle flash messages
          */
         handleFlashes(flashes: FlashMessageInterface[]): void {
-            var modal = new Modal(this.document);
+            // trigger event
+            var event = jQuery.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
+            jQuery(this.getElement() || this.document.body).trigger(event);
 
-            var body = '';
+            // default implementation
+            if (false !== event.result) {
+                var modal = new Modal(this.document);
 
-            for (var i = 0; i < flashes.length; ++i) {
-                body += '<div class="alert alert-' + flashes[i].type + '">'
-                    + jQuery('<div/>').text(flashes[i].message).html()
-                    + '</div>'
-                ;
+                var body = '';
+
+                for (var i = 0; i < flashes.length; ++i) {
+                    body += '<div class="alert alert-' + flashes[i].type + '">'
+                        + jQuery('<div/>').text(flashes[i].message).html()
+                        + '</div>'
+                    ;
+                }
+
+                modal.setBody(body);
+                modal.setFooter('<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>');
+                modal.setSize(ModalSize.SMALL);
+
+                modal.show();
             }
-
-            modal.setBody(body);
-            modal.setFooter('<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>');
-            modal.setSize(ModalSize.SMALL);
-
-            modal.show();
         }
     }
 
