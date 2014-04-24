@@ -22,6 +22,10 @@ class TableOptions extends AbstractOptions
             $options['rowActions'][$key] = new ActionOptions($action);
         }
 
+        foreach ($options['exports'] as $key => $action) {
+            $options['exports'][$key] = new ActionOptions($action);
+        }
+
         return $options;
     }
 
@@ -35,6 +39,7 @@ class TableOptions extends AbstractOptions
             'selectableColumn' => '',
             'attr' => [],
             'translationDomain' => 'messages',
+            'exports' => [],
         ]);
         $resolver->setAllowedTypes([
             'actions' => 'array',
@@ -44,6 +49,7 @@ class TableOptions extends AbstractOptions
             'selectableColumn' => 'string',
             'attr' => 'array',
             'translationDomain' => 'string',
+            'exports' => 'array',
         ]);
     }
 }

@@ -38,6 +38,11 @@
                        title="{{ 'last'|trans({}, 'ImaticViewBundleComponent') }}">&raquo;|</a>
                 </li>
             </ul>
+            <p>{{ 'pagination'|trans({
+                    '%first%':pager.firstIndice,
+                    '%last%':pager.lastIndice,
+                    '%total%':pager.total
+                    }, 'ImaticViewBundleComponent') }}</p>
         {% endif %}
     {% endspaceless %}
 {% endblock %}

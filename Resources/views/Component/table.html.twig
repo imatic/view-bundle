@@ -96,14 +96,31 @@
             {% endblock %}
         </table>
 
+        <div class="row">
+            <div class="col-md-4">
+                {% if table.batchActions is not empty %}
+                    {% for action in table.batchActions %}
+                        {% do action.set('tag', 'input') %}
+                    {% endfor %}
+                    {{ button.group(table.batchActions) }}
+                {% endif %}
+            </div>
+            <div class="col-md-4 text-center">
+                {{ include('ImaticViewBundle:Component:pager.html.twig') }}
+            </div>
+            <div class="col-md-4 text-right">
+                {% if table.exports is not empty %}
+                    {% for action in table.exports %}
+                        {% do action.set('data', {'ajaxify': 'false'}) %}
+                    {% endfor %}
+                    {{ 'Exports'|trans({}, 'ImaticViewBundle') }}: {{ button.group(table.exports) }}
+                {% endif %}
+            </div>
+        </div>
+
         {% if table.batchActions is not empty %}
-            {% for action in table.batchActions %}
-                {% do action.set('tag', 'input') %}
-            {% endfor %}
-            {{ button.group(table.batchActions) }}
             </form>
         {% endif %}
     {% endspaceless %}
-    {{ include('ImaticViewBundle:Component:pager.html.twig') }}
     </div>
 {% endblock %}

@@ -5,3 +5,5 @@ prev:       Předchozí strana
 last:       Poslední strana
 first:      První strana
 current:    Aktuální strana
+
+pagination: "%first% - %last% ze %total%"

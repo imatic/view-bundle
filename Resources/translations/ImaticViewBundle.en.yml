@@ -5,8 +5,21 @@ Page not found:         Page not found
 Access denied:          Access denied
 Go back:                Go back
 
-
 Yes:                    Yes
 yes:                    Yes
 No:                     No
 no:                     No
+
+List:                   List
+Create:                 Create
+Show:                   Show
+Edit:                   Edit
+Delete:                 Delete
+
+Confirm:                Do you really want to perform this action?
+Actions:                Actions
+Exports:                Exports
+
+Do filter:              Filtr
+Reset filter:           Reset filtr
+Filter:                 "{0}Filtr|[1,Inf]Filtr (%count% filters set)"

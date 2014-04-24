@@ -28,6 +28,16 @@ header .navbar {
     #gradient > .vertical(lighten(@gray-dark, 10%), @gray-dark);
 }
 
+footer {
+    margin-top: @line-height-computed;
+
+    .footer-content {
+        border-top: 1px solid darken(@gray-lighter, 10%);
+        #gradient > .vertical(@gray-lighter, darken(@gray-lighter, 10%));
+        .header-font();
+    }
+}
+
 // === Blocks ===
 .headline {
     margin-bottom: 20px;
@@ -71,22 +81,29 @@ header .navbar {
 }
 
 // === Components ===
-.imatic-view-table table {
-    th {
-        .text-center;
-    }
-    td {
-        vertical-align: middle !important;
-
-        &.number, &.money, &.date {
-            .text-right;
-        }
-        &.boolean, &.actions {
+.imatic-view-table {
+    table {
+        th {
             .text-center;
-            * {
-                .text-left;
+        }
+        td {
+            vertical-align: middle !important;
+
+            &.number, &.money, &.date {
+                .text-right;
+            }
+            &.boolean, &.actions {
+                .text-center;
+                * {
+                    .text-left;
+                }
             }
         }
+    }
+
+    ul.pagination {
+        margin-top: 0;
+        margin-bottom: 0;
     }
 }
 

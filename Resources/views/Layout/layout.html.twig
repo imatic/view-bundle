@@ -45,7 +45,7 @@
 
     <title>{% block title_top %}{% spaceless %}
             {% block title %}{{ block('headline') }}{% endblock %}
-            {% endspaceless %} - {% spaceless %}
+        {% endspaceless %} - {% spaceless %}
             {% block application_name %}Imatic IS{% endblock %}
         {% endspaceless %}{% endblock %}</title>
 
@@ -112,6 +112,13 @@
 
         {% block action %}{% endblock %}
     </div>
+
+    <footer class="container-fluid">
+        <div class="footer-content">
+            <a title="{{ 'Copyright'|trans({}, 'ImaticViewBundle') }}"
+               href="http://www.imatic.cz">{{ 'Copyright'|trans({}, 'ImaticViewBundle') }}</a>
+        </div>
+    </footer>
 
 {% endblock %}
 
