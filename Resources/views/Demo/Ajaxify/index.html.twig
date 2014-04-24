@@ -460,8 +460,29 @@
             flash messages.
         </p>
 
+        <ul>
+            <li>
+                By default, the flash messages are displayed inside a modal dialog.
+            </li>
+            <li>
+                <p>
+                    If <code>bootstrap_notify.ts</code> is loaded, the messages will
+                    be displayed using the <a href="http://goodybag.github.io/bootstrap-notify/">Bootstrap Notify</a>
+                    library.
+                </p>
+
+                <div class="alert alert-info">
+                    <p>
+                        The following element must exist in the document for the library to be active:<br>
+                        <code>{{ '<div id="notifications" class="notifications top-right"></div>'|escape }}</code>
+                    </p>
+                </div>
+            </li>
+        </ul>
+
         <p>
-            By default, the flash messages are displayed inside a modal dialog.
+
+
         </p>
 
         {% example %}

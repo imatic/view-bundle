@@ -11,6 +11,7 @@
         {%- stylesheets
         'bundles/imaticview/less/style.less'
         'vendor/select2/select2.css'
+        'vendor/bootstrap-notify/css/bootstrap-notify.css'
         'bundles/imaticview/css/demo/ajaxify/ajaxify.css'
         output='css/style.css' -%}
         <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
@@ -33,9 +34,12 @@
         'vendor/bootstrap/js/tab.js'
         'vendor/bootstrap/js/transition.js'
         'vendor/select2/select2.js'
+        'vendor/bootstrap-notify/js/bootstrap-notify.js'
+        'bundles/imaticview/js/bootstrap-notify.js'
         'vendor/bootstrap-datepicker/js/bootstrap-datepicker.js'
         'bundles/imaticview/js/bootstrap-datepicker-config.js'
         'bundles/imaticview/ts/ajaxify/init.ts'
+        'bundles/imaticview/ts/ajaxify/bootstrap_notify.ts'
         'bundles/imaticview/ts/toggle/toggle.ts'
         'bundles/imaticform/js/ajax-choice.js'
         'bundles/mopabootstrap/js/mopabootstrap-collection.js'
@@ -60,6 +64,10 @@
 </head>
 
 <body>
+
+{% block notifications %}
+    <div id="notifications" class="notifications top-right"></div>
+{% endblock %}
 
 {% block body %}
 
