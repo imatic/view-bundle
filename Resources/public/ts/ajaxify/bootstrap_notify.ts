@@ -25,8 +25,8 @@ module imatic.view.ajaxify.bootstrapNotify {
     var fadeOutMap = {
         success: true,
         info: true,
-        danger: false,
         warning: false,
+        danger: false,
     };
 
     /**
@@ -50,7 +50,7 @@ module imatic.view.ajaxify.bootstrapNotify {
                 var options = {
                     message: {text: flash.message},
                     type: flash.type,
-                    fadeOut: {enabled: fadeOutMap[flash.type], delay: 5000},
+                    fadeOut: {enabled: Boolean(fadeOutMap[flash.type]), delay: 5000},
                 };
 
                 // show notification
