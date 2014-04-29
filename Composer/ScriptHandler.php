@@ -100,6 +100,8 @@ class ScriptHandler
             }
         }
 
+        ksort($dependencies, SORT_NATURAL);
+
         return $dependencies;
     }
 
