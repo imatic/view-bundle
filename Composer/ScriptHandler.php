@@ -85,9 +85,11 @@ class ScriptHandler
                 // print diff info
                 if (!empty($diff)) {
                     foreach ($diff as $component => $version) {
-                        $operation = isset($dependencies[$component]) ? '<comment>CHANGED</comment>': '<info>ADDED</info>';
-
-                        $io->write("\t{$operation} {$component} [{$dependencies[$component]} => {$version}]");
+                        if (isset($dependencies[$component])) {
+                            $io->write("\t<comment>CHANGED</comment> {$component} [{$dependencies[$component]} => {$version}]");
+                        } else {
+                            $io->write("\t<info>ADDED</info> {$component} [{$version}]");
+                        }
                     }
                 } else {
                     $io->write("\tNo changes");
