@@ -4,7 +4,6 @@
 /// <reference path="action.ts"/>
 /// <reference path="message.ts"/>
 /// <reference path="css.ts"/>
-/// <reference path="modal.ts"/>
 /// <reference path="jquery.ts"/>
 /// <reference path="history.ts"/>
 /// <reference path="ajax.ts"/>
@@ -27,8 +26,6 @@ module imatic.view.ajaxify.container {
     import RequestAction            = imatic.view.ajaxify.action.RequestAction;
     import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
     import CssClasses               = imatic.view.ajaxify.css.CssClasses;
-    import ModalSize                = imatic.view.ajaxify.modal.ModalSize;
-    import Modal                    = imatic.view.ajaxify.modal.Modal;
     import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
     import HistoryHandler           = imatic.view.ajaxify.history.HistoryHandler;
     import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
@@ -564,26 +561,6 @@ module imatic.view.ajaxify.container {
             // trigger event
             var event = jQuery.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
             jQuery(this.getElement() || this.document.body).trigger(event);
-
-            // default implementation
-            if (false !== event.result) {
-                var modal = new Modal(this.document);
-
-                var body = '';
-
-                for (var i = 0; i < flashes.length; ++i) {
-                    body += '<div class="alert alert-' + flashes[i].type + '">'
-                        + jQuery('<div/>').text(flashes[i].message).html()
-                        + '</div>'
-                    ;
-                }
-
-                modal.setBody(body);
-                modal.setFooter('<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>');
-                modal.setSize(ModalSize.SMALL);
-
-                modal.show();
-            }
         }
     }
 

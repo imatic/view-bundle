@@ -344,6 +344,9 @@
         <h4>Behaviour</h4>
         <ul>
             <li>
+                Multiple modal dialogs at the same time are supported.
+            </li>
+            <li>
                 All widget and container functionality is available inside
                 modals as well.
             </li>
@@ -351,10 +354,6 @@
                 The modal dialog acts as a parent container for its contents.
                 Any widgets that are not contained in / targeted into another
                 container will be targeted into the modal dialog.
-            </li>
-            <li>
-                If a form submission action takes place in the modal's container
-                and the response code is 200, the dialog will close itself.
             </li>
         </ul>
 
@@ -414,7 +413,12 @@
                 </tr>
                 <tr>
                     <td><code>data-modal-on-close</code></td>
-                    <td>perform a request when the modal is closed</td>
+                    <td>
+                        <p>perform a request when the modal is closed</p>
+                        <ul>
+                            <li>the action is triggered in context of the widget that opened the modal</li>
+                        </ul>
+                    </td>
                     <td><a href="#request-strings">a request string</a></td>
                     <td>-</td>
                 </tr>
@@ -429,7 +433,7 @@
                     <td>
                         <p>forward successful form response that was submitted into the modal's container</p>
                         <ul>
-                            <li>the action is triggered in the original widget's context</li>
+                            <li>the action is triggered in context of the widget that opened the modal</li>
                             <li>the action is trigered after the modal is closed</li>
                             <li>the action is surpressesed by <code>data-modal-on-close</code></li>
                         </ul>
@@ -454,11 +458,6 @@
 
 
         <h4>Displaying flash messages</h4>
-
-        <p>
-            Each container implementation is responsible for handling of the received
-            flash messages.
-        </p>
 
         <ul>
             <li>
@@ -509,7 +508,7 @@
 
         <p>
             Void containers are useful in cases when you wish to perform a background action
-            but do not want reload a physical container in the page.
+            but do not want reload an actual container in the page.
         </p>
 
         <div class="alert alert-info">

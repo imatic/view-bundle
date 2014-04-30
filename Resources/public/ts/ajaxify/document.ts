@@ -5,6 +5,8 @@
 /// <reference path="action.ts"/>
 /// <reference path="link.ts"/>
 /// <reference path="form.ts"/>
+/// <reference path="message.ts"/>
+/// <reference path="modal.ts"/>
 /// <reference path="modal_container.ts"/>
 /// <reference path="void_container.ts"/>
 /// <reference path="jquery.ts"/>
@@ -32,6 +34,10 @@ module imatic.view.ajaxify.document {
     import VoidContainerHandler         = imatic.view.ajaxify.voidContainer.VoidContainerHandler;
     import LinkHandler                  = imatic.view.ajaxify.link.LinkHandler;
     import FormHandler                  = imatic.view.ajaxify.form.FormHandler;
+    import ModalSize                    = imatic.view.ajaxify.modal.ModalSize;
+    import Modal                        = imatic.view.ajaxify.modal.Modal;
+    import ModalStackHandler            = imatic.view.ajaxify.modal.ModalStackHandler;
+    import FlashMessageInterface        = imatic.view.ajaxify.message.FlashMessageInterface;
     import jQuery                       = imatic.view.ajaxify.jquery.jQuery;
 
     /**
@@ -90,6 +96,9 @@ module imatic.view.ajaxify.document {
                 this.document
             );
             this.containerHandler.addTargetHandler(voidContainerHandler);
+
+            // modal stack handler
+            var modalStackHandler = new ModalStackHandler(this.document);
         }
 
         /**
@@ -101,6 +110,7 @@ module imatic.view.ajaxify.document {
                 .on('submit', this.onSubmit)
                 .on(DomEvents.ACTION, this.onAction)
                 .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
+                .on(DomEvents.HANDLE_FLASH_MESSAGES, this.onHandleFlashMessages)
             ;
         }
 
@@ -165,13 +175,13 @@ module imatic.view.ajaxify.document {
         /**
          * Handle action event
          */
-        private onAction = (event: JQueryEventObject, ...args: any[]): any => {
+        private onAction = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
             try {
                 var container = this.containerHandler.findInstance(element, false);
 
-                container.handleAction(<ActionInterface> arguments[1]);
+                container.handleAction(<ActionInterface> event['action']);
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
                     throw e;
@@ -197,6 +207,46 @@ module imatic.view.ajaxify.document {
                 containers[i].destroy();
             }
         };
+
+        /**
+         * Handle onHandleFlashMessages event
+         */
+        private onHandleFlashMessages = (event: JQueryEventObject): void => {
+            this.showFlashMessages(event['flashes'], <HTMLElement> event.target);
+        };
+
+        /**
+         * Show flash messages
+         */
+        showFlashMessages(flashes: FlashMessageInterface[], originElement: HTMLElement): void {
+            // trigger event
+            var event = jQuery.Event(DomEvents.RENDER_FLASH_MESSAGES, {
+                flashes: flashes,
+                originElement: originElement,
+            });
+            jQuery(this.document.body).trigger(event);
+
+            // default implementation
+            if (false !== event.result) {
+                var modal = new Modal(this.document);
+
+                var body = '';
+
+                for (var i = 0; i < flashes.length; ++i) {
+                    body += '<div class="alert alert-' + flashes[i].type + '">'
+                        + jQuery('<div/>').text(flashes[i].message).html()
+                        + '</div>'
+                    ;
+                }
+
+                modal.setBody(body);
+                modal.setFooter('<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>');
+                modal.setSize(ModalSize.SMALL);
+
+                modal.show();
+            }
+        }
+
 
         /**
          * Get container context for given element
