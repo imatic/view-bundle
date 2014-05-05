@@ -14,18 +14,43 @@ module imatic.view.ajaxify.event {
     {
         /**
          * Event triggered by code to execute action in a context
+         *
+         * Arguments: {
+         *      action: imatic.view.ajaxify.action.ActionInterface;
+         * }
          */
         static ACTION = 'imatic.view.ajaxify.event.action';
 
         /**
          * Event triggered before contents of an element are replaced or removed
+         *
+         * Arguments: {}
          */
         static BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.before_content_update';
 
         /**
-         * Event triggered when flash messages are about to be handled
+         * Event triggered when there are flash messages to be handled
+         *
+         * This is used by the document handler.
+         *
+         * Arguments: {
+         *      flashes: imatic.view.ajaxify.message.FlashMessageInterface[];
+         * }
          */
         static HANDLE_FLASH_MESSAGES = 'imatic.view.ajaxify.event.handle_flash_messages';
+
+        /**
+         * Event triggered when flash messages are to be rendered
+         *
+         * This should be used by an extenstion that reimplements
+         * the way flash messages are rendered.
+         *
+         * Arguments: {
+         *      flashes: imatic.view.ajaxify.message.FlashMessageInterface[];
+         *      originElement: HTMLElement;
+         * }
+         */
+        static RENDER_FLASH_MESSAGES = 'imatic.view.ajaxify.event.render_flash_messages';
     }
 
     /**

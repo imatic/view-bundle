@@ -22,12 +22,13 @@ module imatic.view.ajaxify.bootstrapNotify {
      * Defines which flash types do automatically fade out
      * Unknown types do not fade out.
      */
-    var fadeOutMap = {
-        success: true,
-        info: true,
-        warning: false,
-        danger: false,
+    var fadeOutDelayMap = {
+        success: 5000,
+        info: 5000,
+        warning: 10000,
+        danger: 10000,
     };
+    var fallbackDelay = 10000;
 
     /**
      * Function to verify availability of bootstrap-notify
@@ -37,9 +38,9 @@ module imatic.view.ajaxify.bootstrapNotify {
     }
 
     /**
-     * Handle flash messages using bootstrap-notify
+     * Render flash messages using bootstrap-notify
      */
-    export function handleFlashMessages(event: JQueryEventObject) {
+    export function renderFlashMessages(event: JQueryEventObject) {
         var notificationContainer = document.getElementById('notifications');
 
         if (notificationContainer) {
@@ -50,7 +51,10 @@ module imatic.view.ajaxify.bootstrapNotify {
                 var options = {
                     message: {text: flash.message},
                     type: flash.type,
-                    fadeOut: {enabled: Boolean(fadeOutMap[flash.type]), delay: 5000},
+                    fadeOut: {
+                        enabled: true,
+                        delay: fadeOutDelayMap[flash.type] || fallbackDelay,
+                    },
                 };
 
                 // show notification
@@ -77,10 +81,10 @@ module imatic.view.ajaxify.bootstrapNotify {
     // init on ready
     jQuery(window.document).ready(function () {
         if (bootstrapNotifyIsAvailable()) {
-            // attach to the "HANDLE_FLASH_MESSAGES" event
+            // attach to the "RENDER_FLASH_MESSAGES" event
             jQuery(window.document.body).on(
-                DomEvents.HANDLE_FLASH_MESSAGES,
-                handleFlashMessages
+                DomEvents.RENDER_FLASH_MESSAGES,
+                renderFlashMessages
             );
         }
     });

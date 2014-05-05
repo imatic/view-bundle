@@ -1,5 +1,5 @@
 {
-    "name": "AppImaticViewBundle",
+    "name": "ImaticViewBundle",
     "dependencies": {
         "jquery": "~1.10",
         "bootstrap": "~3.1",

@@ -24,11 +24,67 @@ module imatic.view.ajaxify.modal {
     }
 
     /**
+     * Modal stack handler
+     */
+    export class ModalStackHandler
+    {
+        /**
+         * Constructor
+         */
+        constructor(private document: HTMLDocument) {
+            jQuery(this.document)
+                .on('show.bs.modal', this.onModalShow)
+            ;
+        }
+
+        /**
+         * Handle onModalShow event
+         */
+        private onModalShow = (event: JQueryEventObject): void => {
+            var modal = jQuery(event.target).data('bs.modal');
+
+            // extend the backdrop() method to hook our logic
+            // - the logic cannot be right here because the backdrop is not yet initialized
+            // - shown.bs.modal cannot be used because it waits for the animations
+            var backdropMethod = modal['backdrop'];
+            modal['backdrop'] = (): void => {
+                backdropMethod.apply(modal, arguments);
+                this.updateZIndexes();
+            };
+        };
+
+        /**
+         * Update z-indexes of existing modals
+         */
+        private updateZIndexes(): void {
+            var modals = jQuery('div.modal', this.document.body);
+            var zIndex = null;
+            for (var i = 0; i < modals.length; ++i) {
+                var modal = jQuery(modals[i]);
+                var modalObj = modal.data('bs.modal');
+
+                if (null === zIndex) {
+                    zIndex = Number(modal.css('z-index'));
+                } else {
+                    zIndex += 10;
+                }
+
+                modal.css('z-index', zIndex);
+
+                if (modalObj['$backdrop']) {
+                    modalObj['$backdrop'].css('z-index', zIndex - 5);
+                }
+            }
+        }
+    }
+
+    /**
      * Modal
      */
     export class Modal
     {
         static uidCounter = 0;
+
         private element: HTMLElement;
         private uid: number;
         private closable: boolean = true;
