@@ -87,9 +87,12 @@ footer {
         th {
             .text-center;
         }
-        td {
+        td, th {
             vertical-align: middle !important;
 
+            &.text {
+                .text-left;
+            }
             &.number, &.money, &.date {
                 .text-right;
             }
