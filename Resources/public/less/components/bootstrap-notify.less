@@ -1,6 +1,13 @@
 /* Notifications */
 #notifications {
+    z-index: 10000;
+
+    &:empty {
+        display: none;
+    }
+
     a.close {
         margin-left: .5em;
     }
 }
+
