@@ -102,8 +102,7 @@ module imatic.view.ajaxify.history {
                         // trigger action
                         var action = HistoryStateChangeAction.createFromRequestInfo(requestInfo);
                         jQuery(containerElement).trigger(
-                            DomEvents.ACTION,
-                            [action]
+                            jQuery.Event(DomEvents.ACTION, {action: action})
                         );
                     }
                 }

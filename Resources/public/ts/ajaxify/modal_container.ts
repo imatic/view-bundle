@@ -191,8 +191,7 @@ module imatic.view.ajaxify.modalContainer {
 
             if (action) {
                 jQuery(originalTriggerWidget.getElement()).trigger(
-                    DomEvents.ACTION,
-                    [action]
+                    jQuery.Event(DomEvents.ACTION, {action: action})
                 );
             }
         }
