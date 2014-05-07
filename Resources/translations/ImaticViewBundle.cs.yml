@@ -22,4 +22,5 @@ Exports:                Exportovat
 
 Do filter:              Filtrovat
 Reset filter:           Zrušit filtr
+Default filter:         Výchozí filtr
 Filter:                 "{0}Filtr|[1,Inf]Filtr (%count% filtrů je nastaveno)"

@@ -20,7 +20,7 @@
                     <legend data-toggle=".imatic-view-filter-content">{{ 'Filter'|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
                     <div class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
-                        {% for field in form %}
+                        {% for field in form if field.vars.name != 'clearFilter' %}
                             <div class="form-group row">
                                 <div class="col-md-2">
                                     <label for="{{ field.value.vars.id }}">{{ field.vars.name|humanize|trans({}, filter.translationDomain) }}</label>
@@ -41,7 +41,14 @@
                                        value="{{ 'Do filter'|trans({}, 'ImaticViewBundle') }}"
                                        class="btn btn-primary">
 
-                                <a href="{{ uri }}" class="btn">{{ 'Reset filter'|trans({}, 'ImaticViewBundle') }}</a>
+                                {{ form_widget(form.clearFilter, {
+                                    label: 'Reset filter',
+                                    translation_domain: 'ImaticViewBundle'
+                                }) }}
+
+                                {% if filter.hasDefaults %}
+                                    <a href="{{ uri }}" class="btn btn-default">{{ 'Default filter'|trans({}, 'ImaticViewBundle') }}</a>
+                                {% endif %}
                             </div>
                         </div>
                         {{ form_end(form) }}
