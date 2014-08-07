@@ -157,12 +157,14 @@ module imatic.view.ajaxify.widget {
 
             var action = this.doCreateAction(config);
 
-            action.events.addCallback('begin', (event: EventInterface): void => {
-                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
-            });
-            action.events.addCallback('complete', (event: EventInterface): void => {
-                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
-            });
+            if (action) {
+                action.events.addCallback('begin', (event: EventInterface): void => {
+                    jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                });
+                action.events.addCallback('complete', (event: EventInterface): void => {
+                    jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                });
+            }
 
             return action;
         }
@@ -183,9 +185,11 @@ module imatic.view.ajaxify.widget {
 
         /**
          * Create action instance
+         *
+         * NULL may be returned.
          */
         doCreateAction(config: {[key: string]: any;}): ActionInterface {
-            throw new Error('Not implemented');
+            return null;
         }
     }
 

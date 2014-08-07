@@ -117,7 +117,7 @@ module imatic.view.ajaxify.document {
         /**
          * Validate given element
          */
-        private isValidElement(element: HTMLElement): boolean {
+        isValidElement(element: HTMLElement): boolean {
             return false !== jQuery(element).data('ajaxify');
         }
 
@@ -136,8 +136,9 @@ module imatic.view.ajaxify.document {
                     var context = this.getContainerContext(element);
                     var link = this.linkHandler.getInstance(element, context.containerElement);
 
-                    this.dispatch(context.container, link);
-                    event.preventDefault();
+                    if (this.dispatch(context.container, link)) {
+                        event.preventDefault();
+                    }
                 } else if (this.formHandler.isValidSubmitElement(element)) {
                     this.formHandler.markSubmitElement(element);
                 }
@@ -162,8 +163,9 @@ module imatic.view.ajaxify.document {
                     var context = this.getContainerContext(element);
                     var form = this.formHandler.getInstance(element, context.containerElement);
 
-                    this.dispatch(context.container, form);
-                    event.preventDefault();
+                    if (this.dispatch(context.container, form)) {
+                        event.preventDefault();
+                    }
                 }
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
@@ -281,11 +283,15 @@ module imatic.view.ajaxify.document {
         /**
          * Perform widget <=> container interaction
          */
-        private dispatch(container: ContainerInterface, widget: WidgetInterface): void {
+        private dispatch(container: ContainerInterface, widget: WidgetInterface): boolean {
             var action = widget.createAction();
 
             if (action) {
                 container.handleAction(action);
+
+                return true;
+            } else {
+                return false;
             }
         }
     }

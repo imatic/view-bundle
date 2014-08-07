@@ -128,8 +128,15 @@ module imatic.view.ajaxify.form {
             var form = <HTMLFormElement> this.element;
             var formData = jQuery(form).serializeArray();
 
-            // add used submit button's name to the data
+            // get used submit button
             var submitButton = this.getUsedSubmitButton(form);
+
+            // abort on non-ajaxify submit buttons
+            if (submitButton && !imatic.view.ajaxify.getDocumentHandler().isValidElement(submitButton)) {
+                return null;
+            }
+
+            // add used submit button's name to the data
             if (submitButton && submitButton.name) {
                 formData.push({
                     name: submitButton.name,
