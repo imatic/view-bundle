@@ -37,18 +37,22 @@
                         {% endfor %}
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <input type="submit"
-                                       value="{{ 'Do filter'|trans({}, 'ImaticViewBundle') }}"
-                                       class="btn btn-primary">
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ 'Do filter'|trans({}, 'ImaticViewBundle') }}
+                                    </button>
 
-                                {{ form_widget(form.clearFilter, {
+                                    {{ form_widget(form.clearFilter, {
                                     label: 'Reset filter',
-                                    translation_domain: 'ImaticViewBundle'
-                                }) }}
+                                    translation_domain: 'ImaticViewBundle',
+                                    attr: { class: 'btn btn-default' }
+                                    }) }}
 
-                                {% if filter.hasDefaults %}
-                                    <a href="{{ uri }}" class="btn btn-default">{{ 'Default filter'|trans({}, 'ImaticViewBundle') }}</a>
-                                {% endif %}
+                                    {% if filter.hasDefaults %}
+                                        <a href="{{ uri }}"
+                                           class="btn btn-default">{{ 'Default filter'|trans({}, 'ImaticViewBundle') }}</a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         {{ form_end(form) }}
