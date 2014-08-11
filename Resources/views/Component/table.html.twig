@@ -36,7 +36,8 @@
                 <thead>
                 <tr>
                     {% if table.selectable %}
-                        <th>
+                        <th class="batch-selector-switch">
+                            <input type="checkbox" onchange="jQuery('tbody td.batch-selector input', jQuery(this).parents('table')[0]).prop('checked', this.checked)">
                         </th>
                     {% endif %}
                     {% for column in columns %}
@@ -67,7 +68,7 @@
                             {# da se vygenerovat na zacatku a tady jen replacnout ID #}
                             {% block table_row_select %}
                                 {% if table.selectable %}
-                                    <td>
+                                    <td class="batch-selector">
                                         <input type="checkbox"
                                                name="selected[]"
                                                value="{{ attribute(item, table.selectableColumn) }}">
