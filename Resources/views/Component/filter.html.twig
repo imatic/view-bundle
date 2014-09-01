@@ -15,12 +15,13 @@
             {% set form = filter.form.createView() %}
         {% endif %}
         {% if form is defined %}
-            <div class="imatic-view-filter">
+            <div class="imatic-view-filter {% if filter.form.valid %} imatic-view-initial-closed{% endif %}">
                 <fieldset>
-                    <legend data-toggle=".imatic-view-filter-content">{{ 'Filter'|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
+                    <legend data-toggle=".imatic-view-filter-content">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
                     <div class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
                         {% for field in form if field.vars.name != 'clearFilter' %}
+                        {% set field_has_error = field.value.vars.errors is not empty %}
                             <div class="form-group row">
                                 <div class="col-md-2">
                                     <label for="{{ field.value.vars.id }}">{{ field.vars.name|humanize|trans({}, filter.translationDomain) }}</label>
@@ -30,8 +31,11 @@
                                         {{ form_widget(field.operator, {horizontal: false}) }}
                                     {% endif %}
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8{% if field_has_error %} has-error{% endif %}">
                                     {{ form_widget(field.value, {horizontal: false}) }}
+                                    {% if field_has_error %}
+                                        {{ form_errors(field.value) }}
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}

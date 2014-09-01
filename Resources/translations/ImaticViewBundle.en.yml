@@ -20,6 +20,7 @@ Confirm:                Do you really want to perform this action?
 Actions:                Actions
 Exports:                Exports
 
-Do filter:              Filtr
-Reset filter:           Reset filtr
-Filter:                 "{0}Filtr|[1,Inf]Filtr (%count% filters set)"
+Do filter:              Filter
+Reset filter:           Reset filter
+Filter:                 "{0}Filter|[1,Inf]Filter (%count% filters set)"
+Filter errors:          "{0}Filter (has errors)|[1,Inf]Filter (%count% filters set, has errors)"
