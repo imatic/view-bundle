@@ -26,6 +26,10 @@ class CommonFormatter implements FormatterInterface
 
     public function formatText($value, array $options = [])
     {
+        if (isset($options['convert_newlines']) && $options['convert_newlines']) {
+            return nl2br($value);
+        }
+
         return $value;
     }
 
