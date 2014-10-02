@@ -18,6 +18,8 @@ class TestKernel extends BaseTestKernel
             new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new \Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+            new \Imatic\Bundle\FormBundle\ImaticFormBundle(),
+            new \Genemu\Bundle\FormBundle\GenemuFormBundle(),
 
             new \Imatic\Bundle\ViewBundle\ImaticViewBundle(),
             new \Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\ImaticViewBundle\AppImaticViewBundle(),
