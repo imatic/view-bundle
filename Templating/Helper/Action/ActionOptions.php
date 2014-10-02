@@ -3,6 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Action;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -47,6 +48,15 @@ class ActionOptions extends AbstractOptions
             'nested' => 'array',
             'condition' => 'string',
             'tag' => 'string',
+        ]);
+        $resolver->setNormalizers([
+            'nested' => function (Options $options, $nested) {
+                foreach ($nested as &$nestedAction) {
+                    $nestedAction = new static($nestedAction);
+                }
+                
+                return $nested;
+            },
         ]);
     }
 }

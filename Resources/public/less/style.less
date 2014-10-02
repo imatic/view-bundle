@@ -68,6 +68,26 @@ footer {
     .header-font()
 }
 
+// === Dropdowns ===
+
+.dropdown-menu > li > input[type=submit] {
+    border: none;
+    background: none;
+    min-width: 100%;
+    text-align: left;
+
+    &:extend(.dropdown-menu > li > a);
+
+    &:hover,
+    &:focus {
+        &:extend(.dropdown-menu > li > a:hover);
+    }
+}
+
+.dropdown-menu > .active > input[type=submit] {
+    &:extend(.dropdown-menu > .active > a);
+}
+
 // === Classes ===
 .yes {
     .glyphicon;
