@@ -1,5 +1,6 @@
 mopa_bootstrap:
     form:
+        checkbox_label: label
         show_legend: false
         collection:
             widget_remove_btn:
@@ -7,4 +8,3 @@ mopa_bootstrap:
             widget_add_btn:
                 icon: plus-sign
         render_optional_text: false
-
