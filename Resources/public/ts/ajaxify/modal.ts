@@ -295,7 +295,7 @@ module imatic.view.ajaxify.modal {
          * Create the modal
          */
         private create(): void {
-            var html = '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imatic_view_ajaxify_modal_title_' + this.uid + '" aria-hidden="true">'
+            var html = '<div class="modal fade" role="dialog" aria-labelledby="imatic_view_ajaxify_modal_title_' + this.uid + '" aria-hidden="true">'
                 + '<div class="modal-dialog">'
                     + '<div class="modal-content">'
                         + '<div class="modal-header">'
