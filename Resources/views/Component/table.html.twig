@@ -99,7 +99,7 @@
 
         <div class="row">
             <div class="col-md-4">
-                <label><input type="checkbox" name="selectedAll"> {{ 'Select All'|trans({}, 'ImaticViewBundle') }}</label>
+                <label><input type="checkbox" name="selectedAll"> {{ 'All elements'|trans({}, 'ImaticViewBundle') }}</label>&nbsp;
                 {% if table.batchActions is not empty %}
                     {% for action in table.batchActions %}
                         {% if action.nested is not empty %}
