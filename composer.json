@@ -27,7 +27,8 @@
         "sensio/framework-extra-bundle": "3.0.*",
         "knplabs/knp-menu-bundle": "2.0.*",
         "genemu/form-bundle": "2.2.*",
-        "mopa/bootstrap-bundle": "3.0.*"
+        "mopa/bootstrap-bundle": "3.0.*",
+        "imatic/form-bundle": "*"
     },
     "require-dev": {
         "imatic/testing-bundle": "2.4.*",

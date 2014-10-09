@@ -99,6 +99,7 @@
 
         <div class="row">
             <div class="col-md-4">
+                <label><input type="checkbox" name="selectedAll"> {{ 'Select All'|trans({}, 'ImaticViewBundle') }}</label>
                 {% if table.batchActions is not empty %}
                     {% for action in table.batchActions %}
                         {% if action.nested is not empty %}
@@ -126,6 +127,7 @@
         </div>
 
         {% if table.batchActions is not empty %}
+                <input name="query" type="hidden" value="{{ query }}">
             </form>
         {% endif %}
     {% endspaceless %}
