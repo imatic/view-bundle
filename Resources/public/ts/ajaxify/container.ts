@@ -544,7 +544,7 @@ module imatic.view.ajaxify.container {
             // handle history
             if (event['response'].valid && config['history'] && elementId) {
                 // state change
-                if (event['initiator']) {
+                if (event['action'].initiator) {
                     HistoryHandler.containerStateChange(
                         elementId,
                         event['response'].fullTitle,

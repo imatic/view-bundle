@@ -28,6 +28,7 @@ module imatic.view.ajaxify.action {
     export interface ActionInterface
     {
         events: EventDispatcherInterface;
+        initiator: WidgetInterface;
 
         /**
          * See if the action is complete
@@ -103,7 +104,6 @@ module imatic.view.ajaxify.action {
 
             this.events.dispatch('begin', new Event({
                 action: this,
-                initiator: this.initiator,
                 container: container,
                 request: this.request,
             }));
@@ -116,7 +116,6 @@ module imatic.view.ajaxify.action {
                 if (response.valid) {
                     var event = this.events.dispatch('apply', new Event({
                         action: this,
-                        initiator: this.initiator,
                         container: container,
                         response: response,
                         proceed: true,
@@ -130,7 +129,6 @@ module imatic.view.ajaxify.action {
                 // complete event
                 this.events.dispatch('complete', new Event({
                     action: this,
-                    initiator: this.initiator,
                     container: container,
                     response: response,
                 }));
@@ -160,7 +158,7 @@ module imatic.view.ajaxify.action {
          * Constructor
          */
         constructor(
-            private initiator: WidgetInterface,
+            public initiator: WidgetInterface,
             private response: Response,
             private contentSelector?: string
         ) {
@@ -189,7 +187,6 @@ module imatic.view.ajaxify.action {
         execute(container: ContainerInterface): void {
             this.events.dispatch('begin', new Event({
                 action: this,
-                initiator: this.initiator,
                 container: container,
                 request: null,
             }));
@@ -198,7 +195,6 @@ module imatic.view.ajaxify.action {
             if (this.response.valid) {
                 var event = this.events.dispatch('apply', new Event({
                     action: this,
-                    initiator: this.initiator,
                     container: container,
                     response: this.response,
                     proceed: true,
@@ -212,7 +208,6 @@ module imatic.view.ajaxify.action {
             // complete event
             this.events.dispatch('complete', new Event({
                 action: this,
-                initiator: this.initiator,
                 container: container,
                 response: this.response,
             }));

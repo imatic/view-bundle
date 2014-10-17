@@ -106,7 +106,6 @@ module imatic.view.ajaxify.link {
 
             return link;
         }
-
     }
 
     /**

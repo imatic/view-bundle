@@ -200,11 +200,13 @@ module imatic.view.ajaxify.modalContainer {
          * Handle given action
          */
         handleAction(action: ActionInterface): void {
+            action.events.addCallback('begin', (event: EventInterface): void => {
+                this.actionInitiator = event['action'].initiator;
+            });
+
             action.events.addCallback('apply', (event: EventInterface): void => {
                 if (event['response'].valid) {
                     var config = this.getConfiguration();
-
-                    this.actionInitiator = event['initiator'];
                     this.responseTitle = event['response'].title || null;
                     this.resendResponse = null;
 
@@ -225,7 +227,6 @@ module imatic.view.ajaxify.modalContainer {
                             this.modal.hide();
                         }
                     }
-
                 }
             });
 

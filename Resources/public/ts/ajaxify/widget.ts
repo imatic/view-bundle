@@ -112,6 +112,8 @@ module imatic.view.ajaxify.widget {
      */
     export class Widget implements WidgetInterface
     {
+        private pendingActions: ActionInterface[] = [];
+
         /**
          * Constructor
          */
@@ -125,6 +127,11 @@ module imatic.view.ajaxify.widget {
          * Destructor
          */
         destroy(): void {
+            for (var i = 0; i < this.pendingActions.length; ++i) {
+                this.pendingActions[i].abort();
+            }
+
+            this.pendingActions = [];
             this.element = null;
         }
 
@@ -160,9 +167,16 @@ module imatic.view.ajaxify.widget {
             if (action) {
                 action.events.addCallback('begin', (event: EventInterface): void => {
                     jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+
+                    this.pendingActions.push(<ActionInterface> event['action']);
                 });
                 action.events.addCallback('complete', (event: EventInterface): void => {
                     jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+
+                    this.pendingActions.splice(
+                        this.pendingActions.indexOf(<ActionInterface> event['action']),
+                        1
+                    );
                 });
             }
 
