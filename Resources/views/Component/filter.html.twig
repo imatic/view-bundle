@@ -20,7 +20,7 @@
                     <legend data-toggle=".imatic-view-filter-content">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
                     <div class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
-                        {% for field in form if field.vars.name != 'clearFilter' %}
+                        {% for field in form if field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter'] %}
                         {% set field_has_error = field.value.vars.errors is not empty %}
                             <div class="form-group row">
                                 <div class="col-md-2">
@@ -52,10 +52,11 @@
                                     attr: { class: 'btn btn-default' }
                                     }) }}
 
-                                    {% if filter.hasDefaults %}
-                                        <a href="{{ uri }}"
-                                           class="btn btn-default">{{ 'Default filter'|trans({}, 'ImaticViewBundle') }}</a>
-                                    {% endif %}
+                                    {{ form_widget(form.defaultFilter, {
+                                    label: 'Default filter',
+                                    translation_domain: 'ImaticViewBundle',
+                                    attr: { class: 'btn btn-default' }
+                                    }) }}
                                 </div>
                             </div>
                         </div>

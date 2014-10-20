@@ -23,7 +23,7 @@ class UrlHelper
 
     public function updateFilterUrl($url)
     {
-        return $this->updateUrl($url, ['query' => ['filter' => null]]);
+        return $this->updateUrl($url, ['query' => ['filter' => null, 'page' => 1]]);
     }
 
     public function updatePagerUrl($url, $page)
