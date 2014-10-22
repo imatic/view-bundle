@@ -99,30 +99,36 @@
 
         <div class="row">
             <div class="col-md-4">
-                <label><input type="checkbox" name="selectedAll"> {{ 'All elements'|trans({}, 'ImaticViewBundle') }}</label>&nbsp;
-                {% if table.batchActions is not empty %}
-                    {% for action in table.batchActions %}
-                        {% if action.nested is not empty %}
-                            {% for nested_action in action.nested %}
-                                {% do nested_action.set('tag', 'input') %}
-                            {% endfor %}
-                        {% else %}
-                            {% do action.set('tag', 'input') %}
-                        {% endif %}
-                    {% endfor %}
-                    {{ button.group(table.batchActions) }}
-                {% endif %}
+                {% block table_batch_actions %}
+                    <label><input type="checkbox" name="selectedAll"> {{ 'All elements'|trans({}, 'ImaticViewBundle') }}</label>&nbsp;
+                    {% if table.batchActions is not empty %}
+                        {% for action in table.batchActions %}
+                            {% if action.nested is not empty %}
+                                {% for nested_action in action.nested %}
+                                    {% do nested_action.set('tag', 'input') %}
+                                {% endfor %}
+                            {% else %}
+                                {% do action.set('tag', 'input') %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ button.group(table.batchActions) }}
+                    {% endif %}
+                {% endblock %}
             </div>
             <div class="col-md-4 text-center">
-                {{ include('ImaticViewBundle:Component:pager.html.twig') }}
+                {% block table_pager %}
+                    {{ include('ImaticViewBundle:Component:pager.html.twig') }}
+                {% endblock %}
             </div>
             <div class="col-md-4 text-right">
-                {% if table.exports is not empty %}
-                    {% for action in table.exports %}
-                        {% do action.set('data', {'ajaxify': 'false'}) %}
-                    {% endfor %}
-                    {{ 'Exports'|trans({}, 'ImaticViewBundle') }}: {{ button.group(table.exports) }}
-                {% endif %}
+                {% block table_exports %}
+                    {% if table.exports is not empty %}
+                        {% for action in table.exports %}
+                            {% do action.set('data', {'ajaxify': 'false'}) %}
+                        {% endfor %}
+                        {{ 'Exports'|trans({}, 'ImaticViewBundle') }}: {{ button.group(table.exports) }}
+                    {% endif %}
+                {% endblock %}
             </div>
         </div>
 
