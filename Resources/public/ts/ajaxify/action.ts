@@ -52,6 +52,51 @@ module imatic.view.ajaxify.action {
     }
 
     /**
+     * No action
+     */
+    export class NoAction implements ActionInterface
+    {
+        events = new EventDispatcher();
+        private successful = false;
+        private complete = false;
+
+        /**
+         * Constructor
+         */
+        constructor(
+            public initiator: WidgetInterface
+        ) {}
+
+        /**
+         * See if the action is complete
+         */
+        isComplete(): boolean {
+            return this.complete;
+        }
+
+        /**
+         * See if the action was successful
+         */
+        isSuccessful(): boolean {
+            return this.successful;
+        }
+
+        /**
+         * Execute the action
+         */
+        execute(container: ContainerInterface): void {
+            this.successful = true;
+            this.complete = true;
+        }
+
+        /**
+         * Abort the action
+         */
+        abort(): void {
+        }
+    }
+
+    /**
      * Request action
      *
      * Loads remote HTML contents.

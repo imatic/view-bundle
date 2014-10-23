@@ -158,7 +158,7 @@ module imatic.view.ajaxify.widget {
                 );
 
                 if (!confirm(message)) {
-                    return null;
+                    return new imatic.view.ajaxify.action.NoAction(this);
                 }
             }
 
