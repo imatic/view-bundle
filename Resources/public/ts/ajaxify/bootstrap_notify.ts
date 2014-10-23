@@ -13,8 +13,9 @@ module imatic.view.ajaxify.bootstrapNotify {
 
     "use_strict";
 
-    import DomEvents = imatic.view.ajaxify.event.DomEvents;
     import jQuery    = imatic.view.ajaxify.jquery.jQuery;
+
+    import DomEvents = imatic.view.ajaxify.event.DomEvents;
 
     declare var window: Window;
 

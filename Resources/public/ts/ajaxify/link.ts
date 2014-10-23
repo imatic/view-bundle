@@ -14,29 +14,29 @@ module imatic.view.ajaxify.link {
 
     "use_strict";
 
-    import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
+    import ajaxify              = imatic.view.ajaxify;
+    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
+
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Link handler
      */
     export class LinkHandler
     {
-        private linkFactory = new LinkFactory(this.configBuilder);
+        private linkFactory = new LinkFactory();
         private linkTagNames = ['A', 'BUTTON'];
 
         /**
          * Constructor
          */
         constructor(
-            private widgetHandler: WidgetHandler,
-            private configBuilder: ConfigurationBuilder
+            private widgetHandler: WidgetHandler
         ) {}
 
         /**
@@ -86,18 +86,10 @@ module imatic.view.ajaxify.link {
     class LinkFactory
     {
         /**
-         * Constructor
-         */
-        constructor(
-            private configBuilder: ConfigurationBuilder
-        ) {}
-
-        /**
          * Create a link
          */
         create(element: HTMLElement, containerElement?: HTMLElement): Link {
             var link = new Link(
-                this.configBuilder,
                 element,
                 containerElement
             );

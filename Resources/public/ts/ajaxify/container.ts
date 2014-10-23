@@ -18,15 +18,16 @@ module imatic.view.ajaxify.container {
 
     "use_strict";
 
+    import ajaxify                  = imatic.view.ajaxify;
+    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
+
     import Exception                = imatic.view.ajaxify.exception.Exception;
-    import ConfigurationBuilder     = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import DomEvents                = imatic.view.ajaxify.event.DomEvents;
     import EventInterface           = imatic.view.ajaxify.event.EventInterface;
     import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
     import RequestAction            = imatic.view.ajaxify.action.RequestAction;
     import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
     import CssClasses               = imatic.view.ajaxify.css.CssClasses;
-    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
     import HistoryHandler           = imatic.view.ajaxify.history.HistoryHandler;
     import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
     import RequestHelper            = imatic.view.ajaxify.ajax.RequestHelper;
@@ -126,21 +127,8 @@ module imatic.view.ajaxify.container {
         public instanceDataKey = 'containerInstance';
         public instanceMarkAttr = 'data-has-container-instance';
 
-        private containerFactory = new ContainerFactory(
-            this,
-            this.configBuilder,
-            this.document
-        );
-
+        private containerFactory = new ContainerFactory(this);
         private targetHandlers: TargetHandlerInterface[] = [];
-
-        /**
-         * Constructor
-         */
-        constructor(
-            private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument
-        ) {}
 
         /**
          * Add target handler
@@ -272,7 +260,7 @@ module imatic.view.ajaxify.container {
          * Get container element using given selector
          */
         getElementFromSelector(selector: string): HTMLElement {
-            var containerElement = jQuery(selector, this.document)[0];
+            var containerElement = jQuery(selector)[0];
             if (!containerElement) {
                 throw new ContainerNotFoundException('Container specified by selector "' + selector + '" was not found');
             }
@@ -291,7 +279,7 @@ module imatic.view.ajaxify.container {
         findInstances(element?: HTMLElement): ContainerInterface[] {
             var self = this;
             var containers: ContainerInterface[] = [];
-            element = element || this.document.body;
+            element = element || ajaxify.domDocument.body;
 
             if (this.isValidElement(element) && this.hasInstance(element)) {
                 containers.push(this.getInstance(element));
@@ -311,7 +299,7 @@ module imatic.view.ajaxify.container {
          */
         findElements(element?: HTMLElement): HTMLElement[] {
             var elements: HTMLElement[] = [];
-            element = element || this.document.body;
+            element = element || ajaxify.domDocument.body;
 
             if (this.isValidElement(element)) {
                 elements.push(element);
@@ -334,9 +322,7 @@ module imatic.view.ajaxify.container {
          * Constructor
          */
         constructor(
-            private containerHandler: ContainerHandler,
-            private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument
+            private containerHandler: ContainerHandler
         ) {}
 
         /**
@@ -345,8 +331,6 @@ module imatic.view.ajaxify.container {
         create(element: HTMLElement): ContainerInterface {
             return new Container(
                 this.containerHandler,
-                this.configBuilder,
-                this.document,
                 element
             );
         }
@@ -365,8 +349,6 @@ module imatic.view.ajaxify.container {
          */
         constructor(
             public containerHandler: ContainerHandler,
-            public configBuilder: ConfigurationBuilder,
-            public document: HTMLDocument,
             public element: HTMLElement = null
         ) {
             this.currentRequest = null;
@@ -390,7 +372,7 @@ module imatic.view.ajaxify.container {
          * Get container's configuration
          */
         getConfiguration(): {[key: string]: any;} {
-            return this.configBuilder.build(this.element);
+            return ajaxify.configBuilder.build(this.element);
         }
 
         /**
@@ -463,8 +445,8 @@ module imatic.view.ajaxify.container {
             this.currentAction = action;
 
             // listen to action's events
-            action.events.addCallback('begin', this.handleActionStart, 100);
-            action.events.addCallback('complete', this.handleActionCompletion, 100);
+            action.events.addCallback('begin', this.onActionStart, 100);
+            action.events.addCallback('complete', this.onActionComplete, 100);
 
             // execute action
             action.execute(this);
@@ -473,7 +455,7 @@ module imatic.view.ajaxify.container {
         /**
          * Handle action's start
          */
-        handleActionStart = (event: EventInterface): void => {
+        onActionStart = (event: EventInterface): void => {
             // add busy class
             if (this.element) {
                 jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
@@ -519,7 +501,7 @@ module imatic.view.ajaxify.container {
         /**
          * Handle action's completion
          */
-        handleActionCompletion = (event: EventInterface): void => {
+        onActionComplete = (event: EventInterface): void => {
             var config = this.getConfiguration();
             var elementId = this.getId();
 
@@ -528,28 +510,31 @@ module imatic.view.ajaxify.container {
                 jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
             }
 
-            // handle flash messages
-            if (event['response'].flashes.length > 0) {
-                this.handleFlashes(event['response'].flashes);
-            } else if (!event['response'].valid && !event['response'].aborted) {
-                this.handleFlashes([{
-                    type: 'danger',
-                    message: 'An error occured'
-                }]);
-            }
+            // handle response
+            if (event['response']) {
+                // handle flash messages
+                if (event['response'].flashes.length > 0) {
+                    this.handleFlashes(event['response'].flashes);
+                } else if (!event['response'].valid && !event['response'].aborted) {
+                    this.handleFlashes([{
+                        type: 'danger',
+                        message: 'An error occured'
+                    }]);
+                }
 
-            // update current request
-            this.currentRequest = event['response'].request;
+                // update current request
+                this.currentRequest = event['response'].request;
 
-            // handle history
-            if (event['response'].valid && config['history'] && elementId) {
-                // state change
-                if (event['action'].initiator) {
-                    HistoryHandler.containerStateChange(
-                        elementId,
-                        event['response'].fullTitle,
-                        event['response'].request
-                    );
+                // handle history
+                if (event['response'].valid && config['history'] && elementId) {
+                    // state change
+                    if (event['action'].initiator) {
+                        HistoryHandler.containerStateChange(
+                            elementId,
+                            event['response'].fullTitle,
+                            event['response'].request
+                        );
+                    }
                 }
             }
         }
@@ -560,7 +545,7 @@ module imatic.view.ajaxify.container {
         handleFlashes(flashes: FlashMessageInterface[]): void {
             // trigger event
             var event = jQuery.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
-            jQuery(this.getElement() || this.document.body).trigger(event);
+            jQuery(this.getElement() || ajaxify.domDocument.body).trigger(event);
         }
     }
 

@@ -11,9 +11,10 @@ module imatic.view.ajaxify.ajax {
 
     "use_strict";
 
+    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
+
     import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
     import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
-    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Data types

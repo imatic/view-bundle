@@ -17,7 +17,9 @@ module imatic.view.ajaxify.modalContainer {
 
     "use_strict";
 
-    import ConfigurationBuilder             = imatic.view.ajaxify.configuration.ConfigurationBuilder;
+    import ajaxify                          = imatic.view.ajaxify;
+    import jQuery                           = imatic.view.ajaxify.jquery.jQuery;
+
     import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
     import DomEvents                        = imatic.view.ajaxify.event.DomEvents;
     import EventInterface                   = imatic.view.ajaxify.event.EventInterface;
@@ -36,7 +38,6 @@ module imatic.view.ajaxify.modalContainer {
     import WidgetInterface                  = imatic.view.ajaxify.widget.WidgetInterface;
     import ModalSize                        = imatic.view.ajaxify.modal.ModalSize;
     import Modal                            = imatic.view.ajaxify.modal.Modal;
-    import jQuery                           = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Modal configuration defaults
@@ -76,10 +77,8 @@ module imatic.view.ajaxify.modalContainer {
     export class ModalContainerHandler implements TargetHandlerInterface
     {
         private containerFactory = new ModalContainerFactory(
-            this.configBuilder,
             this.containerHandler,
-            this.widgetHandler,
-            this.document
+            this.widgetHandler
         );
 
         /**
@@ -87,9 +86,7 @@ module imatic.view.ajaxify.modalContainer {
          */
         constructor(
             private containerHandler: ContainerHandler,
-            private widgetHandler: WidgetHandler,
-            private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument
+            private widgetHandler: WidgetHandler
         ) {}
 
         /**
@@ -116,10 +113,8 @@ module imatic.view.ajaxify.modalContainer {
          * Constructor
          */
         constructor(
-            private configBuilder: ConfigurationBuilder,
             private containerHandler: ContainerHandler,
-            private widgetHandler: WidgetHandler,
-            private document: HTMLDocument
+            private widgetHandler: WidgetHandler
         ) {}
 
         /**
@@ -128,8 +123,6 @@ module imatic.view.ajaxify.modalContainer {
         create(trigger: HTMLElement): ContainerInterface {
             var container = new ModalContainer(
                 this.containerHandler,
-                this.configBuilder,
-                this.document,
                 null
             );
 
@@ -148,7 +141,7 @@ module imatic.view.ajaxify.modalContainer {
         widgetHandler: WidgetHandler;
         originalTrigger: HTMLElement;
 
-        private modal = new Modal(this.document);
+        private modal = new Modal();
         private actionInitiator: WidgetInterface;
         private responseTitle: string;
         private resendResponse: Response;

@@ -14,7 +14,8 @@ module imatic.view.ajaxify.voidContainer {
 
     "use_strict";
 
-    import ConfigurationBuilder             = imatic.view.ajaxify.configuration.ConfigurationBuilder;
+    import ajaxify                          = imatic.view.ajaxify;
+
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
     import Container                        = imatic.view.ajaxify.container.Container;
     import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
@@ -30,9 +31,7 @@ module imatic.view.ajaxify.voidContainer {
          * Constructor
          */
         constructor(
-            private containerHandler: ContainerHandler,
-            private configBuilder: ConfigurationBuilder,
-            private document: HTMLDocument
+            private containerHandler: ContainerHandler
         ) {}
 
         /**
@@ -51,7 +50,7 @@ module imatic.view.ajaxify.voidContainer {
             if (this.containerHandler.hasInstance(element)) {
                 container = this.containerHandler.getInstance(element);
             } else {
-                container = new VoidContainer(this.containerHandler, this.configBuilder, this.document, null);
+                container = new VoidContainer(this.containerHandler, null);
                 this.containerHandler.setInstance(element, container);
             }
 

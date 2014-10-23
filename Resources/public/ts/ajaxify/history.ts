@@ -14,9 +14,11 @@ module imatic.view.ajaxify.history {
 
     "use_strict";
 
+    import ajaxify              = imatic.view.ajaxify;
+    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
+
     import RequestHelper        = imatic.view.ajaxify.ajax.RequestHelper;
     import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
     import DomEvents            = imatic.view.ajaxify.event.DomEvents;
     import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
@@ -76,7 +78,7 @@ module imatic.view.ajaxify.history {
          */
         static onStateChange(): void {
             var state = History.getState();
-            var documentHandler = imatic.view.ajaxify.getDocumentHandler();
+            var documentHandler = imatic.view.ajaxify.documentHandler;
             var containerHandler = documentHandler.containerHandler;
 
             if (state.data && state.data.containerStates) {
@@ -127,7 +129,7 @@ module imatic.view.ajaxify.history {
          */
         static getCurrentData(): any {
             var data: HistoryDataInterface = {containerStates: []};
-            var containerHandler = imatic.view.ajaxify.getDocumentHandler().containerHandler;
+            var containerHandler = imatic.view.ajaxify.documentHandler.containerHandler;
             var containerElements = containerHandler.findElements();
 
             // find all containers with enabled history

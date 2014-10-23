@@ -31,11 +31,6 @@ module imatic.view.ajaxify.configuration {
         private processors: ConfigurationProcessorInterface[] = [];
 
         /**
-         * Constructor
-         */
-        constructor(private document: HTMLDocument) {}
-
-        /**
          * Add configuration processor
          */
         addProcessor(processor: ConfigurationProcessorInterface): void {

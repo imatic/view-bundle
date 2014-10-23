@@ -13,11 +13,12 @@ module imatic.view.ajaxify.widget {
 
     "use_strict";
 
+    import ajaxify              = imatic.view.ajaxify;
+    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
+
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import EventInterface       = imatic.view.ajaxify.event.EventInterface;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Widget interface
@@ -118,7 +119,6 @@ module imatic.view.ajaxify.widget {
          * Constructor
          */
         constructor(
-            public configBuilder: ConfigurationBuilder,
             public element: HTMLElement,
             public containerElement: HTMLElement
         ) {}
@@ -139,7 +139,7 @@ module imatic.view.ajaxify.widget {
          * Get form's configuration
          */
         getConfiguration(): {[key: string]: any;} {
-            return this.configBuilder.build(
+            return ajaxify.configBuilder.build(
                 this.element,
                 this.containerElement ? [this.containerElement] : []
             );

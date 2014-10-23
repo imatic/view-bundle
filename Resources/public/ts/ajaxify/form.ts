@@ -13,14 +13,15 @@ module imatic.view.ajaxify.form {
 
     "use_strict";
 
+    import ajaxify              = imatic.view.ajaxify;
+    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
+
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
-    import ConfigurationBuilder = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * Form handler
@@ -29,14 +30,13 @@ module imatic.view.ajaxify.form {
     {
         public submitMarkAttr = 'data-marked-submit-element';
         public submitElementSelector = 'input[type=submit], button';
-        private formFactory = new FormFactory(this, this.configBuilder);
+        private formFactory = new FormFactory(this);
 
         /**
          * Constructor
          */
         constructor(
-            private widgetHandler: WidgetHandler,
-            private configBuilder: ConfigurationBuilder
+            private widgetHandler: WidgetHandler
         ) {}
 
         /**
@@ -94,8 +94,7 @@ module imatic.view.ajaxify.form {
          * Constructor
          */
         constructor(
-            private formHandler: FormHandler,
-            private configBuilder: ConfigurationBuilder
+            private formHandler: FormHandler
         ) {}
 
         /**
@@ -103,7 +102,6 @@ module imatic.view.ajaxify.form {
          */
         create(element: HTMLElement, containerElement?: HTMLElement): Form {
             var form = new Form(
-                this.configBuilder,
                 <HTMLFormElement> element,
                 containerElement
             );
@@ -132,7 +130,7 @@ module imatic.view.ajaxify.form {
             var submitButton = this.getUsedSubmitButton(form);
 
             // abort on non-ajaxify submit buttons
-            if (submitButton && !imatic.view.ajaxify.getDocumentHandler().isValidElement(submitButton)) {
+            if (submitButton && !ajaxify.documentHandler.isValidElement(submitButton)) {
                 return null;
             }
 

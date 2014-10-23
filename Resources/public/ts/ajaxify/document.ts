@@ -20,7 +20,8 @@ module imatic.view.ajaxify.document {
 
     "use_strict";
 
-    import ConfigurationBuilder         = imatic.view.ajaxify.configuration.ConfigurationBuilder;
+    import jQuery                       = imatic.view.ajaxify.jquery.jQuery;
+
     import DomEvents                    = imatic.view.ajaxify.event.DomEvents;
     import ContainerInterface           = imatic.view.ajaxify.container.ContainerInterface;
     import ContainerHandler             = imatic.view.ajaxify.container.ContainerHandler;
@@ -29,8 +30,6 @@ module imatic.view.ajaxify.document {
     import WidgetHandler                = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface              = imatic.view.ajaxify.action.ActionInterface;
     import ModalContainerHandler        = imatic.view.ajaxify.modalContainer.ModalContainerHandler;
-    import ModalConfigurationDefaults   = imatic.view.ajaxify.modalContainer.ModalConfigurationDefaults;
-    import ModalConfigurationProcessor  = imatic.view.ajaxify.modalContainer.ModalConfigurationProcessor;
     import VoidContainerHandler         = imatic.view.ajaxify.voidContainer.VoidContainerHandler;
     import LinkHandler                  = imatic.view.ajaxify.link.LinkHandler;
     import FormHandler                  = imatic.view.ajaxify.form.FormHandler;
@@ -38,7 +37,6 @@ module imatic.view.ajaxify.document {
     import Modal                        = imatic.view.ajaxify.modal.Modal;
     import ModalStackHandler            = imatic.view.ajaxify.modal.ModalStackHandler;
     import FlashMessageInterface        = imatic.view.ajaxify.message.FlashMessageInterface;
-    import jQuery                       = imatic.view.ajaxify.jquery.jQuery;
 
     /**
      * HTML document handler
@@ -47,8 +45,6 @@ module imatic.view.ajaxify.document {
      */
     export class HTMLDocumentHandler
     {
-        document: HTMLDocument;
-        configBuilder: ConfigurationBuilder;
         containerHandler: ContainerHandler;
         widgetHandler: WidgetHandler;
         linkHandler: LinkHandler;
@@ -57,55 +53,39 @@ module imatic.view.ajaxify.document {
         /**
          * Constructor
          */
-        constructor(document: HTMLDocument) {
-            this.document = document;
-
-            // config builder
-            this.configBuilder = new ConfigurationBuilder(document);
-            this.configBuilder.addDefaults(ModalConfigurationDefaults);
-            this.configBuilder.addProcessor(new ModalConfigurationProcessor());
-
+        constructor() {
             // widget handler
             this.widgetHandler = new WidgetHandler();
 
             // link handler
-            this.linkHandler = new LinkHandler(this.widgetHandler, this.configBuilder);
+            this.linkHandler = new LinkHandler(this.widgetHandler);
 
             // form handler
-            this.formHandler = new FormHandler(this.widgetHandler, this.configBuilder);
+            this.formHandler = new FormHandler(this.widgetHandler);
 
             // container handler
-            this.containerHandler = new ContainerHandler(
-                this.configBuilder,
-                this.document
-            );
+            this.containerHandler = new ContainerHandler();
 
             // modal container handler
             var modalContainerHandler = new ModalContainerHandler(
                 this.containerHandler,
-                this.widgetHandler,
-                this.configBuilder,
-                this.document
+                this.widgetHandler
             );
             this.containerHandler.addTargetHandler(modalContainerHandler);
 
             // void container handler
-            var voidContainerHandler = new VoidContainerHandler(
-                this.containerHandler,
-                this.configBuilder,
-                this.document
-            );
+            var voidContainerHandler = new VoidContainerHandler(this.containerHandler);
             this.containerHandler.addTargetHandler(voidContainerHandler);
 
             // modal stack handler
-            var modalStackHandler = new ModalStackHandler(this.document);
+            var modalStackHandler = new ModalStackHandler();
         }
 
         /**
          * Attach the handler
          */
         attach(): void {
-            jQuery(this.document)
+            jQuery(ajaxify.domDocument)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
                 .on(DomEvents.ACTION, this.onAction)
@@ -136,7 +116,7 @@ module imatic.view.ajaxify.document {
                     var context = this.getContainerContext(element);
                     var link = this.linkHandler.getInstance(element, context.containerElement);
 
-                    if (this.dispatch(context.container, link)) {
+                    if (this.dispatchWidget(context.container, link)) {
                         event.preventDefault();
                     }
                 } else if (this.formHandler.isValidSubmitElement(element)) {
@@ -163,7 +143,7 @@ module imatic.view.ajaxify.document {
                     var context = this.getContainerContext(element);
                     var form = this.formHandler.getInstance(element, context.containerElement);
 
-                    if (this.dispatch(context.container, form)) {
+                    if (this.dispatchWidget(context.container, form)) {
                         event.preventDefault();
                     }
                 }
@@ -183,7 +163,7 @@ module imatic.view.ajaxify.document {
             try {
                 var container = this.containerHandler.findInstance(element, false);
 
-                container.handleAction(<ActionInterface> event['action']);
+                this.dispatchAction(container, <ActionInterface> event['action']);
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
                     throw e;
@@ -226,11 +206,11 @@ module imatic.view.ajaxify.document {
                 flashes: flashes,
                 originElement: originElement,
             });
-            jQuery(this.document.body).trigger(event);
+            jQuery(ajaxify.domDocument.body).trigger(event);
 
             // default implementation
             if (false !== event.result) {
-                var modal = new Modal(this.document);
+                var modal = new Modal();
 
                 var body = '';
 
@@ -248,7 +228,6 @@ module imatic.view.ajaxify.document {
                 modal.show();
             }
         }
-
 
         /**
          * Get container context for given element
@@ -281,18 +260,46 @@ module imatic.view.ajaxify.document {
         }
 
         /**
-         * Perform widget <=> container interaction
+         * Perform widget-container interaction
          */
-        private dispatch(container: ContainerInterface, widget: WidgetInterface): boolean {
+        private dispatchWidget(container: ContainerInterface, widget: WidgetInterface): boolean {
             var action = widget.createAction();
 
             if (action) {
-                container.handleAction(action);
-
-                return true;
+                return this.dispatchAction(container, action);
             } else {
                 return false;
             }
+        }
+
+        /**
+         * Perform action-container interaction
+         */
+        private dispatchAction(container: ContainerInterface, action: ActionInterface): boolean {
+            container.handleAction(action);
+            
+            return true;
+
+            /*var success = false;
+
+            try {
+                do {
+                    if (container.handleAction(action)) {
+                        success = true;
+                    } else {
+                        var containerElement = container.getElement();
+                        if (containerElement && containerElement.parentNode) {
+                            container = this.containerHandler.findInstance(<HTMLElement> containerElement.parentNode, false);
+                        }
+                    }
+                } while (!success && container);
+            } catch (e) {
+                if (!(e instanceof ContainerNotFoundException)) {
+                    throw e;
+                }
+            }
+
+            return success;*/
         }
     }
 

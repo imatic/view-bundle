@@ -10,8 +10,10 @@ module imatic.view.ajaxify.modal {
 
     "use_strict";
 
-    import DomEvents = imatic.view.ajaxify.event.DomEvents;
-    import jQuery    = imatic.view.ajaxify.jquery.jQuery;
+    import ajaxify      = imatic.view.ajaxify;
+    import jQuery       = imatic.view.ajaxify.jquery.jQuery;
+
+    import DomEvents    = imatic.view.ajaxify.event.DomEvents;
 
     /**
      * Modal size
@@ -31,8 +33,8 @@ module imatic.view.ajaxify.modal {
         /**
          * Constructor
          */
-        constructor(private document: HTMLDocument) {
-            jQuery(this.document)
+        constructor() {
+            jQuery(ajaxify.domDocument)
                 .on('show.bs.modal', this.onModalShow)
             ;
         }
@@ -42,6 +44,11 @@ module imatic.view.ajaxify.modal {
          */
         private onModalShow = (event: JQueryEventObject): void => {
             var modal = jQuery(event.target).data('bs.modal');
+
+            if (!modal) {
+                // bootstrap-datepicker fires show.bs.modal for some reason
+                return;
+            }
 
             // extend the backdrop() method to hook our logic
             // - the logic cannot be right here because the backdrop is not yet initialized
@@ -57,7 +64,7 @@ module imatic.view.ajaxify.modal {
          * Update z-indexes of existing modals
          */
         private updateZIndexes(): void {
-            var modals = jQuery('div.modal', this.document.body);
+            var modals = jQuery('div.modal', ajaxify.domDocument.body);
             var zIndex = null;
             for (var i = 0; i < modals.length; ++i) {
                 var modal = jQuery(modals[i]);
@@ -92,7 +99,7 @@ module imatic.view.ajaxify.modal {
         /**
          * Constructor
          */
-        constructor(private document: HTMLDocument) {
+        constructor() {
             this.uid = ++Modal.uidCounter;
         }
 
@@ -309,7 +316,7 @@ module imatic.view.ajaxify.modal {
                 + '</div>'
             ;
 
-            this.element = jQuery(html, this.document).appendTo(this.document.body)[0];
+            this.element = jQuery(html).appendTo(ajaxify.domDocument.body)[0];
 
             jQuery(this.element).on('hidden.bs.modal', (): void => {
                 this.destroy();
