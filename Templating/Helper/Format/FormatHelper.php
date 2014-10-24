@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
 class FormatHelper implements FormatterInterface
 {
@@ -71,8 +72,13 @@ class FormatHelper implements FormatterInterface
         if (is_null($propertyPath)) {
             $value = $objectOrArray;
         } else {
-            $value = $accessor->getValue($objectOrArray, $propertyPath);
-            $options['object'] = $objectOrArray;
+            try {
+                $value = $accessor->getValue($objectOrArray, $propertyPath);
+                $options['object'] = $objectOrArray;
+            } catch (UnexpectedTypeException $e) {
+                // the property path could not be reached
+                $value = null;
+            }
         }
 
         if (!empty($options['collection']) && true === $options['collection']) {

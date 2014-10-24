@@ -32,6 +32,10 @@ class ConditionHelper
 
     public function evaluate($expression, array $context = [])
     {
+        if (is_bool($expression)) {
+            return $expression;
+        }
+
         if (!$expression) {
             return true;
         }

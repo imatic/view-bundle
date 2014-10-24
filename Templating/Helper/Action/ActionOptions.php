@@ -46,7 +46,7 @@ class ActionOptions extends AbstractOptions
             'routeParams' => 'array',
             'url' => 'string',
             'nested' => 'array',
-            'condition' => 'string',
+            'condition' => array('string', 'bool'),
             'tag' => 'string',
         ]);
         $resolver->setNormalizers([
