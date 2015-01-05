@@ -131,6 +131,10 @@ module imatic.view.ajaxify.modalContainer {
         private responseTitle: string;
         private resendResponse: Response;
 
+        loadOptions(): ConfigurationInterface {
+            return ajaxify.configBuilder.buildFromDom(this.originalTrigger);
+        }
+
         destroy(): void {
             if (this.modal.hasElement()) {
                 this.modal.destroy();
@@ -189,13 +193,14 @@ module imatic.view.ajaxify.modalContainer {
                         && this.actionInitiator instanceof Form
                         && jQuery(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
                     ) {
-                        // store response for resend
-                        if (this.getOption('modalForwardFormResponse')) {
-                            this.resendResponse = event.response;
-                        }
-
-                        // close modal
+                        // close on form success
                         if (this.getOption('modalCloseOnFormSuccess')) {
+                            // store response for resend
+                            if (this.getOption('modalForwardFormResponse')) {
+                                this.resendResponse = event.response;
+                            }
+
+                            // stop the action and close
                             event.proceed = false;
                             this.modal.hide();
                         }

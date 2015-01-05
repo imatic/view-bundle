@@ -341,7 +341,7 @@ module imatic.view.ajaxify.container {
             if (this.element) {
                 return ajaxify.configBuilder.buildFromDom(this.element);
             } else {
-                return {};
+                return ajaxify.configBuilder.buildFromData({});
             }
         }
 

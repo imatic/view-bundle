@@ -433,6 +433,7 @@
                     <td>
                         <p>forward successful form response that was submitted into the modal's container</p>
                         <ul>
+                            <li><code>data-modal-close-on-form-success</code> must be be <code>true</code></li>
                             <li>the action is triggered in context of the widget that opened the modal</li>
                             <li>the action is trigered after the modal is closed</li>
                             <li>the action is surpressesed by <code>data-modal-on-close</code></li>
@@ -646,7 +647,7 @@
                                 <ul>
                                     <li>repeats the target container's current request</li>
                                     <li>the request is copied, even the method and data</li>
-                                    <li>all parts of the request string are discarded</li>
+                                    <li>other parts of the request string are ignored</li>
                                 </ul>
 
                             </li>
