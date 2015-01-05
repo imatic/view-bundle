@@ -12,14 +12,22 @@ module imatic.view.ajaxify.configuration {
     import jQuery = imatic.view.ajaxify.jquery.jQuery;
 
     /**
+     * Configuration interface
+     */
+    export interface ConfigurationInterface
+    {
+        [key: string]: any;
+    }
+
+    /**
      * Configuration processor interface
      */
     export interface ConfigurationProcessorInterface
     {
         /**
-         * Process configuration
+         * Procesconfiguration
          */
-        process: (config: {[key: string]: any;}) => void;
+        process: (data: ConfigurationInterface) => void;
     }
 
     /**
@@ -38,31 +46,17 @@ module imatic.view.ajaxify.configuration {
         }
 
         /**
-         * Add default configuration
+         * Add defaulconfiguration
          */
-        addDefaults(config: any): void {
-            jQuery.extend(this.defaults, config);
+        addDefaults(data: ConfigurationInterface): void {
+            jQuery.extend(this.defaults, data);
         }
 
         /**
-         * Build configuration for given elements
+         * Build configuration using already existing data set
          */
-        build(element?: HTMLElement, parentElements: HTMLElement[] = []): {[key: string]: any;} {
-            // default
-            var config = jQuery.extend({}, this.defaults);
-
-            // parents
-            if (parentElements.length > 0) {
-                for (var i = parentElements.length - 1; i >= 0; --i) {
-                    jQuery.extend(config, jQuery(parentElements[i]).data());
-                }
-                
-            }
-
-            // local
-            if (element) {
-                jQuery.extend(config, jQuery(element).data());
-            }
+        buildFromData(data: ConfigurationInterface): ConfigurationInterface {
+            var config = jQuery.extend({}, this.defaults, data);
 
             this.process(config);
 
@@ -70,11 +64,31 @@ module imatic.view.ajaxify.configuration {
         }
 
         /**
-         * Process loaded configuration
+         * Build configuration using DOM element data attributes
+         *
+         * The base element's data has greater priority.
+         *
+         * The parent elements should be ordered from closest to furthest.
+         * (Closer partent's data overrides further parent's data.)
          */
-        private process(config: {[key: string]: any;}): void {
+        buildFromDom(baseElement: HTMLElement, parentElements: HTMLElement[] = []): ConfigurationInterface {
+            var data: ConfigurationInterface = {};
+
+            for (var i = parentElements.length - 1; i >= 0; --i) {
+                jQuery.extend(data, jQuery(parentElements[i]).data());
+            }
+
+            jQuery.extend(data, jQuery(baseElement).data());
+
+            return this.buildFromData(data);
+        }
+
+        /**
+         * Process loadeconfiguration
+         */
+        private process(data: ConfigurationInterface): void {
             for (var i = 0; i < this.processors.length; ++i) {
-                this.processors[i].process(config);
+                this.processors[i].process(data);
             }
         }
     }

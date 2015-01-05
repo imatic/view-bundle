@@ -1,5 +1,5 @@
+/// <reference path="object.ts"/>
 /// <reference path="action.ts"/>
-/// <reference path="event.ts"/>
 /// <reference path="css.ts"/>
 /// <reference path="jquery.ts"/>
 /// <reference path="configuration.ts"/>
@@ -13,31 +13,23 @@ module imatic.view.ajaxify.widget {
 
     "use_strict";
 
-    import ajaxify              = imatic.view.ajaxify;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-
-    import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
-    import CssClasses           = imatic.view.ajaxify.css.CssClasses;
+    import ajaxify                  = imatic.view.ajaxify;
+    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
+    import Object                   = imatic.view.ajaxify.object.Object;
+    import ObjectInterface          = imatic.view.ajaxify.object.ObjectInterface;
+    import ConfigurationInterface   = imatic.view.ajaxify.configuration.ConfigurationInterface;
+    import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
+    import CssClasses               = imatic.view.ajaxify.css.CssClasses;
+    import ActionEvent              = imatic.view.ajaxify.action.ActionEvent;
 
     /**
      * Widget interface
      * Represents an object that generates actions for it's container.
      */
-    export interface WidgetInterface
+    export interface WidgetInterface extends ObjectInterface
     {
         /**
-         * Destructor
-         */
-        destroy: () => void;
-
-        /**
-         * Get widget's configuration
-         */
-        getConfiguration: () => {[key: string]: any;};
-
-        /**
-         * Create action
+         Create action
          *
          * NULL may be returned
          */
@@ -109,23 +101,19 @@ module imatic.view.ajaxify.widget {
 
     /**
      * Widget
+     *
      * Base class for other element-based widgets.
      */
-    export class Widget implements WidgetInterface
+    export class Widget extends Object implements WidgetInterface
     {
         private pendingActions: ActionInterface[] = [];
 
-        /**
-         * Constructor
-         */
         constructor(
-            public element: HTMLElement,
-            public containerElement: HTMLElement
-        ) {}
+            public element: HTMLElement
+        ) {
+            super();
+        }
 
-        /**
-         * Destructor
-         */
         destroy(): void {
             for (var i = 0; i < this.pendingActions.length; ++i) {
                 this.pendingActions[i].abort();
@@ -133,48 +121,41 @@ module imatic.view.ajaxify.widget {
 
             this.pendingActions = [];
             this.element = null;
+
+            super.destroy();
         }
 
-        /**
-         * Get form's configuration
-         */
-        getConfiguration(): {[key: string]: any;} {
-            return ajaxify.configBuilder.build(
-                this.element,
-                this.containerElement ? [this.containerElement] : []
-            );
+        loadOptions(): ConfigurationInterface {
+            return ajaxify.configBuilder.buildFromDom(this.element);
         }
 
-        /**
-         * Create action
-         */
         createAction(): ActionInterface {
-            var config = this.getConfiguration();
+            var confirmOption = this.getOption('confirm');
 
-            if (config['confirm']) {
-                var message = ('string' === typeof config['confirm']
-                    ? config['confirm']
+            if (confirmOption) {
+                var message = ('string' === typeof confirmOption
+                    ? confirmOption
                     : this.getDefaultConfirmMessage()
                 );
 
-                if (!confirm(message)) {
+                if (!confirm(confirmOption)) {
                     return new imatic.view.ajaxify.action.NoAction(this);
                 }
             }
 
-            var action = this.doCreateAction(config);
+            var action = this.doCreateAction();
 
             if (action) {
-                action.events.addCallback('begin', (event: EventInterface): void => {
+                action.listen('begin', (event: ActionEvent): void => {
                     jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
 
-                    this.pendingActions.push(<ActionInterface> event['action']);
+                    this.pendingActions.push(event.action);
                 });
-                action.events.addCallback('complete', (event: EventInterface): void => {
+                action.listen('complete', (event: ActionEvent): void => {
                     jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
 
                     this.pendingActions.splice(
-                        this.pendingActions.indexOf(<ActionInterface> event['action']),
+                        this.pendingActions.indexOf(event.action),
                         1
                     );
                 });
@@ -183,9 +164,6 @@ module imatic.view.ajaxify.widget {
             return action;
         }
 
-        /**
-         * Get widget's element
-         */
         getElement(): HTMLElement {
             return this.element;
         }
@@ -202,7 +180,7 @@ module imatic.view.ajaxify.widget {
          *
          * NULL may be returned.
          */
-        doCreateAction(config: {[key: string]: any;}): ActionInterface {
+        doCreateAction(): ActionInterface {
             return null;
         }
     }

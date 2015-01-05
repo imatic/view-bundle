@@ -12,7 +12,6 @@ module imatic.view.ajaxify.ajax {
     "use_strict";
 
     import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
-
     import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
     import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
 
@@ -24,6 +23,37 @@ module imatic.view.ajaxify.ajax {
         TEXT,
         HTML,
         JSON
+    }
+
+    /**
+     * Request info
+     *
+     * Holds information about a request.
+     */
+    export class RequestInfo
+    {
+        public uid: number = null;
+
+        constructor(
+            public url: string = '',
+            public method: string = 'GET',
+            public data: any = null,
+            public contentSelector: string = null
+        ) {}
+
+        hasData(): boolean {
+            if (
+                this.data
+                && (
+                    'string' === typeof this.data
+                    || !jQuery.isEmptyObject(this.data)
+                )
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
@@ -63,7 +93,7 @@ module imatic.view.ajaxify.ajax {
             requestInfo.method = method || 'GET';
             requestInfo.data = null;
             requestInfo.contentSelector = contentSelector || null;
-            
+
             return requestInfo;
         }
     }
@@ -77,114 +107,31 @@ module imatic.view.ajaxify.ajax {
     {
         static uidSequence: number = 0;
 
-        private uid: number;
         private xhr: XMLHttpRequest;
 
-        /**
-         * Constructor
-         */
         constructor(
-            private url?: string,
-            private method?: string,
-            private data?: any,
-            private dataType?: DataType,
-            private contentSelector?: string
+            private info: RequestInfo,
+            private dataType?: DataType
         ) {
-            this.uid = ++Request.uidSequence;
+            info.uid = ++Request.uidSequence;
+
             if (!this.dataType) {
                 this.dataType = DataType.HTML;
             }
         }
 
         /**
-         * Get unique request UID
+         * Get request info
          */
-        getUid(): number {
-            return this.uid;
+        getInfo(): RequestInfo {
+            return this.info;
         }
 
         /**
-         * Get XHR instance
-         *
-         * Can only be obtained after the request has been executed.
+         * Set request info
          */
-        getXhr(): XMLHttpRequest {
-            if (!this.xhr) {
-                throw new Error('Request not yet executed - XHR is not available');
-            }
-
-            return this.xhr;
-        }
-
-        /**
-         * Get URL
-         */
-        getUrl(): string {
-            return this.url || '';
-        }
-
-        /**
-         * Set URL
-         */
-        setUrl(url: string): void {
-            if (this.xhr) {
-                throw new Error('Cannot change already executed request');
-            }
-
-            this.url = url;
-        }
-
-        /**
-         * Get method
-         */
-        getMethod(): string {
-            return this.method ? this.method.toUpperCase() : 'GET';
-        }
-
-        /**
-         * Set method
-         */
-        setMethod(method: string): void {
-            if (this.xhr) {
-                throw new Error('Cannot change already executed request');
-            }
-
-            this.method = method;
-        }
-
-        /**
-         * Get data
-         */
-        getData(): any {
-            return this.data || {};
-        }
-
-        /**
-         * Check if data are set
-         */
-        hasData(): boolean {
-            if (
-                this.data
-                && (
-                    'string' === typeof this.data
-                    || !jQuery.isEmptyObject(this.data)
-                )
-            ) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         * Set data
-         */
-        setData(data: any): void {
-            if (this.xhr) {
-                throw new Error('Cannot change already executed request');
-            }
-
-            this.data = data;
+        setInfo(info: RequestInfo): void {
+            this.info = info;
         }
 
         /**
@@ -206,57 +153,26 @@ module imatic.view.ajaxify.ajax {
         }
 
         /**
-         * Get content selector
+         * Get XHR instance
+         *
+         * Can only be obtained after the request has been executed.
          */
-        getContentSelector(): any {
-            return this.contentSelector || null;
-        }
-
-        /**
-         * Set content selector
-         */
-        setContentSelector(contentSelector: string): void {
-            if (this.xhr) {
-                throw new Error('Cannot change already executed request');
+        getXhr(): XMLHttpRequest {
+            if (!this.xhr) {
+                throw new Error('Request not yet executed - XHR is not available');
             }
 
-            this.contentSelector = contentSelector;
+            return this.xhr;
         }
 
         /**
-         * Get request info
+         * Perform the request
          */
-        getInfo(): RequestInfo {
-            var requestInfo = new RequestInfo();
-
-            requestInfo.uid = this.getUid();
-            requestInfo.url = this.getUrl();
-            requestInfo.method = this.getMethod();
-            requestInfo.data = this.getData();
-            requestInfo.contentSelector = this.getContentSelector();
-            
-            return requestInfo;
-        }
-
-        /**
-         * Apply request info
-         *
-         * UID is not applied.
-         */
-        applyInfo(requestInfo: RequestInfo): void {
-            this.url = requestInfo.url;
-            this.method = requestInfo.method;
-            this.data = requestInfo.data;
-            this.contentSelector = requestInfo.contentSelector;
-        }
-
-        /**
-         * Execute the request
-         */
-        execute(onComplete?: (response: Response) => void) {
-            var url = this.url || '';
-            var method = (this.method || 'GET').toUpperCase();
-            var data = this.data || {};
+        execute(): jQuery.Promise {
+            var deferred = jQuery.Deferred();
+            var url = this.info.url || '';
+            var method = (this.info.method || 'GET').toUpperCase();
+            var data = this.info.data || {};
 
             // convert methods other than GET and POST into POST + _method
             if ('GET' !== method && 'POST' !== method) {
@@ -276,31 +192,22 @@ module imatic.view.ajaxify.ajax {
                 dataType: 'text',
                 data: data,
                 cache: false,
-                complete: (xhr: XMLHttpRequest, textStatus: string): void => {
-                    if (onComplete) {
-                        var response = new ResponseFactory().create(this);
-                        onComplete(response);
+                complete: (): void => {
+                    var response = new ResponseFactory().create(this);
+
+                    if (response.successful) {
+                        deferred.resolve(response);
+                    } else {
+                        deferred.reject(response);
                     }
-                },
+                }
             };
 
             // execute request
             this.xhr = jQuery.ajax(options);
-        }
-    }
 
-    /**
-     * Request info
-     *
-     * Holds information about a request.
-     */
-    export class RequestInfo
-    {
-        uid: number;
-        url: string;
-        method: string;
-        data: any;
-        contentSelector: string;
+            return deferred.promise();
+        }
     }
 
     /**
@@ -323,7 +230,7 @@ module imatic.view.ajaxify.ajax {
                     data = xhr.responseText;
                     break;
                 case DataType.HTML:
-                    data = this.processHtmlData(xhr.responseText, request.getContentSelector());
+                    data = this.processHtmlData(xhr.responseText, request.getInfo().contentSelector);
                     break;
                 case DataType.JSON:
                     if (xhr.responseText) {

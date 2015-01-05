@@ -10,6 +10,7 @@
 /// <reference path="modal_container.ts"/>
 /// <reference path="void_container.ts"/>
 /// <reference path="jquery.ts"/>
+/// <reference path="dom.ts"/>
 
 /**
  * Imatic view ajaxify document module
@@ -21,8 +22,7 @@ module imatic.view.ajaxify.document {
     "use_strict";
 
     import jQuery                       = imatic.view.ajaxify.jquery.jQuery;
-
-    import DomEvents                    = imatic.view.ajaxify.event.DomEvents;
+    import DomEvents                    = imatic.view.ajaxify.dom.DomEvents;
     import ContainerInterface           = imatic.view.ajaxify.container.ContainerInterface;
     import ContainerHandler             = imatic.view.ajaxify.container.ContainerHandler;
     import ContainerNotFoundException   = imatic.view.ajaxify.container.ContainerNotFoundException;
@@ -50,9 +50,6 @@ module imatic.view.ajaxify.document {
         linkHandler: LinkHandler;
         formHandler: FormHandler;
 
-        /**
-         * Constructor
-         */
         constructor() {
             // widget handler
             this.widgetHandler = new WidgetHandler();
@@ -113,10 +110,10 @@ module imatic.view.ajaxify.document {
                     && this.isValidElement(element)
                     && this.linkHandler.isValidEvent(event)
                 ) {
-                    var context = this.getContainerContext(element);
-                    var link = this.linkHandler.getInstance(element, context.containerElement);
+                    var container = this.containerHandler.findInstance(element);
+                    var link = this.linkHandler.getInstance(element);
 
-                    if (this.dispatchWidget(context.container, link)) {
+                    if (this.dispatchWidget(container, link)) {
                         event.preventDefault();
                     }
                 } else if (this.formHandler.isValidSubmitElement(element)) {
@@ -140,10 +137,10 @@ module imatic.view.ajaxify.document {
                     this.formHandler.isValidElement(element)
                     && this.isValidElement(element)
                 ) {
-                    var context = this.getContainerContext(element);
-                    var form = this.formHandler.getInstance(element, context.containerElement);
+                    var container = this.containerHandler.findInstance(element);
+                    var form = this.formHandler.getInstance(element);
 
-                    if (this.dispatchWidget(context.container, form)) {
+                    if (this.dispatchWidget(container, form)) {
                         event.preventDefault();
                     }
                 }
@@ -230,36 +227,6 @@ module imatic.view.ajaxify.document {
         }
 
         /**
-         * Get container context for given element
-         *
-         * This method finds the related container instance and also
-         * the contextual container's element.
-         */
-        private getContainerContext(element: HTMLElement): {
-            container: ContainerInterface;
-            containerElement: HTMLElement;
-        } {
-            var container = this.containerHandler.findInstance(element);
-            var containerElement;
-
-            try {
-                containerElement = (container.isContextual()
-                    ? container.getElement()
-                    : this.containerHandler.getElementFromContext(element)
-                );
-            } catch (e) {
-                if (!(e instanceof ContainerNotFoundException)) {
-                    throw e;
-                }
-            }
-
-            return {
-                container: container,
-                containerElement: containerElement,
-            };
-        }
-
-        /**
          * Perform widget-container interaction
          */
         private dispatchWidget(container: ContainerInterface, widget: WidgetInterface): boolean {
@@ -276,30 +243,18 @@ module imatic.view.ajaxify.document {
          * Perform action-container interaction
          */
         private dispatchAction(container: ContainerInterface, action: ActionInterface): boolean {
-            container.handleAction(action);
-            
-            return true;
+            var success = false;
 
-            /*var success = false;
-
-            try {
-                do {
-                    if (container.handleAction(action)) {
-                        success = true;
-                    } else {
-                        var containerElement = container.getElement();
-                        if (containerElement && containerElement.parentNode) {
-                            container = this.containerHandler.findInstance(<HTMLElement> containerElement.parentNode, false);
-                        }
-                    }
-                } while (!success && container);
-            } catch (e) {
-                if (!(e instanceof ContainerNotFoundException)) {
-                    throw e;
+            do {
+                if (action.supports(container)) {
+                    success = true;
+                    container.handleAction(action);
+                } else {
+                    container = container.getParent();
                 }
-            }
+            } while (!success && container);
 
-            return success;*/
+            return success;
         }
     }
 

@@ -17,15 +17,18 @@
             {{ block('form_message') }}
 	    <script type="text/javascript">
 		$(document).ready(function () {
-		    $({{ id }}).datepicker();
-                    $({{ id }}).keydown(function(e) {
-                        if(e.which == 27) {
-                            $({{ id }}).datepicker('hide');
-                                return false;
-                            }
-                        });
-                });
-            </script>
+		    $(document.getElementById({{ id|json_encode|raw }}))
+                .datepicker()
+                .keydown(function(e) {
+                    if(27 === e.which) {
+                        $(this).datepicker('hide');
+
+                        return false;
+                    }
+                })
+            ;
+        });
+        </script>
         </div>
     {% else %}
         {{ block('form_widget_simple') }}

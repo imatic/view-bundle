@@ -9,15 +9,11 @@ module imatic.view.ajaxify.exception {
 
     /**
      * Exception
-     * Base class for custom exception classes
      */
     export class Exception implements Error
     {
         name: string;
 
-        /**
-         * Constructor
-         */
         constructor(public message: string) {}
 
         /**

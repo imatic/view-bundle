@@ -14,12 +14,11 @@ module imatic.view.ajaxify.voidContainer {
 
     "use_strict";
 
-    import ajaxify                          = imatic.view.ajaxify;
-
-    import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
-    import Container                        = imatic.view.ajaxify.container.Container;
-    import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
-    import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
+    import ajaxify                  = imatic.view.ajaxify;
+    import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
+    import Container                = imatic.view.ajaxify.container.Container;
+    import ContainerHandler         = imatic.view.ajaxify.container.ContainerHandler;
+    import TargetHandlerInterface   = imatic.view.ajaxify.container.TargetHandlerInterface;
 
     /**
      * Void container handler
@@ -27,23 +26,14 @@ module imatic.view.ajaxify.voidContainer {
      */
     export class VoidContainerHandler implements TargetHandlerInterface
     {
-        /**
-         * Constructor
-         */
         constructor(
             private containerHandler: ContainerHandler
         ) {}
 
-        /**
-         * See if the handler supports given target and element
-         */
         supports(target: string, element: HTMLElement): boolean {
             return 'void' === target;
         }
 
-        /**
-         * Return container instance for given target and element
-         */
         findContainer(target: string, element: HTMLElement): ContainerInterface {
             var container;
 
@@ -63,16 +53,6 @@ module imatic.view.ajaxify.voidContainer {
      */
     export class VoidContainer extends Container
     {
-        /**
-         * Get container's configuration
-         */
-        getConfiguration(): {[key: string]: any;} {
-            return {};
-        }
-
-        /**
-         * Set container's content
-         */
         setContent(content: any): void {
         }
     }

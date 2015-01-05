@@ -1,5 +1,6 @@
 /// <reference path="event.ts"/>
 /// <reference path="jquery.ts"/>
+/// <reference path="dom.ts"/>
 
 /**
  * Imatic view ajaxify modal module
@@ -12,8 +13,7 @@ module imatic.view.ajaxify.modal {
 
     import ajaxify      = imatic.view.ajaxify;
     import jQuery       = imatic.view.ajaxify.jquery.jQuery;
-
-    import DomEvents    = imatic.view.ajaxify.event.DomEvents;
+    import DomEvents    = imatic.view.ajaxify.dom.DomEvents;
 
     /**
      * Modal size
@@ -30,9 +30,6 @@ module imatic.view.ajaxify.modal {
      */
     export class ModalStackHandler
     {
-        /**
-         * Constructor
-         */
         constructor() {
             jQuery(ajaxify.domDocument)
                 .on('show.bs.modal', this.onModalShow)
@@ -96,9 +93,6 @@ module imatic.view.ajaxify.modal {
         private uid: number;
         private closable: boolean = true;
 
-        /**
-         * Constructor
-         */
         constructor() {
             this.uid = ++Modal.uidCounter;
         }

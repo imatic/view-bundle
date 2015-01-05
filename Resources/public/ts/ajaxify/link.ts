@@ -4,6 +4,7 @@
 /// <reference path="css.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="jquery.ts"/>
+/// <reference path="ajax.ts"/>
 
 /**
  * Imatic view ajaxify link module
@@ -16,13 +17,13 @@ module imatic.view.ajaxify.link {
 
     import ajaxify              = imatic.view.ajaxify;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
+    import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
 
     /**
      * Link handler
@@ -32,9 +33,6 @@ module imatic.view.ajaxify.link {
         private linkFactory = new LinkFactory();
         private linkTagNames = ['A', 'BUTTON'];
 
-        /**
-         * Constructor
-         */
         constructor(
             private widgetHandler: WidgetHandler
         ) {}
@@ -66,13 +64,13 @@ module imatic.view.ajaxify.link {
         /**
          * Get link instance for given element
          */
-        getInstance(element: HTMLElement, containerElement?: HTMLElement): Link {
+        getInstance(element: HTMLElement): Link {
             var link;
 
             if (this.widgetHandler.hasInstance(element)) {
                 link = this.widgetHandler.getInstance(element);
             } else {
-                link = this.linkFactory.create(element, containerElement);
+                link = this.linkFactory.create(element);
                 this.widgetHandler.setInstance(element, link);
             }
 
@@ -88,11 +86,8 @@ module imatic.view.ajaxify.link {
         /**
          * Create a link
          */
-        create(element: HTMLElement, containerElement?: HTMLElement): Link {
-            var link = new Link(
-                element,
-                containerElement
-            );
+        create(element: HTMLElement): Link {
+            var link = new Link(element);
 
             link.url = jQuery(element).attr('href') || jQuery(element).data('href');
 
@@ -107,16 +102,16 @@ module imatic.view.ajaxify.link {
     {
         url: string;
 
-        /**
-         * Create action instance
-         */
-        doCreateAction(config: {[key: string]: any;}): ActionInterface {
-            return new RequestAction(this, {
-                url: this.url,
-                method: config['method'] || 'GET',
-                data: null,
-                contentSelector: config['contentSelector'] || null,
-            });
+        doCreateAction(): ActionInterface {
+            return new RequestAction(
+                this,
+                new RequestInfo(
+                    this.url,
+                    this.getOption('method') || 'GET',
+                    null,
+                    this.getOption('contentSelector') || null
+                )
+            );
         }
     }
 

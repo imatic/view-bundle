@@ -1,5 +1,4 @@
 /// <reference path="configuration.ts"/>
-/// <reference path="event.ts"/>
 /// <reference path="ajax.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="action.ts"/>
@@ -7,6 +6,7 @@
 /// <reference path="widget.ts"/>
 /// <reference path="modal.ts"/>
 /// <reference path="jquery.ts"/>
+/// <reference path="dom.ts"/>
 
 /**
  * Imatic view ajaxify modal container module
@@ -19,10 +19,9 @@ module imatic.view.ajaxify.modalContainer {
 
     import ajaxify                          = imatic.view.ajaxify;
     import jQuery                           = imatic.view.ajaxify.jquery.jQuery;
-
     import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
-    import DomEvents                        = imatic.view.ajaxify.event.DomEvents;
-    import EventInterface                   = imatic.view.ajaxify.event.EventInterface;
+    import ConfigurationInterface           = imatic.view.ajaxify.configuration.ConfigurationInterface;
+    import DomEvents                        = imatic.view.ajaxify.dom.DomEvents;
     import Response                         = imatic.view.ajaxify.ajax.Response;
     import RequestHelper                    = imatic.view.ajaxify.ajax.RequestHelper;
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
@@ -31,6 +30,7 @@ module imatic.view.ajaxify.modalContainer {
     import ContainerNotFoundException       = imatic.view.ajaxify.container.ContainerNotFoundException;
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
+    import ActionEvent                      = imatic.view.ajaxify.action.ActionEvent;
     import RequestAction                    = imatic.view.ajaxify.action.RequestAction;
     import ResponseAction                   = imatic.view.ajaxify.action.ResponseAction;
     import Form                             = imatic.view.ajaxify.form.Form;
@@ -57,15 +57,12 @@ module imatic.view.ajaxify.modalContainer {
      */
     export class ModalConfigurationProcessor implements ConfigurationProcessorInterface
     {
-        /**
-         * Process configuration
-         */
-        process(config: {[key: string]: any;}): void {
+        process(data: ConfigurationInterface): void {
             // modal-size
-            if ('string' === typeof config['modalSize']) {
-                config['modalSize'] = ModalSize[config['modalSize'].toUpperCase()];
+            if ('string' === typeof data['modalSize']) {
+                data['modalSize'] = ModalSize[data['modalSize'].toUpperCase()];
             } else {
-                config['modalSize'] = ModalSize.NORMAL;
+                data['modalSize'] = ModalSize.NORMAL;
             }
         }
     }
@@ -81,24 +78,15 @@ module imatic.view.ajaxify.modalContainer {
             this.widgetHandler
         );
 
-        /**
-         * Constructor
-         */
         constructor(
             private containerHandler: ContainerHandler,
             private widgetHandler: WidgetHandler
         ) {}
 
-        /**
-         * See if the handler supports given target and element
-         */
         supports(target: string, element: HTMLElement): boolean {
             return 'modal' === target;
         }
 
-        /**
-         * Return container instance for given target and element
-         */
         findContainer(target: string, element: HTMLElement): ContainerInterface {
             return this.containerFactory.create(element);
         }
@@ -109,9 +97,6 @@ module imatic.view.ajaxify.modalContainer {
      */
     class ModalContainerFactory
     {
-        /**
-         * Constructor
-         */
         constructor(
             private containerHandler: ContainerHandler,
             private widgetHandler: WidgetHandler
@@ -146,9 +131,6 @@ module imatic.view.ajaxify.modalContainer {
         private responseTitle: string;
         private resendResponse: Response;
 
-        /**
-         * Destructor
-         */
         destroy(): void {
             if (this.modal.hasElement()) {
                 this.modal.destroy();
@@ -156,9 +138,8 @@ module imatic.view.ajaxify.modalContainer {
 
             if (this.originalTrigger && this.widgetHandler.hasInstance(this.originalTrigger)) {
                 var originalTriggerWidget = this.widgetHandler.getInstance(this.originalTrigger);
-                var originalTriggerWidgetConfig = originalTriggerWidget.getConfiguration();
 
-                this.executeOnClose(originalTriggerWidget, originalTriggerWidgetConfig['modalOnClose']);
+                this.executeOnClose(originalTriggerWidget, originalTriggerWidget.getOption('modalOnClose'));
             }
 
             super.destroy();
@@ -174,7 +155,10 @@ module imatic.view.ajaxify.modalContainer {
                 // load on close
                 var requestInfo = RequestHelper.parseRequestString(onClose);
 
-                action = new RequestAction(originalTriggerWidget, requestInfo);
+                action = new RequestAction(
+                    originalTriggerWidget,
+                    requestInfo
+                );
             } else if (this.resendResponse) {
                 // resend response
                 this.resendResponse.flashes = [];
@@ -189,34 +173,30 @@ module imatic.view.ajaxify.modalContainer {
             }
         }
 
-        /**
-         * Handle given action
-         */
         handleAction(action: ActionInterface): void {
-            action.events.addCallback('begin', (event: EventInterface): void => {
-                this.actionInitiator = event['action'].initiator;
+            action.listen('begin', (event: ActionEvent): void => {
+                this.actionInitiator = event.action.getInitiator();
             });
 
-            action.events.addCallback('apply', (event: EventInterface): void => {
-                if (event['response'].valid) {
-                    var config = this.getConfiguration();
-                    this.responseTitle = event['response'].title || null;
+            action.listen('apply', (event: ActionEvent): void => {
+                if (event.response.valid) {
+                    this.responseTitle = event.response.title || null;
                     this.resendResponse = null;
 
                     // handle successful form submit
                     if (
-                        event['response'].successful
+                        event.response.successful
                         && this.actionInitiator instanceof Form
                         && jQuery(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
                     ) {
                         // store response for resend
-                        if (config['modalForwardFormResponse']) {
-                            this.resendResponse = event['response'];
+                        if (this.getOption('modalForwardFormResponse')) {
+                            this.resendResponse = event.response;
                         }
 
                         // close modal
-                        if (config['modalCloseOnFormSuccess']) {
-                            event['proceed'] = false;
+                        if (this.getOption('modalCloseOnFormSuccess')) {
+                            event.proceed = false;
                             this.modal.hide();
                         }
                     }
@@ -226,50 +206,27 @@ module imatic.view.ajaxify.modalContainer {
             super.handleAction(action);
         }
 
-        /**
-         * Get container's configuration
-         */
-        getConfiguration(): {[key: string]: any;} {
-            if (this.actionInitiator) {
-                return this.actionInitiator.getConfiguration();
-            } else {
-                return {};
-            }
-        }
-
-        /**
-         * See if the container is contextual
-         */
-        isContextual(): boolean {
-            return false;
-        }
-
-        /**
-         * Get container's element
-         *
-         * NULL may be returned.
-         */
         getElement(): HTMLElement {
             return null;
         }
 
-        /**
-         * Set container's content
-         */
         setContent(content: JQuery): void {
-            var config = this.getConfiguration();
+            if (!this.actionInitiator) {
+                throw new Error('Cannot set content when action initiator is not yet known');
+            }
+            var options = this.actionInitiator.getOptions();
 
             var title = '';
             var footer = null;
 
             // configure modal
-            this.modal.setSize(config['modalSize']);
-            this.modal.setClosable(config['modalClosable']);
+            this.modal.setSize(options['modalSize']);
+            this.modal.setClosable(options['modalClosable']);
 
             // find title
             var titleElement;
-            if (config['modalTitle'] && 'none' !== config['modalTitle']) {
-                titleElement = jQuery(config['modalTitle'], content).get(0);
+            if (options['modalTitle'] && 'none' !== options['modalTitle']) {
+                titleElement = jQuery(options['modalTitle'], content).get(0);
                 if (titleElement) {
                     title = jQuery(titleElement).text();
                     jQuery(titleElement).remove();
@@ -277,13 +234,13 @@ module imatic.view.ajaxify.modalContainer {
             }
 
             // use response title
-            if ('' === title && !config['modalTitle'] && this.responseTitle) {
+            if ('' === title && !options['modalTitle'] && this.responseTitle) {
                 title = this.responseTitle;
             }
 
             // find footer
-            if (config['modalFooter']) {
-                footer = jQuery(config['modalFooter'], content);
+            if (options['modalFooter']) {
+                footer = jQuery(options['modalFooter'], content);
                 if (footer.length > 0) {
                     footer.detach();
                 } else {
@@ -305,6 +262,20 @@ module imatic.view.ajaxify.modalContainer {
 
             // show the modal
             this.modal.show();
+        }
+
+        getParent(): ContainerInterface {
+            if (this.originalTrigger) {
+                try {
+                    return this.containerHandler.findInstance(<HTMLElement> this.originalTrigger.parentNode, false);
+                } catch (e) {
+                    if (!(e instanceof ContainerNotFoundException)) {
+                        throw e;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 

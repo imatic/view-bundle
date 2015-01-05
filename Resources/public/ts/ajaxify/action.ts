@@ -1,3 +1,4 @@
+/// <reference path="object.ts"/>
 /// <reference path="container.ts"/>
 /// <reference path="widget.ts"/>
 /// <reference path="ajax.ts"/>
@@ -12,9 +13,14 @@ module imatic.view.ajaxify.action {
 
     "use_strict";
 
+    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
+    import Object                   = imatic.view.ajaxify.object.Object;
+    import ObjectInterface          = imatic.view.ajaxify.object.ObjectInterface;
     import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
     import DataType                 = imatic.view.ajaxify.ajax.DataType;
     import Request                  = imatic.view.ajaxify.ajax.Request;
+    import RequestHelper            = imatic.view.ajaxify.ajax.RequestHelper;
+    import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
     import Response                 = imatic.view.ajaxify.ajax.Response;
     import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
     import EventDispatcherInterface = imatic.view.ajaxify.event.EventDispatcherInterface;
@@ -25,10 +31,22 @@ module imatic.view.ajaxify.action {
      * Action interface
      * Represents an interaction between Widget and its Container.
      */
-    export interface ActionInterface
+    export interface ActionInterface extends ObjectInterface
     {
-        events: EventDispatcherInterface;
-        initiator: WidgetInterface;
+        /**
+         * See if the action has an initiator
+         */
+        hasInitiator: () => boolean;
+
+        /**
+         * Get action's initiator
+         */
+        getInitiator: () => WidgetInterface;
+
+        /**
+         * Set action's initiator
+         */
+        setInitiator: (initiator: WidgetInterface) => void;
 
         /**
          * See if the action is complete
@@ -41,9 +59,14 @@ module imatic.view.ajaxify.action {
         isSuccessful: () => boolean;
 
         /**
+         * See if the action supports the given container
+         */
+        supports: (container: ContainerInterface) => boolean;
+
+        /**
          * Execute the action
          */
-        execute: (container: ContainerInterface) => void;
+        execute: (container: ContainerInterface) => jQuery.Promise;
 
         /**
          * Abort the action
@@ -52,47 +75,75 @@ module imatic.view.ajaxify.action {
     }
 
     /**
-     * No action
+     * Base action
      */
-    export class NoAction implements ActionInterface
+    export class Action extends Object implements ActionInterface
     {
-        events = new EventDispatcher();
-        private successful = false;
-        private complete = false;
+        private initiator: WidgetInterface = null;
+        private complete: boolean = false;
+        private successful: boolean = false;
 
-        /**
-         * Constructor
-         */
-        constructor(
-            public initiator: WidgetInterface
-        ) {}
+        constructor(initiator: WidgetInterface) {
+            super();
 
-        /**
-         * See if the action is complete
-         */
+            if (initiator) {
+                this.setInitiator(initiator);
+            }
+        }
+
+        hasInitiator(): boolean {
+            return this.initiator ? true : false;
+        }
+
+        getInitiator(): WidgetInterface {
+            return this.initiator;
+        }
+
+        setInitiator(initiator: WidgetInterface): void {
+            this.initiator = initiator;
+        }
+
         isComplete(): boolean {
             return this.complete;
         }
 
-        /**
-         * See if the action was successful
-         */
         isSuccessful(): boolean {
             return this.successful;
+        }
+
+        supports(container: ContainerInterface): boolean {
+            return true;
+        }
+
+        execute(container: ContainerInterface): jQuery.Promise {
+            this.complete = false;
+            this.successful = false;
+
+            return this
+                .doExecute(container)
+                .done((): void => { this.successful = true; })
+                .always((): void => { this.complete = true; })
+            ;
         }
 
         /**
          * Execute the action
          */
-        execute(container: ContainerInterface): void {
-            this.successful = true;
-            this.complete = true;
+        doExecute(container: ContainerInterface): jQuery.Promise {
+            throw new Error('Not implemented');
         }
 
-        /**
-         * Abort the action
-         */
         abort(): void {
+        }
+    }
+
+    /**
+     * No action
+     */
+    export class NoAction extends Action
+    {
+        doExecute(container: ContainerInterface): jQuery.Promise {
+            return jQuery.Deferred().resolve().promise();
         }
     }
 
@@ -101,92 +152,119 @@ module imatic.view.ajaxify.action {
      *
      * Loads remote HTML contents.
      */
-    export class RequestAction implements ActionInterface
+    export class RequestAction extends Action
     {
-        events = new EventDispatcher();
-        complete = false;
-        successful = false;
-        request: Request;
+        private request: Request = null;
 
-        /**
-         * Constructor
-         */
         constructor(
-            public initiator: WidgetInterface,
-            public options: {
-                url: string;
-                method: string;
-                data: any;
-                contentSelector: string;
-            }
-        ) {}
-
-        /**
-         * See if the action is complete
-         */
-        isComplete(): boolean {
-            return this.complete;
+            initiator: WidgetInterface,
+            private info: RequestInfo
+        ) {
+            super(initiator);
         }
 
         /**
-         * See if the action was successful
+         * Get request info
          */
-        isSuccessful(): boolean {
-            return this.successful;
+        getInfo(): RequestInfo {
+            return this.info;
         }
 
-        /**
-         * Execute the action
-         */
-        execute(container: ContainerInterface): void {
+        doExecute(container: ContainerInterface): jQuery.Promise {
+            var info = this.prepareRequest(container);
+
             this.request = new Request(
-                this.options.url,
-                this.options.method,
-                this.options.data,
-                DataType.HTML,
-                this.options.contentSelector || container.getContentSelector()
+                info,
+                DataType.HTML
             );
 
-            this.events.dispatch('begin', new Event({
-                action: this,
-                container: container,
-                request: this.request,
-            }));
+            this.emit(ActionEvent.createBegin(this, container, this.request));
 
-            this.request.execute((response: Response): void => {
-                this.complete = true;
-                this.successful = response.successful;
+            return this
+                .request
+                .execute()
+                .always((response: Response): void => {
+                    this.handleResponse(container, response);
+                })
+            ;
+        }
 
-                // handle response
-                if (response.valid) {
-                    var event = this.events.dispatch('apply', new Event({
-                        action: this,
-                        container: container,
-                        response: response,
-                        proceed: true,
-                    }));
-
-                    if (event['proceed']) {
-                        container.setContent(response.data);
-                    }
-                }
-
-                // complete event
-                this.events.dispatch('complete', new Event({
-                    action: this,
-                    container: container,
-                    response: response,
-                }));
-            });
+        abort(): void {
+            if (!this.isComplete()) {
+                this.request.getXhr().abort();
+            }
         }
 
         /**
-         * Abort the action
+         * Prepare the request
          */
-        abort(): void {
-            if (!this.complete) {
-                this.request.getXhr().abort();
+        prepareRequest(container: ContainerInterface): RequestInfo {
+            var info = jQuery.extend(true, {},  this.info);
+
+            // use container's content selector if none was given
+            if (!info.contentSelector) {
+                info.contentSelector = container.getContentSelector();
             }
+
+            // special URLs
+            if ('@reload' === info.url || '@current' === info.url) {
+
+                // determine current request
+                var currentRequest = container.getCurrentRequest();
+                if (!currentRequest) {
+                    currentRequest = RequestHelper.parseRequestString(
+                        container.getOption('initial')
+                    );
+                }
+
+                // modify request
+                if ('@reload' === info.url) {
+                    // reload using complete current request info
+                    info = currentRequest;
+                } else {
+                    // change the URL
+                    info.url = currentRequest.url;
+
+                    // change the data if the request method
+                    // is GET and the request has no data of its own
+                    if (
+                        'GET' === info.method
+                        && 'GET' === currentRequest.method
+                        && !info.hasData()
+                    ) {
+                        info.data = currentRequest.data;
+                    }
+                }
+            }
+
+            return info;
+        }
+
+        /**
+         * Handle response
+         */
+        handleResponse(container: ContainerInterface, response: Response): void {
+            // handle response
+            if (response.valid) {
+                var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, response));
+
+                if (event.proceed) {
+                    container.setContent(response.data);
+                }
+            }
+
+            // flash messages
+            if (response.flashes.length > 0) {
+                container.handleFlashes(response.flashes);
+            } else if (!response.valid && !response.aborted) {
+                container.handleFlashes([{
+                    type: 'danger',
+                    message: 'An error occured'
+                }]);
+            }
+
+            // complete event
+            this.emit(ActionEvent.createComplete(this, container, response));
         }
     }
 
@@ -195,73 +273,89 @@ module imatic.view.ajaxify.action {
      *
      * Uses already existing HTML response.
      */
-    export class ResponseAction implements ActionInterface
+    export class ResponseAction extends Action
     {
-        public events = new EventDispatcher();
-
-        /**
-         * Constructor
-         */
         constructor(
-            public initiator: WidgetInterface,
-            private response: Response,
-            private contentSelector?: string
+            initiator: WidgetInterface,
+            private response: Response
         ) {
-            if (DataType.HTML !== response.dataType) {
-                throw new Error('Expected response with data type "HTML"');
-            }
+            super(initiator);
         }
 
-        /**
-         * See if the action is complete
-         */
-        isComplete(): boolean {
-            return true;
-        }
-
-        /**
-         * See if the action was successful
-         */
-        isSuccessful(): boolean {
-            return this.response.valid && this.response.successful;
-        }
-
-        /**
-         * Execute the action
-         */
-        execute(container: ContainerInterface): void {
-            this.events.dispatch('begin', new Event({
-                action: this,
-                container: container,
-                request: null,
-            }));
+        doExecute(container: ContainerInterface): jQuery.Promise {
+            this.emit(ActionEvent.createBegin(this, container, null));
 
             // handle response
             if (this.response.valid) {
-                var event = this.events.dispatch('apply', new Event({
-                    action: this,
-                    container: container,
-                    response: this.response,
-                    proceed: true,
-                }));
+                var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, this.response));
 
-                if (event['proceed']) {
+                if (event.proceed) {
                     container.setContent(this.response.data);
                 }
             }
 
             // complete event
-            this.events.dispatch('complete', new Event({
-                action: this,
-                container: container,
-                response: this.response,
-            }));
+            this.emit(ActionEvent.createComplete(this, container, this.response));
+
+            return jQuery.Deferred().resolve().promise();
+        }
+    }
+
+    /**
+     * Action event
+     */
+    export class ActionEvent extends Event
+    {
+        action: ActionInterface;
+        container: ContainerInterface;
+        request: Request;
+        response: Response;
+        proceed: boolean;
+
+        static createBegin(
+            action: ActionInterface,
+            container: ContainerInterface,
+            request: Request
+        ): ActionEvent {
+            var event = new this();
+
+            event.name = 'begin';
+            event.action = action;
+            event.container = container;
+            event.request = request;
+
+            return event;
         }
 
-        /**
-         * Abort the action
-         */
-        abort(): void {
+        static createApply(
+            action: ActionInterface,
+            container: ContainerInterface,
+            response: Response
+        ): ActionEvent {
+            var event = new this();
+
+            event.name = 'apply';
+            event.action = action;
+            event.container = container;
+            event.response = response;
+            event.proceed = true;
+
+            return event;
+        }
+
+        static createComplete(
+            action: ActionInterface,
+            container: ContainerInterface,
+            response: Response
+        ): ActionEvent {
+            var event = new this();
+
+            event.name = 'complete';
+            event.action = action;
+            event.container = container;
+            event.response = response;
+
+            return event;
         }
     }
 

@@ -18,9 +18,6 @@ module imatic.view.ajaxify.html {
     {
         private dom: any;
 
-        /**
-         * Constructor
-         */
         constructor(html: string) {
             this.dom = jQuery('<div />')
                 .append(jQuery.parseHTML(html, null, true))

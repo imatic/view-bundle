@@ -8,52 +8,6 @@ module imatic.view.ajaxify.event {
     "use_strict";
 
     /**
-     * DOM Events
-     */
-    export class DomEvents
-    {
-        /**
-         * Event triggered by code to execute action in a context
-         *
-         * Arguments: {
-         *      action: imatic.view.ajaxify.action.ActionInterface;
-         * }
-         */
-        static ACTION = 'imatic.view.ajaxify.event.action';
-
-        /**
-         * Event triggered before contents of an element are replaced or removed
-         *
-         * Arguments: {}
-         */
-        static BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.before_content_update';
-
-        /**
-         * Event triggered when there are flash messages to be handled
-         *
-         * This is used by the document handler.
-         *
-         * Arguments: {
-         *      flashes: imatic.view.ajaxify.message.FlashMessageInterface[];
-         * }
-         */
-        static HANDLE_FLASH_MESSAGES = 'imatic.view.ajaxify.event.handle_flash_messages';
-
-        /**
-         * Event triggered when flash messages are to be rendered
-         *
-         * This should be used by an extenstion that reimplements
-         * the way flash messages are rendered.
-         *
-         * Arguments: {
-         *      flashes: imatic.view.ajaxify.message.FlashMessageInterface[];
-         *      originElement: HTMLElement;
-         * }
-         */
-        static RENDER_FLASH_MESSAGES = 'imatic.view.ajaxify.event.render_flash_messages';
-    }
-
-    /**
      * Event dispatcher interface
      */
     export interface EventDispatcherInterface
@@ -79,6 +33,11 @@ module imatic.view.ajaxify.event {
         removeListener: (eventName: string, listener: ListenerInterface) => void;
 
         /**
+         * Emit an event
+         */
+        emit: (event: EventInterface) => EventInterface;
+
+        /**
          * Dispatch an event
          */
         dispatch: (eventName: string, event?: EventInterface) => EventInterface;
@@ -90,7 +49,6 @@ module imatic.view.ajaxify.event {
     export interface EventInterface
     {
         name: string;
-        [property: string]: any;
 
         /**
          * Stop event propagation
@@ -126,31 +84,12 @@ module imatic.view.ajaxify.event {
     export class Event implements EventInterface
     {
         name: string;
-        [property: string]: any;
-
         private propagationStopped = false;
 
-        /**
-         * Constructor
-         */
-        constructor(properties?: {[property: string]: any}) {
-            if (properties) {
-                for (var property in properties) {
-                    this[property] = properties[property];
-                }
-            }
-        }
-
-        /**
-         * Stop event propagation
-         */
         stopPropagation(): void {
             this.propagationStopped = true;
         }
 
-        /**
-         * See if event propagation is stopped
-         */
         isPropagationStopped(): boolean {
             return this.propagationStopped;
         }
@@ -163,44 +102,24 @@ module imatic.view.ajaxify.event {
     {
         private listeners = new ListenerCollection();
 
-        /**
-         * Add a callback
-         */
         addCallback(eventName: string, callback: ListenerCallbackInterface, priority: number = 0): void {
             this.listeners.add(eventName, new Listener(callback, priority));
         }
 
-        /**
-         * Remove a callback
-         */
         removeCallback(eventName: string, callback: ListenerCallbackInterface): void {
             this.listeners.removeCallback(eventName, callback);
         }
 
-        /**
-         * Add a listener
-         */
         addListener(eventName: string, listener: ListenerInterface): void {
             this.listeners.add(eventName, listener);
         }
 
-        /**
-         * Remove a listener
-         */
         removeListener(eventName: string, listener: ListenerInterface): void {
             this.listeners.remove(eventName, listener);
         }
 
-        /**
-         * Dispatch an event
-         */
-        dispatch(eventName: string, event?: EventInterface): EventInterface {
-            if (!event) {
-                event = new Event();
-            }
-            event.name = eventName;
-
-            var eventListeners = this.listeners.get(eventName);
+        emit(event: EventInterface): EventInterface {
+            var eventListeners = this.listeners.get(event.name);
             for (var i = 0; i < eventListeners.length; ++i) {
                 eventListeners[i].callback(event);
 
@@ -210,6 +129,15 @@ module imatic.view.ajaxify.event {
             }
 
             return event;
+        }
+
+        dispatch(eventName: string, event?: EventInterface): EventInterface {
+            if (!event) {
+                event = new Event();
+            }
+            event.name = eventName;
+
+            return this.emit(event);
         }
     }
 

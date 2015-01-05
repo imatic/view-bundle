@@ -1,9 +1,9 @@
 /// <reference path="../history/history.d.ts"/>
 /// <reference path="jquery.ts"/>
-/// <reference path="event.ts"/>
 /// <reference path="ajax.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="container.ts"/>
+/// <reference path="dom.ts"/>
 
 /**
  * Imatic view ajaxify history module
@@ -16,12 +16,11 @@ module imatic.view.ajaxify.history {
 
     import ajaxify              = imatic.view.ajaxify;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-
     import RequestHelper        = imatic.view.ajaxify.ajax.RequestHelper;
     import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
-    import DomEvents            = imatic.view.ajaxify.event.DomEvents;
-    import EventInterface       = imatic.view.ajaxify.event.EventInterface;
+    import DomEvents            = imatic.view.ajaxify.dom.DomEvents;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
+    import ActionEvent          = imatic.view.ajaxify.action.ActionEvent;
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
 
     declare var window: Window;
@@ -84,7 +83,7 @@ module imatic.view.ajaxify.history {
             if (state.data && state.data.containerStates) {
                 for (var i = 0; i < state.data.containerStates.length; ++i) {
                     var containerState = state.data.containerStates[i];
-                    var containerElement = documentHandler.document.getElementById(containerState.id);
+                    var containerElement = imatic.view.ajaxify.domDocument.getElementById(containerState.id);
 
                     if (containerElement && containerHandler.hasInstance(containerElement)) {
                         var container = containerHandler.getInstance(containerElement);
@@ -97,12 +96,13 @@ module imatic.view.ajaxify.history {
                         } else {
                             // initial
                             requestInfo = RequestHelper.parseRequestString(
-                                container.getConfiguration()['initial']
+                                container.getOption('initial')
                             );
                         }
 
                         // trigger action
-                        var action = HistoryStateChangeAction.createFromRequestInfo(requestInfo);
+                        var action = new HistoryStateChangeAction(null, requestInfo);
+
                         jQuery(containerElement).trigger(
                             jQuery.Event(DomEvents.ACTION, {action: action})
                         );
@@ -160,38 +160,21 @@ module imatic.view.ajaxify.history {
      */
     export class HistoryStateChangeAction extends RequestAction
     {
-        requestUid: number;
-
-        /**
-         * Create from request info
-         */
-        static createFromRequestInfo(requestInfo: RequestInfo): HistoryStateChangeAction {
-            var action = new HistoryStateChangeAction(null, requestInfo);
-
-            action.requestUid = requestInfo.uid;
-
-            return action;
-        }
-
-        /**
-         * Execute the action
-         */
-        execute(container: ContainerInterface): void {
-            // check container's current request
+        doExecute(container: ContainerInterface): jQuery.Promise {
             var currentRequest = container.getCurrentRequest();
-            if (this.requestUid != (currentRequest ? currentRequest.uid : null)) {
 
+            // check container's current request
+            if (this.getInfo().uid != (currentRequest ? currentRequest.uid : null)) {
                 // set request UID to NULL if reverting to initial state
-                if (!this.requestUid) {
-                    this.events.addCallback('complete', (event: EventInterface): void => {
-                        event['container'].getCurrentRequest().uid = null;
+                if (!this.getInfo().uid) {
+                    this.listen('complete', (event: ActionEvent): void => {
+                        event.container.getCurrentRequest().uid = null;
                     }, -100);
                 }
 
-                super.execute(container);
+                return super.doExecute(container);
             } else {
-                this.complete = true;
-                this.successful = true;
+                return jQuery.Deferred().resolve().promise();
             }
         }
     }

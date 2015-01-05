@@ -3,6 +3,7 @@
 /// <reference path="widget.ts"/>
 /// <reference path="action.ts"/>
 /// <reference path="jquery.ts"/>
+/// <reference path="ajax.ts"/>
 
 /**
  * Imatic view ajaxify form module
@@ -15,13 +16,13 @@ module imatic.view.ajaxify.form {
 
     import ajaxify              = imatic.view.ajaxify;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-
     import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
     import Widget               = imatic.view.ajaxify.widget.Widget;
     import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
     import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
     import CssClasses           = imatic.view.ajaxify.css.CssClasses;
+    import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
 
     /**
      * Form handler
@@ -32,9 +33,6 @@ module imatic.view.ajaxify.form {
         public submitElementSelector = 'input[type=submit], button';
         private formFactory = new FormFactory(this);
 
-        /**
-         * Constructor
-         */
         constructor(
             private widgetHandler: WidgetHandler
         ) {}
@@ -71,13 +69,13 @@ module imatic.view.ajaxify.form {
         /**
          * Get form instance for given element
          */
-        getInstance(element: HTMLElement, containerElement?: HTMLElement): Form {
+        getInstance(element: HTMLElement): Form {
             var form;
 
             if (this.widgetHandler.hasInstance(element)) {
                 form = this.widgetHandler.getInstance(element);
             } else {
-                form = this.formFactory.create(element, containerElement);
+                form = this.formFactory.create(element);
                 this.widgetHandler.setInstance(element, form);
             }
 
@@ -90,9 +88,6 @@ module imatic.view.ajaxify.form {
      */
     class FormFactory
     {
-        /**
-         * Constructor
-         */
         constructor(
             private formHandler: FormHandler
         ) {}
@@ -100,11 +95,8 @@ module imatic.view.ajaxify.form {
         /**
          * Create form
          */
-        create(element: HTMLElement, containerElement?: HTMLElement): Form {
-            var form = new Form(
-                <HTMLFormElement> element,
-                containerElement
-            );
+        create(element: HTMLElement): Form {
+            var form = new Form(<HTMLFormElement> element);
 
             form.submitMarkAttr = this.formHandler.submitMarkAttr;
 
@@ -119,10 +111,7 @@ module imatic.view.ajaxify.form {
     {
         submitMarkAttr: string;
 
-        /**
-         * Create action instance
-         */
-        doCreateAction(config: {[key: string]: any;}): ActionInterface {
+        doCreateAction(): ActionInterface {
             var form = <HTMLFormElement> this.element;
             var formData = jQuery(form).serializeArray();
 
@@ -144,31 +133,31 @@ module imatic.view.ajaxify.form {
 
             // determine url
             var url;
-            if (submitButton && submitButton.formAction) {
-                url = submitButton.formAction;
+            if (submitButton && submitButton.hasAttribute('formaction')) {
+                url = submitButton.getAttribute('formaction');
             } else {
                 url = form.action;
             }
 
             // determine method
             var method = 'GET';
-            if (submitButton && submitButton.formMethod) {
-                method = submitButton.formMethod;
+            if (submitButton && submitButton.hasAttribute('formmethod')) {
+                method = submitButton.getAttribute('formmethod');
             } else if (form.method) {
                 method = form.method;
             }
 
-            return new RequestAction(this, {
-                url: url,
-                method: method,
-                data: formData,
-                contentSelector: config['contentSelector'] || null,
-            });
+            return new RequestAction(
+                this,
+                new RequestInfo(
+                    url,
+                    method,
+                    formData,
+                    this.getOption('contentSelector') || null
+                )
+            );
         }
 
-        /**
-         * Get default confirmation message
-         */
         getDefaultConfirmMessage(): string {
             return 'Are you sure you want to submit the entered data?';
         }
