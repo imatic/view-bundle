@@ -13,8 +13,9 @@ module imatic.view.ajaxify {
     import ConfigurationBuilder         = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ModalConfigurationDefaults   = imatic.view.ajaxify.modalContainer.ModalConfigurationDefaults;
     import ModalConfigurationProcessor  = imatic.view.ajaxify.modalContainer.ModalConfigurationProcessor;
-    import ActionHelper                 = imatic.view.ajaxify.action.ActionHelper;
     import RequestHelper                = imatic.view.ajaxify.ajax.RequestHelper;
+    import ActionHelper                 = imatic.view.ajaxify.action.ActionHelper;
+    import NoAction                     = imatic.view.ajaxify.action.NoAction;
     import CloseModalAction             = imatic.view.ajaxify.modalContainer.CloseModalAction;
 
     // global components
@@ -43,6 +44,7 @@ module imatic.view.ajaxify {
         // action helper
         actionHelper = new ActionHelper();
         actionHelper.addKeywordHandler('close-modal', CloseModalAction.keywordHandler);
+        actionHelper.addKeywordHandler('noop', NoAction.keywordHandler);
 
         // request helper
         requestHelper = new RequestHelper();

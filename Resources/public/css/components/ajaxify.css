@@ -1,20 +1,16 @@
 /* Busy generic */
 .imatic-view-ajaxify-busy {
-    cursor: wait;
-}
-
-/* Containers */
-.imatic-view-ajaxify-container.imatic-view-ajaxify-busy {
     opacity: 0.5;
+}
+.imatic-view-ajaxify-busy,
+.imatic-view-ajaxify-busy * {
+    cursor: wait !important;
+}
+.imatic-view-ajaxify-busy .imatic-view-ajaxify-busy {
+    opacity: 1;
 }
 
 /* Widgets */
-.imatic-view-ajaxify-widget.imatic-view-ajaxify-busy {
-    opacity: 0.5;
-}
-.imatic-view-ajaxify-container.imatic-view-ajaxify-busy .imatic-view-ajaxify-widget {
-    opacity: 1;
-}
 a[data-action] {
     cursor: pointer;
 }

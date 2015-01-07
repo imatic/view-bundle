@@ -27,9 +27,9 @@
             <li><a href="#flashes">Flash messages</a></li>
             <li><a href="#void">Void containers</a></li>
             <li><a href="#history">Browser history</a></li>
-            <li><a href="#css">CSS classes</a></li>
             <li><a href="#action-strings">Action strings</a></li>
             <li><a href="#request-strings">Request strings</a></li>
+            <li><a href="#css">CSS classes</a></li>
         </ol>
 
 
@@ -188,7 +188,7 @@
         {% example %}
             <div data-role="container">
                 <a href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">I am a link widget :)</a>
-            </div>    
+            </div>
         {% endexample %}
 
 
@@ -577,36 +577,6 @@
         <hr>
 
 
-        <!-- css -->
-        <h3 id="css">CSS classes</h3>
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Class</th>
-                    <th>Meaning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>imatic-view-ajaxify-busy</code></td>
-                    <td>Container or a widget that is currently performing an action.</td>
-                </tr>
-                <tr>
-                    <td><code>imatic-view-ajaxify-container</code></td>
-                    <td>Element holding a Container instance. Useful in conjunction with <code>imatic-view-ajaxify-busy</code>.</td>
-                </tr>
-                <tr>
-                    <td><code>imatic-view-ajaxify-widget</code></td>
-                    <td>Element holding a Widget instance. Useful in conjunction with <code>imatic-view-ajaxify-busy</code>.</td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <hr>
-
-
         <!-- action strings -->
         <h3 id="action-strings">Action strings</h3>
 
@@ -651,6 +621,10 @@
                     <td><code>@close-modal</code></td>
                     <td>Closes a modal container.</td>
                 </tr>
+                <tr>
+                    <td><code>@noop</code></td>
+                    <td>Does nothing. Always succeeds</td>
+                </tr>
             </tbody>
         </table>
 
@@ -667,6 +641,10 @@
                 <tr>
                     <td><code>@close-modal | @reload</code></td>
                     <td>close a modal dialog or reload the current container</td>
+                </tr>
+                <tr>
+                    <td><code>@close-modal | @noop</code></td>
+                    <td>close a modal dialog or do nothing</td>
                 </tr>
             </tbody>
         </table>
@@ -761,6 +739,36 @@
                 <tr><td><code>/foobar</code></td><td>-</td></tr>
                 <tr><td><code>;#container</code></td><td><code>@page;#container</code></td></tr>
                 <tr><td>an empty string</td><td><code>@page</code></td></tr>
+            </tbody>
+        </table>
+
+
+        <hr>
+
+
+        <!-- css -->
+        <h3 id="css">CSS classes</h3>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Meaning</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>imatic-view-ajaxify-busy</code></td>
+                    <td>Element (container, widget, invisible widget's parent) that is currently busy performing an action.</td>
+                </tr>
+                <tr>
+                    <td><code>imatic-view-ajaxify-container</code></td>
+                    <td>Element holding a Container instance.</td>
+                </tr>
+                <tr>
+                    <td><code>imatic-view-ajaxify-widget</code></td>
+                    <td>Element holding a Widget instance.</td>
+                </tr>
             </tbody>
         </table>
 

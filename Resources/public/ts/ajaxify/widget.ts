@@ -45,7 +45,6 @@ module imatic.view.ajaxify.widget {
     export class WidgetHandler
     {
         public instanceDataKey = 'widgetInstance';
-        public instanceMarkAttr = 'data-has-widget-instance';
 
         /**
          * Check for widget instance
@@ -72,7 +71,6 @@ module imatic.view.ajaxify.widget {
         setInstance(widgetElement: HTMLElement, widget: WidgetInterface): void {
             jQuery(widgetElement)
                 .data(this.instanceDataKey, widget)
-                .attr(this.instanceMarkAttr, 'true')
                 .addClass(CssClasses.WIDGET)
             ;
         }
@@ -82,7 +80,7 @@ module imatic.view.ajaxify.widget {
          */
         findInstances(element: HTMLElement): WidgetInterface[] {
             var self = this;
-            var selector = '[' + this.instanceMarkAttr + ']';
+            var selector = '.' + CssClasses.WIDGET;
             var widgets: WidgetInterface[] = [];
 
             if (jQuery(element).is(selector) && this.hasInstance(element)) {
@@ -105,6 +103,7 @@ module imatic.view.ajaxify.widget {
     export class Widget extends Object implements WidgetInterface
     {
         private pendingActions: ActionInterface[] = [];
+        private busyElement: HTMLElement = null;
 
         constructor(
             public element: HTMLElement
@@ -146,7 +145,11 @@ module imatic.view.ajaxify.widget {
             for (var i = 0; i < actions.length; ++i) {
                 actions[i].listen('begin', (event: ActionEvent): void => {
                     if (0 === this.pendingActions.length) {
-                        jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                        this.busyElement = jQuery(this.element).is(':visible')
+                            ? this.element
+                            : jQuery(this.element).parents(':visible')[0] || this.element
+                        ;
+                        jQuery(this.busyElement).addClass(CssClasses.COMPONENT_BUSY);
                     }
 
                     this.pendingActions.push(event.action);
@@ -158,7 +161,8 @@ module imatic.view.ajaxify.widget {
                     );
 
                     if (0 === this.pendingActions.length) {
-                        jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                        jQuery(this.busyElement).removeClass(CssClasses.COMPONENT_BUSY);
+                        this.busyElement = null;
                     }
                 });
             }

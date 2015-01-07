@@ -205,6 +205,10 @@ module imatic.view.ajaxify.action {
      */
     export class NoAction extends Action
     {
+        static keywordHandler = (initiator: WidgetInterface): ActionInterface => {
+            return new NoAction(initiator);
+        };
+
         doExecute(container: ContainerInterface): jQuery.Promise {
             return jQuery.Deferred().resolve().promise();
         }

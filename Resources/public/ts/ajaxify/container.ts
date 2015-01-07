@@ -123,7 +123,6 @@ module imatic.view.ajaxify.container {
     {
         private selector = '[data-role="container"]';
         private instanceDataKey = 'containerInstance';
-        private instanceMarkAttr = 'data-has-container-instance';
         private containerFactory = new ContainerFactory(this);
         private targetHandlers: TargetHandlerInterface[] = [];
 
@@ -177,7 +176,6 @@ module imatic.view.ajaxify.container {
         setInstance(containerElement: HTMLElement, container: ContainerInterface): void {
             jQuery(containerElement)
                 .data(this.instanceDataKey, container)
-                .attr(this.instanceMarkAttr, 'true')
                 .addClass(CssClasses.CONTAINER)
             ;
         }
@@ -280,7 +278,7 @@ module imatic.view.ajaxify.container {
                 containers.push(this.getInstance(element));
             }
 
-            jQuery('[' + this.instanceMarkAttr + ']', element).each(function () {
+            jQuery('.' + CssClasses.CONTAINER, element).each(function () {
                 containers.push(self.getInstance(this));
             });
 
