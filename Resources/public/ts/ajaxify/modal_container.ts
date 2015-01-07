@@ -23,13 +23,13 @@ module imatic.view.ajaxify.modalContainer {
     import ConfigurationInterface           = imatic.view.ajaxify.configuration.ConfigurationInterface;
     import DomEvents                        = imatic.view.ajaxify.dom.DomEvents;
     import Response                         = imatic.view.ajaxify.ajax.Response;
-    import RequestHelper                    = imatic.view.ajaxify.ajax.RequestHelper;
     import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
     import Container                        = imatic.view.ajaxify.container.Container;
     import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
     import ContainerNotFoundException       = imatic.view.ajaxify.container.ContainerNotFoundException;
     import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
     import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
+    import Action                           = imatic.view.ajaxify.action.Action;
     import ActionEvent                      = imatic.view.ajaxify.action.ActionEvent;
     import RequestAction                    = imatic.view.ajaxify.action.RequestAction;
     import ResponseAction                   = imatic.view.ajaxify.action.ResponseAction;
@@ -131,6 +131,10 @@ module imatic.view.ajaxify.modalContainer {
         private responseTitle: string;
         private resendResponse: Response;
 
+        getModal(): Modal {
+            return this.modal;
+        }
+
         loadOptions(): ConfigurationInterface {
             return ajaxify.configBuilder.buildFromDom(this.originalTrigger);
         }
@@ -153,26 +157,21 @@ module imatic.view.ajaxify.modalContainer {
          * Execute on close action
          */
         private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: any) {
-            var action;
+            var actions;
 
             if (onClose) {
                 // load on close
-                var requestInfo = RequestHelper.parseRequestString(onClose);
-
-                action = new RequestAction(
-                    originalTriggerWidget,
-                    requestInfo
-                );
+                actions = ajaxify.actionHelper.parseActionString(onClose, originalTriggerWidget);
             } else if (this.resendResponse) {
                 // resend response
                 this.resendResponse.flashes = [];
-                action = new ResponseAction(originalTriggerWidget, this.resendResponse);
+                actions = [new ResponseAction(originalTriggerWidget, this.resendResponse)];
                 this.resendResponse = null;
             }
 
-            if (action) {
+            if (actions) {
                 jQuery(originalTriggerWidget.getElement()).trigger(
-                    jQuery.Event(DomEvents.ACTION, {action: action})
+                    jQuery.Event(DomEvents.ACTIONS, {actions: actions})
                 );
             }
         }
@@ -183,7 +182,7 @@ module imatic.view.ajaxify.modalContainer {
             });
 
             action.listen('apply', (event: ActionEvent): void => {
-                if (event.response.valid) {
+                if (event.response && event.response.valid) {
                     this.responseTitle = event.response.title || null;
                     this.resendResponse = null;
 
@@ -281,6 +280,26 @@ module imatic.view.ajaxify.modalContainer {
             }
 
             return null;
+        }
+    }
+
+    /**
+     * Close modal action
+     */
+    export class CloseModalAction extends Action
+    {
+        static keywordHandler = (initiator: WidgetInterface): ActionInterface => {
+            return new CloseModalAction(initiator);
+        };
+
+        supports(container: ContainerInterface): boolean {
+            return container instanceof ModalContainer;
+        }
+
+        doExecute(container: ContainerInterface): jQuery.Promise {
+            (<ModalContainer> container).getModal().hide();
+
+            return jQuery.Deferred().resolve().promise();
         }
     }
 

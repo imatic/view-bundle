@@ -15,3 +15,6 @@
 .imatic-view-ajaxify-container.imatic-view-ajaxify-busy .imatic-view-ajaxify-widget {
     opacity: 1;
 }
+a[data-action] {
+    cursor: pointer;
+}

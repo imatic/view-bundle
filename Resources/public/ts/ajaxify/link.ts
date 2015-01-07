@@ -46,6 +46,7 @@ module imatic.view.ajaxify.link {
                 && (
                     jQuery(element).attr('href')
                     || jQuery(element).data('href')
+                    || jQuery(element).data('action')
                 )
             ) {
                 return true;
@@ -102,16 +103,28 @@ module imatic.view.ajaxify.link {
     {
         url: string;
 
-        doCreateAction(): ActionInterface {
-            return new RequestAction(
-                this,
-                new RequestInfo(
-                    this.url,
-                    this.getOption('method') || 'GET',
-                    null,
-                    this.getOption('contentSelector') || null
-                )
-            );
+        doCreateActions(): ActionInterface[] {
+            var actions = [];
+
+            var actionString = this.getOption('action');
+
+            if (actionString) {
+                jQuery.merge(actions, ajaxify.actionHelper.parseActionString(actionString, this));
+            }
+
+            if (this.url) {
+                actions.push(new RequestAction(
+                    this,
+                    new RequestInfo(
+                        this.url,
+                        this.getOption('method') || 'GET',
+                        null,
+                        this.getOption('contentSelector') || null
+                    )
+                ));
+            }
+
+            return actions;
         }
     }
 

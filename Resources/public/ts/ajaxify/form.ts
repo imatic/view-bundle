@@ -111,7 +111,7 @@ module imatic.view.ajaxify.form {
     {
         submitMarkAttr: string;
 
-        doCreateAction(): ActionInterface {
+        doCreateActions(): ActionInterface[] {
             var form = <HTMLFormElement> this.element;
             var formData = jQuery(form).serializeArray();
 
@@ -147,7 +147,8 @@ module imatic.view.ajaxify.form {
                 method = form.method;
             }
 
-            return new RequestAction(
+            // create action
+            var action = new RequestAction(
                 this,
                 new RequestInfo(
                     url,
@@ -156,6 +157,8 @@ module imatic.view.ajaxify.form {
                     this.getOption('contentSelector') || null
                 )
             );
+
+            return [action];
         }
 
         getDefaultConfirmMessage(): string {

@@ -13,19 +13,82 @@ module imatic.view.ajaxify.action {
 
     "use_strict";
 
+    import ajaxify                  = imatic.view.ajaxify;
     import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
     import Object                   = imatic.view.ajaxify.object.Object;
     import ObjectInterface          = imatic.view.ajaxify.object.ObjectInterface;
     import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
     import DataType                 = imatic.view.ajaxify.ajax.DataType;
     import Request                  = imatic.view.ajaxify.ajax.Request;
-    import RequestHelper            = imatic.view.ajaxify.ajax.RequestHelper;
     import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
     import Response                 = imatic.view.ajaxify.ajax.Response;
     import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
     import EventDispatcherInterface = imatic.view.ajaxify.event.EventDispatcherInterface;
     import EventDispatcher          = imatic.view.ajaxify.event.EventDispatcher;
     import Event                    = imatic.view.ajaxify.event.Event;
+
+    /**
+     * Action helper
+     *
+     * Provides helper methods related to actions.
+     */
+    export class ActionHelper
+    {
+        private keywordHandlers: {[keyword: string]: (initiator: WidgetInterface) => ActionInterface} = {};
+
+        /**
+         * Register a keyword handler
+         */
+        addKeywordHandler(keyword: string, callback: (initiator: WidgetInterface) => ActionInterface): void {
+            this.keywordHandlers[keyword] = callback;
+        }
+
+        /**
+         * Parse action string (segments separated by "|")
+         */
+        parseActionString(actionString: string, initiator?: WidgetInterface): ActionInterface[] {
+            var actions: ActionInterface[] = [];
+            var segments = actionString.split(/\s*\|\s*/);
+
+            for (var i = 0; i < segments.length; ++i) {
+                var action = this.parseActionSegment(segments[i], initiator);
+
+                if (action) {
+                    actions.push(action);
+                }
+            }
+
+            return actions;
+        }
+
+        /**
+         * Parse single action segment
+         */
+        parseActionSegment(actionSegment: string, initiator?: WidgetInterface): ActionInterface {
+            var action = null;
+            var segment = jQuery.trim(actionSegment);
+
+            if (segment.length > 0) {
+                // try to match the @key-word syntax
+                var match = segment.match(/^@([A-Za-z0-9_\-]+)$/);
+
+                // find and invoke the handler
+                if (match && this.keywordHandlers[match[1]]) {
+                    action = this.keywordHandlers[match[1]](initiator);
+                }
+
+                // if no action was matched, fall back to request strings
+                if (!action) {
+                    action = new RequestAction(
+                        initiator,
+                        ajaxify.requestHelper.parseRequestString(segment)
+                    );
+                }
+            }
+
+            return action;
+        }
+    }
 
     /**
      * Action interface
@@ -212,9 +275,13 @@ module imatic.view.ajaxify.action {
                 // determine current request
                 var currentRequest = container.getCurrentRequest();
                 if (!currentRequest) {
-                    currentRequest = RequestHelper.parseRequestString(
+                    currentRequest = ajaxify.requestHelper.parseRequestString(
                         container.getOption('initial')
                     );
+                }
+                var currentRequestInitiator = container.getCurrentRequestInitiator();
+                if (currentRequestInitiator) {
+                    this.setInitiator(currentRequestInitiator);
                 }
 
                 // modify request

@@ -13,13 +13,13 @@ module imatic.view.ajaxify.dom {
     export class DomEvents
     {
         /**
-         * Event triggered by code to execute action in a context
+         * Event triggered by code to execute actions in a context
          *
          * Arguments: {
          *      action: imatic.view.ajaxify.action.ActionInterface;
          * }
          */
-        static ACTION = 'imatic.view.ajaxify.event.action';
+        static ACTIONS = 'imatic.view.ajaxify.event.actions';
 
         /**
          * Event triggered before contents of an element are replaced or removed

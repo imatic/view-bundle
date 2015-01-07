@@ -29,11 +29,9 @@ module imatic.view.ajaxify.widget {
     export interface WidgetInterface extends ObjectInterface
     {
         /**
-         Create action
-         *
-         * NULL may be returned
+         * Create actions
          */
-        createAction: () => ActionInterface;
+        createActions: () => ActionInterface[];
 
         /**
          * Get widget's element
@@ -129,7 +127,7 @@ module imatic.view.ajaxify.widget {
             return ajaxify.configBuilder.buildFromDom(this.element);
         }
 
-        createAction(): ActionInterface {
+        createActions(): ActionInterface[] {
             var confirmOption = this.getOption('confirm');
 
             if (confirmOption) {
@@ -139,29 +137,33 @@ module imatic.view.ajaxify.widget {
                 );
 
                 if (!confirm(confirmOption)) {
-                    return new imatic.view.ajaxify.action.NoAction(this);
+                    return [new imatic.view.ajaxify.action.NoAction(this)];
                 }
             }
 
-            var action = this.doCreateAction();
+            var actions = this.doCreateActions();
 
-            if (action) {
-                action.listen('begin', (event: ActionEvent): void => {
-                    jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+            for (var i = 0; i < actions.length; ++i) {
+                actions[i].listen('begin', (event: ActionEvent): void => {
+                    if (0 === this.pendingActions.length) {
+                        jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+                    }
 
                     this.pendingActions.push(event.action);
                 });
-                action.listen('complete', (event: ActionEvent): void => {
-                    jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
-
+                actions[i].listen('complete', (event: ActionEvent): void => {
                     this.pendingActions.splice(
                         this.pendingActions.indexOf(event.action),
                         1
                     );
+
+                    if (0 === this.pendingActions.length) {
+                        jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+                    }
                 });
             }
 
-            return action;
+            return actions;
         }
 
         getElement(): HTMLElement {
@@ -176,12 +178,10 @@ module imatic.view.ajaxify.widget {
         }
 
         /**
-         * Create action instance
-         *
-         * NULL may be returned.
+         * Create action instances
          */
-        doCreateAction(): ActionInterface {
-            return null;
+        doCreateActions(): ActionInterface[] {
+            return [];
         }
     }
 

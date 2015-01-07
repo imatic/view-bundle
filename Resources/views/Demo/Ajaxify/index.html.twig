@@ -28,6 +28,7 @@
             <li><a href="#void">Void containers</a></li>
             <li><a href="#history">Browser history</a></li>
             <li><a href="#css">CSS classes</a></li>
+            <li><a href="#action-strings">Action strings</a></li>
             <li><a href="#request-strings">Request strings</a></li>
         </ol>
 
@@ -247,6 +248,19 @@
                     <td>response content selector</td>
                     <td>container's ID if any</td>
                 </tr>
+                <tr>
+                    <td><code>data-action</code></td>
+                    <td>
+                        <p>custom <a href="#action-strings">action string</a> to execute</p>
+                        <ul>
+                            <li>
+                                these actions are attempted before the link's
+                                <code>href</code> or <code>data-href</code> attributes are used
+                            </li>
+                        </ul>
+                    </td>
+                    <td>-</td>
+                </tr>
             </tbody>
         </table>
 
@@ -372,9 +386,7 @@
         <h4>Modal configuration</h4>
 
         <p>
-            The modal options can be set on the widget, container or the document's
-            body element. All options are cascaded together. The order
-            of priority is: widget > container > document's body element.
+            The modal dialog options are taken from the widget that triggers it.
         </p>
 
         <table class="table table-bordered">
@@ -414,12 +426,12 @@
                 <tr>
                     <td><code>data-modal-on-close</code></td>
                     <td>
-                        <p>perform a request when the modal is closed</p>
+                        <p>perform one or more actions when the modal is closed</p>
                         <ul>
-                            <li>the action is triggered in context of the widget that opened the modal</li>
+                            <li>the actions are triggered in context of the widget that opened the modal</li>
                         </ul>
                     </td>
-                    <td><a href="#request-strings">a request string</a></td>
+                    <td><a href="#action-strings">an action string</a></td>
                     <td>-</td>
                 </tr>
                 <tr>
@@ -595,6 +607,74 @@
         <hr>
 
 
+        <!-- action strings -->
+        <h3 id="action-strings">Action strings</h3>
+
+        <p>
+            Some options have the form of an &quot;action string&quot;. Abstract
+            definition of the format is:
+        </p>
+
+        <p>
+            <code>action1</code> <code>|</code>
+            <code>action2</code> <code>|</code>
+            <code>...</code>
+        </p>
+
+        <ul>
+            <li>one or more actions can be specified</li>
+            <li>the actions are fired in order until one of them succeeds, like so:
+                <ol>
+                    <li>see if the action supports the current container and if it does, execute it and stop</li>
+                    <li>if not, move onto the parent container</li>
+                    <li>if none of the containers are supported, move onto the next action and repeat</li>
+                </ol>
+            </li>
+            <li>should all actions fail, the default behavior takes place (e.g. default link click, form submit, etc.)</li>
+        </ul>
+
+        <h4>Supported actions</h4>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Effect</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="#request-strings">a request string</a></td>
+                    <td>Performas a request.</td>
+                </tr>
+                <tr>
+                    <td><code>@close-modal</code></td>
+                    <td>Closes a modal container.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Examples</h4>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Example</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>@close-modal | @reload</code></td>
+                    <td>close a modal dialog or reload the current container</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <hr>
+
+
         <!-- request strings -->
         <h3 id="request-strings">Request strings</h3>
 
@@ -605,7 +685,7 @@
 
         <p>
             <code>method</code>
-            <code>URL</code>;
+            <code>URL</code> <code>;</code>
             <code>content-selector</code>
         </p>
 

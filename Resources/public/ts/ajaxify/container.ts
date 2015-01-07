@@ -8,6 +8,7 @@
 /// <reference path="history.ts"/>
 /// <reference path="ajax.ts"/>
 /// <reference path="dom.ts"/>
+/// <reference path="widget.ts"/>
 
 
 /**
@@ -33,7 +34,7 @@ module imatic.view.ajaxify.container {
     import CssClasses               = imatic.view.ajaxify.css.CssClasses;
     import HistoryHandler           = imatic.view.ajaxify.history.HistoryHandler;
     import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
-    import RequestHelper            = imatic.view.ajaxify.ajax.RequestHelper;
+    import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
 
     /**
      * Container not found exception
@@ -63,6 +64,11 @@ module imatic.view.ajaxify.container {
          * Get current request, if any
          */
         getCurrentRequest: () => RequestInfo;
+
+        /**
+         * Get initiator of current request, if any
+         */
+        getCurrentRequestInitiator: () => WidgetInterface;
 
         /**
          * Get container's element
@@ -329,6 +335,7 @@ module imatic.view.ajaxify.container {
     {
         private currentAction: ActionInterface;
         private currentRequest: RequestInfo = null;
+        private currentRequestInitiator: WidgetInterface = null;
 
         constructor(
             public containerHandler: ContainerHandler,
@@ -367,6 +374,10 @@ module imatic.view.ajaxify.container {
 
         getCurrentRequest(): RequestInfo {
             return this.currentRequest;
+        }
+
+        getCurrentRequestInitiator(): WidgetInterface {
+            return this.currentRequestInitiator;
         }
 
         getElement(): HTMLElement {
@@ -423,8 +434,9 @@ module imatic.view.ajaxify.container {
 
             // handle response
             if (event.response) {
-                // update current request
+                // update current request and initiator
                 this.currentRequest = event.response.request;
+                this.currentRequestInitiator = event.action.getInitiator();
 
                 // handle history
                 if (event.response.valid && this.getOption('history') && elementId) {

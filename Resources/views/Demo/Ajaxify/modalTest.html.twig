@@ -6,4 +6,17 @@
 
     <p>Hello, I am a modal dialog.</p>
 
+    <p>
+        <a data-action="@close-modal">Close me</a>
+        or
+        <a
+            href="{{ path('imatic_view_demo_ajaxify_modaltest') }}"
+            data-target="modal"
+            data-modal-title="h2"
+        >
+            open another
+        </a>
+        .
+    </p>
+
 {% endblock %}

@@ -13,11 +13,16 @@ module imatic.view.ajaxify {
     import ConfigurationBuilder         = imatic.view.ajaxify.configuration.ConfigurationBuilder;
     import ModalConfigurationDefaults   = imatic.view.ajaxify.modalContainer.ModalConfigurationDefaults;
     import ModalConfigurationProcessor  = imatic.view.ajaxify.modalContainer.ModalConfigurationProcessor;
+    import ActionHelper                 = imatic.view.ajaxify.action.ActionHelper;
+    import RequestHelper                = imatic.view.ajaxify.ajax.RequestHelper;
+    import CloseModalAction             = imatic.view.ajaxify.modalContainer.CloseModalAction;
 
     // global components
     export var domDocument;
     export var documentHandler;
     export var configBuilder;
+    export var actionHelper;
+    export var requestHelper;
 
     /**
      * Initialize ajaxify
@@ -26,12 +31,21 @@ module imatic.view.ajaxify {
     {
         domDocument = d;
 
+        // document handler
         documentHandler = new HTMLDocumentHandler();
         documentHandler.attach();
 
+        // configuration builder
         configBuilder = new ConfigurationBuilder();
         configBuilder.addDefaults(ModalConfigurationDefaults);
         configBuilder.addProcessor(new ModalConfigurationProcessor());
+
+        // action helper
+        actionHelper = new ActionHelper();
+        actionHelper.addKeywordHandler('close-modal', CloseModalAction.keywordHandler);
+
+        // request helper
+        requestHelper = new RequestHelper();
     }
 }
 

@@ -66,7 +66,7 @@ module imatic.view.ajaxify.ajax {
         /**
          * Parse request string
          */
-        static parseRequestString(requestString: string): RequestInfo {
+        parseRequestString(requestString: string): RequestInfo {
             var requestInfo = new RequestInfo();
 
             if (typeof requestString !== 'string') {
@@ -79,8 +79,8 @@ module imatic.view.ajaxify.ajax {
 
             if (match) {
                 method = match[1];
-                url = match[2];
-                contentSelector = match[3];
+                url = jQuery.trim(match[2]);
+                contentSelector = jQuery.trim(match[3]);
             }
 
             if ('@page' === url) {
@@ -265,7 +265,7 @@ module imatic.view.ajaxify.ajax {
             response.dataType = request.getDataType();
             response.valid = this.isValidStatus(xhr.status);
             response.successful = this.isSuccessfulStatus(xhr.status);
-            response.aborted = (0 === xhr.status && 'abort' === xhr.statusText);
+            response.aborted = (0 === xhr.status || 'abort' === xhr.statusText);
             response.request = request.getInfo();
             response.flashes = flashes;
 

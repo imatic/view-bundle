@@ -85,7 +85,7 @@ module imatic.view.ajaxify.document {
             jQuery(ajaxify.domDocument)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
-                .on(DomEvents.ACTION, this.onAction)
+                .on(DomEvents.ACTIONS, this.onActions)
                 .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
                 .on(DomEvents.HANDLE_FLASH_MESSAGES, this.onHandleFlashMessages)
             ;
@@ -113,7 +113,7 @@ module imatic.view.ajaxify.document {
                     var container = this.containerHandler.findInstance(element);
                     var link = this.linkHandler.getInstance(element);
 
-                    if (this.dispatchWidget(container, link)) {
+                    if (this.dispatchActions(container, link.createActions())) {
                         event.preventDefault();
                     }
                 } else if (this.formHandler.isValidSubmitElement(element)) {
@@ -140,7 +140,7 @@ module imatic.view.ajaxify.document {
                     var container = this.containerHandler.findInstance(element);
                     var form = this.formHandler.getInstance(element);
 
-                    if (this.dispatchWidget(container, form)) {
+                    if (this.dispatchActions(container, form.createActions())) {
                         event.preventDefault();
                     }
                 }
@@ -154,13 +154,13 @@ module imatic.view.ajaxify.document {
         /**
          * Handle action event
          */
-        private onAction = (event: JQueryEventObject): void => {
+        private onActions = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
             try {
                 var container = this.containerHandler.findInstance(element, false);
 
-                this.dispatchAction(container, <ActionInterface> event['action']);
+                this.dispatchActions(container, <ActionInterface[]> event['actions']);
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
                     throw e;
@@ -227,20 +227,23 @@ module imatic.view.ajaxify.document {
         }
 
         /**
-         * Perform widget-container interaction
+         * Attempt to execute a list of action using the given container
          */
-        private dispatchWidget(container: ContainerInterface, widget: WidgetInterface): boolean {
-            var action = widget.createAction();
+        private dispatchActions(container: ContainerInterface, actions: ActionInterface[]): boolean {
+            var success = false;
 
-            if (action) {
-                return this.dispatchAction(container, action);
-            } else {
-                return false;
+            for (var i = 0; i < actions.length; ++i) {
+                if (this.dispatchAction(container, actions[i])) {
+                    success = true;
+                    break;
+                }
             }
+
+            return success;
         }
 
         /**
-         * Perform action-container interaction
+         * Attempt to execute a single action using the given container
          */
         private dispatchAction(container: ContainerInterface, action: ActionInterface): boolean {
             var success = false;

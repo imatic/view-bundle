@@ -16,7 +16,6 @@ module imatic.view.ajaxify.history {
 
     import ajaxify              = imatic.view.ajaxify;
     import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-    import RequestHelper        = imatic.view.ajaxify.ajax.RequestHelper;
     import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
     import DomEvents            = imatic.view.ajaxify.dom.DomEvents;
     import RequestAction        = imatic.view.ajaxify.action.RequestAction;
@@ -95,7 +94,7 @@ module imatic.view.ajaxify.history {
                             requestInfo = containerState.request;
                         } else {
                             // initial
-                            requestInfo = RequestHelper.parseRequestString(
+                            requestInfo = ajaxify.requestHelper.parseRequestString(
                                 container.getOption('initial')
                             );
                         }
@@ -104,7 +103,7 @@ module imatic.view.ajaxify.history {
                         var action = new HistoryStateChangeAction(null, requestInfo);
 
                         jQuery(containerElement).trigger(
-                            jQuery.Event(DomEvents.ACTION, {action: action})
+                            jQuery.Event(DomEvents.ACTIONS, {actions: [action]})
                         );
                     }
                 }
