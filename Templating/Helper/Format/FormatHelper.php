@@ -53,8 +53,12 @@ class FormatHelper implements FormatterInterface
         $this->formaterOptions[$name] = $this->resolver->resolve($options);
     }
 
-    public function format($value, $format, array $options = [])
+    public function format($value, $format = null, array $options = [])
     {
+        if (null === $format) {
+            $format = $this->guessFormat($value);
+        }
+
         if (!array_key_exists($format, $this->formatters)) {
             throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
         }
@@ -66,7 +70,7 @@ class FormatHelper implements FormatterInterface
         return $this->formatters[$format]->format($value, $format, $options);
     }
 
-    public function renderValue($objectOrArray, $propertyPath, $format, array $options = [])
+    public function renderValue($objectOrArray, $propertyPath, $format = null, array $options = [])
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         if (is_null($propertyPath)) {
@@ -79,6 +83,10 @@ class FormatHelper implements FormatterInterface
                 // the property path could not be reached
                 $value = null;
             }
+        }
+
+        if (null === $format) {
+            $format = $this->guessFormat($value);
         }
 
         if (!empty($options['collection']) && true === $options['collection']) {
@@ -101,5 +109,42 @@ class FormatHelper implements FormatterInterface
         } else {
             return $this->format($value, $format, $options);
         }
+    }
+
+    protected function guessFormat($value)
+    {
+        $format = null;
+        $type = gettype($value);
+
+        switch ($type) {
+            case 'boolean':
+                $format = 'boolean';
+                break;
+            case 'integer':
+            case 'double':
+                $format = 'number';
+                break;
+            case 'string':
+            case 'NULL':
+            case 'resource':
+                $format = 'text';
+                break;
+            case 'object':
+                if ($value instanceof \DateTime) {
+                    $format = 'datetime';
+                } else {
+                    $format = 'text';
+                }
+                break;
+        }
+
+        if (null === $format) {
+            throw new \RuntimeException(sprintf(
+                'Could not guess format for a value of type "%s". Please provide a format.',
+                $type
+            ));
+        }
+
+        return $format;
     }
 }
