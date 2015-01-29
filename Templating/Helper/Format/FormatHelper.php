@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
 class FormatHelper implements FormatterInterface
@@ -30,10 +31,17 @@ class FormatHelper implements FormatterInterface
      */
     private $container;
 
+    /**
+     * @var PropertyAccessor
+     */
+    private $accessor;
+
     public function __construct(ContainerInterface $container)
     {
         // need a container instance, because circular reference
         $this->container = $container;
+
+        $this->accessor = PropertyAccess::createPropertyAccessor();
 
         $this->formatters = [];
         $this->formaterOptions = [];
@@ -59,6 +67,16 @@ class FormatHelper implements FormatterInterface
             $format = $this->guessFormat($value);
         }
 
+        if (!empty($options['template'])) {
+            return $this->container->get('templating')->render(
+                $options['template'],
+                array_merge(
+                    $options,
+                    ['value' => $value, 'options' => $options, 'format' => $format]
+                )
+            );
+        }
+
         if (!array_key_exists($format, $this->formatters)) {
             throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
         }
@@ -72,21 +90,16 @@ class FormatHelper implements FormatterInterface
 
     public function renderValue($objectOrArray, $propertyPath, $format = null, array $options = [])
     {
-        $accessor = PropertyAccess::createPropertyAccessor();
         if (is_null($propertyPath)) {
             $value = $objectOrArray;
         } else {
             try {
-                $value = $accessor->getValue($objectOrArray, $propertyPath);
+                $value = $this->accessor->getValue($objectOrArray, $propertyPath);
                 $options['object'] = $objectOrArray;
             } catch (UnexpectedTypeException $e) {
                 // the property path could not be reached
                 $value = null;
             }
-        }
-
-        if (null === $format) {
-            $format = $this->guessFormat($value);
         }
 
         if (!empty($options['collection']) && true === $options['collection']) {
@@ -102,10 +115,6 @@ class FormatHelper implements FormatterInterface
                 'format' => $format,
                 'propertyPath' => $propertyPath,
             ]);
-        } elseif (!empty($options['template'])) {
-            return $this->container->get('templating')->render($options['template'], array_merge($options, ['value' => $value, 'options' => $options, 'format' => $format]));
-        } elseif (is_null($value)) {
-            return null;
         } else {
             return $this->format($value, $format, $options);
         }
