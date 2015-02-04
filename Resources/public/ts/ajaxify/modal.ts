@@ -33,7 +33,33 @@ module imatic.view.ajaxify.modal {
         constructor() {
             jQuery(ajaxify.domDocument)
                 .on('show.bs.modal', this.onModalShow)
+                .on('keydown', this.onKeydown)
             ;
+        }
+
+        /**
+         * Get the topmost modal dialog element
+         */
+        getTopmostModal(): HTMLElement {
+            var modals = jQuery('div.modal', ajaxify.domDocument.body);
+
+            var topmostIndex = null;
+            var topmostZIndex = 0;
+
+            for (var i = 0; i < modals.length; ++i) {
+                var zIndex = Number($(modals[i]).css('z-index'));
+
+                if (null === topmostIndex || zIndex > topmostZIndex) {
+                    topmostIndex = i;
+                    topmostZIndex = zIndex;
+                }
+            }
+
+            if (null !== topmostIndex) {
+                return modals[topmostIndex];
+            } else {
+                return null;
+            }
         }
 
         /**
@@ -55,6 +81,23 @@ module imatic.view.ajaxify.modal {
                 backdropMethod.apply(modal, arguments);
                 this.updateZIndexes();
             };
+        };
+
+        /**
+         * Handle keydown event
+         */
+        private onKeydown = (event: JQueryEventObject): void => {
+            if (27 === event.keyCode) {
+                var topmostModal = this.getTopmostModal();
+
+                if (topmostModal) {
+                    var modal = jQuery(topmostModal).data('bs.modal');
+                    
+                    if (true === modal.options.backdrop) {
+                        jQuery(topmostModal)['modal']('hide');
+                    }
+                }
+            }
         };
 
         /**
@@ -123,11 +166,12 @@ module imatic.view.ajaxify.modal {
             }
 
             // options
-            var options: {[key: string]: any} = {};
+            var options: {[key: string]: any} = {
+                keyboard: false,
+            };
 
             if (!this.closable) {
                 options['backdrop'] = 'static';
-                options['keyboard'] = false;
             }
 
             jQuery(this.element)['modal'](options);
