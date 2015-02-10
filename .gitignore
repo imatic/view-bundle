@@ -1,6 +1,5 @@
 /.idea/
 /vendor/
-/composer.lock
 /nbproject/
 .DS_Store
 Thumbs.db
