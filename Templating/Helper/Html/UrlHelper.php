@@ -15,6 +15,8 @@ class UrlHelper
 
     public function updateSorterUrl($url, $column, $direction)
     {
+        $column = $this->fixColumn($column);
+
         // reset previous sorter
         $url = $this->updateUrl($url, ['query' => ['sorter' => null, 'page' => null]]);
 
@@ -55,5 +57,10 @@ class UrlHelper
         $fragment = isset($components['fragment']) ? '#' . $components['fragment'] : '';
 
         return $scheme . $user . $pass . $host . $port . $path . $query . $fragment;
+    }
+
+    private function fixColumn($column)
+    {
+        return trim($column, '[]');
     }
 }
