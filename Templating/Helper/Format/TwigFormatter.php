@@ -23,6 +23,10 @@ class TwigFormatter implements FormatterInterface
 
     protected function formatDate($value, array $options)
     {
+        if ($value === null) {
+            return null;
+        }
+
         return twig_date_format_filter(
             $this->twig,
             $value,
