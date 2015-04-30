@@ -90,6 +90,10 @@ class FormatHelper implements FormatterInterface
 
     public function renderValue($objectOrArray, $propertyPath, $format = null, array $options = [])
     {
+        if (is_array($objectOrArray) && $propertyPath && $propertyPath[0] !== '[') {
+            $propertyPath = sprintf('[%s]', $propertyPath);
+        }
+
         if (is_null($propertyPath)) {
             $value = $objectOrArray;
         } else {
