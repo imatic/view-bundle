@@ -46,7 +46,7 @@
         output='js/javascript.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
-        <script src="{{ asset('vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.' ~ app.request.locale ~ '.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.' ~ ('en' == app.request.locale ? 'en-GB' : app.request.locale) ~ '.js') }}" type="text/javascript"></script>
     {% endblock %}
 
     <title>{% block title_top %}{% spaceless %}
