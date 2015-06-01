@@ -33,9 +33,16 @@ footer {
     margin-top: @line-height-computed;
 
     .footer-content {
+        padding-left:15px;
+        padding-right:15px;
         border-top: 1px solid darken(@gray-lighter, 10%);
         #gradient > .vertical(@gray-lighter, darken(@gray-lighter, 10%));
         .header-font();
+    }
+
+    &.container-fluid {
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
@@ -203,6 +210,8 @@ table.table-auto {
     }
 
     div.collection-items {
+        margin-left: 0;
+        margin-right: 0;
         min-height: 65px;
     }
 }
