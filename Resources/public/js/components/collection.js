@@ -75,7 +75,6 @@ var Imatic;
             function matchField(collection, element, prototypeList)
             {
                 for (var i = 0; i < prototypeList.length; ++i) {
-
                     if (
                         prototypeList[i].collection === collection
                         && getFieldRegex(prototypeList[i]).test(element.id)

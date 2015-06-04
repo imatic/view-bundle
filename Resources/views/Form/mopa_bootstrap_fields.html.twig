@@ -1,13 +1,15 @@
 {# Datepicker javascript #}
 {% block date_javascript %}
     <script type="text/javascript">
-        var $field = $('#{{ id }}');
+        (function ($) {
+            var $field = $('#{{ id }}');
 
-        $(function () {
-            {% block date_javascript_prototype %}
-            Imatic.View.Datepicker.init($field, {{ app.request.locale|json_encode|raw }})
-            {% endblock %}
-        });
+            $(function () {
+                {% block date_javascript_prototype %}
+                Imatic.View.Datepicker.init($field, {{ app.request.locale|json_encode|raw }})
+                {% endblock %}
+            });
+        })(jQuery);
     </script>
 {% endblock %}
 
