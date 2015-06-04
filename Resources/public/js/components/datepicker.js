@@ -30,11 +30,11 @@ var Imatic;
             };
 
             // https://github.com/naitsirch/mopa-bootstrap-bundle/blob/master/Resources/doc/3.3-form-components.md
-            Datepicker.init = function (id, language) {
-                var $elem = $('#' + id).parent('div.date');
+            Datepicker.init = function ($field, language) {
+                var $elem = $field.parent('div.date');
 
                 if ($elem.length < 1) {
-                    throw new Error('Datepicker #' + id + ' was not found');
+                    throw new Error('Datepicker element was not found');
                 }
 
                 var options = $.extend(

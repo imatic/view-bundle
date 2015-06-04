@@ -1,7 +1,13 @@
-{# Init datepickers #}
+{# Datepicker javascript #}
 {% block date_javascript %}
     <script type="text/javascript">
-        $(function () { Imatic.View.Datepicker.init({{ id|json_encode|raw }}, {{ app.request.locale|json_encode|raw }}) })
+        var $field = $('#{{ id }}');
+
+        $(function () {
+            {% block date_javascript_prototype %}
+            Imatic.View.Datepicker.init($field, {{ app.request.locale|json_encode|raw }})
+            {% endblock %}
+        });
     </script>
 {% endblock %}
 
@@ -11,6 +17,20 @@
 
 {% block time_javascript %}
     {{ block('date_javascript') }}
+{% endblock %}
+
+{# Collection prototype javascript #}
+{% block collection_javascript %}
+    {{ block('form_javascript') }}
+
+    {% if prototype is defined %}
+        <script type="text/javascript">
+            Imatic.View.Collection.registerPrototypeFields(
+                {{ imatic_view_form_javascript_prototype(form) }},
+                $('#collection{{ id }}_form_group')[0]
+            );
+        </script>
+    {% endif %}
 {% endblock %}
 
 {# Fix missing form_message #}
