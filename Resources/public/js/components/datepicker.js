@@ -34,7 +34,8 @@ var Imatic;
                 var $elem = $field.parent('div.date');
 
                 if ($elem.length < 1) {
-                    throw new Error('Datepicker element was not found');
+                    // fallback to the field if there is no wrapper
+                    $elem = $field;
                 }
 
                 var options = $.extend(
