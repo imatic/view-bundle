@@ -18,7 +18,7 @@ class FieldOptions extends AbstractOptions
             'label' => function (Options $options) {
                     return $options['name'];
                 },
-            'propertyPath' => function (Options $options) {
+            'propertyPath' => function (Options $options, $x) {
                     return $options['name'];
                 }
         ]);
@@ -28,7 +28,7 @@ class FieldOptions extends AbstractOptions
             'formatOptions' => 'array',
             'class' => 'string',
             'label' => 'string',
-            'propertyPath' => 'string',
+            'propertyPath' => ['string', 'NULL'],
         ]);
     }
 }

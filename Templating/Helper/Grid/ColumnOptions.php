@@ -38,7 +38,7 @@ class ColumnOptions extends AbstractOptions
             'formatOptions' => 'array',
             'class' => 'string',
             'label' => 'string',
-            'propertyPath' => 'string',
+            'propertyPath' => ['string', 'NULL'],
         ]);
     }
 }

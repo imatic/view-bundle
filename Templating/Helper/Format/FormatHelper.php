@@ -94,7 +94,7 @@ class FormatHelper implements FormatterInterface
             $propertyPath = sprintf('[%s]', $propertyPath);
         }
 
-        if (is_null($propertyPath)) {
+        if (null === $propertyPath) {
             $value = $objectOrArray;
         } else {
             try {
