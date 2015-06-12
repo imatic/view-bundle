@@ -30,10 +30,10 @@ var Imatic;
             };
 
             Datepicker.html5TypeMap = {
-                'date': 'datepicker',
-                'datetime': 'datetimepicker',
-                'datetime-local': 'datetimepicker',
-                'time': 'timepicker'
+                'date': {type: 'datepicker', format: 'yyyy-mm-dd'},
+                'datetime': {type: 'datetimepicker', format: 'yyyy-mm-dd hh:ii'},
+                'datetime-local': {type: 'datetimepicker', format: 'yyyy-mm-dd hh:ii'},
+                'time': {type: 'timepicker', format: 'hh:ii'}
             };
 
             function fixTranslations(language)
@@ -50,26 +50,42 @@ var Imatic;
                 var $wrapper = $field.parent('div.date');
                 var $target = $wrapper.length < 1 ? $field : $wrapper;
 
-                var type =
-                    $target.data('provider')
-                    || Datepicker.html5TypeMap[$field.attr('type')]
-                    || 'datepicker'
-                ;
+                var type, format;
 
-                var options = $.extend(
-                    {language: language},
-                    Datepicker.defaults.base,
-                    Datepicker.defaults[type]
-                );
+                if ($wrapper.length > 0) {
+                    // wrapped fields
+                    type = $target.data('provider');
+                } else {
+                    // plain HTML5 input
+                    var html5Type = Datepicker.html5TypeMap[$field.attr('type')];
 
-                $target.datetimepicker(options);
+                    if (html5Type) {
+                        type = html5Type.type;
+                        format = html5Type.format;
 
-                if ($wrapper === $target) {
-                    $target.find('input[type=hidden]').each(function () {
-                        if ($(this).val()) {
-                            $(this).parent().datetimepicker('setValue');
-                        }
-                    });
+                        // change the input type to "text" to prevent
+                        // browser's implementation from interfering
+                        $target.attr('type', 'text');
+                    }
+                }
+
+                if (type) {
+                    var options = $.extend(
+                        {language: language},
+                        Datepicker.defaults.base,
+                        Datepicker.defaults[type],
+                        {format: format}
+                    );
+
+                    $target.datetimepicker(options);
+
+                    if ($wrapper.length > 0) {
+                        $wrapper.find('input[type=hidden]').each(function () {
+                            if ($(this).val()) {
+                                $(this).parent().datetimepicker('setValue');
+                            }
+                        });
+                    }
                 }
             };
 

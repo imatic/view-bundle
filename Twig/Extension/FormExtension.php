@@ -11,6 +11,8 @@ class FormExtension extends Twig_Extension
 {
     /** @var TwigRendererInterface */
     private $renderer;
+    /** @var int */
+    private $prototypeRenderUidSeq = 0;
 
     public function __construct(TwigRendererInterface $renderer)
     {
@@ -20,16 +22,24 @@ class FormExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            'imatic_view_form_javascript_prototype' => new Twig_Function_Method($this, 'renderFormJavascriptPrototype', ['is_safe' => ['html']]),
+            'imatic_view_form_javascript_prototype' => new Twig_Function_Method(
+                $this,
+                'renderFormJavascriptPrototype',
+                [
+                    'needs_context' => true,
+                    'is_safe' => ['html']
+                ]
+            ),
         ];
     }
 
     /**
+     * @param array    $context
      * @param FormView $rootForm
      * @throws \InvalidArgumentException if the given root form has no prototype
-     * @return string javascript object
+     * @return string javascript array
      */
-    public function renderFormJavascriptPrototype(FormView $rootForm)
+    public function renderFormJavascriptPrototype(array $context, FormView $rootForm)
     {
         if (!isset($rootForm->vars['prototype'])) {
             throw new \InvalidArgumentException('The given root form view has no prototype');
@@ -37,7 +47,7 @@ class FormExtension extends Twig_Extension
 
         $stack = [
             // FormView $prototype, string $prototypeName, string[] $parentPrototypeNames
-            [$rootForm->vars['prototype'], $rootForm->vars['prototype']->vars['name'], []]
+            [$rootForm->vars['prototype'], $rootForm->vars['prototype']->vars['name'], []],
         ];
         
         $output = '[';
@@ -45,7 +55,11 @@ class FormExtension extends Twig_Extension
 
         while (list($prototype, $prototypeName, $parentPrototypeNames) = array_pop($stack)) {
             try {
-                $code = $this->renderer->searchAndRenderBlock($prototype, 'javascript_prototype');
+                // the "unique_block_prefix" must be changed to prevent messing
+                // up FormRenderer's internal cache and causing errors later on
+                $prototype->vars['unique_block_prefix'] .= sprintf('_%d', ++$this->prototypeRenderUidSeq);
+
+                $code = $this->renderer->searchAndRenderBlock($prototype, 'javascript_prototype', $context);
                 
                 if (++$counter > 1) {
                     $output .= ",\n";
