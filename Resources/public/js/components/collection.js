@@ -26,19 +26,19 @@ var Imatic;
              */
             function findFields(prototypeList, collection, row)
             {
-                var elements = $('*[id]', row);
+                var $elements = $('*[id]', row);
 
                 var field;
                 var results = [];
 
-                for (var i = 0; i < elements.length; ++i) {
-                    var parent = $(elements[i]).parents('div.collection-item')[0];
+                for (var i = 0; i < $elements.length; ++i) {
+                    var parent = $($elements[i]).parents('div.collection-item')[0];
 
                     if (
                         $(row).is(parent)
-                        && (field = matchField(collection, elements[i], prototypeList))
+                        && (field = matchField(collection, $elements[i], prototypeList))
                     ) {
-                        results.push({element: elements[i], field: field});
+                        results.push({element: $elements[i], field: field});
                     }
                 }
 
@@ -76,7 +76,10 @@ var Imatic;
             {
                 for (var i = 0; i < prototypeList.length; ++i) {
                     if (
-                        prototypeList[i].collection === collection
+                        (
+                            prototypeList[i].collection === collection
+                            || $.contains(prototypeList[i].collection, collection)
+                        )
                         && getFieldRegex(prototypeList[i]).test(element.id)
                     ) {
                         return prototypeList[i];
