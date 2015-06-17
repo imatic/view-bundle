@@ -100,8 +100,8 @@
         </table>
 
         <div class="row">
-            <div class="col-md-4">
-                {% block table_batch_actions %}
+            {% set table_batch_actions -%}
+                {% block table_batch_actions -%}
                     {% if table.batchActions is not empty %}
                         <label><input type="checkbox" name="selectedAll"> {{ 'All elements'|trans({}, 'ImaticViewBundle') }}</label>&nbsp;
                         {% for action in table.batchActions %}
@@ -115,23 +115,35 @@
                         {% endfor %}
                         {{ button.group(table.batchActions) }}
                     {% endif %}
-                {% endblock %}
-            </div>
-            <div class="col-md-4 text-center">
-                {% block table_pager %}
+                {%- endblock %}
+            {%- endset %}
+
+            {% set table_pager -%}
+                {% block table_pager -%}
                     {{ include('ImaticViewBundle:Component:pager.html.twig') }}
-                {% endblock %}
-            </div>
-            <div class="col-md-4 text-right">
-                {% block table_exports %}
+                {%- endblock %}
+            {%- endset %}
+
+            {% set table_exports -%}
+                {% block table_exports -%}
                     {% if table.exports is not empty %}
                         {% for action in table.exports %}
                             {% do action.set('data', {'ajaxify': 'false'}) %}
                         {% endfor %}
                         {{ 'Exports'|trans({}, 'ImaticViewBundle') }}: {{ button.group(table.exports) }}
-                    {% endif %}
-                {% endblock %}
-            </div>
+                    {%- endif %}
+                {%- endblock %}
+            {%- endset %}
+
+            {% if table_batch_actions is not empty or table_exports is not empty %}
+                <div class="col-md-4">{{ table_batch_actions }}</div>
+            {% endif %}
+            {% if table_pager is not empty or table_exports is not empty %}
+                <div class="{% if table_batch_actions is not empty or table_exports is not empty %}col-md-4 {% endif %}text-center">{{ table_pager }}</div>
+            {% endif %}
+            {% if table_exports is not empty %}
+                <div class="col-md-4 text-right">{{ table_exports }}</div>
+            {% endif %}
         </div>
 
         {% if table.batchActions is not empty %}
