@@ -1,26 +1,26 @@
 /// <reference path="../history/history.d.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="ajax.ts"/>
-/// <reference path="action.ts"/>
-/// <reference path="container.ts"/>
-/// <reference path="dom.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="Ajax.ts"/>
+/// <reference path="Action.ts"/>
+/// <reference path="Container.ts"/>
+/// <reference path="Dom.ts"/>
 
 /**
  * Imatic view ajaxify history module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.history {
+module Imatic.View.Ajaxify.History {
 
     "use_strict";
 
-    import ajaxify              = imatic.view.ajaxify;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-    import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
-    import DomEvents            = imatic.view.ajaxify.dom.DomEvents;
-    import RequestAction        = imatic.view.ajaxify.action.RequestAction;
-    import ActionEvent          = imatic.view.ajaxify.action.ActionEvent;
-    import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
+    import ajaxify              = Imatic.View.Ajaxify;
+    import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
+    import RequestInfo          = Imatic.View.Ajaxify.Ajax.RequestInfo;
+    import DomEvents            = Imatic.View.Ajaxify.Dom.DomEvents;
+    import RequestAction        = Imatic.View.Ajaxify.Action.RequestAction;
+    import ActionEvent          = Imatic.View.Ajaxify.Action.ActionEvent;
+    import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
 
     declare var window: Window;
 
@@ -76,13 +76,13 @@ module imatic.view.ajaxify.history {
          */
         static onStateChange(): void {
             var state = History.getState();
-            var documentHandler = imatic.view.ajaxify.documentHandler;
+            var documentHandler = ajaxify.documentHandler;
             var containerHandler = documentHandler.containerHandler;
 
             if (state.data && state.data.containerStates) {
                 for (var i = 0; i < state.data.containerStates.length; ++i) {
                     var containerState = state.data.containerStates[i];
-                    var containerElement = imatic.view.ajaxify.domDocument.getElementById(containerState.id);
+                    var containerElement = ajaxify.domDocument.getElementById(containerState.id);
 
                     if (containerElement && containerHandler.hasInstance(containerElement)) {
                         var container = containerHandler.getInstance(containerElement);
@@ -128,7 +128,7 @@ module imatic.view.ajaxify.history {
          */
         static getCurrentData(): any {
             var data: HistoryDataInterface = {containerStates: []};
-            var containerHandler = imatic.view.ajaxify.documentHandler.containerHandler;
+            var containerHandler = ajaxify.documentHandler.containerHandler;
             var containerElements = containerHandler.findElements();
 
             // find all containers with enabled history

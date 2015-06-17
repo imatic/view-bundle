@@ -1,14 +1,14 @@
-/// <reference path="object.ts"/>
-/// <reference path="exception.ts"/>
-/// <reference path="configuration.ts"/>
-/// <reference path="action.ts"/>
-/// <reference path="message.ts"/>
-/// <reference path="css.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="history.ts"/>
-/// <reference path="ajax.ts"/>
-/// <reference path="dom.ts"/>
-/// <reference path="widget.ts"/>
+/// <reference path="Object.ts"/>
+/// <reference path="Exception.ts"/>
+/// <reference path="Configuration.ts"/>
+/// <reference path="Action.ts"/>
+/// <reference path="Message.ts"/>
+/// <reference path="Css.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="History.ts"/>
+/// <reference path="Ajax.ts"/>
+/// <reference path="Dom.ts"/>
+/// <reference path="Widget.ts"/>
 
 
 /**
@@ -16,25 +16,25 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.container {
+module Imatic.View.Ajaxify.Container {
 
     "use_strict";
 
-    import ajaxify                  = imatic.view.ajaxify;
-    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
-    import Object                   = imatic.view.ajaxify.object.Object;
-    import ObjectInterface          = imatic.view.ajaxify.object.ObjectInterface;
-    import ConfigurationInterface   = imatic.view.ajaxify.configuration.ConfigurationInterface;
-    import Exception                = imatic.view.ajaxify.exception.Exception;
-    import DomEvents                = imatic.view.ajaxify.dom.DomEvents;
-    import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
-    import ActionEvent              = imatic.view.ajaxify.action.ActionEvent;
-    import RequestAction            = imatic.view.ajaxify.action.RequestAction;
-    import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
-    import CssClasses               = imatic.view.ajaxify.css.CssClasses;
-    import HistoryHandler           = imatic.view.ajaxify.history.HistoryHandler;
-    import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
-    import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
+    import ajaxify                  = Imatic.View.Ajaxify;
+    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
+    import Object                   = Imatic.View.Ajaxify.Object.Object;
+    import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
+    import ConfigurationInterface   = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
+    import Exception                = Imatic.View.Ajaxify.Exception.Exception;
+    import DomEvents                = Imatic.View.Ajaxify.Dom.DomEvents;
+    import ActionInterface          = Imatic.View.Ajaxify.Action.ActionInterface;
+    import ActionEvent              = Imatic.View.Ajaxify.Action.ActionEvent;
+    import RequestAction            = Imatic.View.Ajaxify.Action.RequestAction;
+    import FlashMessageInterface    = Imatic.View.Ajaxify.Message.FlashMessageInterface;
+    import CssClasses               = Imatic.View.Ajaxify.Css.CssClasses;
+    import HistoryHandler           = Imatic.View.Ajaxify.History.HistoryHandler;
+    import RequestInfo              = Imatic.View.Ajaxify.Ajax.RequestInfo;
+    import WidgetInterface          = Imatic.View.Ajaxify.Widget.WidgetInterface;
 
     /**
      * Container not found exception

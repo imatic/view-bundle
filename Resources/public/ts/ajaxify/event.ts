@@ -3,7 +3,7 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.event {
+module Imatic.View.Ajaxify.Event {
 
     "use_strict";
 

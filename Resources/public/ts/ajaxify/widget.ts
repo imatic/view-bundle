@@ -1,26 +1,26 @@
-/// <reference path="object.ts"/>
-/// <reference path="action.ts"/>
-/// <reference path="css.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="configuration.ts"/>
+/// <reference path="Object.ts"/>
+/// <reference path="Action.ts"/>
+/// <reference path="Css.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="Configuration.ts"/>
 
 /**
  * Imatic view ajaxify widget module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.widget {
+module Imatic.View.Ajaxify.Widget {
 
     "use_strict";
 
-    import ajaxify                  = imatic.view.ajaxify;
-    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
-    import Object                   = imatic.view.ajaxify.object.Object;
-    import ObjectInterface          = imatic.view.ajaxify.object.ObjectInterface;
-    import ConfigurationInterface   = imatic.view.ajaxify.configuration.ConfigurationInterface;
-    import ActionInterface          = imatic.view.ajaxify.action.ActionInterface;
-    import CssClasses               = imatic.view.ajaxify.css.CssClasses;
-    import ActionEvent              = imatic.view.ajaxify.action.ActionEvent;
+    import ajaxify                  = Imatic.View.Ajaxify;
+    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
+    import Object                   = Imatic.View.Ajaxify.Object.Object;
+    import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
+    import ConfigurationInterface   = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
+    import ActionInterface          = Imatic.View.Ajaxify.Action.ActionInterface;
+    import CssClasses               = Imatic.View.Ajaxify.Css.CssClasses;
+    import ActionEvent              = Imatic.View.Ajaxify.Action.ActionEvent;
 
     /**
      * Widget interface
@@ -136,7 +136,7 @@ module imatic.view.ajaxify.widget {
                 );
 
                 if (!confirm(confirmOption)) {
-                    return [new imatic.view.ajaxify.action.NoAction(this)];
+                    return [new Imatic.View.Ajaxify.Action.NoAction(this)];
                 }
             }
 

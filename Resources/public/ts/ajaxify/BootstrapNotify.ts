@@ -1,6 +1,6 @@
-/// <reference path="event.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="dom.ts"/>
+/// <reference path="Event.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="Dom.ts"/>
 
 /**
  * Imatic view ajaxify bootstrap notify module
@@ -10,12 +10,12 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.bootstrapNotify {
+module Imatic.View.Ajaxify.BootstrapNotify {
 
     "use_strict";
 
-    import jQuery    = imatic.view.ajaxify.jquery.jQuery;
-    import DomEvents = imatic.view.ajaxify.dom.DomEvents;
+    import jQuery    = Imatic.View.Ajaxify.Jquery.jQuery;
+    import DomEvents = Imatic.View.Ajaxify.Dom.DomEvents;
 
     declare var window: Window;
 

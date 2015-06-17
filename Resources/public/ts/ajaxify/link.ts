@@ -1,29 +1,29 @@
-/// <reference path="configuration.ts"/>
-/// <reference path="container.ts"/>
-/// <reference path="widget.ts"/>
-/// <reference path="css.ts"/>
-/// <reference path="action.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="ajax.ts"/>
+/// <reference path="Configuration.ts"/>
+/// <reference path="Container.ts"/>
+/// <reference path="Widget.ts"/>
+/// <reference path="Css.ts"/>
+/// <reference path="Action.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="Ajax.ts"/>
 
 /**
  * Imatic view ajaxify link module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.link {
+module Imatic.View.Ajaxify.Link {
 
     "use_strict";
 
-    import ajaxify              = imatic.view.ajaxify;
-    import jQuery               = imatic.view.ajaxify.jquery.jQuery;
-    import ContainerInterface   = imatic.view.ajaxify.container.ContainerInterface;
-    import Widget               = imatic.view.ajaxify.widget.Widget;
-    import WidgetHandler        = imatic.view.ajaxify.widget.WidgetHandler;
-    import ActionInterface      = imatic.view.ajaxify.action.ActionInterface;
-    import RequestAction        = imatic.view.ajaxify.action.RequestAction;
-    import CssClasses           = imatic.view.ajaxify.css.CssClasses;
-    import RequestInfo          = imatic.view.ajaxify.ajax.RequestInfo;
+    import ajaxify              = Imatic.View.Ajaxify;
+    import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
+    import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
+    import Widget               = Imatic.View.Ajaxify.Widget.Widget;
+    import WidgetHandler        = Imatic.View.Ajaxify.Widget.WidgetHandler;
+    import ActionInterface      = Imatic.View.Ajaxify.Action.ActionInterface;
+    import RequestAction        = Imatic.View.Ajaxify.Action.RequestAction;
+    import CssClasses           = Imatic.View.Ajaxify.Css.CssClasses;
+    import RequestInfo          = Imatic.View.Ajaxify.Ajax.RequestInfo;
 
     /**
      * Link handler

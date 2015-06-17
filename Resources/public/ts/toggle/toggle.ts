@@ -5,7 +5,7 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.toggle {
+module Imatic.View.Toggle {
 
     "use_strict";
 
@@ -54,4 +54,4 @@ module imatic.view.toggle {
 
 declare var document: HTMLDocument;
 
-imatic.view.toggle.init(document);
+Imatic.View.Toggle.init(document);

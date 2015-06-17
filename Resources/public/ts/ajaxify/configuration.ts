@@ -1,15 +1,15 @@
-/// <reference path="jquery.ts"/>
+/// <reference path="Jquery.ts"/>
 
 /**
  * Imatic view ajaxify configuration module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.configuration {
+module Imatic.View.Ajaxify.Configuration {
 
     "use_strict";
 
-    import jQuery = imatic.view.ajaxify.jquery.jQuery;
+    import jQuery = Imatic.View.Ajaxify.Jquery.jQuery;
 
     /**
      * Configuration interface

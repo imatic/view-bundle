@@ -1,43 +1,43 @@
-/// <reference path="configuration.ts"/>
-/// <reference path="ajax.ts"/>
-/// <reference path="container.ts"/>
-/// <reference path="action.ts"/>
-/// <reference path="form.ts"/>
-/// <reference path="widget.ts"/>
-/// <reference path="modal.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="dom.ts"/>
+/// <reference path="Configuration.ts"/>
+/// <reference path="Ajax.ts"/>
+/// <reference path="Container.ts"/>
+/// <reference path="Action.ts"/>
+/// <reference path="Form.ts"/>
+/// <reference path="Widget.ts"/>
+/// <reference path="Modal.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="Dom.ts"/>
 
 /**
  * Imatic view ajaxify modal container module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.modalContainer {
+module Imatic.View.Ajaxify.ModalContainer {
 
     "use_strict";
 
-    import ajaxify                          = imatic.view.ajaxify;
-    import jQuery                           = imatic.view.ajaxify.jquery.jQuery;
-    import ConfigurationProcessorInterface  = imatic.view.ajaxify.configuration.ConfigurationProcessorInterface;
-    import ConfigurationInterface           = imatic.view.ajaxify.configuration.ConfigurationInterface;
-    import DomEvents                        = imatic.view.ajaxify.dom.DomEvents;
-    import Response                         = imatic.view.ajaxify.ajax.Response;
-    import ContainerInterface               = imatic.view.ajaxify.container.ContainerInterface;
-    import Container                        = imatic.view.ajaxify.container.Container;
-    import ContainerHandler                 = imatic.view.ajaxify.container.ContainerHandler;
-    import ContainerNotFoundException       = imatic.view.ajaxify.container.ContainerNotFoundException;
-    import TargetHandlerInterface           = imatic.view.ajaxify.container.TargetHandlerInterface;
-    import ActionInterface                  = imatic.view.ajaxify.action.ActionInterface;
-    import Action                           = imatic.view.ajaxify.action.Action;
-    import ActionEvent                      = imatic.view.ajaxify.action.ActionEvent;
-    import RequestAction                    = imatic.view.ajaxify.action.RequestAction;
-    import ResponseAction                   = imatic.view.ajaxify.action.ResponseAction;
-    import Form                             = imatic.view.ajaxify.form.Form;
-    import WidgetHandler                    = imatic.view.ajaxify.widget.WidgetHandler;
-    import WidgetInterface                  = imatic.view.ajaxify.widget.WidgetInterface;
-    import ModalSize                        = imatic.view.ajaxify.modal.ModalSize;
-    import Modal                            = imatic.view.ajaxify.modal.Modal;
+    import ajaxify                          = Imatic.View.Ajaxify;
+    import jQuery                           = Imatic.View.Ajaxify.Jquery.jQuery;
+    import ConfigurationProcessorInterface  = Imatic.View.Ajaxify.Configuration.ConfigurationProcessorInterface;
+    import ConfigurationInterface           = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
+    import DomEvents                        = Imatic.View.Ajaxify.Dom.DomEvents;
+    import Response                         = Imatic.View.Ajaxify.Ajax.Response;
+    import ContainerInterface               = Imatic.View.Ajaxify.Container.ContainerInterface;
+    import Container                        = Imatic.View.Ajaxify.Container.Container;
+    import ContainerHandler                 = Imatic.View.Ajaxify.Container.ContainerHandler;
+    import ContainerNotFoundException       = Imatic.View.Ajaxify.Container.ContainerNotFoundException;
+    import TargetHandlerInterface           = Imatic.View.Ajaxify.Container.TargetHandlerInterface;
+    import ActionInterface                  = Imatic.View.Ajaxify.Action.ActionInterface;
+    import Action                           = Imatic.View.Ajaxify.Action.Action;
+    import ActionEvent                      = Imatic.View.Ajaxify.Action.ActionEvent;
+    import RequestAction                    = Imatic.View.Ajaxify.Action.RequestAction;
+    import ResponseAction                   = Imatic.View.Ajaxify.Action.ResponseAction;
+    import Form                             = Imatic.View.Ajaxify.Form.Form;
+    import WidgetHandler                    = Imatic.View.Ajaxify.Widget.WidgetHandler;
+    import WidgetInterface                  = Imatic.View.Ajaxify.Widget.WidgetInterface;
+    import ModalSize                        = Imatic.View.Ajaxify.Modal.ModalSize;
+    import Modal                            = Imatic.View.Ajaxify.Modal.Modal;
 
     /**
      * Modal configuration defaults
@@ -178,8 +178,15 @@ module imatic.view.ajaxify.modalContainer {
 
         handleAction(action: ActionInterface): void {
             action.listen('begin', (event: ActionEvent): void => {
+                var options = this.getOptions();
+                var requestInfo = event.request.getInfo();
+
+                requestInfo.headers['X-Modal-Dialog'] = '1';
+                if (options['modalCloseOnFormSuccess'] && !options['modalForwardFormResponse']) {
+                    requestInfo.headers['X-Prefer-No-Redirects'] = '1';
+                }
+
                 this.actionInitiator = event.action.getInitiator();
-                event.request.getInfo().headers['X-Modal-Dialog'] = '1';
             });
 
             action.listen('apply', (event: ActionEvent): void => {

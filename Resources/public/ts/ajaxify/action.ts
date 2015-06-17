@@ -1,31 +1,31 @@
-/// <reference path="object.ts"/>
-/// <reference path="container.ts"/>
-/// <reference path="widget.ts"/>
-/// <reference path="ajax.ts"/>
-/// <reference path="event.ts"/>
+/// <reference path="Object.ts"/>
+/// <reference path="Container.ts"/>
+/// <reference path="Widget.ts"/>
+/// <reference path="Ajax.ts"/>
+/// <reference path="Event.ts"/>
 
 /**
  * Imatic view ajaxify action module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.action {
+module Imatic.View.Ajaxify.Action {
 
     "use_strict";
 
-    import ajaxify                  = imatic.view.ajaxify;
-    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
-    import Object                   = imatic.view.ajaxify.object.Object;
-    import ObjectInterface          = imatic.view.ajaxify.object.ObjectInterface;
-    import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
-    import DataType                 = imatic.view.ajaxify.ajax.DataType;
-    import Request                  = imatic.view.ajaxify.ajax.Request;
-    import RequestInfo              = imatic.view.ajaxify.ajax.RequestInfo;
-    import Response                 = imatic.view.ajaxify.ajax.Response;
-    import WidgetInterface          = imatic.view.ajaxify.widget.WidgetInterface;
-    import EventDispatcherInterface = imatic.view.ajaxify.event.EventDispatcherInterface;
-    import EventDispatcher          = imatic.view.ajaxify.event.EventDispatcher;
-    import Event                    = imatic.view.ajaxify.event.Event;
+    import ajaxify                  = Imatic.View.Ajaxify;
+    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
+    import Object                   = Imatic.View.Ajaxify.Object.Object;
+    import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
+    import ContainerInterface       = Imatic.View.Ajaxify.Container.ContainerInterface;
+    import DataType                 = Imatic.View.Ajaxify.Ajax.DataType;
+    import Request                  = Imatic.View.Ajaxify.Ajax.Request;
+    import RequestInfo              = Imatic.View.Ajaxify.Ajax.RequestInfo;
+    import Response                 = Imatic.View.Ajaxify.Ajax.Response;
+    import WidgetInterface          = Imatic.View.Ajaxify.Widget.WidgetInterface;
+    import EventDispatcherInterface = Imatic.View.Ajaxify.Event.EventDispatcherInterface;
+    import EventDispatcher          = Imatic.View.Ajaxify.Event.EventDispatcher;
+    import Event                    = Imatic.View.Ajaxify.Event.Event;
 
     /**
      * Action helper

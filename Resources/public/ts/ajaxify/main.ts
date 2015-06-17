@@ -1,22 +1,22 @@
-/// <reference path="document.ts"/>
+/// <reference path="Document.ts"/>
 
 /**
  * Imatic view ajaxify module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify {
+module Imatic.View.Ajaxify {
 
     "use_strict";
 
-    import HTMLDocumentHandler          = imatic.view.ajaxify.document.HTMLDocumentHandler;
-    import ConfigurationBuilder         = imatic.view.ajaxify.configuration.ConfigurationBuilder;
-    import ModalConfigurationDefaults   = imatic.view.ajaxify.modalContainer.ModalConfigurationDefaults;
-    import ModalConfigurationProcessor  = imatic.view.ajaxify.modalContainer.ModalConfigurationProcessor;
-    import RequestHelper                = imatic.view.ajaxify.ajax.RequestHelper;
-    import ActionHelper                 = imatic.view.ajaxify.action.ActionHelper;
-    import NoAction                     = imatic.view.ajaxify.action.NoAction;
-    import CloseModalAction             = imatic.view.ajaxify.modalContainer.CloseModalAction;
+    import HTMLDocumentHandler          = Imatic.View.Ajaxify.Document.HTMLDocumentHandler;
+    import ConfigurationBuilder         = Imatic.View.Ajaxify.Configuration.ConfigurationBuilder;
+    import ModalConfigurationDefaults   = Imatic.View.Ajaxify.ModalContainer.ModalConfigurationDefaults;
+    import ModalConfigurationProcessor  = Imatic.View.Ajaxify.ModalContainer.ModalConfigurationProcessor;
+    import RequestHelper                = Imatic.View.Ajaxify.Ajax.RequestHelper;
+    import ActionHelper                 = Imatic.View.Ajaxify.Action.ActionHelper;
+    import NoAction                     = Imatic.View.Ajaxify.Action.NoAction;
+    import CloseModalAction             = Imatic.View.Ajaxify.ModalContainer.CloseModalAction;
 
     // global components
     export var domDocument;
@@ -53,4 +53,4 @@ module imatic.view.ajaxify {
 
 declare var document: HTMLDocument;
 
-imatic.view.ajaxify.init(document);
+Imatic.View.Ajaxify.init(document);

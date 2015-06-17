@@ -1,20 +1,20 @@
-/// <reference path="configuration.ts"/>
-/// <reference path="event.ts"/>
+/// <reference path="Configuration.ts"/>
+/// <reference path="Event.ts"/>
 
 /**
  * Imatic view ajaxify object module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.object {
+module Imatic.View.Ajaxify.Object {
 
     "use_strict";
 
-    import ConfigurationInterface       = imatic.view.ajaxify.configuration.ConfigurationInterface;
-    import EventDispatcher              = imatic.view.ajaxify.event.EventDispatcher;
-    import EventDispatcherInterface     = imatic.view.ajaxify.event.EventDispatcherInterface;
-    import EventInterface               = imatic.view.ajaxify.event.EventInterface;
-    import ListenerCallbackInterface    = imatic.view.ajaxify.event.ListenerCallbackInterface;
+    import ConfigurationInterface       = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
+    import EventDispatcher              = Imatic.View.Ajaxify.Event.EventDispatcher;
+    import EventDispatcherInterface     = Imatic.View.Ajaxify.Event.EventDispatcherInterface;
+    import EventInterface               = Imatic.View.Ajaxify.Event.EventInterface;
+    import ListenerCallbackInterface    = Imatic.View.Ajaxify.Event.ListenerCallbackInterface;
 
     /**
      * Base object interface

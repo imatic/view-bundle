@@ -1,19 +1,19 @@
-/// <reference path="message.ts"/>
-/// <reference path="html.ts"/>
-/// <reference path="jquery.ts"/>
+/// <reference path="Message.ts"/>
+/// <reference path="Html.ts"/>
+/// <reference path="Jquery.ts"/>
 
 /**
  * Imatic view ajaxify ajax module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.ajax {
+module Imatic.View.Ajaxify.Ajax {
 
     "use_strict";
 
-    import jQuery                   = imatic.view.ajaxify.jquery.jQuery;
-    import FlashMessageInterface    = imatic.view.ajaxify.message.FlashMessageInterface;
-    import HtmlFragment             = imatic.view.ajaxify.html.HtmlFragment;
+    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
+    import FlashMessageInterface    = Imatic.View.Ajaxify.Message.FlashMessageInterface;
+    import HtmlFragment             = Imatic.View.Ajaxify.Html.HtmlFragment;
 
     /**
      * Data types

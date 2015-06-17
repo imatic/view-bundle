@@ -5,7 +5,7 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.jquery {
+module Imatic.View.Ajaxify.Jquery {
 
     "use_strict";
 

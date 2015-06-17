@@ -3,7 +3,7 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.exception {
+module Imatic.View.Ajaxify.Exception {
 
     "use_strict";
 

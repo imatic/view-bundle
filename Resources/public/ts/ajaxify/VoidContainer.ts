@@ -1,24 +1,24 @@
-/// <reference path="configuration.ts"/>
-/// <reference path="event.ts"/>
-/// <reference path="container.ts"/>
-/// <reference path="action.ts"/>
-/// <reference path="form.ts"/>
-/// <reference path="modal.ts"/>
+/// <reference path="Configuration.ts"/>
+/// <reference path="Event.ts"/>
+/// <reference path="Container.ts"/>
+/// <reference path="Action.ts"/>
+/// <reference path="Form.ts"/>
+/// <reference path="Modal.ts"/>
 
 /**
  * Imatic view ajaxify void container module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.voidContainer {
+module Imatic.View.Ajaxify.VoidContainer {
 
     "use_strict";
 
-    import ajaxify                  = imatic.view.ajaxify;
-    import ContainerInterface       = imatic.view.ajaxify.container.ContainerInterface;
-    import Container                = imatic.view.ajaxify.container.Container;
-    import ContainerHandler         = imatic.view.ajaxify.container.ContainerHandler;
-    import TargetHandlerInterface   = imatic.view.ajaxify.container.TargetHandlerInterface;
+    import ajaxify                  = Imatic.View.Ajaxify;
+    import ContainerInterface       = Imatic.View.Ajaxify.Container.ContainerInterface;
+    import Container                = Imatic.View.Ajaxify.Container.Container;
+    import ContainerHandler         = Imatic.View.Ajaxify.Container.ContainerHandler;
+    import TargetHandlerInterface   = Imatic.View.Ajaxify.Container.TargetHandlerInterface;
 
     /**
      * Void container handler

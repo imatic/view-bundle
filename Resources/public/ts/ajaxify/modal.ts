@@ -1,19 +1,19 @@
-/// <reference path="event.ts"/>
-/// <reference path="jquery.ts"/>
-/// <reference path="dom.ts"/>
+/// <reference path="Event.ts"/>
+/// <reference path="Jquery.ts"/>
+/// <reference path="Dom.ts"/>
 
 /**
  * Imatic view ajaxify modal module
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-module imatic.view.ajaxify.modal {
+module Imatic.View.Ajaxify.Modal {
 
     "use_strict";
 
-    import ajaxify      = imatic.view.ajaxify;
-    import jQuery       = imatic.view.ajaxify.jquery.jQuery;
-    import DomEvents    = imatic.view.ajaxify.dom.DomEvents;
+    import ajaxify      = Imatic.View.Ajaxify;
+    import jQuery       = Imatic.View.Ajaxify.Jquery.jQuery;
+    import DomEvents    = Imatic.View.Ajaxify.Dom.DomEvents;
 
     /**
      * Modal size
