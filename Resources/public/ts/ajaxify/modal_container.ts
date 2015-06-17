@@ -41,6 +41,9 @@ module imatic.view.ajaxify.modalContainer {
 
     /**
      * Modal configuration defaults
+     *
+     * If you need to change the defaults at runtime, use:
+     * imatic.ajaxify.configBuilder.addDefaults({someKey: 'someValue'})
      */
     export var ModalConfigurationDefaults = {
         modalSize: ModalSize.NORMAL,
@@ -58,11 +61,8 @@ module imatic.view.ajaxify.modalContainer {
     export class ModalConfigurationProcessor implements ConfigurationProcessorInterface
     {
         process(data: ConfigurationInterface): void {
-            // modal-size
             if ('string' === typeof data['modalSize']) {
                 data['modalSize'] = ModalSize[data['modalSize'].toUpperCase()];
-            } else {
-                data['modalSize'] = ModalSize.NORMAL;
             }
         }
     }
@@ -179,6 +179,7 @@ module imatic.view.ajaxify.modalContainer {
         handleAction(action: ActionInterface): void {
             action.listen('begin', (event: ActionEvent): void => {
                 this.actionInitiator = event.action.getInitiator();
+                event.request.getInfo().headers['X-Modal-Dialog'] = '1';
             });
 
             action.listen('apply', (event: ActionEvent): void => {

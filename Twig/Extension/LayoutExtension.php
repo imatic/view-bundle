@@ -33,6 +33,7 @@ class LayoutExtension extends Twig_Extension
     {
         return [
             new Twig_SimpleFunction('imatic_view_has_layout', [$this->layoutHelper, 'hasLayout']),
+            new Twig_SimpleFunction('imatic_view_is_modal_dialog', [$this->layoutHelper, 'isModalDialog']),
             new Twig_SimpleFunction('imatic_view_set_title', [$this->layoutHelper, 'setTitle']),
             new Twig_SimpleFunction('imatic_view_set_full_title', [$this->layoutHelper, 'setFullTitle']),
         ];

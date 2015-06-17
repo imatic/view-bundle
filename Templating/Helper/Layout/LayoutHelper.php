@@ -51,6 +51,16 @@ class LayoutHelper
     }
 
     /**
+     * See if the request comes from inside of a modal dialog
+     *
+     * @return bool
+     */
+    public function isModalDialog()
+    {
+        return $this->requestStack->getMasterRequest()->headers->has('X-Modal-Dialog');
+    }
+
+    /**
      * See if flash messages are handled by headers
      *
      * @return bool

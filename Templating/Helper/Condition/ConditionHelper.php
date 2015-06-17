@@ -4,6 +4,7 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
 
 class ConditionHelper
 {
@@ -13,12 +14,20 @@ class ConditionHelper
     private $expressionLanguage;
 
     /**
+     * @var LayoutHelper
+     */
+    private $layoutHelper;
+
+    /**
      * @var SecurityContextInterface
      */
     private $securityContext;
 
-    public function __construct(SecurityContextInterface $securityContext, ExpressionLanguage $expressionLanguage = null)
-    {
+    public function __construct(
+        SecurityContextInterface $securityContext,
+        LayoutHelper $layoutHelper,
+        ExpressionLanguage $expressionLanguage = null
+    ) {
         $this->expressionLanguage = $expressionLanguage ? : new ExpressionLanguage();
         $this->expressionLanguage->register(
             'isGranted',
@@ -27,6 +36,7 @@ class ConditionHelper
             }, function (array $values, $str) {
                 return $this->securityContext->isGranted($str);
             });
+        $this->layoutHelper = $layoutHelper;
         $this->securityContext = $securityContext;
     }
 
@@ -44,6 +54,7 @@ class ConditionHelper
         if ($this->securityContext->getToken()) {
             $context['user'] = $this->securityContext->getToken()->getUser();
         }
+        $context['hasLayout'] = $this->layoutHelper->hasLayout();
 
         return $this->expressionLanguage->evaluate($expression, $context);
     }

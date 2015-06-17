@@ -309,6 +309,7 @@ module imatic.view.ajaxify.modal {
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content)
+                .trigger(DomEvents.AFTER_CONTENT_UPDATE)
             ;
         }
 
@@ -333,6 +334,7 @@ module imatic.view.ajaxify.modal {
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content)
+                .trigger(DomEvents.AFTER_CONTENT_UPDATE)
             ;
         }
 

@@ -122,7 +122,9 @@
     <div class="container-fluid">
         {{ message.session_message() }}
 
+        {% block action_before %}{% endblock %}
         {% block action %}{% endblock %}
+        {% block action_after %}{% endblock %}
     </div>
 
     <footer class="container-fluid">

@@ -29,6 +29,13 @@ module imatic.view.ajaxify.dom {
         static BEFORE_CONTENT_UPDATE = 'imatic.view.ajaxify.event.before_content_update';
 
         /**
+         * Event triggered after contents of an element have been set or replaced
+         *
+         * Arguments: {}
+         */
+        static AFTER_CONTENT_UPDATE = 'imatic.view.ajaxify.event.after_content_update';
+
+        /**
          * Event triggered when there are flash messages to be handled
          *
          * This is used by the document handler.

@@ -1,7 +1,9 @@
 {% extends 'ImaticViewBundle:Layout:layout.html.twig' %}
 
 {% block document %}
+    {{ block('action_before') }}
     {{ block('action') }}
+    {{ block('action_after') }}
 {% endblock %}
 
 {% do imatic_view_set_title(block('title')) %}

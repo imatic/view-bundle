@@ -38,8 +38,13 @@ module imatic.view.ajaxify.ajax {
             public url: string = '',
             public method: string = 'GET',
             public data: any = null,
-            public contentSelector: string = null
-        ) {}
+            public contentSelector: string = null,
+            public headers: {[key: string]: any} = null
+        ) {
+            if (null === this.headers) {
+                this.headers = {};
+            }
+        }
 
         hasData(): boolean {
             if (
@@ -173,6 +178,7 @@ module imatic.view.ajaxify.ajax {
             var url = this.info.url || '';
             var method = (this.info.method || 'GET').toUpperCase();
             var data = this.info.data || {};
+            var headers = this.info.headers || {};
 
             // convert methods other than GET and POST into POST + _method
             if ('GET' !== method && 'POST' !== method) {
@@ -191,6 +197,7 @@ module imatic.view.ajaxify.ajax {
                 type: method,
                 dataType: 'text',
                 data: data,
+                headers: headers,
                 cache: false,
                 complete: (): void => {
                     var response = new ResponseFactory().create(this);

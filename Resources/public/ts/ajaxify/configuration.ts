@@ -68,8 +68,8 @@ module imatic.view.ajaxify.configuration {
          *
          * The base element's data has greater priority.
          *
-         * The parent elements should be ordered from closest to furthest.
-         * (Closer partent's data overrides further parent's data.)
+         * The parent elements should be ordered parent first, ancestors later.
+         * (Parent's data overrides first ancestor's data and so on.)
          */
         buildFromDom(baseElement: HTMLElement, parentElements: HTMLElement[] = []): ConfigurationInterface {
             var data: ConfigurationInterface = {};

@@ -387,6 +387,7 @@ module imatic.view.ajaxify.container {
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content.contents())
+                .trigger(DomEvents.AFTER_CONTENT_UPDATE)
             ;
         }
 

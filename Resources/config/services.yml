@@ -161,6 +161,7 @@ services:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper
         arguments:
             - '@security.context'
+            - '@imatic_view.templating.helper.layout'
 
     imatic_view.templating.helper.url:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper
