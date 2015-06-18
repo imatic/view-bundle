@@ -14,7 +14,7 @@ module Imatic.View.Ajaxify.History {
 
     "use_strict";
 
-    import ajaxify              = Imatic.View.Ajaxify;
+    import Ajaxify              = Imatic.View.Ajaxify;
     import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
     import RequestInfo          = Imatic.View.Ajaxify.Ajax.RequestInfo;
     import DomEvents            = Imatic.View.Ajaxify.Dom.DomEvents;
@@ -76,13 +76,13 @@ module Imatic.View.Ajaxify.History {
          */
         static onStateChange(): void {
             var state = History.getState();
-            var documentHandler = ajaxify.documentHandler;
+            var documentHandler = Ajaxify.documentHandler;
             var containerHandler = documentHandler.containerHandler;
 
             if (state.data && state.data.containerStates) {
                 for (var i = 0; i < state.data.containerStates.length; ++i) {
                     var containerState = state.data.containerStates[i];
-                    var containerElement = ajaxify.domDocument.getElementById(containerState.id);
+                    var containerElement = Ajaxify.domDocument.getElementById(containerState.id);
 
                     if (containerElement && containerHandler.hasInstance(containerElement)) {
                         var container = containerHandler.getInstance(containerElement);
@@ -94,7 +94,7 @@ module Imatic.View.Ajaxify.History {
                             requestInfo = containerState.request;
                         } else {
                             // initial
-                            requestInfo = ajaxify.requestHelper.parseRequestString(
+                            requestInfo = Ajaxify.requestHelper.parseRequestString(
                                 container.getOption('initial')
                             );
                         }
@@ -128,7 +128,7 @@ module Imatic.View.Ajaxify.History {
          */
         static getCurrentData(): any {
             var data: HistoryDataInterface = {containerStates: []};
-            var containerHandler = ajaxify.documentHandler.containerHandler;
+            var containerHandler = Ajaxify.documentHandler.containerHandler;
             var containerElements = containerHandler.findElements();
 
             // find all containers with enabled history

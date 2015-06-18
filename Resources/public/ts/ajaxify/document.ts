@@ -21,7 +21,7 @@ module Imatic.View.Ajaxify.Document {
 
     "use_strict";
 
-    import ajaxify                      = Imatic.View.Ajaxify;
+    import Ajaxify                      = Imatic.View.Ajaxify;
     import jQuery                       = Imatic.View.Ajaxify.Jquery.jQuery;
     import DomEvents                    = Imatic.View.Ajaxify.Dom.DomEvents;
     import ContainerInterface           = Imatic.View.Ajaxify.Container.ContainerInterface;
@@ -83,7 +83,7 @@ module Imatic.View.Ajaxify.Document {
          * Attach the handler
          */
         attach(): void {
-            jQuery(ajaxify.domDocument)
+            jQuery(Ajaxify.domDocument)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
                 .on(DomEvents.ACTIONS, this.onActions)
@@ -105,25 +105,28 @@ module Imatic.View.Ajaxify.Document {
         private onClick = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
-            try {
-                if (
-                    this.linkHandler.isValidElement(element)
-                    && this.isValidElement(element)
-                    && this.linkHandler.isValidEvent(event)
-                ) {
-                    var container = this.containerHandler.findInstance(element);
-                    var link = this.linkHandler.getInstance(element);
-
-                    if (this.dispatchActions(container, link.createActions())) {
-                        event.preventDefault();
+            
+            if (
+                this.linkHandler.isValidElement(element)
+                && this.isValidElement(element)
+                && this.linkHandler.isValidEvent(event)
+            ) {
+                var container = null;
+                try {
+                    container = this.containerHandler.findInstanceForElement(element);
+                } catch (e) {
+                    if (!(e instanceof ContainerNotFoundException)) {
+                        throw e;
                     }
-                } else if (this.formHandler.isValidSubmitElement(element)) {
-                    this.formHandler.markSubmitElement(element);
                 }
-            } catch (e) {
-                if (!(e instanceof ContainerNotFoundException)) {
-                    throw e;
+
+                var link = this.linkHandler.getInstance(element);
+
+                if (this.dispatchActions(link.createActions(), container)) {
+                    event.preventDefault();
                 }
+            } else if (this.formHandler.isValidSubmitElement(element)) {
+                this.formHandler.markSubmitElement(element);
             }
         }
 
@@ -132,22 +135,24 @@ module Imatic.View.Ajaxify.Document {
          */
         private onSubmit = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
-
-            try {
-                if (
-                    this.formHandler.isValidElement(element)
-                    && this.isValidElement(element)
-                ) {
-                    var container = this.containerHandler.findInstance(element);
-                    var form = this.formHandler.getInstance(element);
-
-                    if (this.dispatchActions(container, form.createActions())) {
-                        event.preventDefault();
+            
+            if (
+                this.formHandler.isValidElement(element)
+                && this.isValidElement(element)
+            ) {
+                var container = null;
+                try {
+                    container = this.containerHandler.findInstanceForElement(element);
+                } catch (e) {
+                    if (!(e instanceof ContainerNotFoundException)) {
+                        throw e;
                     }
                 }
-            } catch (e) {
-                if (!(e instanceof ContainerNotFoundException)) {
-                    throw e;
+
+                var form = this.formHandler.getInstance(element);
+
+                if (this.dispatchActions(form.createActions(), container)) {
+                    event.preventDefault();
                 }
             }
         }
@@ -158,15 +163,16 @@ module Imatic.View.Ajaxify.Document {
         private onActions = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
 
+            var container = null;
             try {
-                var container = this.containerHandler.findInstance(element, false);
-
-                this.dispatchActions(container, <ActionInterface[]> event['actions']);
+                container = this.containerHandler.findInstanceForElement(element, false);
             } catch (e) {
                 if (!(e instanceof ContainerNotFoundException)) {
                     throw e;
                 }
             }
+
+            this.dispatchActions(<ActionInterface[]> event['actions'], container);
         }
 
         /**
@@ -204,7 +210,7 @@ module Imatic.View.Ajaxify.Document {
                 flashes: flashes,
                 originElement: originElement,
             });
-            jQuery(ajaxify.domDocument.body).trigger(event);
+            jQuery(Ajaxify.domDocument.body).trigger(event);
 
             // default implementation
             if (false !== event.result) {
@@ -228,13 +234,30 @@ module Imatic.View.Ajaxify.Document {
         }
 
         /**
-         * Attempt to execute a list of action using the given container
+         * Attempt to execute a list of actions
          */
-        private dispatchActions(container: ContainerInterface, actions: ActionInterface[]): boolean {
+        private dispatchActions(actions: ActionInterface[], contextualContainer?: ContainerInterface): boolean {
             var success = false;
 
             for (var i = 0; i < actions.length; ++i) {
-                if (this.dispatchAction(container, actions[i])) {
+                var container = null;
+
+                if (actions[i].hasTarget()) {
+                    try {
+                        container = this.containerHandler.findInstanceForTarget(
+                            actions[i].getTarget(),
+                            actions[i].hasInitiator() ? actions[i].getInitiator().getElement() : null
+                        );
+                    } catch (e) {
+                        if (!(e instanceof ContainerNotFoundException)) {
+                            throw e;
+                        }
+                    }
+                } else {
+                    container = contextualContainer;
+                }
+
+                if (null != container && this.dispatchAction(actions[i], container)) {
                     success = true;
                     break;
                 }
@@ -246,7 +269,7 @@ module Imatic.View.Ajaxify.Document {
         /**
          * Attempt to execute a single action using the given container
          */
-        private dispatchAction(container: ContainerInterface, action: ActionInterface): boolean {
+        private dispatchAction(action: ActionInterface, container: ContainerInterface): boolean {
             var success = false;
 
             do {

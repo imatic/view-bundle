@@ -17,7 +17,7 @@ module Imatic.View.Ajaxify.ModalContainer {
 
     "use_strict";
 
-    import ajaxify                          = Imatic.View.Ajaxify;
+    import Ajaxify                          = Imatic.View.Ajaxify;
     import jQuery                           = Imatic.View.Ajaxify.Jquery.jQuery;
     import ConfigurationProcessorInterface  = Imatic.View.Ajaxify.Configuration.ConfigurationProcessorInterface;
     import ConfigurationInterface           = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
@@ -43,7 +43,7 @@ module Imatic.View.Ajaxify.ModalContainer {
      * Modal configuration defaults
      *
      * If you need to change the defaults at runtime, use:
-     * imatic.ajaxify.configBuilder.addDefaults({someKey: 'someValue'})
+     * imatic.Ajaxify.configBuilder.addDefaults({someKey: 'someValue'})
      */
     export var ModalConfigurationDefaults = {
         modalSize: ModalSize.NORMAL,
@@ -83,11 +83,11 @@ module Imatic.View.Ajaxify.ModalContainer {
             private widgetHandler: WidgetHandler
         ) {}
 
-        supports(target: string, element: HTMLElement): boolean {
-            return 'modal' === target;
+        supports(target: string, element?: HTMLElement): boolean {
+            return 'modal' === target && null != element;
         }
 
-        findContainer(target: string, element: HTMLElement): ContainerInterface {
+        findContainer(target: string, element?: HTMLElement): ContainerInterface {
             return this.containerFactory.create(element);
         }
     }
@@ -136,7 +136,7 @@ module Imatic.View.Ajaxify.ModalContainer {
         }
 
         loadOptions(): ConfigurationInterface {
-            return ajaxify.configBuilder.buildFromDom(this.originalTrigger);
+            return Ajaxify.configBuilder.buildFromDom(this.originalTrigger);
         }
 
         destroy(): void {
@@ -161,7 +161,7 @@ module Imatic.View.Ajaxify.ModalContainer {
 
             if (onClose) {
                 // load on close
-                actions = ajaxify.actionHelper.parseActionString(onClose, originalTriggerWidget);
+                actions = Ajaxify.actionHelper.parseActionString(onClose, originalTriggerWidget);
             } else if (this.resendResponse) {
                 // resend response
                 this.resendResponse.flashes = [];
@@ -279,7 +279,7 @@ module Imatic.View.Ajaxify.ModalContainer {
         getParent(): ContainerInterface {
             if (this.originalTrigger) {
                 try {
-                    return this.containerHandler.findInstance(<HTMLElement> this.originalTrigger.parentNode, false);
+                    return this.containerHandler.findInstanceForElement(<HTMLElement> this.originalTrigger.parentNode, false);
                 } catch (e) {
                     if (!(e instanceof ContainerNotFoundException)) {
                         throw e;

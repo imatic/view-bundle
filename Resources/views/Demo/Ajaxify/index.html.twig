@@ -74,10 +74,10 @@
                     <td>
                         <ul>
                             <li>defines the initial request (a request string that loads initial state of the container)</li>
-                            <li>used by history and the <code>@current</code> request string keyword</li>
+                            <li>used by history and the <code>@reset</code>, <code>@current</code> and <code>@reload</code> <a href="#request-strings">&lt;request string&gt;</a> keywords</li>
                         </ul>
                     </td>
-                    <td><a href="#request-strings">a request string</a></td>
+                    <td><a href="#request-strings">&lt;request string&gt;</a></td>
                     <td>current URL as a GET request</td>
                 </tr>
             </tbody>
@@ -251,7 +251,7 @@
                 <tr>
                     <td><code>data-action</code></td>
                     <td>
-                        <p>custom <a href="#action-strings">action string</a> to execute</p>
+                        <p>custom <a href="#action-strings">&lt;action-string&gt;</a> to execute</p>
                         <ul>
                             <li>
                                 these actions are attempted before the link's
@@ -431,7 +431,7 @@
                             <li>the actions are triggered in context of the widget that opened the modal</li>
                         </ul>
                     </td>
-                    <td><a href="#action-strings">an action string</a></td>
+                    <td><a href="#action-strings">&lt;action-string&gt;</a></td>
                     <td>-</td>
                 </tr>
                 <tr>
@@ -580,20 +580,28 @@
         <!-- action strings -->
         <h3 id="action-strings">Action strings</h3>
 
-        <p>
-            Some options have the form of an &quot;action string&quot;. Abstract
-            definition of the format is:
-        </p>
+        <p>Action strings define one or more actions to be executed.</p>
 
-        <p>
-            <code>action1</code> <code>|</code>
-            <code>action2</code> <code>|</code>
-            <code>...</code>
-        </p>
+        <h4>Format</h4>
+
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th><code>&lt;action-string&gt;</code></th>
+                    <td><code>&lt;action&gt;[ | &lt;action&gt; | ...]</code></td>
+                </tr>
+                <tr>
+                    <th><code>&lt;action&gt;</code></th>
+                    <td><code>(&lt;keyword&gt; or &lt;request string&gt;)[ with &lt;css-selector&gt;]</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <h4>Behavior</h4>
 
         <ul>
-            <li>one or more actions can be specified</li>
-            <li>the actions are fired in order until one of them succeeds, like so:
+            <li>the actions are fired in order until one of them can be executed, like so:
                 <ol>
                     <li>see if the action supports the current container and if it does, execute it and stop</li>
                     <li>if not, move onto the parent container</li>
@@ -614,8 +622,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="#request-strings">a request string</a></td>
-                    <td>Performas a request.</td>
+                    <td><a href="#request-strings">&lt;request string&gt;</a></td>
+                    <td>Performs a request.</td>
                 </tr>
                 <tr>
                     <td><code>@close-modal</code></td>
@@ -639,6 +647,14 @@
             </thead>
             <tbody>
                 <tr>
+                    <td><code>@reload</code></td>
+                    <td>reload the current container</td>
+                </tr>
+                <tr>
+                    <td><code>@reload with #my-container</code></td>
+                    <td>reload the container that matches the given selector</td>
+                </tr>
+                <tr>
                     <td><code>@close-modal | @reload</code></td>
                     <td>close a modal dialog or reload the current container</td>
                 </tr>
@@ -656,19 +672,21 @@
         <!-- request strings -->
         <h3 id="request-strings">Request strings</h3>
 
-        <p>
-            Some options have the form of a &quot;request string&quot;. Abstract
-            definition of the format is:
-        </p>
+        <p>Request strings describe a HTTP request and can define a content selector.</p>
+
+        <h4>Format</h4>
+
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th><code>&lt;request-string&gt;</code></th>
+                    <td><code>[&lt;method&gt; ][&lt;url&gt;][;&lt;content-selector&gt;]</code></td>
+                </tr>
+            </tbody>
+        </table>
 
         <p>
-            <code>method</code>
-            <code>URL</code> <code>;</code>
-            <code>content-selector</code>
-        </p>
-
-        <p>
-            All of the segments are optional and have default values.
+            All of the segments are optional and have default values:
         </p>
         
         <table class="table table-bordered">
@@ -681,17 +699,24 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><code>method</code></td>
+                    <td><code>&lt;method&gt;</code></td>
                     <td>the request method (POST, GET, ...)</td>
                     <td>GET</td>
                 </tr>
                 <tr>
-                    <td><code>URL</code></td>
+                    <td><code>&lt;url&gt;</code></td>
                     <td>
                         <p>the URL to load</p>
                         <ul>
                             <li>
                                 <p>empty string or the <code>@page</code> keyword (= current document URL)</p>
+                            </li>
+                            <li>
+                                <p>the <code>@reset</code> keyword</p>
+                                <ul>
+                                    <li>loads the container's initial request URL</li>
+                                    <li>other parts of the request string are ignored</li>
+                                </ul>
                             </li>
                             <li>
                                 <p>the <code>@current</code> keyword</p>
@@ -714,7 +739,7 @@
                     <td>@page</td>
                 </tr>
                 <tr>
-                    <td><code>content-selector</code></td>
+                    <td><code>&lt;content-selector&gt;</code></td>
                     <td>response content selector</td>
                     <td>the container's ID if any</td>
                 </tr>

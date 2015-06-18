@@ -20,7 +20,7 @@ module Imatic.View.Ajaxify.Container {
 
     "use_strict";
 
-    import ajaxify                  = Imatic.View.Ajaxify;
+    import Ajaxify                  = Imatic.View.Ajaxify;
     import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import Object                   = Imatic.View.Ajaxify.Object.Object;
     import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
@@ -159,19 +159,25 @@ module Imatic.View.Ajaxify.Container {
         }
 
         /**
-         * Get container instance
+         * Get container instance from the given element
          */
-        getInstance(containerElement: HTMLElement): ContainerInterface {
+        getInstance(containerElement: HTMLElement, autoCreate = false): ContainerInterface {
             var container = jQuery(containerElement).data(this.instanceDataKey);
             if (!container) {
-                throw new ContainerNotFoundException('Container instance not found');
+                if (!autoCreate) {
+                    throw new ContainerNotFoundException('Container instance not found');
+                }
+
+                // auto-create
+                container = this.containerFactory.create(containerElement);
+                this.setInstance(containerElement, container);
             }
 
             return container;
         }
 
         /**
-         * Set container instance
+         * Set container instance on the given element
          */
         setInstance(containerElement: HTMLElement, container: ContainerInterface): void {
             jQuery(containerElement)
@@ -181,52 +187,49 @@ module Imatic.View.Ajaxify.Container {
         }
 
         /**
-         * Get container instance for given element
+         * Find container instance for the given target
          */
-        findInstance(element: HTMLElement, considerTarget = true): ContainerInterface {
-            var container;
-            var target;
-            if (considerTarget) {
-                target = jQuery(element).data('target');
-            }
-
+        findInstanceForTarget(target: string, context?: HTMLElement): ContainerInterface {
             // choose target handler
             var targetHandler;
-            if (considerTarget) {
-                for (var i = 0; i < this.targetHandlers.length; ++i) {
-                    if (this.targetHandlers[i].supports(target, element)) {
-                        targetHandler = this.targetHandlers[i];
-                        break;
-                    }
+            for (var i = 0; i < this.targetHandlers.length; ++i) {
+                if (this.targetHandlers[i].supports(target, context)) {
+                    targetHandler = this.targetHandlers[i];
+                    break;
                 }
             }
 
             // find container
             if (targetHandler) {
                 // use target handler
-                return targetHandler.findContainer(target, element);
+                return targetHandler.findContainer(target, context);
             } else {
                 // default implementation
                 var containerElement;
                 if (!target || '.' === target) {
                     // parent container
-                    containerElement = this.getElementFromContext(element);
+                    if (null == context) {
+                        throw new ContainerNotFoundException('Cannot find a container when neither the target nor the context has been defined');
+                    }
+                    containerElement = this.getElementFromContext(context);
                 } else {
                     // specified by selector
                     containerElement = this.getElementFromSelector(target);
                 }
 
                 // get instance
-                var container;
-                if (this.hasInstance(containerElement)) {
-                    container = this.getInstance(containerElement);
-                } else {
-                    container = this.containerFactory.create(containerElement);
-                    this.setInstance(containerElement, container);
-                }
-
-                return container;
+                return this.getInstance(containerElement, true);
             }
+        }
+
+        /**
+         * Find container instance for the given element
+         */
+        findInstanceForElement(element: HTMLElement, considerTarget = true): ContainerInterface {
+            return this.findInstanceForTarget(
+                considerTarget ? jQuery(element).data('target') : null,
+                element
+            );
         }
 
         /**
@@ -272,7 +275,7 @@ module Imatic.View.Ajaxify.Container {
         findInstances(element?: HTMLElement): ContainerInterface[] {
             var self = this;
             var containers: ContainerInterface[] = [];
-            element = element || ajaxify.domDocument.body;
+            element = element || Ajaxify.domDocument.body;
 
             if (this.isValidElement(element) && this.hasInstance(element)) {
                 containers.push(this.getInstance(element));
@@ -292,7 +295,7 @@ module Imatic.View.Ajaxify.Container {
          */
         findElements(element?: HTMLElement): HTMLElement[] {
             var elements: HTMLElement[] = [];
-            element = element || ajaxify.domDocument.body;
+            element = element || Ajaxify.domDocument.body;
 
             if (this.isValidElement(element)) {
                 elements.push(element);
@@ -342,11 +345,17 @@ module Imatic.View.Ajaxify.Container {
             super();
         }
 
+        destroy(): void {
+            this.abortCurrentAction();
+
+            super.destroy();
+        }
+
         loadOptions(): ConfigurationInterface {
             if (this.element) {
-                return ajaxify.configBuilder.buildFromDom(this.element);
+                return Ajaxify.configBuilder.buildFromDom(this.element);
             } else {
-                return ajaxify.configBuilder.buildFromData({});
+                return Ajaxify.configBuilder.buildFromData({});
             }
         }
 
@@ -393,11 +402,7 @@ module Imatic.View.Ajaxify.Container {
 
         handleAction(action: ActionInterface): void {
             // abort current action
-            if (this.currentAction) {
-                if (!this.currentAction.isComplete()) {
-                    this.currentAction.abort();
-                }
-            }
+            this.abortCurrentAction();
 
             // set current action
             this.currentAction = action;
@@ -408,6 +413,12 @@ module Imatic.View.Ajaxify.Container {
 
             // execute action
             action.execute(this);
+        }
+
+        private abortCurrentAction(): void {
+            if (this.currentAction && !this.currentAction.isComplete()) {
+                this.currentAction.abort();
+            }
         }
 
         /**
@@ -454,13 +465,13 @@ module Imatic.View.Ajaxify.Container {
         handleFlashes(flashes: FlashMessageInterface[]): void {
             // trigger event
             var event = jQuery.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
-            jQuery(this.getElement() || ajaxify.domDocument.body).trigger(event);
+            jQuery(this.getElement() || Ajaxify.domDocument.body).trigger(event);
         }
 
         getParent(): ContainerInterface {
             if (this.element) {
                 try {
-                    return this.containerHandler.findInstance(<HTMLElement> this.element.parentNode, false);
+                    return this.containerHandler.findInstanceForElement(<HTMLElement> this.element.parentNode, false);
                 } catch (e) {
                     if (!(e instanceof ContainerNotFoundException)) {
                         throw e;

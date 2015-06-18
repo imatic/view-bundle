@@ -14,7 +14,7 @@ module Imatic.View.Ajaxify.Form {
 
     "use_strict";
 
-    import ajaxify              = Imatic.View.Ajaxify;
+    import Ajaxify              = Imatic.View.Ajaxify;
     import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
     import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
     import Widget               = Imatic.View.Ajaxify.Widget.Widget;
@@ -119,7 +119,7 @@ module Imatic.View.Ajaxify.Form {
             var submitButton = this.getUsedSubmitButton(form);
 
             // abort on non-ajaxify submit buttons
-            if (submitButton && !ajaxify.documentHandler.isValidElement(submitButton)) {
+            if (submitButton && !Ajaxify.documentHandler.isValidElement(submitButton)) {
                 return null;
             }
 

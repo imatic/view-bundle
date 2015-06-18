@@ -13,7 +13,7 @@ module Imatic.View.Ajaxify.Action {
 
     "use_strict";
 
-    import ajaxify                  = Imatic.View.Ajaxify;
+    import Ajaxify                  = Imatic.View.Ajaxify;
     import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import Object                   = Imatic.View.Ajaxify.Object.Object;
     import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
@@ -69,20 +69,31 @@ module Imatic.View.Ajaxify.Action {
             var segment = jQuery.trim(actionSegment);
 
             if (segment.length > 0) {
-                // try to match the @key-word syntax
-                var match = segment.match(/^@([A-Za-z0-9_\-]+)$/);
-
-                // find and invoke the handler
-                if (match && this.keywordHandlers[match[1]]) {
-                    action = this.keywordHandlers[match[1]](initiator);
+                // match and remove the target first
+                var targetMatch = segment.match(/\s+with\s+(.+)$/i);
+                if (targetMatch) {
+                    segment = segment.substring(0, segment.length - targetMatch[0].length);
                 }
 
-                // if no action was matched, fall back to request strings
+                // try to match the @key-word syntax
+                var keywordMatch = segment.match(/^@([A-Za-z0-9_\-]+)$/);
+
+                // find and invoke the handler
+                if (keywordMatch && this.keywordHandlers[keywordMatch[1]]) {
+                    action = this.keywordHandlers[keywordMatch[1]](initiator);
+                }
+
+                // if no kewyword was matched, fall back to request strings
                 if (!action) {
                     action = new RequestAction(
                         initiator,
-                        ajaxify.requestHelper.parseRequestString(segment)
+                        Ajaxify.requestHelper.parseRequestString(segment)
                     );
+                }
+
+                // set the target
+                if (targetMatch) {
+                    action.setTarget(targetMatch[1]);
                 }
             }
 
@@ -110,6 +121,21 @@ module Imatic.View.Ajaxify.Action {
          * Set action's initiator
          */
         setInitiator: (initiator: WidgetInterface) => void;
+
+        /**
+         * See if the action has a custom target selector
+         */
+        hasTarget: () => boolean;
+
+        /**
+         * Get custom target selector
+         */
+        getTarget: () => string;
+
+        /**
+         * Set custom target selector
+         */
+        setTarget: (target: string) => void;
 
         /**
          * See if the action is complete
@@ -143,6 +169,7 @@ module Imatic.View.Ajaxify.Action {
     export class Action extends Object implements ActionInterface
     {
         private initiator: WidgetInterface = null;
+        private target: string = null;
         private complete: boolean = false;
         private successful: boolean = false;
 
@@ -164,6 +191,18 @@ module Imatic.View.Ajaxify.Action {
 
         setInitiator(initiator: WidgetInterface): void {
             this.initiator = initiator;
+        }
+
+        hasTarget(): boolean {
+            return null != this.target;
+        }
+
+        getTarget(): string {
+            return this.target;
+        }
+
+        setTarget(target: string): void {
+            this.target = target;
         }
 
         isComplete(): boolean {
@@ -266,7 +305,7 @@ module Imatic.View.Ajaxify.Action {
          * Prepare the request
          */
         prepareRequest(container: ContainerInterface): RequestInfo {
-            var info = jQuery.extend(true, {},  this.info);
+            var info = jQuery.extend(true, {}, this.info);
 
             // use container's content selector if none was given
             if (!info.contentSelector) {
@@ -274,15 +313,24 @@ module Imatic.View.Ajaxify.Action {
             }
 
             // special URLs
-            if ('@reload' === info.url || '@current' === info.url) {
-
+            if (
+                '@reload' === info.url
+                || '@current' === info.url
+                || '@reset' === info.url
+            ) {
                 // determine current request
-                var currentRequest = container.getCurrentRequest();
+                var currentRequest = null;
+
+                if ('@reset' !== info.url) {
+                    currentRequest = container.getCurrentRequest();
+                }
                 if (!currentRequest) {
-                    currentRequest = ajaxify.requestHelper.parseRequestString(
+                    currentRequest = Ajaxify.requestHelper.parseRequestString(
                         container.getOption('initial')
                     );
                 }
+
+                // replace this action's initiator
                 var currentRequestInitiator = container.getCurrentRequestInitiator();
                 if (currentRequestInitiator) {
                     this.setInitiator(currentRequestInitiator);
@@ -330,7 +378,7 @@ module Imatic.View.Ajaxify.Action {
             } else if (!response.valid && !response.aborted) {
                 container.handleFlashes([{
                     type: 'danger',
-                    message: 'An error occured'
+                    message: 'An error occurred'
                 }]);
             }
 

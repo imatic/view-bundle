@@ -11,7 +11,7 @@ module Imatic.View.Ajaxify.Modal {
 
     "use_strict";
 
-    import ajaxify      = Imatic.View.Ajaxify;
+    import Ajaxify      = Imatic.View.Ajaxify;
     import jQuery       = Imatic.View.Ajaxify.Jquery.jQuery;
     import DomEvents    = Imatic.View.Ajaxify.Dom.DomEvents;
 
@@ -31,7 +31,7 @@ module Imatic.View.Ajaxify.Modal {
     export class ModalStackHandler
     {
         constructor() {
-            jQuery(ajaxify.domDocument)
+            jQuery(Ajaxify.domDocument)
                 .on('show.bs.modal', this.onModalShow)
                 .on('keydown', this.onKeydown)
             ;
@@ -41,7 +41,7 @@ module Imatic.View.Ajaxify.Modal {
          * Get the topmost modal dialog element
          */
         getTopmostModal(): HTMLElement {
-            var modals = jQuery('div.modal', ajaxify.domDocument.body);
+            var modals = jQuery('div.modal', Ajaxify.domDocument.body);
 
             var topmostIndex = null;
             var topmostZIndex = 0;
@@ -104,7 +104,7 @@ module Imatic.View.Ajaxify.Modal {
          * Update z-indexes of existing modals
          */
         private updateZIndexes(): void {
-            var modals = jQuery('div.modal', ajaxify.domDocument.body);
+            var modals = jQuery('div.modal', Ajaxify.domDocument.body);
             var zIndex = null;
             for (var i = 0; i < modals.length; ++i) {
                 var modal = jQuery(modals[i]);
@@ -356,7 +356,7 @@ module Imatic.View.Ajaxify.Modal {
                 + '</div>'
             ;
 
-            this.element = jQuery(html).appendTo(ajaxify.domDocument.body)[0];
+            this.element = jQuery(html).appendTo(Ajaxify.domDocument.body)[0];
 
             jQuery(this.element).on('hidden.bs.modal', (): void => {
                 this.destroy();

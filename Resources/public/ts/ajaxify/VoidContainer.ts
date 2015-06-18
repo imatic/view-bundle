@@ -14,7 +14,7 @@ module Imatic.View.Ajaxify.VoidContainer {
 
     "use_strict";
 
-    import ajaxify                  = Imatic.View.Ajaxify;
+    import Ajaxify                  = Imatic.View.Ajaxify;
     import ContainerInterface       = Imatic.View.Ajaxify.Container.ContainerInterface;
     import Container                = Imatic.View.Ajaxify.Container.Container;
     import ContainerHandler         = Imatic.View.Ajaxify.Container.ContainerHandler;
@@ -30,21 +30,12 @@ module Imatic.View.Ajaxify.VoidContainer {
             private containerHandler: ContainerHandler
         ) {}
 
-        supports(target: string, element: HTMLElement): boolean {
+        supports(target: string, element?: HTMLElement): boolean {
             return 'void' === target;
         }
 
-        findContainer(target: string, element: HTMLElement): ContainerInterface {
-            var container;
-
-            if (this.containerHandler.hasInstance(element)) {
-                container = this.containerHandler.getInstance(element);
-            } else {
-                container = new VoidContainer(this.containerHandler, null);
-                this.containerHandler.setInstance(element, container);
-            }
-
-            return container;
+        findContainer(target: string, element?: HTMLElement): ContainerInterface {
+            return new VoidContainer(this.containerHandler, null);
         }
     }
 

@@ -80,7 +80,7 @@ module Imatic.View.Ajaxify.Ajax {
 
             // parse
             var method, url, contentSelector;
-            var match = requestString.match(/^(?:([A-Z]+)\s)?(.*?)(?:;(.*))?$/);
+            var match = requestString.match(/^^(?:([A-Z]+)\s)?([^;]*)(?:;(.*))?$/);
 
             if (match) {
                 method = match[1];

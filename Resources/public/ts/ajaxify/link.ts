@@ -15,7 +15,7 @@ module Imatic.View.Ajaxify.Link {
 
     "use_strict";
 
-    import ajaxify              = Imatic.View.Ajaxify;
+    import Ajaxify              = Imatic.View.Ajaxify;
     import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
     import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
     import Widget               = Imatic.View.Ajaxify.Widget.Widget;
@@ -109,7 +109,7 @@ module Imatic.View.Ajaxify.Link {
             var actionString = this.getOption('action');
 
             if (actionString) {
-                jQuery.merge(actions, ajaxify.actionHelper.parseActionString(actionString, this));
+                jQuery.merge(actions, Ajaxify.actionHelper.parseActionString(actionString, this));
             }
 
             if (this.url) {

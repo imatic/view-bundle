@@ -13,7 +13,7 @@ module Imatic.View.Ajaxify.Widget {
 
     "use_strict";
 
-    import ajaxify                  = Imatic.View.Ajaxify;
+    import Ajaxify                  = Imatic.View.Ajaxify;
     import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import Object                   = Imatic.View.Ajaxify.Object.Object;
     import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
@@ -123,7 +123,7 @@ module Imatic.View.Ajaxify.Widget {
         }
 
         loadOptions(): ConfigurationInterface {
-            return ajaxify.configBuilder.buildFromDom(this.element);
+            return Ajaxify.configBuilder.buildFromDom(this.element);
         }
 
         createActions(): ActionInterface[] {
