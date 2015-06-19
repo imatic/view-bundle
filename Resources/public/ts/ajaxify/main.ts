@@ -16,6 +16,7 @@ module Imatic.View.Ajaxify {
     import RequestHelper                = Imatic.View.Ajaxify.Ajax.RequestHelper;
     import ActionHelper                 = Imatic.View.Ajaxify.Action.ActionHelper;
     import NoAction                     = Imatic.View.Ajaxify.Action.NoAction;
+    import ClearAction                  = Imatic.View.Ajaxify.Action.ClearAction;
     import CloseModalAction             = Imatic.View.Ajaxify.ModalContainer.CloseModalAction;
 
     // global components
@@ -45,6 +46,7 @@ module Imatic.View.Ajaxify {
         actionHelper = new ActionHelper();
         actionHelper.addKeywordHandler('close-modal', CloseModalAction.keywordHandler);
         actionHelper.addKeywordHandler('noop', NoAction.keywordHandler);
+        actionHelper.addKeywordHandler('clear', ClearAction.keywordHandler);
 
         // request helper
         requestHelper = new RequestHelper();

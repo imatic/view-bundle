@@ -179,11 +179,14 @@ module Imatic.View.Ajaxify.ModalContainer {
         handleAction(action: ActionInterface): void {
             action.listen('begin', (event: ActionEvent): void => {
                 var options = this.getOptions();
-                var requestInfo = event.request.getInfo();
 
-                requestInfo.headers['X-Modal-Dialog'] = '1';
-                if (options['modalCloseOnFormSuccess'] && !options['modalForwardFormResponse']) {
-                    requestInfo.headers['X-Prefer-No-Redirects'] = '1';
+                if (event.request) {
+                    var requestInfo = event.request.getInfo();
+
+                    requestInfo.headers['X-Modal-Dialog'] = '1';
+                    if (options['modalCloseOnFormSuccess'] && !options['modalForwardFormResponse']) {
+                        requestInfo.headers['X-Prefer-No-Redirects'] = '1';
+                    }
                 }
 
                 this.actionInitiator = event.action.getInitiator();

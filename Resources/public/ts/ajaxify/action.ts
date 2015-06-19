@@ -241,6 +241,8 @@ module Imatic.View.Ajaxify.Action {
 
     /**
      * No action
+     *
+     * Does nothing.
      */
     export class NoAction extends Action
     {
@@ -249,6 +251,32 @@ module Imatic.View.Ajaxify.Action {
         };
 
         doExecute(container: ContainerInterface): jQuery.Promise {
+            return jQuery.Deferred().resolve().promise();
+        }
+    }
+
+    /**
+     * Clear action
+     *
+     * Sets empty content.
+     */
+    export class ClearAction extends Action
+    {
+        static keywordHandler = (initiator: WidgetInterface): ActionInterface => {
+            return new ClearAction(initiator);
+        };
+
+        doExecute(container: ContainerInterface): jQuery.Promise {
+            this.emit(ActionEvent.createBegin(this, container));
+
+            var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container));
+
+            if (event.proceed) {
+                container.setContent(jQuery());
+            }
+
+            this.emit(ActionEvent.createComplete(this, container));
+
             return jQuery.Deferred().resolve().promise();
         }
     }
@@ -402,7 +430,7 @@ module Imatic.View.Ajaxify.Action {
         }
 
         doExecute(container: ContainerInterface): jQuery.Promise {
-            this.emit(ActionEvent.createBegin(this, container, null));
+            this.emit(ActionEvent.createBegin(this, container));
 
             // handle response
             if (this.response.valid) {
@@ -434,7 +462,7 @@ module Imatic.View.Ajaxify.Action {
         static createBegin(
             action: ActionInterface,
             container: ContainerInterface,
-            request: Request
+            request: Request = null
         ): ActionEvent {
             var event = new this();
 
@@ -449,7 +477,7 @@ module Imatic.View.Ajaxify.Action {
         static createApply(
             action: ActionInterface,
             container: ContainerInterface,
-            response: Response
+            response: Response = null
         ): ActionEvent {
             var event = new this();
 
@@ -465,7 +493,7 @@ module Imatic.View.Ajaxify.Action {
         static createComplete(
             action: ActionInterface,
             container: ContainerInterface,
-            response: Response
+            response: Response = null
         ): ActionEvent {
             var event = new this();
 
