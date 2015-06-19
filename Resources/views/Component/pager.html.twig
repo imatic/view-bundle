@@ -13,16 +13,16 @@
         {% if pager is defined and pager.haveToPaginate %}
             <ul class="pagination">
                 <li class="{% if pager.isFirstPage() %}disabled{% endif %}">
-                    <a href="{{ imatic_view_update_pager_url(uri, pager.getFirstPage()) }}"
+                    <a href="{{ imatic_view_update_pager_url(uri, pager.getFirstPage(), componentId|default(none)) }}"
                        title="{{ 'first'|trans({}, 'ImaticViewBundleComponent') }}">|&laquo;</a>
                 </li>
                 <li class="{% if pager.isFirstPage() %}disabled{% endif %}">
-                    <a href="{{ imatic_view_update_pager_url(uri, pager.getPreviousPage()) }}"
+                    <a href="{{ imatic_view_update_pager_url(uri, pager.getPreviousPage(), componentId|default(none)) }}"
                        title="{{ 'prev'|trans({}, 'ImaticViewBundleComponent') }}">&laquo;</a>
                 </li>
                 {% for page in pager.links %}
                     <li class="{% if pager.isCurrentPage(page) %}active{% endif %}">
-                        <a href="{{ imatic_view_update_pager_url(uri, page) }}">{{ page }}
+                        <a href="{{ imatic_view_update_pager_url(uri, page, componentId|default(none)) }}">{{ page }}
                             {% if pager.isCurrentPage(page) %}
                                 <span class="sr-only">({{ 'current' | trans({}, 'ImaticViewBundleComponent') }})</span>
                             {% endif %}
@@ -30,11 +30,11 @@
                     </li>
                 {% endfor %}
                 <li class="{% if pager.isLastPage() %}disabled{% endif %}">
-                    <a href="{{ imatic_view_update_pager_url(uri, pager.getNextPage()) }}"
+                    <a href="{{ imatic_view_update_pager_url(uri, pager.getNextPage(), componentId|default(none)) }}"
                        title="{{ 'next'|trans({}, 'ImaticViewBundleComponent') }}">&raquo;</a>
                 </li>
                 <li class="{% if pager.isLastPage() %}disabled{% endif %}">
-                    <a href="{{ imatic_view_update_pager_url(uri, pager.getLastPage()) }}"
+                    <a href="{{ imatic_view_update_pager_url(uri, pager.getLastPage(), componentId|default(none)) }}"
                        title="{{ 'last'|trans({}, 'ImaticViewBundleComponent') }}">&raquo;|</a>
                 </li>
             </ul>

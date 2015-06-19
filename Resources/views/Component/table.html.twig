@@ -45,7 +45,7 @@
                         {% block table_column_header %}
                             <th class="{{ column.format }} {{ column.class }}">
                                 {% if sorter is defined and column.sortable %}
-                                <a href="{{ imatic_view_update_sorter_url(uri, column.name, sorter.reverseDirection(column.name, true)) }}"
+                                <a href="{{ imatic_view_update_sorter_url(uri, column.name, sorter.reverseDirection(column.name, true), componentId|default(none)) }}"
                                    class="{{ sorter.sorted(column.name) ? 'sorted '~sorter.direction(column.name, true) : '' }}">
                                     {% endif %}
                                     {{ column.label|trim('[]')|humanize|trans({}, table.translationDomain) }}

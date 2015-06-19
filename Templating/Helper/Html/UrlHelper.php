@@ -13,32 +13,49 @@ class UrlHelper
         return $this->buildUrl($merged);
     }
 
-    public function updateSorterUrl($url, $column, $direction)
+    public function updateSorterUrl($url, $column, $direction, $componentId = null)
     {
         $column = $this->fixColumn($column);
 
         // reset previous sorter
-        $url = $this->updateUrl($url, ['query' => ['sorter' => null, 'page' => null]]);
+        $url = $this->updateUrl($url, [
+            'query' => $this->buildQueryArray(
+                ['sorter' => null, 'page' => null],
+                $componentId
+            )
+        ]);
 
-        return $this->updateUrl($url, ['query' => ['sorter' => [$column => $direction]]]);
+        return $this->updateUrl($url, [
+            'query' => $this->buildQueryArray(
+                ['sorter' => [$column => $direction]],
+                $componentId)
+        ]);
     }
 
-    public function updateFilterUrl($url)
+    public function updateFilterUrl($url, $componentId = null)
     {
-        return $this->updateUrl($url, ['query' => ['filter' => null, 'page' => 1]]);
+        return $this->updateUrl($url, [
+            'query' => $this->buildQueryArray(
+                ['filter' => null, 'page' => 1],
+                $componentId
+            )
+        ]);
     }
 
-    public function updatePagerUrl($url, $page)
+    public function updatePagerUrl($url, $page, $componentId = null)
     {
-        return $this->updateUrl($url, ['query' => ['page' => $page]]);
+        return $this->updateUrl($url, [
+            'query' => $this->buildQueryArray(
+                ['page' => $page],
+                $componentId)
+        ]);
     }
 
     public function parseUrl($url)
     {
         $components = parse_url($url);
         if (isset($components['query'])) {
-            $qs = $components['query'];
-            parse_str($qs, $components['query']);
+            parse_str($components['query'], $components['query']);
         }
 
         return $components;
@@ -53,10 +70,15 @@ class UrlHelper
         $pass = isset($components['pass']) ? ':' . $components['pass'] : '';
         $pass = ($user || $pass) ? "$pass@" : '';
         $path = isset($components['path']) ? $components['path'] : '';
-        $query = isset($components['query']) ? '?' . (is_array($components['query']) ? urldecode(http_build_query($components['query'])) : $components['query']) : '';
+        $query = isset($components['query']) ? '?' . (is_array($components['query']) ? http_build_query($components['query']) : $components['query']) : '';
         $fragment = isset($components['fragment']) ? '#' . $components['fragment'] : '';
 
         return $scheme . $user . $pass . $host . $port . $path . $query . $fragment;
+    }
+
+    private function buildQueryArray(array $query, $componentId = null)
+    {
+        return null !== $componentId ? [$componentId => $query] : $query;
     }
 
     private function fixColumn($column)

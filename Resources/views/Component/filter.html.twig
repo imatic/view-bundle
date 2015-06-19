@@ -6,7 +6,7 @@
 {% block filter %}
     {% spaceless %}
         {% set uri = uri|default(app.request.uri) %}
-        {% set uri = imatic_view_update_filter_url(uri) %}
+        {% set uri = imatic_view_update_filter_url(uri, componentId|default(none)) %}
         {% if filter is not defined and display_criteria is defined %}
             {% set filter = display_criteria.filter %}
         {% endif %}
