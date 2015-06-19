@@ -104,13 +104,14 @@ module Imatic.View.Ajaxify.Document {
          */
         private onClick = (event: JQueryEventObject): void => {
             var element = <HTMLElement> event.target;
-
             
             if (
                 this.linkHandler.isValidElement(element)
                 && this.isValidElement(element)
                 && this.linkHandler.isValidEvent(event)
             ) {
+                var link = this.linkHandler.getInstance(element);
+
                 var container = null;
                 try {
                     container = this.containerHandler.findInstanceForElement(element);
@@ -119,8 +120,6 @@ module Imatic.View.Ajaxify.Document {
                         throw e;
                     }
                 }
-
-                var link = this.linkHandler.getInstance(element);
 
                 if (this.dispatchActions(link.createActions(), container)) {
                     event.preventDefault();
@@ -140,6 +139,8 @@ module Imatic.View.Ajaxify.Document {
                 this.formHandler.isValidElement(element)
                 && this.isValidElement(element)
             ) {
+                var form = this.formHandler.getInstance(element);
+
                 var container = null;
                 try {
                     container = this.containerHandler.findInstanceForElement(element);
@@ -148,8 +149,6 @@ module Imatic.View.Ajaxify.Document {
                         throw e;
                     }
                 }
-
-                var form = this.formHandler.getInstance(element);
 
                 if (this.dispatchActions(form.createActions(), container)) {
                     event.preventDefault();

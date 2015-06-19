@@ -10,6 +10,14 @@
     opacity: 1;
 }
 
+/* Busy modals */
+.modal.imatic-view-ajaxify-busy {
+    opacity: 1;
+}
+.modal.imatic-view-ajaxify-busy div.modal-content > div {
+    opacity: 0.5;
+}
+
 /* Widgets */
 a[data-action] {
     cursor: pointer;

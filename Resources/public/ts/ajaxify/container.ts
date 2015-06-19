@@ -334,15 +334,21 @@ module Imatic.View.Ajaxify.Container {
      */
     export class Container extends Object implements ContainerInterface
     {
+        public containerHandler: ContainerHandler;
+
+        private _element: HTMLElement;
         private currentAction: ActionInterface;
         private currentRequest: RequestInfo = null;
         private currentRequestInitiator: WidgetInterface = null;
 
         constructor(
-            public containerHandler: ContainerHandler,
-            public element: HTMLElement = null
+            containerHandler: ContainerHandler,
+            element: HTMLElement = null
         ) {
             super();
+
+            this.containerHandler = containerHandler;
+            this._element = element;
         }
 
         destroy(): void {
@@ -352,16 +358,20 @@ module Imatic.View.Ajaxify.Container {
         }
 
         loadOptions(): ConfigurationInterface {
-            if (this.element) {
-                return Ajaxify.configBuilder.buildFromDom(this.element);
+            var element = this.getElement();
+
+            if (element) {
+                return Ajaxify.configBuilder.buildFromDom(element);
             } else {
                 return Ajaxify.configBuilder.buildFromData({});
             }
         }
 
         getId(): string {
-            if (this.element && this.element.id) {
-                return this.element.id;
+            var element = this.getElement();
+
+            if (element && element.id) {
+                return element.id;
             } else {
                 return null;
             }
@@ -388,11 +398,11 @@ module Imatic.View.Ajaxify.Container {
         }
 
         getElement(): HTMLElement {
-            return this.element;
+            return this._element;
         }
 
         setContent(content: JQuery): void {
-            jQuery(this.element)
+            jQuery(this.getElement())
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content.contents())
@@ -426,8 +436,10 @@ module Imatic.View.Ajaxify.Container {
          */
         onActionStart = (event: ActionEvent): void => {
             // add busy class
-            if (this.element) {
-                jQuery(this.element).addClass(CssClasses.COMPONENT_BUSY);
+            var elem = this.getElement();
+
+            if (elem) {
+                jQuery(elem).addClass(CssClasses.COMPONENT_BUSY);
             }
         }
 
@@ -435,11 +447,12 @@ module Imatic.View.Ajaxify.Container {
          * Handle action's completion
          */
         onActionComplete = (event: ActionEvent): void => {
+            var elem = this.getElement();
             var elementId = this.getId();
 
             // remove busy class
-            if (this.element) {
-                jQuery(this.element).removeClass(CssClasses.COMPONENT_BUSY);
+            if (elem) {
+                jQuery(elem).removeClass(CssClasses.COMPONENT_BUSY);
             }
 
             // handle response
@@ -469,9 +482,11 @@ module Imatic.View.Ajaxify.Container {
         }
 
         getParent(): ContainerInterface {
-            if (this.element) {
+            var element = this.getElement();
+
+            if (element) {
                 try {
-                    return this.containerHandler.findInstanceForElement(<HTMLElement> this.element.parentNode, false);
+                    return this.containerHandler.findInstanceForElement(<HTMLElement> element.parentNode, false);
                 } catch (e) {
                     if (!(e instanceof ContainerNotFoundException)) {
                         throw e;

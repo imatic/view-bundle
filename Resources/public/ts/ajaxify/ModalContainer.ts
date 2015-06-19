@@ -111,8 +111,9 @@ module Imatic.View.Ajaxify.ModalContainer {
                 null
             );
 
-            container.widgetHandler = this.widgetHandler;
-            container.originalTrigger = trigger;
+            if (this.widgetHandler.hasInstance(trigger)) {
+                container.originalTrigger = this.widgetHandler.getInstance(trigger);
+            }
 
             return container;
         }
@@ -123,8 +124,7 @@ module Imatic.View.Ajaxify.ModalContainer {
      */
     export class ModalContainer extends Container
     {
-        widgetHandler: WidgetHandler;
-        originalTrigger: HTMLElement;
+        originalTrigger: WidgetInterface;
 
         private modal = new Modal();
         private actionInitiator: WidgetInterface;
@@ -144,10 +144,8 @@ module Imatic.View.Ajaxify.ModalContainer {
                 this.modal.destroy();
             }
 
-            if (this.originalTrigger && this.widgetHandler.hasInstance(this.originalTrigger)) {
-                var originalTriggerWidget = this.widgetHandler.getInstance(this.originalTrigger);
-
-                this.executeOnClose(originalTriggerWidget, originalTriggerWidget.getOption('modalOnClose'));
+            if (this.originalTrigger) {
+                this.executeOnClose(this.originalTrigger, this.originalTrigger.getOption('modalOnClose'));
             }
 
             super.destroy();
@@ -156,21 +154,21 @@ module Imatic.View.Ajaxify.ModalContainer {
         /**
          * Execute on close action
          */
-        private executeOnClose(originalTriggerWidget: WidgetInterface, onClose: any) {
+        private executeOnClose(originalTrigger: WidgetInterface, onClose: any) {
             var actions;
 
             if (onClose) {
                 // load on close
-                actions = Ajaxify.actionHelper.parseActionString(onClose, originalTriggerWidget);
+                actions = Ajaxify.actionHelper.parseActionString(onClose, originalTrigger);
             } else if (this.resendResponse) {
                 // resend response
                 this.resendResponse.flashes = [];
-                actions = [new ResponseAction(originalTriggerWidget, this.resendResponse)];
+                actions = [new ResponseAction(originalTrigger, this.resendResponse)];
                 this.resendResponse = null;
             }
 
             if (actions) {
-                jQuery(originalTriggerWidget.getElement()).trigger(
+                jQuery(originalTrigger.getElement()).trigger(
                     jQuery.Event(DomEvents.ACTIONS, {actions: actions})
                 );
             }
@@ -222,14 +220,16 @@ module Imatic.View.Ajaxify.ModalContainer {
         }
 
         getElement(): HTMLElement {
-            return null;
+            if (this.modal.hasElement()) {
+                return this.modal.getElement();
+            }
         }
 
         setContent(content: JQuery): void {
             if (!this.actionInitiator) {
                 throw new Error('Cannot set content when action initiator is not yet known');
             }
-            var options = this.actionInitiator.getOptions();
+            var options = (this.originalTrigger ? this.originalTrigger: this.actionInitiator).getOptions();
 
             var title = '';
             var footer = null;
@@ -282,7 +282,7 @@ module Imatic.View.Ajaxify.ModalContainer {
         getParent(): ContainerInterface {
             if (this.originalTrigger) {
                 try {
-                    return this.containerHandler.findInstanceForElement(<HTMLElement> this.originalTrigger.parentNode, false);
+                    return this.containerHandler.findInstanceForElement(<HTMLElement> this.originalTrigger.getElement().parentNode, false);
                 } catch (e) {
                     if (!(e instanceof ContainerNotFoundException)) {
                         throw e;
