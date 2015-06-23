@@ -11,6 +11,7 @@ module Imatic.View.Ajaxify.Ajax {
 
     "use_strict";
 
+    import Ajaxify                  = Imatic.View.Ajaxify;
     import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import FlashMessageInterface    = Imatic.View.Ajaxify.Message.FlashMessageInterface;
     import HtmlFragment             = Imatic.View.Ajaxify.Html.HtmlFragment;
@@ -46,6 +47,16 @@ module Imatic.View.Ajaxify.Ajax {
             }
         }
 
+        /**
+         * Append a key-value pair to the data
+         */
+        appendData(key: string, value: any): void {
+            this.data = Ajaxify.requestHelper.appendData(this.data, key, value);
+        }
+
+        /**
+         * See if any data has been set
+         */
         hasData(): boolean {
             if (
                 this.data
@@ -100,6 +111,30 @@ module Imatic.View.Ajaxify.Ajax {
             requestInfo.contentSelector = contentSelector || null;
 
             return requestInfo;
+        }
+
+        /**
+         * Append a key-value pair to the given data
+         */
+        appendData(data: any, key: string, value: any): any {
+            if (data && ('string' === typeof data || !jQuery.isEmptyObject(data))) {
+                if ('string' === typeof data) {
+                    // string
+                    data += '&' + key + '=' + encodeURIComponent(value);
+                } else if ('FormData' in Ajaxify.domWindow && data instanceof FormData) {
+                    // FormData
+                    data.append(key, value);
+                } else {
+                    // plain object
+                    data[key] = value;
+                }
+            } else {
+                // create a plain object
+                data = {};
+                data[key] = value;
+            }
+
+            return data;
         }
     }
 
@@ -178,16 +213,11 @@ module Imatic.View.Ajaxify.Ajax {
             var url = this.info.url || '';
             var method = (this.info.method || 'GET').toUpperCase();
             var data = this.info.data || {};
-            var headers = this.info.headers || {};
+            var headers = this.info.headers || {};            
 
-            // convert methods other than GET and POST into POST + _method
+            // convert methods other than GET and POST into POST + _method parameter
             if ('GET' !== method && 'POST' !== method) {
-                if ('object' === typeof data) {
-                    data['_method'] = method;
-                } else if ('string' === typeof data) {
-                    data += (data.length > 0 ? '&' : '') + '_method=' + method;
-                }
-
+                data = Ajaxify.requestHelper.appendData(data, '_method', method);
                 method = 'POST';
             }
 
@@ -210,6 +240,11 @@ module Imatic.View.Ajaxify.Ajax {
                 }
             };
 
+            if ('FormData' in Ajaxify.domWindow && data instanceof FormData) {
+                options['processData'] = false;
+                options['contentType'] = false;
+            }
+
             // execute request
             this.xhr = jQuery.ajax(options);
 
@@ -231,13 +266,13 @@ module Imatic.View.Ajaxify.Ajax {
             var data;
             var flashes = [];
 
-            // process data according to it's expected type
+            // process data according to its expected type
             switch (request.getDataType()) {
                 case DataType.TEXT:
                     data = xhr.responseText;
                     break;
                 case DataType.HTML:
-                    data = this.processHtmlData(xhr.responseText, request.getInfo().contentSelector);
+                    data = this.parseHtml(xhr.responseText, request.getInfo().contentSelector);
                     break;
                 case DataType.JSON:
                     if (xhr.responseText) {
@@ -280,9 +315,9 @@ module Imatic.View.Ajaxify.Ajax {
         }
 
         /**
-         * Process HTML data
+         * Process HTML response
          */
-        private processHtmlData(html: string, contentSelector: string): JQuery {
+        private parseHtml(html: string, contentSelector: string): JQuery {
             var result;
             var fragment = new HtmlFragment(html);
 

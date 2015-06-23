@@ -180,7 +180,7 @@ table.table-auto {
     }
 }
 
-// modal
+// === Modals ===
 @media (min-width: 768px) {
     .modal-dialog.modal-max {
         width: 90%; /* fallback */
@@ -188,17 +188,17 @@ table.table-auto {
     }
 }
 
-// alerts (styling error message type)
+// === Alerts ===
 .alert-error {
     .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);
 }
 
-// select2
+// === Select2 ===
 .select2-container {
     width: 100%;
 }
 
-// forms
+// === Forms ===
 .imatic-view-form.form-horizontal {
     label {
         clear: left;
@@ -219,6 +219,10 @@ table.table-auto {
 label.required:before {
     content: "*";
     color: @brand-danger;
+}
+
+input[type=file].form-control {
+    height:auto;
 }
 
 // === Variables ===

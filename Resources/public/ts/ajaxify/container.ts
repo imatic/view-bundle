@@ -360,11 +360,10 @@ module Imatic.View.Ajaxify.Container {
         loadOptions(): ConfigurationInterface {
             var element = this.getElement();
 
-            if (element) {
-                return Ajaxify.configBuilder.buildFromDom(element);
-            } else {
-                return Ajaxify.configBuilder.buildFromData({});
-            }
+            return (element
+                ? Ajaxify.configBuilder.buildFromDom(element)
+                : Ajaxify.configBuilder.buildFromData({})
+            );
         }
 
         getId(): string {

@@ -184,13 +184,11 @@
             into that container when activated (clicked).
         </p>
 
-
         {% example %}
             <div data-role="container">
                 <a href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}">I am a link widget :)</a>
             </div>
         {% endexample %}
-
 
         <p>
             As noted in the <a href="#widgets">widgets section</a>, any widget
@@ -210,7 +208,6 @@
                 I am the container
             </div>
         {% endexample %}
-
 
         <h4>Supported attributes</h4>
 
@@ -289,7 +286,6 @@
             <div data-role="container" id="demo-form-result"></div>
         {% endexample %}
 
-
         <h4>Submit buttons</h4>
         
         <ul>
@@ -297,6 +293,13 @@
             <li>The <code>formmethod</code> and <code>formaction</code> attributes are supported.</li>
         </ul>
 
+        <h4>File uploads</h4>
+
+        <ul>
+            <li>File uploads are supported if the browser supports <code>FormData</code>.</li>
+            <li>If <code>FormData</code> is not supported, any form with <code>enctype="multipart/form-data"</code>
+                will be submitted the standard way (without using XHR).</li>
+        </ul>
 
         <h4>Supported attributes</h4>
 
@@ -492,11 +495,6 @@
             </li>
         </ul>
 
-        <p>
-
-
-        </p>
-
         {% example %}
             <a
                 href="{{ path('imatic_view_demo_ajaxify_flashestest') }}"
@@ -564,7 +562,6 @@
                 Warning! Anchors may interfere with correct behaviour. See <a href="https://github.com/browserstate/history.js/issues/276">https://github.com/browserstate/history.js/issues/276</a>.
             </p>
         </div>
-
         
         {% example %}
         <div id="history-example" data-role="container" data-history="true">
@@ -596,7 +593,6 @@
                 </tr>
             </tbody>
         </table>
-
 
         <h4>Behavior</h4>
 

@@ -20,17 +20,19 @@ module Imatic.View.Ajaxify {
     import CloseModalAction             = Imatic.View.Ajaxify.ModalContainer.CloseModalAction;
 
     // global components
-    export var domDocument;
-    export var documentHandler;
-    export var configBuilder;
-    export var actionHelper;
-    export var requestHelper;
+    export var domWindow : Window;
+    export var domDocument: HTMLDocument;
+    export var documentHandler : HTMLDocumentHandler;
+    export var configBuilder : ConfigurationBuilder;
+    export var actionHelper: ActionHelper;
+    export var requestHelper: RequestHelper;
 
     /**
      * Initialize ajaxify
      */
-    export function init(d: HTMLDocument)
+    export function init(w: Window, d: HTMLDocument)
     {
+        domWindow = w;
         domDocument = d;
 
         // document handler
@@ -54,5 +56,6 @@ module Imatic.View.Ajaxify {
 }
 
 declare var document: HTMLDocument;
+declare var window: Window;
 
-Imatic.View.Ajaxify.init(document);
+Imatic.View.Ajaxify.init(window, document);

@@ -78,8 +78,9 @@ module Imatic.View.Ajaxify.Modal {
             // - shown.bs.modal cannot be used because it waits for the animations
             var backdropMethod = modal['backdrop'];
             modal['backdrop'] = (): void => {
-                backdropMethod.apply(modal, arguments);
                 this.updateZIndexes();
+
+                backdropMethod.apply(modal, arguments);
             };
         };
 
@@ -106,6 +107,7 @@ module Imatic.View.Ajaxify.Modal {
         private updateZIndexes(): void {
             var modals = jQuery('div.modal', Ajaxify.domDocument.body);
             var zIndex = null;
+
             for (var i = 0; i < modals.length; ++i) {
                 var modal = jQuery(modals[i]);
                 var modalObj = modal.data('bs.modal');
@@ -119,7 +121,12 @@ module Imatic.View.Ajaxify.Modal {
                 modal.css('z-index', zIndex);
 
                 if (modalObj['$backdrop']) {
-                    modalObj['$backdrop'].css('z-index', zIndex - 5);
+                    if (i === modals.length - 1) {
+                        modalObj['$backdrop'].css('z-index', zIndex - 5);
+                        modalObj['$backdrop'].css('visibility', 'visible');
+                    } else {
+                        modalObj['$backdrop'].css('visibility', 'hidden');
+                    }
                 }
             }
         }

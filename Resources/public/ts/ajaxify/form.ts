@@ -113,56 +113,80 @@ module Imatic.View.Ajaxify.Form {
 
         doCreateActions(): ActionInterface[] {
             var form = <HTMLFormElement> this.element;
-            var formData = jQuery(form).serializeArray();
+            var formData;
+            var formTarget = form.getAttribute('target');
 
             // get used submit button
             var submitButton = this.getUsedSubmitButton(form);
 
-            // abort on non-ajaxify submit buttons
-            if (submitButton && !Ajaxify.documentHandler.isValidElement(submitButton)) {
-                return null;
+            // see if the form can be ajaxified
+            if (
+                // ignore forms that target frames/new windows
+                (!formTarget || '_self' === formTarget.toLowerCase())
+                // ignore forms submitted by a non-ajaxified submit buttons
+                && (!submitButton || Ajaxify.documentHandler.isValidElement(submitButton))
+                // ignore forms whose data cannot be serialized for XHR
+                && false !== (formData = this.getFormData())
+            ) {
+                // add used submit button's name to the data
+                if (submitButton && submitButton.name) {
+                    formData = Ajaxify.requestHelper.appendData(
+                        formData,
+                        submitButton.name,
+                        submitButton.value || '1'
+                    );
+                }
+
+                // determine url
+                var url = submitButton && submitButton.hasAttribute('formaction')
+                    ? submitButton.getAttribute('formaction')
+                    : form.action
+                ;
+
+                // determine method
+                var method = submitButton && submitButton.hasAttribute('formmethod')
+                    ? submitButton.getAttribute('formmethod')
+                    : form.method || 'GET'
+                ;
+
+                // create action
+                var action = new RequestAction(
+                    this,
+                    new RequestInfo(
+                        url,
+                        method,
+                        formData,
+                        this.getOption('contentSelector') || null
+                    )
+                );
+
+                return [action];
             }
 
-            // add used submit button's name to the data
-            if (submitButton && submitButton.name) {
-                formData.push({
-                    name: submitButton.name,
-                    value: submitButton.value || '1'
-                });
-            }
-
-            // determine url
-            var url;
-            if (submitButton && submitButton.hasAttribute('formaction')) {
-                url = submitButton.getAttribute('formaction');
-            } else {
-                url = form.action;
-            }
-
-            // determine method
-            var method = 'GET';
-            if (submitButton && submitButton.hasAttribute('formmethod')) {
-                method = submitButton.getAttribute('formmethod');
-            } else if (form.method) {
-                method = form.method;
-            }
-
-            // create action
-            var action = new RequestAction(
-                this,
-                new RequestInfo(
-                    url,
-                    method,
-                    formData,
-                    this.getOption('contentSelector') || null
-                )
-            );
-
-            return [action];
+            return [];
         }
 
         getDefaultConfirmMessage(): string {
             return 'Are you sure you want to submit the entered data?';
+        }
+
+        /**
+         * Get current form data
+         *
+         * Returns FALSE if the data cannot be serialized for AJAX.
+         */
+        getFormData(): any {
+            var form = <HTMLFormElement> this.element;
+
+            if ('multipart/form-data' === form.enctype.toLowerCase()) {
+                if ('FormData' in Ajaxify.domWindow) {
+                    return new FormData(form);
+                } else {
+                    return false;
+                }
+            } else {
+                return jQuery(form).serializeArray();
+            }
         }
 
         /**

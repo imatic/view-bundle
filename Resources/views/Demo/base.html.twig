@@ -7,7 +7,7 @@
     'vendor/highlightjs/highlight.pack.js'
     output='js/demo-combined.js' %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script>jQuery(function () { hljs.initHighlightingOnLoad(); })</script>
     {% endjavascripts %}
 {% endblock %}
 

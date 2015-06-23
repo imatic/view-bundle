@@ -45,7 +45,7 @@ module Imatic.View.Ajaxify.ModalContainer {
      * If you need to change the defaults at runtime, use:
      * imatic.Ajaxify.configBuilder.addDefaults({someKey: 'someValue'})
      */
-    export var ModalConfigurationDefaults = {
+    export var ModalConfigurationDefaults: ConfigurationInterface = {
         modalSize: ModalSize.NORMAL,
         modalClosable: true,
         modalTitle: '',
@@ -136,7 +136,10 @@ module Imatic.View.Ajaxify.ModalContainer {
         }
 
         loadOptions(): ConfigurationInterface {
-            return Ajaxify.configBuilder.buildFromDom(this.originalTrigger);
+            return (this.originalTrigger
+                ? this.originalTrigger.getOptions()
+                : Ajaxify.configBuilder.buildFromData({})
+            );
         }
 
         destroy(): void {

@@ -372,7 +372,7 @@ module Imatic.View.Ajaxify.Action {
                     // change the URL
                     info.url = currentRequest.url;
 
-                    // change the data if the request method
+                    // change the data too if the request method
                     // is GET and the request has no data of its own
                     if (
                         'GET' === info.method
