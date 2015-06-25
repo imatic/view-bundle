@@ -1,6 +1,5 @@
 /// <reference path="Message.ts"/>
 /// <reference path="Html.ts"/>
-/// <reference path="Jquery.ts"/>
 
 /**
  * Imatic view ajaxify ajax module
@@ -12,7 +11,6 @@ module Imatic.View.Ajaxify.Ajax {
     "use_strict";
 
     import Ajaxify                  = Imatic.View.Ajaxify;
-    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import FlashMessageInterface    = Imatic.View.Ajaxify.Message.FlashMessageInterface;
     import HtmlFragment             = Imatic.View.Ajaxify.Html.HtmlFragment;
 
@@ -62,7 +60,7 @@ module Imatic.View.Ajaxify.Ajax {
                 this.data
                 && (
                     'string' === typeof this.data
-                    || !jQuery.isEmptyObject(this.data)
+                    || !$.isEmptyObject(this.data)
                 )
             ) {
                 return true;
@@ -95,8 +93,8 @@ module Imatic.View.Ajaxify.Ajax {
 
             if (match) {
                 method = match[1];
-                url = jQuery.trim(match[2]);
-                contentSelector = jQuery.trim(match[3]);
+                url = $.trim(match[2]);
+                contentSelector = $.trim(match[3]);
             }
 
             if ('@page' === url) {
@@ -117,11 +115,11 @@ module Imatic.View.Ajaxify.Ajax {
          * Append a key-value pair to the given data
          */
         appendData(data: any, key: string, value: any): any {
-            if (data && ('string' === typeof data || !jQuery.isEmptyObject(data))) {
+            if (data && ('string' === typeof data || !$.isEmptyObject(data))) {
                 if ('string' === typeof data) {
                     // string
                     data += '&' + key + '=' + encodeURIComponent(value);
-                } else if ('FormData' in Ajaxify.domWindow && data instanceof FormData) {
+                } else if ('FormData' in window && data instanceof FormData) {
                     // FormData
                     data.append(key, value);
                 } else {
@@ -208,8 +206,8 @@ module Imatic.View.Ajaxify.Ajax {
         /**
          * Perform the request
          */
-        execute(): jQuery.Promise {
-            var deferred = jQuery.Deferred();
+        execute(): JQueryPromise<any> {
+            var deferred = $.Deferred();
             var url = this.info.url || '';
             var method = (this.info.method || 'GET').toUpperCase();
             var data = this.info.data || {};
@@ -240,13 +238,13 @@ module Imatic.View.Ajaxify.Ajax {
                 }
             };
 
-            if ('FormData' in Ajaxify.domWindow && data instanceof FormData) {
+            if ('FormData' in window && data instanceof FormData) {
                 options['processData'] = false;
                 options['contentType'] = false;
             }
 
             // execute request
-            this.xhr = jQuery.ajax(options);
+            this.xhr = $.ajax(options);
 
             return deferred.promise();
         }
@@ -276,7 +274,7 @@ module Imatic.View.Ajaxify.Ajax {
                     break;
                 case DataType.JSON:
                     if (xhr.responseText) {
-                        data = jQuery.parseJSON(xhr.responseText);
+                        data = $.parseJSON(xhr.responseText);
                     } else {
                         data = null;
                     }
@@ -288,14 +286,14 @@ module Imatic.View.Ajaxify.Ajax {
             // parse flash messages
             var flashesJson = xhr.getResponseHeader('X-Flash-Messages');
             if (flashesJson) {
-                flashes = <FlashMessageInterface[]> jQuery.parseJSON(flashesJson);
+                flashes = <FlashMessageInterface[]> $.parseJSON(flashesJson);
             }
 
             // parse title
             var title, fullTitle;
             var titleJson = xhr.getResponseHeader('X-Title');
             if (titleJson) {
-                var titles = jQuery.parseJSON(titleJson);
+                var titles = $.parseJSON(titleJson);
                 title = titles['title'];
                 fullTitle = titles['fullTitle'];
             }

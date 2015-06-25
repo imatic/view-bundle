@@ -4,7 +4,6 @@
 /// <reference path="Action.ts"/>
 /// <reference path="Message.ts"/>
 /// <reference path="Css.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="History.ts"/>
 /// <reference path="Ajax.ts"/>
 /// <reference path="Dom.ts"/>
@@ -21,7 +20,6 @@ module Imatic.View.Ajaxify.Container {
     "use_strict";
 
     import Ajaxify                  = Imatic.View.Ajaxify;
-    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import Object                   = Imatic.View.Ajaxify.Object.Object;
     import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
     import ConfigurationInterface   = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
@@ -137,7 +135,7 @@ module Imatic.View.Ajaxify.Container {
          * Validate given element
          */
         isValidElement(element: HTMLElement): boolean {
-            return jQuery(element).is(this.selector);
+            return $(element).is(this.selector);
         }
 
         /**
@@ -155,14 +153,14 @@ module Imatic.View.Ajaxify.Container {
          * Check for container instance
          */
         hasInstance(containerElement: HTMLElement): boolean {
-            return jQuery(containerElement).data(this.instanceDataKey) ? true : false;
+            return $(containerElement).data(this.instanceDataKey) ? true : false;
         }
 
         /**
          * Get container instance from the given element
          */
         getInstance(containerElement: HTMLElement, autoCreate = false): ContainerInterface {
-            var container = jQuery(containerElement).data(this.instanceDataKey);
+            var container = $(containerElement).data(this.instanceDataKey);
             if (!container) {
                 if (!autoCreate) {
                     throw new ContainerNotFoundException('Container instance not found');
@@ -180,7 +178,7 @@ module Imatic.View.Ajaxify.Container {
          * Set container instance on the given element
          */
         setInstance(containerElement: HTMLElement, container: ContainerInterface): void {
-            jQuery(containerElement)
+            $(containerElement)
                 .data(this.instanceDataKey, container)
                 .addClass(CssClasses.CONTAINER)
             ;
@@ -227,7 +225,7 @@ module Imatic.View.Ajaxify.Container {
          */
         findInstanceForElement(element: HTMLElement, considerTarget = true): ContainerInterface {
             return this.findInstanceForTarget(
-                considerTarget ? jQuery(element).data('target') : null,
+                considerTarget ? $(element).data('target') : null,
                 element
             );
         }
@@ -238,10 +236,10 @@ module Imatic.View.Ajaxify.Container {
         getElementFromContext(element: HTMLElement, parentsOnly = false): HTMLElement {
             var containerElement;
 
-            if (!parentsOnly && jQuery(element).is(this.selector)) {
+            if (!parentsOnly && $(element).is(this.selector)) {
                 containerElement = element;
             } else {
-                var parentContainers = jQuery(element).parents(this.selector);
+                var parentContainers = $(element).parents(this.selector);
                 if (parentContainers.length < 1) {
                     throw new ContainerNotFoundException('Could not determine the container from context');
                 }
@@ -256,7 +254,7 @@ module Imatic.View.Ajaxify.Container {
          * Get container element using given selector
          */
         getElementFromSelector(selector: string): HTMLElement {
-            var containerElement = jQuery(selector)[0];
+            var containerElement = $(selector)[0];
             if (!containerElement) {
                 throw new ContainerNotFoundException('Container specified by selector "' + selector + '" was not found');
             }
@@ -275,13 +273,13 @@ module Imatic.View.Ajaxify.Container {
         findInstances(element?: HTMLElement): ContainerInterface[] {
             var self = this;
             var containers: ContainerInterface[] = [];
-            element = element || Ajaxify.domDocument.body;
+            element = element || document.body;
 
             if (this.isValidElement(element) && this.hasInstance(element)) {
                 containers.push(this.getInstance(element));
             }
 
-            jQuery('.' + CssClasses.CONTAINER, element).each(function () {
+            $('.' + CssClasses.CONTAINER, element).each(function () {
                 containers.push(self.getInstance(this));
             });
 
@@ -295,13 +293,13 @@ module Imatic.View.Ajaxify.Container {
          */
         findElements(element?: HTMLElement): HTMLElement[] {
             var elements: HTMLElement[] = [];
-            element = element || Ajaxify.domDocument.body;
+            element = element || document.body;
 
             if (this.isValidElement(element)) {
                 elements.push(element);
             }
 
-            jQuery(this.selector, element).each(function () {
+            $(this.selector, element).each(function () {
                 elements.push(this);
             });
 
@@ -401,7 +399,7 @@ module Imatic.View.Ajaxify.Container {
         }
 
         setContent(content: JQuery): void {
-            jQuery(this.getElement())
+            $(this.getElement())
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content.contents())
@@ -438,7 +436,7 @@ module Imatic.View.Ajaxify.Container {
             var elem = this.getElement();
 
             if (elem) {
-                jQuery(elem).addClass(CssClasses.COMPONENT_BUSY);
+                $(elem).addClass(CssClasses.COMPONENT_BUSY);
             }
         }
 
@@ -451,7 +449,7 @@ module Imatic.View.Ajaxify.Container {
 
             // remove busy class
             if (elem) {
-                jQuery(elem).removeClass(CssClasses.COMPONENT_BUSY);
+                $(elem).removeClass(CssClasses.COMPONENT_BUSY);
             }
 
             // handle response
@@ -476,8 +474,8 @@ module Imatic.View.Ajaxify.Container {
 
         handleFlashes(flashes: FlashMessageInterface[]): void {
             // trigger event
-            var event = jQuery.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
-            jQuery(this.getElement() || Ajaxify.domDocument.body).trigger(event);
+            var event = $.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
+            $(this.getElement() || document.body).trigger(event);
         }
 
         getParent(): ContainerInterface {

@@ -2,7 +2,6 @@
 /// <reference path="Configuration.ts"/>
 /// <reference path="Widget.ts"/>
 /// <reference path="Action.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Ajax.ts"/>
 
 /**
@@ -15,7 +14,6 @@ module Imatic.View.Ajaxify.Form {
     "use_strict";
 
     import Ajaxify              = Imatic.View.Ajaxify;
-    import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
     import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
     import Widget               = Imatic.View.Ajaxify.Widget.Widget;
     import WidgetHandler        = Imatic.View.Ajaxify.Widget.WidgetHandler;
@@ -48,7 +46,7 @@ module Imatic.View.Ajaxify.Form {
          * Validate given submit element
          */
         isValidSubmitElement(element: HTMLElement): boolean {
-            return jQuery(element).is(this.submitElementSelector);
+            return $(element).is(this.submitElementSelector);
         }
 
         /**
@@ -57,12 +55,12 @@ module Imatic.View.Ajaxify.Form {
         markSubmitElement(element: HTMLElement): void {
             var form = element['form'];
             if (form) {
-                var submitElements = jQuery(this.submitElementSelector, form);
+                var submitElements = $(this.submitElementSelector, form);
                 for (var i = 0; i < submitElements.length; ++i) {
-                    jQuery(submitElements[i]).removeAttr(this.submitMarkAttr);
+                    $(submitElements[i]).removeAttr(this.submitMarkAttr);
                 }
 
-                jQuery(element).attr(this.submitMarkAttr, 'true');
+                $(element).attr(this.submitMarkAttr, 'true');
             }
         }
 
@@ -179,13 +177,13 @@ module Imatic.View.Ajaxify.Form {
             var form = <HTMLFormElement> this.element;
 
             if ('multipart/form-data' === form.enctype.toLowerCase()) {
-                if ('FormData' in Ajaxify.domWindow) {
-                    return new FormData(form);
+                if ('FormData' in window) {
+                    return new (<any> FormData)(form); // https://github.com/Microsoft/TypeScript/issues/1074
                 } else {
                     return false;
                 }
             } else {
-                return jQuery(form).serializeArray();
+                return $(form).serializeArray();
             }
         }
 
@@ -193,9 +191,9 @@ module Imatic.View.Ajaxify.Form {
          * Determine used submit button
          */
         getUsedSubmitButton(form: HTMLFormElement): HTMLButtonElement {
-            var submitButton = jQuery('[' + this.submitMarkAttr + ']', form);
+            var submitButton = $('[' + this.submitMarkAttr + ']', form);
             if (submitButton.length < 1) {
-                submitButton = jQuery('input[type=submit], button[type=submit]');
+                submitButton = $('input[type=submit], button[type=submit]');
             }
 
             if (submitButton.length > 0) {

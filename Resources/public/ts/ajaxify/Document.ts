@@ -9,7 +9,6 @@
 /// <reference path="Modal.ts"/>
 /// <reference path="ModalContainer.ts"/>
 /// <reference path="VoidContainer.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Dom.ts"/>
 
 /**
@@ -22,7 +21,6 @@ module Imatic.View.Ajaxify.Document {
     "use_strict";
 
     import Ajaxify                      = Imatic.View.Ajaxify;
-    import jQuery                       = Imatic.View.Ajaxify.Jquery.jQuery;
     import DomEvents                    = Imatic.View.Ajaxify.Dom.DomEvents;
     import ContainerInterface           = Imatic.View.Ajaxify.Container.ContainerInterface;
     import ContainerHandler             = Imatic.View.Ajaxify.Container.ContainerHandler;
@@ -83,7 +81,7 @@ module Imatic.View.Ajaxify.Document {
          * Attach the handler
          */
         attach(): void {
-            jQuery(Ajaxify.domDocument)
+            $(document)
                 .on('click', this.onClick)
                 .on('submit', this.onSubmit)
                 .on(DomEvents.ACTIONS, this.onActions)
@@ -96,7 +94,7 @@ module Imatic.View.Ajaxify.Document {
          * Validate given element
          */
         isValidElement(element: HTMLElement): boolean {
-            return false !== jQuery(element).data('ajaxify');
+            return false !== $(element).data('ajaxify');
         }
 
         /**
@@ -205,11 +203,11 @@ module Imatic.View.Ajaxify.Document {
          */
         showFlashMessages(flashes: FlashMessageInterface[], originElement: HTMLElement): void {
             // trigger event
-            var event = jQuery.Event(DomEvents.RENDER_FLASH_MESSAGES, {
+            var event = $.Event(DomEvents.RENDER_FLASH_MESSAGES, {
                 flashes: flashes,
                 originElement: originElement,
             });
-            jQuery(Ajaxify.domDocument.body).trigger(event);
+            $(document.body).trigger(event);
 
             // default implementation
             if (false !== event.result) {
@@ -219,7 +217,7 @@ module Imatic.View.Ajaxify.Document {
 
                 for (var i = 0; i < flashes.length; ++i) {
                     body += '<div class="alert alert-' + flashes[i].type + '">'
-                        + jQuery('<div/>').text(flashes[i].message).html()
+                        + $('<div/>').text(flashes[i].message).html()
                         + '</div>'
                     ;
                 }
@@ -235,7 +233,7 @@ module Imatic.View.Ajaxify.Document {
         /**
          * Attempt to execute a list of actions
          */
-        private dispatchActions(actions: ActionInterface[], contextualContainer?: ContainerInterface): boolean {
+        private dispatchActions(actions: ActionInterface[], contextualContainer: ContainerInterface = null): boolean {
             var success = false;
 
             for (var i = 0; i < actions.length; ++i) {
@@ -268,17 +266,22 @@ module Imatic.View.Ajaxify.Document {
         /**
          * Attempt to execute a single action using the given container
          */
-        private dispatchAction(action: ActionInterface, container: ContainerInterface): boolean {
+        private dispatchAction(action: ActionInterface, container: ContainerInterface = null): boolean {
             var success = false;
 
             do {
                 if (action.supports(container)) {
+                    // compatible container found
                     success = true;
                     container.handleAction(action);
-                } else {
+                } else if (container) {
+                    // try parent container
                     container = container.getParent();
+                } else {
+                    // no more containers
+                    break;
                 }
-            } while (!success && container);
+            } while (!success);
 
             return success;
         }

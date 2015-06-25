@@ -1,5 +1,4 @@
 /// <reference path="Event.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Dom.ts"/>
 
 /**
@@ -12,7 +11,6 @@ module Imatic.View.Ajaxify.Modal {
     "use_strict";
 
     import Ajaxify      = Imatic.View.Ajaxify;
-    import jQuery       = Imatic.View.Ajaxify.Jquery.jQuery;
     import DomEvents    = Imatic.View.Ajaxify.Dom.DomEvents;
 
     /**
@@ -31,7 +29,7 @@ module Imatic.View.Ajaxify.Modal {
     export class ModalStackHandler
     {
         constructor() {
-            jQuery(Ajaxify.domDocument)
+            $(document)
                 .on('show.bs.modal', this.onModalShow)
                 .on('hidden.bs.modal', this.onModalHide)
                 .on('keydown', this.onKeydown)
@@ -42,7 +40,7 @@ module Imatic.View.Ajaxify.Modal {
          * Get the topmost modal dialog element
          */
         getTopmostModal(): HTMLElement {
-            var modals = jQuery('div.modal', Ajaxify.domDocument.body);
+            var modals = $('div.modal', document.body);
 
             var topmostIndex = null;
             var topmostZIndex = 0;
@@ -67,7 +65,7 @@ module Imatic.View.Ajaxify.Modal {
          * Handle onModalShow event
          */
         private onModalShow = (event: JQueryEventObject): void => {
-            var modal = jQuery(event.target).data('bs.modal');
+            var modal = $(event.target).data('bs.modal');
 
             // extend the backdrop() method to hook our logic
             // - the logic cannot be right here because the backdrop is not yet initialized
@@ -92,10 +90,10 @@ module Imatic.View.Ajaxify.Modal {
                 var topmostModal = this.getTopmostModal();
 
                 if (topmostModal) {
-                    var modal = jQuery(topmostModal).data('bs.modal');
+                    var modal = $(topmostModal).data('bs.modal');
 
                     if (true === modal.options.backdrop) {
-                        jQuery(topmostModal)['modal']('hide');
+                        $(topmostModal)['modal']('hide');
                     }
                 }
             }
@@ -105,11 +103,11 @@ module Imatic.View.Ajaxify.Modal {
          * Update existing modals
          */
         private updateModals(): void {
-            var modals = jQuery('div.modal', Ajaxify.domDocument.body);
+            var modals = $('div.modal', document.body);
             var zIndex = null;
 
             for (var i = 0; i < modals.length; ++i) {
-                var modal = jQuery(modals[i]);
+                var modal = $(modals[i]);
                 var modalObj = modal.data('bs.modal');
 
                 if (null === zIndex) {
@@ -131,9 +129,9 @@ module Imatic.View.Ajaxify.Modal {
             }
 
             if (modals.length > 0) {
-                jQuery(Ajaxify.domDocument.body).addClass('modal-open');
+                $(document.body).addClass('modal-open');
             } else {
-                jQuery(Ajaxify.domDocument.body).removeClass('modal-open');
+                $(document.body).removeClass('modal-open');
             }
         }
     }
@@ -162,7 +160,7 @@ module Imatic.View.Ajaxify.Modal {
             }
 
             // toggle footer
-            var footer = jQuery(this.getFooterElement());
+            var footer = $(this.getFooterElement());
             if (footer.is(':empty')) {
                 footer.hide();
             } else {
@@ -170,8 +168,8 @@ module Imatic.View.Ajaxify.Modal {
             }
 
             // toggle header
-            var title = jQuery(this.getTitleElement());
-            var header = jQuery(this.getHeaderElement());
+            var title = $(this.getTitleElement());
+            var header = $(this.getHeaderElement());
             if (title.is(':empty')) {
                 header.hide();
             } else {
@@ -187,7 +185,7 @@ module Imatic.View.Ajaxify.Modal {
                 options['backdrop'] = 'static';
             }
 
-            jQuery(this.element)['modal'](options);
+            $(this.element)['modal'](options);
         }
 
         /**
@@ -195,7 +193,7 @@ module Imatic.View.Ajaxify.Modal {
          */
         hide(): void {
             if (this.element) {
-                jQuery(this.element)['modal']('hide');
+                $(this.element)['modal']('hide');
             }
         }
 
@@ -207,7 +205,7 @@ module Imatic.View.Ajaxify.Modal {
                 var element = this.element;
                 this.element = null;
 
-                jQuery(element)
+                $(element)
                     .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                     .remove()
                 ;
@@ -240,7 +238,7 @@ module Imatic.View.Ajaxify.Modal {
                 this.create();
             }
 
-            var dialog = jQuery('div.modal-dialog', this.element);
+            var dialog = $('div.modal-dialog', this.element);
 
             dialog
                 .removeClass()
@@ -264,7 +262,7 @@ module Imatic.View.Ajaxify.Modal {
 
             this.closable = closable;
 
-            var closeButton = jQuery('div.modal-header > button.close', this.element);
+            var closeButton = $('div.modal-header > button.close', this.element);
             if (closable) {
                 closeButton.show();
             } else {
@@ -280,7 +278,7 @@ module Imatic.View.Ajaxify.Modal {
                 this.create();
             }
 
-            return jQuery('div.modal-header', this.element).get(0);
+            return $('div.modal-header', this.element).get(0);
         }
 
         /**
@@ -291,14 +289,14 @@ module Imatic.View.Ajaxify.Modal {
                 this.create();
             }
 
-            return jQuery('div.modal-header > h4.modal-title', this.element).get(0);
+            return $('div.modal-header > h4.modal-title', this.element).get(0);
         }
 
         /**
          * Set modal's title
          */
         setTitle(title: string): void {
-            jQuery(this.getTitleElement())
+            $(this.getTitleElement())
                 .text(title)
             ;
         }
@@ -311,14 +309,14 @@ module Imatic.View.Ajaxify.Modal {
                 this.create();
             }
 
-            return jQuery('div.modal-body', this.element).get(0);
+            return $('div.modal-body', this.element).get(0);
         }
 
         /**
          * Set modal's body content
          */
         setBody(content: any): void {
-            jQuery(this.getBodyElement())
+            $(this.getBodyElement())
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .empty()
                 .append(content)
@@ -334,14 +332,14 @@ module Imatic.View.Ajaxify.Modal {
                 this.create();
             }
 
-            return jQuery('div.modal-footer', this.element).get(0);
+            return $('div.modal-footer', this.element).get(0);
         }
 
         /**
          * Set modal's footer content
          */
         setFooter(content: any): void {
-            var footer = jQuery(this.getFooterElement());
+            var footer = $(this.getFooterElement());
 
             footer
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
@@ -369,9 +367,9 @@ module Imatic.View.Ajaxify.Modal {
                 + '</div>'
             ;
 
-            this.element = jQuery(html).appendTo(Ajaxify.domDocument.body)[0];
+            this.element = $(html).appendTo(document.body)[0];
 
-            jQuery(this.element).on('hidden.bs.modal', (): void => {
+            $(this.element).on('hidden.bs.modal', (): void => {
                 this.destroy();
             });
         }

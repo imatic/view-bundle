@@ -1,5 +1,3 @@
-/// <reference path="Jquery.ts"/>
-
 /**
  * Imatic view ajaxify configuration module
  *
@@ -8,8 +6,6 @@
 module Imatic.View.Ajaxify.Configuration {
 
     "use_strict";
-
-    import jQuery = Imatic.View.Ajaxify.Jquery.jQuery;
 
     /**
      * Configuration interface
@@ -49,14 +45,14 @@ module Imatic.View.Ajaxify.Configuration {
          * Add defaulconfiguration
          */
         addDefaults(data: ConfigurationInterface): void {
-            jQuery.extend(this.defaults, data);
+            $.extend(this.defaults, data);
         }
 
         /**
          * Build configuration using already existing data set
          */
         buildFromData(data: ConfigurationInterface): ConfigurationInterface {
-            var config = jQuery.extend({}, this.defaults, data);
+            var config = $.extend({}, this.defaults, data);
 
             this.process(config);
 
@@ -75,10 +71,10 @@ module Imatic.View.Ajaxify.Configuration {
             var data: ConfigurationInterface = {};
 
             for (var i = parentElements.length - 1; i >= 0; --i) {
-                jQuery.extend(data, jQuery(parentElements[i]).data());
+                $.extend(data, $(parentElements[i]).data());
             }
 
-            jQuery.extend(data, jQuery(baseElement).data());
+            $.extend(data, $(baseElement).data());
 
             return this.buildFromData(data);
         }

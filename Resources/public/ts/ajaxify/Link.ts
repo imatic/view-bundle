@@ -3,7 +3,6 @@
 /// <reference path="Widget.ts"/>
 /// <reference path="Css.ts"/>
 /// <reference path="Action.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Ajax.ts"/>
 
 /**
@@ -16,7 +15,6 @@ module Imatic.View.Ajaxify.Link {
     "use_strict";
 
     import Ajaxify              = Imatic.View.Ajaxify;
-    import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
     import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
     import Widget               = Imatic.View.Ajaxify.Widget.Widget;
     import WidgetHandler        = Imatic.View.Ajaxify.Widget.WidgetHandler;
@@ -51,9 +49,9 @@ module Imatic.View.Ajaxify.Link {
                 )
                 // check url/action attributes
                 && (
-                    jQuery(element).attr('href')
-                    || jQuery(element).data('href')
-                    || jQuery(element).data('action')
+                    $(element).attr('href')
+                    || $(element).data('href')
+                    || $(element).data('action')
                 )
             );
         }
@@ -99,7 +97,7 @@ module Imatic.View.Ajaxify.Link {
         create(element: HTMLElement): Link {
             var link = new Link(element);
 
-            link.url = jQuery(element).attr('href') || jQuery(element).data('href');
+            link.url = $(element).attr('href') || $(element).data('href');
 
             return link;
         }
@@ -118,7 +116,7 @@ module Imatic.View.Ajaxify.Link {
             var actionString = this.getOption('action');
 
             if (actionString) {
-                jQuery.merge(actions, Ajaxify.actionHelper.parseActionString(actionString, this));
+                $.merge(actions, Ajaxify.actionHelper.parseActionString(actionString, this));
             }
 
             if (this.url) {

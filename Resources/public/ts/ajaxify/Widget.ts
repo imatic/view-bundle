@@ -1,7 +1,6 @@
 /// <reference path="Object.ts"/>
 /// <reference path="Action.ts"/>
 /// <reference path="Css.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Configuration.ts"/>
 
 /**
@@ -14,7 +13,6 @@ module Imatic.View.Ajaxify.Widget {
     "use_strict";
 
     import Ajaxify                  = Imatic.View.Ajaxify;
-    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import Object                   = Imatic.View.Ajaxify.Object.Object;
     import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
     import ConfigurationInterface   = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
@@ -50,14 +48,14 @@ module Imatic.View.Ajaxify.Widget {
          * Check for widget instance
          */
         hasInstance(widgetElement: HTMLElement): boolean {
-            return jQuery(widgetElement).data(this.instanceDataKey) ? true : false;
+            return $(widgetElement).data(this.instanceDataKey) ? true : false;
         }
 
         /**
          * Get widget instance
          */
         getInstance(widgetElement: HTMLElement): WidgetInterface {
-            var widget = jQuery(widgetElement).data(this.instanceDataKey);
+            var widget = $(widgetElement).data(this.instanceDataKey);
             if (!widget) {
                 throw new Error('Widget instance not found'); // TODO: cutom exception?
             }
@@ -69,7 +67,7 @@ module Imatic.View.Ajaxify.Widget {
          * Set widget instance
          */
         setInstance(widgetElement: HTMLElement, widget: WidgetInterface): void {
-            jQuery(widgetElement)
+            $(widgetElement)
                 .data(this.instanceDataKey, widget)
                 .addClass(CssClasses.WIDGET)
             ;
@@ -83,11 +81,11 @@ module Imatic.View.Ajaxify.Widget {
             var selector = '.' + CssClasses.WIDGET;
             var widgets: WidgetInterface[] = [];
 
-            if (jQuery(element).is(selector) && this.hasInstance(element)) {
+            if ($(element).is(selector) && this.hasInstance(element)) {
                 widgets.push(this.getInstance(element));
             }
 
-            jQuery(selector, element).each(function () {
+            $(selector, element).each(function () {
                 widgets.push(self.getInstance(this));
             });
 
@@ -145,11 +143,11 @@ module Imatic.View.Ajaxify.Widget {
             for (var i = 0; i < actions.length; ++i) {
                 actions[i].listen('begin', (event: ActionEvent): void => {
                     if (0 === this.pendingActions.length) {
-                        this.busyElement = jQuery(this.element).is(':visible')
+                        this.busyElement = $(this.element).is(':visible')
                             ? this.element
-                            : jQuery(this.element).parents(':visible')[0] || this.element
+                            : $(this.element).parents(':visible')[0] || this.element
                         ;
-                        jQuery(this.busyElement).addClass(CssClasses.COMPONENT_BUSY);
+                        $(this.busyElement).addClass(CssClasses.COMPONENT_BUSY);
                     }
 
                     this.pendingActions.push(event.action);
@@ -161,7 +159,7 @@ module Imatic.View.Ajaxify.Widget {
                     );
 
                     if (0 === this.pendingActions.length) {
-                        jQuery(this.busyElement).removeClass(CssClasses.COMPONENT_BUSY);
+                        $(this.busyElement).removeClass(CssClasses.COMPONENT_BUSY);
                         this.busyElement = null;
                     }
                 });

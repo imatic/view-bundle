@@ -5,7 +5,6 @@
 /// <reference path="Form.ts"/>
 /// <reference path="Widget.ts"/>
 /// <reference path="Modal.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Dom.ts"/>
 
 /**
@@ -18,7 +17,6 @@ module Imatic.View.Ajaxify.ModalContainer {
     "use_strict";
 
     import Ajaxify                          = Imatic.View.Ajaxify;
-    import jQuery                           = Imatic.View.Ajaxify.Jquery.jQuery;
     import ConfigurationProcessorInterface  = Imatic.View.Ajaxify.Configuration.ConfigurationProcessorInterface;
     import ConfigurationInterface           = Imatic.View.Ajaxify.Configuration.ConfigurationInterface;
     import DomEvents                        = Imatic.View.Ajaxify.Dom.DomEvents;
@@ -171,8 +169,8 @@ module Imatic.View.Ajaxify.ModalContainer {
             }
 
             if (actions) {
-                jQuery(originalTrigger.getElement()).trigger(
-                    jQuery.Event(DomEvents.ACTIONS, {actions: actions})
+                $(originalTrigger.getElement()).trigger(
+                    $.Event(DomEvents.ACTIONS, {actions: actions})
                 );
             }
         }
@@ -202,7 +200,7 @@ module Imatic.View.Ajaxify.ModalContainer {
                     if (
                         event.response.successful
                         && this.actionInitiator instanceof Form
-                        && jQuery(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
+                        && $(this.modal.getElement()).has(this.actionInitiator.getElement()).length > 0
                     ) {
                         // close on form success
                         if (this.getOption('modalCloseOnFormSuccess')) {
@@ -244,10 +242,10 @@ module Imatic.View.Ajaxify.ModalContainer {
             // find title
             var titleElement;
             if (options['modalTitle'] && 'none' !== options['modalTitle']) {
-                titleElement = jQuery(options['modalTitle'], content).get(0);
+                titleElement = $(options['modalTitle'], content).get(0);
                 if (titleElement) {
-                    title = jQuery(titleElement).text();
-                    jQuery(titleElement).remove();
+                    title = $(titleElement).text();
+                    $(titleElement).remove();
                 }
             }
 
@@ -258,7 +256,7 @@ module Imatic.View.Ajaxify.ModalContainer {
 
             // find footer
             if (options['modalFooter']) {
-                footer = jQuery(options['modalFooter'], content);
+                footer = $(options['modalFooter'], content);
                 if (footer.length > 0) {
                     footer.detach();
                 } else {
@@ -269,7 +267,7 @@ module Imatic.View.Ajaxify.ModalContainer {
             // attach container instance to the modal's element
             var modalElement = this.modal.getElement();
             if (!this.containerHandler.hasInstance(modalElement)) {
-                jQuery(modalElement).attr('data-role', 'container');
+                $(modalElement).attr('data-role', 'container');
                 this.containerHandler.setInstance(modalElement, this);
             }
 
@@ -310,10 +308,10 @@ module Imatic.View.Ajaxify.ModalContainer {
             return container instanceof ModalContainer;
         }
 
-        doExecute(container: ContainerInterface): jQuery.Promise {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
             (<ModalContainer> container).getModal().hide();
 
-            return jQuery.Deferred().resolve().promise();
+            return $.Deferred().resolve().promise();
         }
     }
 

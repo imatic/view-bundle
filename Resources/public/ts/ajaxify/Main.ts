@@ -1,4 +1,5 @@
 /// <reference path="Document.ts"/>
+/// <reference path="../jquery/jquery.d.ts"/>
 
 /**
  * Imatic view ajaxify module
@@ -17,45 +18,30 @@ module Imatic.View.Ajaxify {
     import ActionHelper                 = Imatic.View.Ajaxify.Action.ActionHelper;
     import NoAction                     = Imatic.View.Ajaxify.Action.NoAction;
     import ClearAction                  = Imatic.View.Ajaxify.Action.ClearAction;
+    import ReloadPageAction             = Imatic.View.Ajaxify.Action.ReloadPageAction;
     import CloseModalAction             = Imatic.View.Ajaxify.ModalContainer.CloseModalAction;
 
-    // global components
-    export var domWindow : Window;
-    export var domDocument: HTMLDocument;
     export var documentHandler : HTMLDocumentHandler;
     export var configBuilder : ConfigurationBuilder;
     export var actionHelper: ActionHelper;
     export var requestHelper: RequestHelper;
 
-    /**
-     * Initialize ajaxify
-     */
-    export function init(w: Window, d: HTMLDocument)
-    {
-        domWindow = w;
-        domDocument = d;
+    // document handler
+    documentHandler = new HTMLDocumentHandler();
+    documentHandler.attach();
 
-        // document handler
-        documentHandler = new HTMLDocumentHandler();
-        documentHandler.attach();
+    // configuration builder
+    configBuilder = new ConfigurationBuilder();
+    configBuilder.addDefaults(ModalConfigurationDefaults);
+    configBuilder.addProcessor(new ModalConfigurationProcessor());
 
-        // configuration builder
-        configBuilder = new ConfigurationBuilder();
-        configBuilder.addDefaults(ModalConfigurationDefaults);
-        configBuilder.addProcessor(new ModalConfigurationProcessor());
+    // action helper
+    actionHelper = new ActionHelper();
+    actionHelper.addKeywordHandler('close-modal', CloseModalAction.keywordHandler);
+    actionHelper.addKeywordHandler('reload-page', ReloadPageAction.keywordHandler);
+    actionHelper.addKeywordHandler('clear', ClearAction.keywordHandler);
+    actionHelper.addKeywordHandler('noop', NoAction.keywordHandler);
 
-        // action helper
-        actionHelper = new ActionHelper();
-        actionHelper.addKeywordHandler('close-modal', CloseModalAction.keywordHandler);
-        actionHelper.addKeywordHandler('noop', NoAction.keywordHandler);
-        actionHelper.addKeywordHandler('clear', ClearAction.keywordHandler);
-
-        // request helper
-        requestHelper = new RequestHelper();
-    }
+    // request helper
+    requestHelper = new RequestHelper();
 }
-
-declare var document: HTMLDocument;
-declare var window: Window;
-
-Imatic.View.Ajaxify.init(window, document);

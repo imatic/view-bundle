@@ -1,5 +1,5 @@
+/// <reference path="Main.ts"/>
 /// <reference path="../history/history.d.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Ajax.ts"/>
 /// <reference path="Action.ts"/>
 /// <reference path="Container.ts"/>
@@ -15,7 +15,6 @@ module Imatic.View.Ajaxify.History {
     "use_strict";
 
     import Ajaxify              = Imatic.View.Ajaxify;
-    import jQuery               = Imatic.View.Ajaxify.Jquery.jQuery;
     import RequestInfo          = Imatic.View.Ajaxify.Ajax.RequestInfo;
     import DomEvents            = Imatic.View.Ajaxify.Dom.DomEvents;
     import RequestAction        = Imatic.View.Ajaxify.Action.RequestAction;
@@ -82,7 +81,7 @@ module Imatic.View.Ajaxify.History {
             if (state.data && state.data.containerStates) {
                 for (var i = 0; i < state.data.containerStates.length; ++i) {
                     var containerState = state.data.containerStates[i];
-                    var containerElement = Ajaxify.domDocument.getElementById(containerState.id);
+                    var containerElement = document.getElementById(containerState.id);
 
                     if (containerElement && containerHandler.hasInstance(containerElement)) {
                         var container = containerHandler.getInstance(containerElement);
@@ -102,8 +101,8 @@ module Imatic.View.Ajaxify.History {
                         // trigger action
                         var action = new HistoryStateChangeAction(null, requestInfo);
 
-                        jQuery(containerElement).trigger(
-                            jQuery.Event(DomEvents.ACTIONS, {actions: [action]})
+                        $(containerElement).trigger(
+                            $.Event(DomEvents.ACTIONS, {actions: [action]})
                         );
                     }
                 }
@@ -134,7 +133,7 @@ module Imatic.View.Ajaxify.History {
             // find all containers with enabled history
             for (var i = 0; i < containerElements.length; ++i) {
                 var containerElementId = containerHandler.getId(containerElements[i]);
-                if (containerElementId && jQuery(containerElements[i]).data('history')) {
+                if (containerElementId && $(containerElements[i]).data('history')) {
                     // store current state
                     var currentContainerRequest;
                     if (containerHandler.hasInstance(containerElements[i])) {
@@ -159,7 +158,7 @@ module Imatic.View.Ajaxify.History {
      */
     export class HistoryStateChangeAction extends RequestAction
     {
-        doExecute(container: ContainerInterface): jQuery.Promise {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
             var currentRequest = container.getCurrentRequest();
 
             // check container's current request
@@ -173,13 +172,13 @@ module Imatic.View.Ajaxify.History {
 
                 return super.doExecute(container);
             } else {
-                return jQuery.Deferred().resolve().promise();
+                return $.Deferred().resolve().promise();
             }
         }
     }
  
     // initialize on document ready
-    jQuery(window.document).ready(function () {
+    $(window.document).ready(function () {
         if (historyjsIsAvailable()) {
             // initialize
             HistoryHandler.initialize();

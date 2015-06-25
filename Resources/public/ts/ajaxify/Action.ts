@@ -14,7 +14,6 @@ module Imatic.View.Ajaxify.Action {
     "use_strict";
 
     import Ajaxify                  = Imatic.View.Ajaxify;
-    import jQuery                   = Imatic.View.Ajaxify.Jquery.jQuery;
     import Object                   = Imatic.View.Ajaxify.Object.Object;
     import ObjectInterface          = Imatic.View.Ajaxify.Object.ObjectInterface;
     import ContainerInterface       = Imatic.View.Ajaxify.Container.ContainerInterface;
@@ -66,7 +65,7 @@ module Imatic.View.Ajaxify.Action {
          */
         parseActionSegment(actionSegment: string, initiator?: WidgetInterface): ActionInterface {
             var action = null;
-            var segment = jQuery.trim(actionSegment);
+            var segment = $.trim(actionSegment);
 
             if (segment.length > 0) {
                 // match and remove the target first
@@ -76,7 +75,7 @@ module Imatic.View.Ajaxify.Action {
                 }
 
                 // try to match the @key-word syntax
-                var keywordMatch = segment.match(/^@([A-Za-z0-9_\-]+)$/);
+                var keywordMatch = segment.match(/^@([\w\-]+)$/);
 
                 // find and invoke the handler
                 if (keywordMatch && this.keywordHandlers[keywordMatch[1]]) {
@@ -149,13 +148,15 @@ module Imatic.View.Ajaxify.Action {
 
         /**
          * See if the action supports the given container
+         *
+         * The container can be NULL.
          */
         supports: (container: ContainerInterface) => boolean;
 
         /**
          * Execute the action
          */
-        execute: (container: ContainerInterface) => jQuery.Promise;
+        execute: (container: ContainerInterface) => JQueryPromise<any>;
 
         /**
          * Abort the action
@@ -172,6 +173,10 @@ module Imatic.View.Ajaxify.Action {
         private target: string = null;
         private complete: boolean = false;
         private successful: boolean = false;
+
+        static keywordHandler(initiator: WidgetInterface): ActionInterface {
+            return new this(initiator);
+        }
 
         constructor(initiator: WidgetInterface) {
             super();
@@ -214,10 +219,10 @@ module Imatic.View.Ajaxify.Action {
         }
 
         supports(container: ContainerInterface): boolean {
-            return true;
+            return null !== container;
         }
 
-        execute(container: ContainerInterface): jQuery.Promise {
+        execute(container: ContainerInterface): JQueryPromise<any> {
             this.complete = false;
             this.successful = false;
 
@@ -231,7 +236,7 @@ module Imatic.View.Ajaxify.Action {
         /**
          * Execute the action
          */
-        doExecute(container: ContainerInterface): jQuery.Promise {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
             throw new Error('Not implemented');
         }
 
@@ -246,12 +251,8 @@ module Imatic.View.Ajaxify.Action {
      */
     export class NoAction extends Action
     {
-        static keywordHandler = (initiator: WidgetInterface): ActionInterface => {
-            return new NoAction(initiator);
-        };
-
-        doExecute(container: ContainerInterface): jQuery.Promise {
-            return jQuery.Deferred().resolve().promise();
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
+            return $.Deferred().resolve().promise();
         }
     }
 
@@ -262,22 +263,32 @@ module Imatic.View.Ajaxify.Action {
      */
     export class ClearAction extends Action
     {
-        static keywordHandler = (initiator: WidgetInterface): ActionInterface => {
-            return new ClearAction(initiator);
-        };
-
-        doExecute(container: ContainerInterface): jQuery.Promise {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
             this.emit(ActionEvent.createBegin(this, container));
 
             var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container));
 
             if (event.proceed) {
-                container.setContent(jQuery());
+                container.setContent($());
             }
 
             this.emit(ActionEvent.createComplete(this, container));
 
-            return jQuery.Deferred().resolve().promise();
+            return $.Deferred().resolve().promise();
+        }
+    }
+
+    /**
+     * Reload page action
+     *
+     * Reloads the entire page.
+     */
+    export class ReloadPageAction extends Action
+    {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
+            document.location.reload(true);
+
+            return $.Deferred().resolve().promise();
         }
     }
 
@@ -304,7 +315,7 @@ module Imatic.View.Ajaxify.Action {
             return this.info;
         }
 
-        doExecute(container: ContainerInterface): jQuery.Promise {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
             var info = this.prepareRequest(container);
 
             this.request = new Request(
@@ -333,7 +344,7 @@ module Imatic.View.Ajaxify.Action {
          * Prepare the request
          */
         prepareRequest(container: ContainerInterface): RequestInfo {
-            var info = jQuery.extend(true, {}, this.info);
+            var info = $.extend(true, {}, this.info);
 
             // use container's content selector if none was given
             if (!info.contentSelector) {
@@ -429,7 +440,7 @@ module Imatic.View.Ajaxify.Action {
             super(initiator);
         }
 
-        doExecute(container: ContainerInterface): jQuery.Promise {
+        doExecute(container: ContainerInterface): JQueryPromise<any> {
             this.emit(ActionEvent.createBegin(this, container));
 
             // handle response
@@ -444,7 +455,7 @@ module Imatic.View.Ajaxify.Action {
             // complete event
             this.emit(ActionEvent.createComplete(this, container, this.response));
 
-            return jQuery.Deferred().resolve().promise();
+            return $.Deferred().resolve().promise();
         }
     }
 

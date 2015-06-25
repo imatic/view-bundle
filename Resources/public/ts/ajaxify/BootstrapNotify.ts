@@ -1,5 +1,5 @@
+/// <reference path="Main.ts"/>
 /// <reference path="Event.ts"/>
-/// <reference path="Jquery.ts"/>
 /// <reference path="Dom.ts"/>
 
 /**
@@ -14,8 +14,7 @@ module Imatic.View.Ajaxify.BootstrapNotify {
 
     "use_strict";
 
-    import jQuery    = Imatic.View.Ajaxify.Jquery.jQuery;
-    import DomEvents = Imatic.View.Ajaxify.Dom.DomEvents;
+    import DomEvents    = Imatic.View.Ajaxify.Dom.DomEvents;
 
     declare var window: Window;
 
@@ -35,7 +34,7 @@ module Imatic.View.Ajaxify.BootstrapNotify {
      * Function to verify availability of bootstrap-notify
      */
     export function bootstrapNotifyIsAvailable(): boolean {
-        return 'undefined' !== typeof jQuery.fn['notify'];
+        return 'undefined' !== typeof $.fn['notify'];
     }
 
     /**
@@ -59,11 +58,11 @@ module Imatic.View.Ajaxify.BootstrapNotify {
                 };
 
                 // show notification
-                jQuery(notificationContainer)['notify'](options).show();
+                $(notificationContainer)['notify'](options).show();
             }
 
             // fix close link behavior
-            jQuery('a.close', notificationContainer).click(handleNotificationCloseLinkClick);
+            $('a.close', notificationContainer).click(handleNotificationCloseLinkClick);
 
             // prevent default implementation from running
             return false;
@@ -80,10 +79,10 @@ module Imatic.View.Ajaxify.BootstrapNotify {
     }
 
     // init on ready
-    jQuery(window.document).ready(function () {
+    $(window.document).ready(function () {
         if (bootstrapNotifyIsAvailable()) {
             // attach to the "RENDER_FLASH_MESSAGES" event
-            jQuery(window.document.body).on(
+            $(window.document.body).on(
                 DomEvents.RENDER_FLASH_MESSAGES,
                 renderFlashMessages
             );

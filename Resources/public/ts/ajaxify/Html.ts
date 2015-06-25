@@ -1,5 +1,3 @@
-/// <reference path="Jquery.ts"/>
-
 /**
  * Imatic view ajaxify html module
  *
@@ -9,8 +7,6 @@ module Imatic.View.Ajaxify.Html {
 
     "use_strict";
 
-    import jQuery = Imatic.View.Ajaxify.Jquery.jQuery;
-
     /**
      * HTML fragment
      */
@@ -19,8 +15,8 @@ module Imatic.View.Ajaxify.Html {
         private dom: any;
 
         constructor(html: string) {
-            this.dom = jQuery('<div />')
-                .append(jQuery.parseHTML(html, null, true))
+            this.dom = $('<div />')
+                .append($.parseHTML(html, null, true))
             ;
         }
 
