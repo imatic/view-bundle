@@ -4,7 +4,6 @@
 /// <reference path="Action.ts"/>
 /// <reference path="Message.ts"/>
 /// <reference path="Css.ts"/>
-/// <reference path="History.ts"/>
 /// <reference path="Ajax.ts"/>
 /// <reference path="Dom.ts"/>
 /// <reference path="Widget.ts"/>
@@ -30,7 +29,6 @@ module Imatic.View.Ajaxify.Container {
     import RequestAction            = Imatic.View.Ajaxify.Action.RequestAction;
     import FlashMessageInterface    = Imatic.View.Ajaxify.Message.FlashMessageInterface;
     import CssClasses               = Imatic.View.Ajaxify.Css.CssClasses;
-    import HistoryHandler           = Imatic.View.Ajaxify.History.HistoryHandler;
     import RequestInfo              = Imatic.View.Ajaxify.Ajax.RequestInfo;
     import WidgetInterface          = Imatic.View.Ajaxify.Widget.WidgetInterface;
 
@@ -445,7 +443,6 @@ module Imatic.View.Ajaxify.Container {
          */
         onActionComplete = (event: ActionEvent): void => {
             var elem = this.getElement();
-            var elementId = this.getId();
 
             // remove busy class
             if (elem) {
@@ -457,18 +454,16 @@ module Imatic.View.Ajaxify.Container {
                 // update current request and initiator
                 this.currentRequest = event.response.request;
                 this.currentRequestInitiator = event.action.getInitiator();
+            }
 
-                // handle history
-                if (event.response.valid && this.getOption('history') && elementId) {
-                    // state change
-                    if (event.action.hasInitiator()) {
-                        HistoryHandler.containerStateChange(
-                            elementId,
-                            event.response.fullTitle,
-                            event.response.request
-                        );
-                    }
-                }
+            // dom event
+            if (elem) {
+                $(elem).trigger(
+                    $.Event(DomEvents.ACTION_COMPLETE, {
+                        container: this,
+                        actionEvent: event,
+                    })
+                );
             }
         }
 

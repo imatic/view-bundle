@@ -254,7 +254,7 @@ module Imatic.View.Ajaxify.Document {
                     container = contextualContainer;
                 }
 
-                if (null != container && this.dispatchAction(actions[i], container)) {
+                if (this.dispatchAction(actions[i], container)) {
                     success = true;
                     break;
                 }
@@ -273,7 +273,11 @@ module Imatic.View.Ajaxify.Document {
                 if (action.supports(container)) {
                     // compatible container found
                     success = true;
-                    container.handleAction(action);
+                    if (container) {
+                        container.handleAction(action);
+                    } else {
+                        action.execute(null);
+                    }
                 } else if (container) {
                     // try parent container
                     container = container.getParent();

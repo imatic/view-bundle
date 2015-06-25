@@ -37,10 +37,10 @@ module Imatic.View.Ajaxify {
 
     // action helper
     actionHelper = new ActionHelper();
-    actionHelper.addKeywordHandler('close-modal', CloseModalAction.keywordHandler);
-    actionHelper.addKeywordHandler('reload-page', ReloadPageAction.keywordHandler);
-    actionHelper.addKeywordHandler('clear', ClearAction.keywordHandler);
-    actionHelper.addKeywordHandler('noop', NoAction.keywordHandler);
+    actionHelper.addKeywordHandler('close-modal', CloseModalAction.createKeywordHandler());
+    actionHelper.addKeywordHandler('reload-page', ReloadPageAction.createKeywordHandler());
+    actionHelper.addKeywordHandler('clear', ClearAction.createKeywordHandler());
+    actionHelper.addKeywordHandler('noop', NoAction.createKeywordHandler());
 
     // request helper
     requestHelper = new RequestHelper();

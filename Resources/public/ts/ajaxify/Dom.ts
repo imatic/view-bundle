@@ -19,21 +19,31 @@ module Imatic.View.Ajaxify.Dom {
          *      action: Imatic.View.Ajaxify.Action.ActionInterface;
          * }
          */
-        static ACTIONS = 'Imatic.View.Ajaxify.Event.actions';
+        static ACTIONS = 'imatic.ajaxify.actions';
+
+        /**
+         * Event triggered by containers after an action has been completed
+         *
+         * Arguments: {
+         *      container: Imatic.View.Ajaxify.Container.ContainerInterface;
+         *      actionEvent: Imatic.View.Ajaxify.Action.ActionEvent;
+         * }
+         */
+        static ACTION_COMPLETE = 'imatic.ajaxify.action_complete';
 
         /**
          * Event triggered before contents of an element are replaced or removed
          *
          * Arguments: {}
          */
-        static BEFORE_CONTENT_UPDATE = 'Imatic.View.Ajaxify.Event.before_content_update';
+        static BEFORE_CONTENT_UPDATE = 'imatic.ajaxify.before_content_update';
 
         /**
          * Event triggered after contents of an element have been set or replaced
          *
          * Arguments: {}
          */
-        static AFTER_CONTENT_UPDATE = 'Imatic.View.Ajaxify.Event.after_content_update';
+        static AFTER_CONTENT_UPDATE = 'imatic.ajaxify.after_content_update';
 
         /**
          * Event triggered when there are flash messages to be handled
@@ -44,7 +54,7 @@ module Imatic.View.Ajaxify.Dom {
          *      flashes: Imatic.View.Ajaxify.Message.FlashMessageInterface[];
          * }
          */
-        static HANDLE_FLASH_MESSAGES = 'Imatic.View.Ajaxify.Event.handle_flash_messages';
+        static HANDLE_FLASH_MESSAGES = 'imatic.ajaxify.handle_flash_messages';
 
         /**
          * Event triggered when flash messages are to be rendered
@@ -57,7 +67,6 @@ module Imatic.View.Ajaxify.Dom {
          *      originElement: HTMLElement;
          * }
          */
-        static RENDER_FLASH_MESSAGES = 'Imatic.View.Ajaxify.Event.render_flash_messages';
+        static RENDER_FLASH_MESSAGES = 'imatic.ajaxify.render_flash_messages';
     }
-
 }

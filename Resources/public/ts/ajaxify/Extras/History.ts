@@ -1,12 +1,12 @@
-/// <reference path="Main.ts"/>
-/// <reference path="../history/history.d.ts"/>
-/// <reference path="Ajax.ts"/>
-/// <reference path="Action.ts"/>
-/// <reference path="Container.ts"/>
-/// <reference path="Dom.ts"/>
+/// <reference path="../../history/history.d.ts"/>
+/// <reference path="../../jquery/jquery.d.ts"/>
+/// <reference path="../Ajaxify.d.ts"/>
 
 /**
  * Imatic view ajaxify history module
+ *
+ * This optional module integrates containers with
+ * https://github.com/browserstate/history.js/
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
@@ -21,17 +21,15 @@ module Imatic.View.Ajaxify.History {
     import ActionEvent          = Imatic.View.Ajaxify.Action.ActionEvent;
     import ContainerInterface   = Imatic.View.Ajaxify.Container.ContainerInterface;
 
-    declare var window: Window;
-
     /**
      * History.js instance
      */
-    export var History = <Historyjs> window['History'];
+    var History = <Historyjs> window['History'];
 
     /**
-     * Function to verify History.js availability
+     * Function to verify availability of History.js
      */
-    export function historyjsIsAvailable(): boolean {
+    function historyjsIsAvailable(): boolean {
         return History && 'undefined' !== typeof History.Adapter;
     }
 
@@ -61,11 +59,34 @@ module Imatic.View.Ajaxify.History {
          * Initialize the handler
          */
         static initialize(): void {
-            if (historyjsIsAvailable()) {
-                History.replaceState(
+            History.replaceState(
+                HistoryHandler.getCurrentData(),
+                window.document.title,
+                window.location.toString()
+            );
+
+            $(document).on(DomEvents.ACTION_COMPLETE, this.onActionComplete);
+        }
+
+        /**
+         * Handle action completion
+         */
+        static onActionComplete(event: JQueryEventObject): void {
+            var actionEvent = <ActionEvent> event['actionEvent'];
+            var container = <ContainerInterface> event['container'];
+            var containerId;
+
+            if (
+                actionEvent.response
+                && actionEvent.response.valid
+                && actionEvent.action.hasInitiator()
+                && container.getOption('history')
+                && (containerId = container.getId())
+            ) {
+                History.pushState(
                     HistoryHandler.getCurrentData(),
-                    window.document.title,
-                    window.location.toString()
+                    actionEvent.response.fullTitle || window.document.title,
+                    actionEvent.response.request.url
                 );
             }
         }
@@ -106,19 +127,6 @@ module Imatic.View.Ajaxify.History {
                         );
                     }
                 }
-            }
-        }
-
-        /**
-         * Record container state change
-         */
-        static containerStateChange(containerId: string, title: string, requestInfo: RequestInfo): void {
-            if (historyjsIsAvailable()) {
-                History.pushState(
-                    HistoryHandler.getCurrentData(),
-                    title || window.document.title,
-                    requestInfo.url
-                );
             }
         }
 
@@ -178,7 +186,7 @@ module Imatic.View.Ajaxify.History {
     }
  
     // initialize on document ready
-    $(window.document).ready(function () {
+    $(document).ready(function () {
         if (historyjsIsAvailable()) {
             // initialize
             HistoryHandler.initialize();

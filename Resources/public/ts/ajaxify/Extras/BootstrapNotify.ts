@@ -1,6 +1,5 @@
-/// <reference path="Main.ts"/>
-/// <reference path="Event.ts"/>
-/// <reference path="Dom.ts"/>
+/// <reference path="../../jquery/jquery.d.ts"/>
+/// <reference path="../Ajaxify.d.ts"/>
 
 /**
  * Imatic view ajaxify bootstrap notify module
@@ -14,9 +13,7 @@ module Imatic.View.Ajaxify.BootstrapNotify {
 
     "use_strict";
 
-    import DomEvents    = Imatic.View.Ajaxify.Dom.DomEvents;
-
-    declare var window: Window;
+    import DomEvents = Imatic.View.Ajaxify.Dom.DomEvents;
 
     /**
      * Defines which flash types do automatically fade out

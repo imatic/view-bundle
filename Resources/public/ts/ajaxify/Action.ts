@@ -174,8 +174,10 @@ module Imatic.View.Ajaxify.Action {
         private complete: boolean = false;
         private successful: boolean = false;
 
-        static keywordHandler(initiator: WidgetInterface): ActionInterface {
-            return new this(initiator);
+        static createKeywordHandler(): (initiator: WidgetInterface) => ActionInterface {
+            return (initiator: WidgetInterface): ActionInterface => {
+                return new this(initiator);
+            };
         }
 
         constructor(initiator: WidgetInterface) {
@@ -289,6 +291,10 @@ module Imatic.View.Ajaxify.Action {
             document.location.reload(true);
 
             return $.Deferred().resolve().promise();
+        }
+
+        supports(container: ContainerInterface): boolean {
+            return true;
         }
     }
 
