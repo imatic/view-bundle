@@ -1,0 +1,23 @@
+_profiler:
+    resource: @WebProfilerBundle/Resources/config/routing/profiler.xml
+    prefix:   /_profiler
+
+_wdt:
+    resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
+    prefix:   /_wdt
+
+#admin:
+#    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+#    prefix: /admin
+#
+#_sonata_admin:
+#    resource: .
+#    type: sonata_admin
+#    prefix: /admin
+
+view_bundle:
+    resource: @ImaticViewBundle/Resources/config/routing.yml
+
+app_view_bundle:
+    resource: @AppImaticViewBundle/Resources/config/routing.yml
+    prefix: /test
