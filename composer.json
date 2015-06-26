@@ -11,8 +11,8 @@
             "email": "stepan.koci@imatic.cz"
         },
         {
-            "name":"Imatic Software s.r.o.",
-            "homepage":"http://imatic.cz/"
+            "name": "Imatic Software s.r.o.",
+            "homepage": "http://imatic.cz/"
         }
     ],
     "repositories": [
@@ -22,8 +22,8 @@
         }
     ],
     "require": {
-        "php":">=5.3.3",
-        "symfony/framework-bundle": "~2.4",
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.6",
         "sensio/framework-extra-bundle": "3.0.*",
         "knplabs/knp-menu-bundle": "2.0.*",
         "genemu/form-bundle": "2.2.*",
@@ -32,16 +32,18 @@
     },
     "require-dev": {
         "imatic/testing-bundle": "2.4.*",
-        "symfony/assetic-bundle": "2.4.*"
+        "symfony/assetic-bundle": "~2.6"
     },
     "autoload": {
-        "psr-0": { "Imatic\\Bundle\\ViewBundle": "" }
+        "psr-0": {
+            "Imatic\\Bundle\\ViewBundle": ""
+        }
     },
     "target-dir": "Imatic/Bundle/ViewBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.4.x-dev"
+            "dev-master": "2.6.x-dev"
         }
     }
 }
