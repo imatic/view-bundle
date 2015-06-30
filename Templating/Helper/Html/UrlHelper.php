@@ -22,13 +22,14 @@ class UrlHelper
             'query' => $this->buildQueryArray(
                 ['sorter' => null, 'page' => null],
                 $componentId
-            )
+            ),
         ]);
 
         return $this->updateUrl($url, [
             'query' => $this->buildQueryArray(
                 ['sorter' => [$column => $direction]],
-                $componentId)
+                $componentId
+            ),
         ]);
     }
 
@@ -38,7 +39,7 @@ class UrlHelper
             'query' => $this->buildQueryArray(
                 ['filter' => null, 'page' => 1],
                 $componentId
-            )
+            ),
         ]);
     }
 
@@ -47,7 +48,8 @@ class UrlHelper
         return $this->updateUrl($url, [
             'query' => $this->buildQueryArray(
                 ['page' => $page],
-                $componentId)
+                $componentId
+            ),
         ]);
     }
 
