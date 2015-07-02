@@ -288,7 +288,7 @@ module Imatic.View.Ajaxify.Action {
     export class ReloadPageAction extends Action
     {
         doExecute(container: ContainerInterface): JQueryPromise<any> {
-            document.location.reload(true);
+            document.location.reload();
 
             return $.Deferred().resolve().promise();
         }

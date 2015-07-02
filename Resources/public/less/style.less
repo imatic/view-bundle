@@ -137,6 +137,16 @@ table.table-auto {
                 }
             }
         }
+        thead {
+            a.sorted {
+                &.desc:after {
+                    content: "▾";
+                }
+                &.asc:after {
+                    content: "▴";
+                }
+            }
+        }
     }
 
     ul.pagination {
