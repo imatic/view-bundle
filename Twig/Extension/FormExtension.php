@@ -22,13 +22,14 @@ class FormExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
+            'imatic_view_form_override_namespace' => new Twig_Function_method(
+                $this,
+                'overrideFormNamespace'
+            ),
             'imatic_view_form_javascript_prototype' => new Twig_Function_Method(
                 $this,
                 'renderFormJavascriptPrototype',
-                [
-                    'needs_context' => true,
-                    'is_safe' => ['html']
-                ]
+                ['needs_context' => true, 'is_safe' => ['html']]
             ),
         ];
     }
@@ -93,6 +94,46 @@ class FormExtension extends Twig_Extension
         $output .= ']';
 
         return $output;
+    }
+
+    /**
+     * @param FormView $rootForm
+     * @param string   $newNamespace
+     * @throws \InvalidArgumentException
+     */
+    public function overrideFormNamespace(FormView $rootForm, $newNamespace)
+    {
+        $stack = [$rootForm];
+
+        while ($form = array_pop($stack)) {
+            if (false !== ($firstSegmentPos = strpos($form->vars['full_name'], '['))) {
+                if ($form === $rootForm) {
+                    throw new \InvalidArgumentException('The given form view is not a root form view');
+                }
+
+                $form->vars['full_name'] = sprintf(
+                    '%s[%s]%s',
+                    $newNamespace,
+                    substr($form->vars['full_name'], 0, $firstSegmentPos),
+                    substr($form->vars['full_name'], $firstSegmentPos)
+                );
+            } else {
+                $form->vars['full_name'] = sprintf(
+                    '%s[%s]',
+                    $newNamespace,
+                    $form->vars['full_name']
+                );
+            }
+
+            $form->vars['id'] = $newNamespace . '_' . $form->vars['id'];
+
+            if (isset($form->vars['prototype'])) {
+                $stack[] = $form->vars['prototype'];
+            }
+            foreach ($form->children as $child) {
+                $stack[] = $child;
+            }
+        }
     }
 
     /**

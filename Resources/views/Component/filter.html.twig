@@ -6,7 +6,7 @@
 {% block filter %}
     {% spaceless %}
         {% set uri = uri|default(app.request.uri) %}
-        {% set uri = imatic_view_update_filter_url(uri, componentId|default(none)) %}
+        {% set uri = imatic_view_update_filter_url(uri, component_id|default(none)) %}
         {% if filter is not defined and display_criteria is defined %}
             {% set filter = display_criteria.filter %}
         {% endif %}
@@ -15,10 +15,16 @@
             {% set form = filter.form.createView() %}
         {% endif %}
         {% if form is defined %}
+            {% if component_id is defined and component_id is not empty %}
+                {% do imatic_view_form_override_namespace(form, component_id) %}
+                {% set filter_content_id = 'imatic_view_filter_' ~ component_id %}
+            {% else %}
+                {% set filter_content_id = 'imatic_view_filter' %}
+            {% endif %}     
             <div class="imatic-view-filter {% if filter.form.valid %} imatic-view-initial-closed{% endif %}">
                 <fieldset>
-                    <legend data-toggle=".imatic-view-filter-content">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
-                    <div class="imatic-view-filter-content">
+                    <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
+                    <div id="{{ filter_content_id }}" class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
                         {% for field in form if field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter'] %}
                         {% set field_has_error = field.value.vars.errors is not empty %}

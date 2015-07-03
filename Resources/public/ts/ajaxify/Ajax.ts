@@ -120,10 +120,13 @@ module Imatic.View.Ajaxify.Ajax {
                     // string
                     data += '&' + key + '=' + encodeURIComponent(value);
                 } else if ('FormData' in window && data instanceof FormData) {
-                    // FormData
+                    // form data
                     data.append(key, value);
+                } else if ($.isArray(data)) {
+                    // array
+                    data.push({name: key, value: value});
                 } else {
-                    // plain object
+                    // key-value map
                     data[key] = value;
                 }
             } else {
