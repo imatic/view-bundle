@@ -88,7 +88,7 @@
                             {% block table_row_actions %}
                                 {% if table.rowActions is not empty %}
                                     <td class="actions">
-                                        {{ button.group(table.rowActions, {item: item}) }}
+                                        {{ button.group(table.rowActions, _context) }}
                                     </td>
                                 {% endif %}
                             {% endblock %}
@@ -113,7 +113,7 @@
                                 {% do action.set('tag', 'input') %}
                             {% endif %}
                         {% endfor %}
-                        {{ button.group(table.batchActions) }}
+                        {{ button.group(table.batchActions, _context) }}
                     {% endif %}
                 {%- endblock %}
             {%- endset %}
@@ -130,7 +130,7 @@
                         {% for action in table.exports %}
                             {% do action.set('data', {'ajaxify': 'false'}) %}
                         {% endfor %}
-                        {{ 'Exports'|trans({}, 'ImaticViewBundle') }}: {{ button.group(table.exports) }}
+                        {{ 'Exports'|trans({}, 'ImaticViewBundle') }}: {{ button.group(table.exports, _context) }}
                     {%- endif %}
                 {%- endblock %}
             {%- endset %}

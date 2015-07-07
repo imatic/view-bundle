@@ -20,29 +20,42 @@
 {% endspaceless %}{% endmacro %}
 
 {% macro _nested(element, action, context) %}
-    <div class="btn-group">
-        {% if action.url is not empty or action.route is not empty %}
-            {{ _self._button(element, action) }}
+    {% set nested -%}
+        {% for nested in action.nested -%}
+            {% if imatic_view_condition_evaluate(nested.condition|default(''), context|default({})) %}
+                <li>{{ _self.action(nested, context) }}</li>
+            {% endif %}
+        {%- endfor %}
+    {%- endset %}
+    {% set hasNested = nested is not empty %}
+    
+    {% if hasNested %}
+        <div class="btn-group">
+    {% endif %}
+
+    {% if action.url is not empty or action.route is not empty %}
+        {{ _self._button(element, action) }}
+        {% if hasNested %}
             <button type="button"
                     class="btn btn-{{ action.type | default('default') }} dropdown-toggle"
                     data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
-        {% else %}
-            {% do element.setValue(action.label ~ ' <span class="caret"></span>') %}
-            {% do element.data.set('toggle', 'dropdown') %}
-            {% do element.classes.add('dropdown-toggle') %}
-            {{ _self._button(element, action) }}
         {% endif %}
+    {% elseif hasNested %}
+        {% do element.setValue(action.label ~ ' <span class="caret"></span>') %}
+        {% do element.data.set('toggle', 'dropdown') %}
+        {% do element.classes.add('dropdown-toggle') %}
+        {{ _self._button(element, action) }}
+    {% endif %}
+
+    {% if hasNested %}
         <ul class="dropdown-menu" role="menu">
-            {% for nested in action.nested %}
-                {% if imatic_view_condition_evaluate(nested.condition|default(''), context|default({})) %}
-                    <li>{{ _self.action(nested, context) }}</li>
-                {% endif %}
-            {% endfor %}
+            {{ nested }}
         </ul>
-    </div>
+        </div>
+    {% endif %}
 {% endmacro %}
 
 {% macro group(buttons, context) %}{% spaceless %}
