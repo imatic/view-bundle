@@ -122,6 +122,7 @@ module Imatic.View.Ajaxify.Modal {
                     if (i === modals.length - 1) {
                         modalObj['$backdrop'].css('z-index', zIndex - 5);
                         modalObj['$backdrop'].addClass('in');
+                        this.fixScrolling(modal);
                     } else {
                         modalObj['$backdrop'].removeClass('in');
                     }
@@ -133,6 +134,33 @@ module Imatic.View.Ajaxify.Modal {
             } else {
                 $(document.body).removeClass('modal-open');
             }
+        }
+
+        /**
+         * This fixes a mouse-wheel scrolling issue in some browsers
+         * that is caused by a CSS transition of the modal.
+         */
+        private fixScrolling(modal: JQuery): void {
+            modal
+                .off('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd')
+                .one('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function () {
+                    $(this)
+                        .queue(function () {
+                            $(this)
+                                .css('position', 'absolute')
+                                .dequeue()
+                            ;
+                        })
+                        .delay(100)
+                        .queue(function () {
+                            $(this)
+                                .css('position', '')
+                                .dequeue()
+                            ;
+                        })
+                    ;
+                })
+            ;
         }
     }
 
