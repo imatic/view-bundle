@@ -14,8 +14,6 @@ use Twig_Compiler;
 class ExampleNode extends Twig_Node
 {
     /**
-     * Constructor
-     *
      * @param Twig_NodeInterface $body
      * @param string             $rawBody
      * @param int                $lineno

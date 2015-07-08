@@ -18,12 +18,6 @@ class KernelResponseListener
     /** @var SessionInterface */
     private $session;
 
-    /**
-     * Constructor
-     *
-     * @param LayoutHelper     $layoutHelper
-     * @param SessionInterface $session
-     */
     public function __construct(LayoutHelper $layoutHelper, SessionInterface $session)
     {
         $this->layoutHelper = $layoutHelper;

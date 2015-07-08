@@ -24,12 +24,6 @@ class ExampleTokenParser extends Twig_TokenParser
     /** @var FileLocatorInterface */
     private $templatingLocator;
 
-    /**
-     * Constructor
-     *
-     * @param TemplateNameParserInterface $templatingNameParser
-     * @param FileLocatorInterface        $templatingLocator
-     */
     public function __construct(
         TemplateNameParserInterface $templatingNameParser,
         FileLocatorInterface $templatingLocator

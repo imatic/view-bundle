@@ -13,18 +13,11 @@ class LayoutHelper
 {
     /** @var RequestStack */
     private $requestStack;
-
     /** @var string|null */
     private $title;
-
     /** @var string|null */
     private $fullTitle;
 
-    /**
-     * Constructor
-     *
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -37,12 +30,16 @@ class LayoutHelper
      */
     public function hasLayout()
     {
-        $request = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMasterRequest();
+        $currentRequest = $this->requestStack->getCurrentRequest();
 
         if (
-            $request->isXmlHttpRequest()
-            || 'off' === $request->get('_layout')
-            || $this->requestStack->getCurrentRequest() !== $this->requestStack->getMasterRequest()
+            $masterRequest->isXmlHttpRequest()
+            || 'off' === $masterRequest->get('_layout')
+            || (
+                $currentRequest !== $masterRequest
+                && !$currentRequest->attributes->has('exception')
+            )
         ) {
             return false;
         } else {

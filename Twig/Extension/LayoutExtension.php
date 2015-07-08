@@ -16,11 +16,6 @@ class LayoutExtension extends Twig_Extension
     /** @var LayoutHelper */
     private $layoutHelper;
 
-    /**
-     * Constructor
-     *
-     * @param LayoutHelper $layoutHelper
-     */
     public function __construct(LayoutHelper $layoutHelper)
     {
         $this->layoutHelper = $layoutHelper;

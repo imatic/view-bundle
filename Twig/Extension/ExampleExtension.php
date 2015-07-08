@@ -18,12 +18,6 @@ class ExampleExtension extends \Twig_Extension
     /** @var FileLocatorInterface */
     private $templatingLocator;
 
-    /**
-     * Constructor
-     *
-     * @param TemplateNameParserInterface $templatingNameParser
-     * @param FileLocatorInterface        $templatingLocator
-     */
     public function __construct(
         TemplateNameParserInterface $templatingNameParser,
         FileLocatorInterface $templatingLocator
