@@ -13,7 +13,20 @@ services:
 
     imatic_view.menu.factory:
         class: Imatic\Bundle\ViewBundle\Menu\Factory
-        arguments: [ '@knp_menu.factory' ]
+        arguments:
+            - '@knp_menu.factory'
+            - '@imatic_view.menu.factory.array_loader'
+            - '@imatic_view.menu.factory.node_loader'
+
+    imatic_view.menu.factory.array_loader:
+        class: Knp\Menu\Loader\ArrayLoader
+        public: false
+        arguments: [ @knp_menu.factory ]
+
+    imatic_view.menu.factory.node_loader:
+        class: Knp\Menu\Loader\NodeLoader
+        public: false
+        arguments: [ @knp_menu.factory ]
 
     imatic_view.menu.helper:
         class: Imatic\Bundle\ViewBundle\Menu\Helper

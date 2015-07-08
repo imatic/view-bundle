@@ -2,9 +2,10 @@
 
 namespace Imatic\Bundle\ViewBundle\Menu;
 
-use Knp\Menu\ItemInterface;
-use Knp\Menu\NodeInterface;
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
+use Knp\Menu\Loader\LoaderInterface;
+use Knp\Menu\NodeInterface;
 
 class Factory implements FactoryInterface
 {
@@ -14,20 +15,29 @@ class Factory implements FactoryInterface
     protected $factory;
 
     /**
-     * @param FactoryInterface $factory
+     * @var LoaderInterface
      */
-    public function __construct(FactoryInterface $factory)
-    {
-        $this->factory = $factory;
-    }
+    protected $arrayLoader;
+
 
     /**
-     * Creates a menu item
-     *
-     * @param  string                  $name
-     * @param  array                   $options
-     * @return \Knp\Menu\ItemInterface
+     * @var LoaderInterface
      */
+    protected $nodeLoader;
+
+    /**
+     * @param FactoryInterface $factory
+     */
+    public function __construct(
+        FactoryInterface $factory,
+        LoaderInterface $arrayLoader,
+        LoaderInterface $nodeLoader
+    ) {
+        $this->factory = $factory;
+        $this->arrayLoader = $arrayLoader;
+        $this->nodeLoader = $nodeLoader;
+    }
+
     public function createItem($name, array $options = [])
     {
         return $this->factory->createItem($name, $options);
@@ -36,24 +46,24 @@ class Factory implements FactoryInterface
     /**
      * Create a menu item from a NodeInterface
      *
-     * @param  \Knp\Menu\NodeInterface $node
-     * @return \Knp\Menu\ItemInterface
+     * @param NodeInterface $node
+     * @return ItemInterface
      */
     public function createFromNode(NodeInterface $node)
     {
-        return $this->factory->createFromNode($node);
-    }
+        return $this->nodeLoader->load($node);
+}
 
     /**
      * Creates a new menu item (and tree if $data['children'] is set).
      *
      * The source is an array of data that should match the output from MenuItem->toArray().
      *
-     * @param  array                   $data The array of data to use as a source for the menu tree
-     * @return \Knp\Menu\ItemInterface
+     * @param array $data The array of data to use as a source for the menu tree
+     * @return ItemInterface
      */
     public function createFromArray(array $data)
     {
-        return $this->factory->createFromArray($data);
+        return $this->arrayLoader->load($data);
     }
 }
