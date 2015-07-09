@@ -15,7 +15,7 @@
         <table class="table table-condensed">
             {% for field in fields %}
                 <tr class="{{ field.format }} {{ field.class }}">
-                    <th>{{ field.label|humanize|trans({}, show.translationDomain) }}</th>
+                    <th>{{ field.label|trans({}, show.translationDomain) }}</th>
                     <td>{{ imatic_view_render_value(item, field.propertyPath, field.format, field.formatOptions) }}</td>
                 </tr>
             {% endfor %}

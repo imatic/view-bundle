@@ -3,6 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Show;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
+use Imatic\Bundle\ViewBundle\Templating\Utils\String;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -16,11 +17,11 @@ class FieldOptions extends AbstractOptions
             'formatOptions' => [],
             'class' => '',
             'label' => function (Options $options) {
-                    return $options['name'];
-                },
+                return String::humanize($options['name']);
+            },
             'propertyPath' => function (Options $options, $x) {
-                    return $options['name'];
-                }
+                return $options['name'];
+            }
         ]);
         $resolver->setAllowedTypes([
             'name' => 'string',

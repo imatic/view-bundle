@@ -1,6 +1,9 @@
 <?php
 namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 
+/**
+ * @todo string is a reserved keyword since PHP 7
+ */
 class String
 {
     /**
@@ -23,5 +26,14 @@ class String
         $slug = preg_replace('~[^-a-z0-9_]+~', '', strtolower($slug));
 
         return $slug;
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public static function humanize($string)
+    {
+        return ucfirst(trim(strtolower(preg_replace(array('/([A-Z])/', '/[_\s]+/'), array('_$1', ' '), $string))));
     }
 }

@@ -18,4 +18,10 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('lorem-ipsum', String::slugify('lorem ipsum'));
         $this->assertEquals('internationalization', String::slugify('Iñtërnâtiônàlizátiøn'));
     }
+
+    public function testHumanize()
+    {
+        $this->assertEquals('Lorem ipsum', String::humanize('loremIpsum'));
+        $this->assertEquals('Foo bar', String::humanize('foo_bar'));
+    }
 }
