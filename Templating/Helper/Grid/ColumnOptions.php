@@ -3,6 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Grid;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
+use Imatic\Bundle\ViewBundle\Templating\Utils\String;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -26,11 +27,11 @@ class ColumnOptions extends AbstractOptions
             'class' => '',
             'sortable' => false,
             'label' => function (Options $options) {
-                    return $options['name'];
-                },
+                return String::humanize($options['name']);
+            },
             'propertyPath' => function (Options $options) {
-                    return $options['name'];
-                }
+                return $options['name'];
+            }
         ]);
         $resolver->setAllowedTypes([
             'name' => 'string',
