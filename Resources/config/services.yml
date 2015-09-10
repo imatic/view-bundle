@@ -132,6 +132,7 @@ services:
         arguments:
             - '@twig'
         tags:
+            - { name: imatic_view.formatter, alias: time, is_safe: true }
             - { name: imatic_view.formatter, alias: date, is_safe: true }
             - { name: imatic_view.formatter, alias: datetime, is_safe: true }
             - { name: imatic_view.formatter, alias: number }

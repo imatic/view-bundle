@@ -47,6 +47,17 @@ class TwigFormatter implements FormatterInterface
         );
     }
 
+    protected function formatTime($value, array $options)
+    {
+        return twig_date_format_filter(
+            $this->twig,
+            $value,
+//            $this->getOption($options, 'format'),
+            'H:i:s',
+            $this->getOption($options, 'timezone')
+        );
+    }
+
     protected function formatNumber($value, array $options)
     {
         return twig_number_format_filter(
