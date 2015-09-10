@@ -69,4 +69,14 @@ class CommonFormatter implements FormatterInterface
 
         return sprintf('<a href="%s">%s</a>', $url, $name);
     }
+
+    public function formatFilesize($value, array $options = [])
+    {
+        $decimals = isset($options['decimals']) ? $options['decimals'] : 2;
+
+        $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $factor = floor((strlen($value) - 1) / 3);
+
+        return sprintf("%.{$decimals}f", $value / pow(1024, $factor)) . @$size[$factor];
+    }
 }
