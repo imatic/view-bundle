@@ -2,12 +2,16 @@
     variables:
     - uri: uri for generating pager, filter and sorter links (default current uri)
     - display_criteria or pager
+    - pager_options:
+        - link_count: Number of rendered links (in each direction, back and forward)
+        - page_text: 'simple' = only current page number, 'expanded' = 1 of N pages
 #}
 {% block pager %}
     {% set uri = uri|default(app.request.uri) %}
     {% if pager is not defined and display_criteria is defined %}
         {% set pager = display_criteria.pager %}
     {% endif %}
+    {% set pager_options = pager_options|default({}) %}
 
     {% spaceless %}
         {% if pager is defined and pager.haveToPaginate %}
@@ -20,7 +24,7 @@
                     <a href="{{ imatic_view_update_pager_url(uri, pager.getPreviousPage(), component_id|default(none)) }}"
                        title="{{ 'prev'|trans({}, 'ImaticViewBundleComponent') }}">&laquo;</a>
                 </li>
-                {% for page in pager.links %}
+                {% for page in pager.links(pager_options.link_count|default(2)) %}
                     <li class="{% if pager.isCurrentPage(page) %}active{% endif %}">
                         <a href="{{ imatic_view_update_pager_url(uri, page, component_id|default(none)) }}">{{ page }}
                             {% if pager.isCurrentPage(page) %}
@@ -38,11 +42,15 @@
                        title="{{ 'last'|trans({}, 'ImaticViewBundleComponent') }}">&raquo;|</a>
                 </li>
             </ul>
-            <p>{{ 'pagination'|trans({
-                    '%first%':pager.firstIndice,
-                    '%last%':pager.lastIndice,
-                    '%total%':pager.total
+            {% if pager_options.page_text|default('expanded') == 'expanded' %}
+                <p>{{ 'pagination'|trans({
+                        '%first%':pager.firstIndice,
+                        '%last%':pager.lastIndice,
+                        '%total%':pager.total
                     }, 'ImaticViewBundleComponent') }}</p>
+            {% else %}
+                <p>{{ pager.page }}/{{ pager.total }}</p>
+            {% endif %}
         {% endif %}
     {% endspaceless %}
 {% endblock %}
