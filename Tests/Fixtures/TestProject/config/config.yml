@@ -72,34 +72,4 @@ security:
             anonymous:          false
 
     access_control:
-        - { path: ^/admin, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
-
-assetic:
-    debug: false
-    use_controller:
-        enabled:              false
-        profiler:             false
-    read_from: '%kernel.root_dir%/web'
-    filters:
-        cssrewrite:
-            apply_to: "\.css$"
-        less:
-            node: %node.bin%
-            node_paths: [ %kernel.root_dir%/node_modules ]
-            apply_to: "\.less$"
-        typescript:
-            node: %node.bin%
-            bin: %kernel.root_dir%/node_modules/typescript/bin/tsc
-            apply_to: "\.ts$"
-
-#sonata_block:
-#    default_contexts:           [admin]
-#    blocks:
-#        sonata.admin.block.admin_list:
-#            contexts:           [admin]
-#
-#sonata_admin:
-#    extensions:
-#        imatic_custom_field.admin.custom_field_extension:
-#            implements:
-#                - Imatic\Bundle\CustomFieldBundle\Model\ORM\CustomFieldEntityInterface
+        - { path: ^/admin, role: [ROLE_ADMIN] }

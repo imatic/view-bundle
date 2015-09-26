@@ -2,24 +2,13 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts
-    'vendor/history.js/scripts/bundled/html5/native.history.js'
-    'bundles/imaticview/ts/ajaxify/Extras/History.ts'
-    'vendor/highlightjs/highlight.pack.js'
-    output='js/demo-combined.js' %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/platform-demo.js') }}" type="text/javascript"></script>
     <script>jQuery(function () { hljs.initHighlightingOnLoad(); })</script>
-    {% endjavascripts %}
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets
-    'bundles/imaticview/css/demo/demo.css'
-    'vendor/highlightjs/styles/default.css'
-    output='css/demo-combined.css' -%}
-    <link rel="stylesheet" href="{{ asset_url }}" media="screen" type="text/css">
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/platform-demo.css') }}" type="text/css">
 {% endblock %}
 
 {% block header_menu %}
