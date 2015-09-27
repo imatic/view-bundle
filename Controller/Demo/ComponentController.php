@@ -3,7 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TableData;
-use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\UserType;
+use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TestingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -65,9 +65,7 @@ class ComponentController extends Controller
      */
     public function formAction()
     {
-        $data = new TableData(1);
-        $user = $data->get(1);
-        $form = $this->createForm(new UserType(), $user);
+        $form = $this->createForm(new TestingType());
 
         return ['form' => $form->createView()];
     }

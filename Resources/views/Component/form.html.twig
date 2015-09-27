@@ -4,7 +4,14 @@
 #}
 
 {% block form %}
-    <div class="imatic-view-form form-horizontal">
+    {% if form_theme is defined %}
+        {% form_theme form form_theme %}
+    {% endif %}
+
+    {{ form_javascript(form) }}
+    {{ form_stylesheet(form) }}
+
+    <div class="imatic-view-form">
         {{ form(form, {attr: {novalidate: 'novalidate' } }) }}
         {{ form_javascript(form) }}
     </div>
