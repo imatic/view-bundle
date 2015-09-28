@@ -26,6 +26,7 @@ class TestingType extends AbstractType
             'choice2' => ['choices' => $choices, '_type' => 'choice', 'expanded' => false, 'multiple' => false],
             'choice3' => ['choices' => $choices, '_type' => 'choice', 'expanded' => false, 'multiple' => true],
             'choice4' => ['choices' => $choices, '_type' => 'choice', 'expanded' => true, 'multiple' => true],
+            'choice5' => ['choices' => $choices, '_type' => 'genemu_jqueryselect2_choice'],
             'country' => [],
             'language' => [],
             'locale' => [],
