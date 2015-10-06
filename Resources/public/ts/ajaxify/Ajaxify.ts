@@ -1,47 +1,32 @@
-/// <reference path="Document.ts"/>
-/// <reference path="../jquery/jquery.d.ts"/>
+/// <reference path="../jquery/jquery.d.ts" />
 
-/**
- * Imatic view ajaxify module
- *
- * @author Pavel Batecko <pavel.batecko@imatic.cz>
- */
-module Imatic.View.Ajaxify {
+import {HTMLDocumentHandler} from './Document';
+import {ConfigurationBuilder} from './Configuration';
+import {RequestHelper} from './Ajax';
+import {ActionHelper, NoAction, ClearAction, ReloadPageAction} from './Action';
+import {ModalConfigurationDefaults, ModalConfigurationProcessor, CloseModalAction} from './ModalContainer';
 
-    "use_strict";
+// public components
+export var documentHandler : HTMLDocumentHandler;
+export var configBuilder : ConfigurationBuilder;
+export var actionHelper: ActionHelper;
+export var requestHelper: RequestHelper;
 
-    import HTMLDocumentHandler          = Imatic.View.Ajaxify.Document.HTMLDocumentHandler;
-    import ConfigurationBuilder         = Imatic.View.Ajaxify.Configuration.ConfigurationBuilder;
-    import ModalConfigurationDefaults   = Imatic.View.Ajaxify.ModalContainer.ModalConfigurationDefaults;
-    import ModalConfigurationProcessor  = Imatic.View.Ajaxify.ModalContainer.ModalConfigurationProcessor;
-    import RequestHelper                = Imatic.View.Ajaxify.Ajax.RequestHelper;
-    import ActionHelper                 = Imatic.View.Ajaxify.Action.ActionHelper;
-    import NoAction                     = Imatic.View.Ajaxify.Action.NoAction;
-    import ClearAction                  = Imatic.View.Ajaxify.Action.ClearAction;
-    import ReloadPageAction             = Imatic.View.Ajaxify.Action.ReloadPageAction;
-    import CloseModalAction             = Imatic.View.Ajaxify.ModalContainer.CloseModalAction;
+// document handler
+documentHandler = new HTMLDocumentHandler();
+documentHandler.attach();
 
-    export var documentHandler : HTMLDocumentHandler;
-    export var configBuilder : ConfigurationBuilder;
-    export var actionHelper: ActionHelper;
-    export var requestHelper: RequestHelper;
+// configuration builder
+configBuilder = new ConfigurationBuilder();
+configBuilder.addDefaults(ModalConfigurationDefaults);
+configBuilder.addProcessor(new ModalConfigurationProcessor());
 
-    // document handler
-    documentHandler = new HTMLDocumentHandler();
-    documentHandler.attach();
+// action helper
+actionHelper = new ActionHelper();
+actionHelper.addKeywordHandler('close-modal', CloseModalAction.createKeywordHandler());
+actionHelper.addKeywordHandler('reload-page', ReloadPageAction.createKeywordHandler());
+actionHelper.addKeywordHandler('clear', ClearAction.createKeywordHandler());
+actionHelper.addKeywordHandler('noop', NoAction.createKeywordHandler());
 
-    // configuration builder
-    configBuilder = new ConfigurationBuilder();
-    configBuilder.addDefaults(ModalConfigurationDefaults);
-    configBuilder.addProcessor(new ModalConfigurationProcessor());
-
-    // action helper
-    actionHelper = new ActionHelper();
-    actionHelper.addKeywordHandler('close-modal', CloseModalAction.createKeywordHandler());
-    actionHelper.addKeywordHandler('reload-page', ReloadPageAction.createKeywordHandler());
-    actionHelper.addKeywordHandler('clear', ClearAction.createKeywordHandler());
-    actionHelper.addKeywordHandler('noop', NoAction.createKeywordHandler());
-
-    // request helper
-    requestHelper = new RequestHelper();
-}
+// request helper
+requestHelper = new RequestHelper();

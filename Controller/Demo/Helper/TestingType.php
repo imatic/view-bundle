@@ -4,7 +4,6 @@ namespace Imatic\Bundle\ViewBundle\Controller\Demo\Helper;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class TestingType extends AbstractType
 {
@@ -22,30 +21,44 @@ class TestingType extends AbstractType
             'percent' => [],
             'search' => [],
             'url' => [],
-            'choice1' => ['choices' => $choices, '_type' => 'choice', 'expanded' => true, 'multiple' => true],
-            'choice2' => ['choices' => $choices, '_type' => 'choice', 'expanded' => false, 'multiple' => false],
-            'choice3' => ['choices' => $choices, '_type' => 'choice', 'expanded' => false, 'multiple' => true],
-            'choice4' => ['choices' => $choices, '_type' => 'choice', 'expanded' => true, 'multiple' => true],
-            'choice5' => ['choices' => $choices, '_type' => 'genemu_jqueryselect2_choice'],
+            'checkbox' => [],
+            'file' => [],
+            'radio' => [],
+            'choice' => [
+                ['choices' => $choices, 'expanded' => true, 'multiple' => true],
+                ['choices' => $choices, 'expanded' => false, 'multiple' => false],
+                ['choices' => $choices, 'expanded' => false, 'multiple' => true],
+                ['choices' => $choices, 'expanded' => true, 'multiple' => true],
+            ],
+            'genemu_jqueryselect2_choice' => ['choices' => $choices],
+            'imatic_type_ajax_choice' => [
+                ['route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) { return 1 == $value ? 'Test initial value' : null; }],
+                ['route' => 'imatic_view_demo_component_formajaxchoice', 'multiple' => true],
+            ],
             'country' => [],
             'language' => [],
             'locale' => [],
             'timezone' => [],
             'currency' => [],
-            'date' => [],
-            'datetime' => [],
-            'time' => [],
+            'date' => ['data' => new \DateTime('-1 week')],
+            'datetime' => ['data' => new \DateTime('-1 week 17:00')],
+            'time' => ['data' => new \DateTime('12:00')],
             'birthday' => [],
-            'checkbox' => [],
-            'file' => [],
-            'radio' => [],
+            'imatic_type_date_range' => [],
+            'imatic_type_datetime_range' => [],
+            'imatic_type_time_range' => [],
+            'imatic_type_range' => [],
             'collection' => ['type' => 'datetime', 'data' => ['today' => new \DateTime(), 'tomorow' => new \DateTime('+1 day')]],
         ];
 
-        foreach ($types as $typeName => $typeOptions) {
-            $type = isset($typeOptions['_type']) ? $typeOptions['_type'] : $typeName;
-            unset($typeOptions['_type']);
-            $builder->add($typeName, $type, $typeOptions);
+        foreach ($types as $type => $options) {
+            if (is_int(key($options))) {
+                foreach ($options as $subKey => $subOptions) {
+                    $builder->add("{$type}_{$subKey}", $type, $subOptions);
+                }
+            } else {
+                $builder->add($type, $type, $options);
+            }
         }
     }
 

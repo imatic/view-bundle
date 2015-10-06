@@ -3,7 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Knp\Menu\ItemInterface;
-use Imatic\Bundle\ViewBundle\Templating\Utils\String;
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -92,7 +92,7 @@ class Helper
         $badge = sprintf(' <span class="badge badge-%s %s">%s</span>', $type, $right ? ' pull-right' : '', $content);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel(String::escape($item->getLabel()) . $badge);
+            ->setLabel(StringUtil::escape($item->getLabel()) . $badge);
     }
 
     public function setIcon(ItemInterface $item, $icon, $right = null)
@@ -100,7 +100,7 @@ class Helper
         $icon = sprintf('<i class="imatic-view-menu-icon icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
         $item
             ->setExtra('safe_label', true)
-            ->setLabel($icon . String::escape($item->getLabel()));
+            ->setLabel($icon . StringUtil::escape($item->getLabel()));
     }
 
     /**

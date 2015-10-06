@@ -1,88 +1,58 @@
-/// <reference path="../../jquery/jquery.d.ts"/>
-/// <reference path="../Ajaxify.d.ts"/>
+import {DomEvents} from '../Dom';
 
 /**
- * Imatic view ajaxify bootstrap notify module
- *
- * This optional module integrates container flash messages
- * with https://github.com/goodybag/bootstrap-notify
- *
- * @author Pavel Batecko <pavel.batecko@imatic.cz>
+ * Flash types
  */
-module Imatic.View.Ajaxify.BootstrapNotify {
+var flashTypes = {
+    success: {delay: 5000, icon: 'glyphicon glyphicon-ok-sign'},
+    info: {delay: 5000, icon: 'glyphicon glyphicon-info-sign'},
+    warning: {delay: 10000, icon: 'glyphicon glyphicon-warning-sign'},
+    danger: {delay: 10000, icon: 'glyphicon glyphicon-exclamation-sign'},
+    default: {delay: 10000, icon: 'glyphicon glyphicon-asterisk'},
+};
 
-    "use_strict";
-
-    import DomEvents = Imatic.View.Ajaxify.Dom.DomEvents;
-
-    /**
-     * Defines which flash types do automatically fade out
-     * Unknown types do not fade out.
-     */
-    var fadeOutDelayMap = {
-        success: 5000,
-        info: 5000,
-        warning: 10000,
-        danger: 10000,
-    };
-    var fallbackDelay = 10000;
-
-    /**
-     * Function to verify availability of bootstrap-notify
-     */
-    export function bootstrapNotifyIsAvailable(): boolean {
-        return 'undefined' !== typeof $.fn['notify'];
-    }
-
-    /**
-     * Render flash messages using bootstrap-notify
-     */
-    export function renderFlashMessages(event: JQueryEventObject) {
-        var notificationContainer = document.getElementById('notifications');
-
-        if (notificationContainer) {
-            for (var i = 0; i < event['flashes'].length; ++i) {
-                var flash = event['flashes'][i];
-
-                // prepare notification options
-                var options = {
-                    message: {text: flash.message},
-                    type: flash.type,
-                    fadeOut: {
-                        enabled: true,
-                        delay: fadeOutDelayMap[flash.type] || fallbackDelay,
-                    },
-                };
-
-                // show notification
-                $(notificationContainer)['notify'](options).show();
-            }
-
-            // fix close link behavior
-            $('a.close', notificationContainer).click(handleNotificationCloseLinkClick);
-
-            // prevent default implementation from running
-            return false;
-        }
-    }
-
-    /**
-     * Handle click on notification's close link
-     */
-    function handleNotificationCloseLinkClick()
-    {
-        // prevent the browser from following the dummy "#" url
-        return false;
-    }
-
-    // init on ready
-    $(window.document).ready(function () {
-        if (bootstrapNotifyIsAvailable()) {
-            // attach to the "RENDER_FLASH_MESSAGES" event
-            $(window.document.body).on(
-                DomEvents.RENDER_FLASH_MESSAGES,
-                renderFlashMessages
-            );
-        }
-    });
+/**
+ * Function to verify availability of bootstrap-notify
+ */
+export function isBootstrapNotifyAvailable(): boolean {
+    return 'undefined' !== typeof $['notify'];
 }
+
+/**
+ * Render flash messages using bootstrap-notify
+ */
+export function renderFlashMessages(event: JQueryEventObject) {
+    for (var i = 0; i < event['flashes'].length; ++i) {
+        var flash = event['flashes'][i];
+        var flashType = flashTypes[flash.type] || flashTypes.default;
+
+        // prepare notification options and settings
+        var options = {
+            message: flash.message,
+            delay: flashType.delay,
+            icon: flashType.icon
+        };
+        var settings = {
+            type: flash.type,
+            mouse_over: 'pause',
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight',
+            },
+        };
+
+        // show notification
+        $['notify'](options, settings);
+    }
+
+    // prevent default implementation from running
+    return false;
+}
+
+// init on ready
+$(window.document).ready(function () {
+    if (isBootstrapNotifyAvailable()) {
+        // attach to the "RENDER_FLASH_MESSAGES" event
+        $(window.document.body).on(DomEvents.RENDER_FLASH_MESSAGES, renderFlashMessages);
+    }
+});

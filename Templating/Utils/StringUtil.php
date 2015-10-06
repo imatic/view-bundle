@@ -1,10 +1,8 @@
 <?php
+
 namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 
-/**
- * @todo string is a reserved keyword since PHP 7
- */
-class String
+class StringUtil
 {
     /**
      * @param string $string

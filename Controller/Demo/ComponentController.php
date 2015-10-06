@@ -6,6 +6,7 @@ use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TableData;
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TestingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Config\Route("/component")
@@ -68,6 +69,18 @@ class ComponentController extends Controller
         $form = $this->createForm(new TestingType());
 
         return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Config\Route("/form/ajax-choice")
+     */
+    public function formAjaxChoiceAction()
+    {
+        return new JsonResponse([
+            ['id' => 123, 'text' => 'Lorem ipsum'],
+            ['id' => 456, 'text' => 'Dolor sit amet'],
+            ['id' => 789, 'text' => 'Foo bar'],
+        ]);
     }
 
     /**

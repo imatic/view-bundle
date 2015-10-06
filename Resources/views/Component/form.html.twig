@@ -1,12 +1,11 @@
 {#
     variables:
     - form
+    - form_theme
 #}
 
 {% block form %}
-    {% if form_theme is defined %}
-        {% form_theme form form_theme %}
-    {% endif %}
+    {% form_theme form form_theme|default('bootstrap_3_horizontal_layout.html.twig') %}
 
     {{ form_javascript(form) }}
     {{ form_stylesheet(form) }}

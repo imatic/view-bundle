@@ -1,6 +1,7 @@
 /.idea/
 /vendor/
 /nbproject/
+/phpunit.xml
 .DS_Store
 Thumbs.db
 

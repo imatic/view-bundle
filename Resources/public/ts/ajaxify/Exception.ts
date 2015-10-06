@@ -1,27 +1,16 @@
 /**
- * Imatic view ajaxify exception module
- *
- * @author Pavel Batecko <pavel.batecko@imatic.cz>
+ * Exception
  */
-module Imatic.View.Ajaxify.Exception {
+export class Exception implements Error
+{
+    name: string;
 
-    "use_strict";
+    constructor(public message: string) {}
 
     /**
-     * Exception
+     * Get string representation of the exception
      */
-    export class Exception implements Error
-    {
-        name: string;
-
-        constructor(public message: string) {}
-
-        /**
-         * Get string representation of the exception
-         */
-        toString(): string {
-            return this.message;
-        }
+    toString(): string {
+        return this.message;
     }
-
 }

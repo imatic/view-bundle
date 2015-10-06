@@ -33,12 +33,12 @@
         "imatic/testing-bundle": "2.4.*"
     },
     "autoload": {
-        "psr-0": {
-            "Imatic\\Bundle\\ViewBundle": ""
+        "psr-4": {
+            "Imatic\\Bundle\\ViewBundle\\": ""
         }
     },
-    "target-dir": "Imatic/Bundle/ViewBundle",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "2.6.x-dev"

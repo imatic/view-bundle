@@ -3,7 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Grid;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
-use Imatic\Bundle\ViewBundle\Templating\Utils\String;
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -27,7 +27,7 @@ class ColumnOptions extends AbstractOptions
             'class' => '',
             'sortable' => false,
             'label' => function (Options $options) {
-                return String::humanize($options['name']);
+                return StringUtil::humanize($options['name']);
             },
             'propertyPath' => function (Options $options) {
                 return $options['name'];

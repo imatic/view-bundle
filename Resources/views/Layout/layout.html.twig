@@ -3,7 +3,7 @@
 {% import 'ImaticViewBundle:Component:button.html.twig' as button %}
 {% block document -%}
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}" data-base-path="{{ app.request.basePath }}">
+<html lang="{{ app.request.locale|slice(0, 2) }}" data-base-path="{{ app.request.basePath }}">
 <head>
     <meta charset="UTF-8">
 
@@ -31,10 +31,6 @@
 </head>
 
 <body>
-
-{% block notifications %}
-    <div id="notifications" class="notifications top-right"></div>
-{% endblock %}
 
 {% block body %}
 
