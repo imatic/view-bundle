@@ -1,5 +1,9 @@
-import App from './../ts/app/App';
+import App from './App';
+import Html from './Html';
+import RegExp from './RegExp';
 
 export default {
-    App: App
+    App: App,
+    Html: Html,
+    RegExp: RegExp
 }

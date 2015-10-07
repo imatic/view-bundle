@@ -110,13 +110,6 @@ services:
         tags:
             - { name: 'twig.extension' }
 
-    imatic_view.twig.extension.form:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\FormExtension
-        arguments:
-            - '@twig.form.renderer'
-        tags:
-            - { name: 'twig.extension' }
-
     # Twig loaders
     imatic_view.twig.loader.remote:
         class:        Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
