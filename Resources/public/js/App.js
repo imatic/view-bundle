@@ -20,5 +20,5 @@ export default {
      */
     getBasePath: function () {
         return document.documentElement.getAttribute('data-base-path');
-    }
+    },
 }

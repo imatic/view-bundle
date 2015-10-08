@@ -31,5 +31,3 @@ require('expose?Imatic.View!./../../public/js/View.js');
 
 // Form bundle
 require('expose?Imatic.Form!./../../../../form-bundle/Resources/public/js/Form.js');
-
-//require('./../../public/js/components/collection.js');

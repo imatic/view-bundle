@@ -12,7 +12,7 @@ export default {
      */
     escape: function (s) {
         return s.replace(regexEscape, '\\$&');
-    }
+    },
 }
 
 var regexEscape = /[-\/\\^$*+?.()|[\]{}]/g;
