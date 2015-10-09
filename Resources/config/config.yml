@@ -1,0 +1,6 @@
+# Genemu
+genemu_form:
+    select2:
+        enabled: true
+        configs:
+            theme: bootstrap
