@@ -59,13 +59,15 @@ class TestingType extends AbstractType
             //'collection' => ['type' => 'collection', 'options' => ['type' => 'date']],
         ];
 
+        $defaultOptions = ['required' => false];
+
         foreach ($types as $type => $options) {
             if (is_int(key($options))) {
                 foreach ($options as $subKey => $subOptions) {
-                    $builder->add("{$type}_{$subKey}", $type, $subOptions);
+                    $builder->add("{$type}_{$subKey}", $type, $subOptions + $defaultOptions);
                 }
             } else {
-                $builder->add($type, $type, $options);
+                $builder->add($type, $type, $options + $defaultOptions);
             }
         }
     }
