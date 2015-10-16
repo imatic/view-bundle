@@ -1,6 +1,7 @@
 {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
 {% import 'ImaticViewBundle:Component:message.html.twig' as message %}
 {% import 'ImaticViewBundle:Component:button.html.twig' as button %}
+{% set webpack_asset_id = webpack_asset_id is defined ? webpack_asset_id : 'platform' %}
 {% block document -%}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|slice(0, 2) }}" data-base-path="{{ app.request.basePath }}">
@@ -8,11 +9,17 @@
     <meta charset="UTF-8">
 
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('assets/css/platform.css') }}" type="text/css">
+        {# Main application stylesheets (webpack) #}
+        {%- if webpack_asset_id is not null -%}
+            <link rel="stylesheet" href="{{ asset("assets/css/#{webpack_asset_id}.css") }}" type="text/css">
+        {%- endif -%}
     {% endblock %}
 
     {% block javascripts %}
-        <script src="{{ asset('assets/js/platform.js') }}" type="text/javascript"></script>
+        {# Main application javascripts (webpack) #}
+        {%- if webpack_asset_id is not null -%}
+            <script src="{{ asset("assets/js/#{webpack_asset_id}.js") }}" type="text/javascript"></script>
+        {%- endif -%}
     {% endblock %}
 
     <title>{% block title_top %}{% spaceless %}

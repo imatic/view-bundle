@@ -1,9 +1,3 @@
-// CSS Styles
-require('./platform.entry.less');
-
-// Animate.css
-require('animate.css/animate.min.css');
-
 // jQuery
 require('expose?jQuery!jquery');
 require('expose?$!jquery');
