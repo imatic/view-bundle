@@ -8,9 +8,11 @@ NPM requirements
 - jquery
 - bootstrap
 - select2 (better form select inputs)
+- select2-bootstrap-theme
 - history.js (browser history for Ajaxify)
 - bootstrap-notify (page notifications for Ajaxify)
-- bootstrap-datetime-picker
+- animate.css (optional CSS animations used by bootstrap-notify)
+- eonasdan-bootstrap-datetimepicker
 - highlight.js (for demo examples)
 
 TODO

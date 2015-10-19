@@ -18,10 +18,3 @@ This bundle provides functionality to load Twig templates from a remote source.
                        content: { placeholder: "@@page_content@@" }
                    metadata:
                        foo: "bar" # will be available as _remote.foo inside the template
-
-
-Custom metadata
----------------
-
-Any custom values set under the "metadata" key of each template will be available
-inside that template as an object called "_remote".

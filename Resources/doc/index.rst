@@ -4,11 +4,10 @@ ImaticViewBundle
 Main
 ----
 
-1. `Installation <01_installation.rst>`_
-2. `Composer hooks <02_composer_hooks.rst>`_
-3. `Layout <03_layout.rst>`_
-4. `Menu <04_menu.rst>`_
-5. `Remote templates <05_remote_templates.rst>`_
+1. `Installation <installation.rst>`_
+2. `Layout <layout.rst>`_
+3. `Menu <menu.rst>`_
+4. `Remote templates <remote_templates.rst>`_
 
 Components
 ----------

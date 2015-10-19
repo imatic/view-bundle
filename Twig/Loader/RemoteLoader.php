@@ -70,9 +70,22 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         $this->ensureExists($name);
 
         // fetch source
-        $source = file_get_contents($this->templates[$name]['url']);
-        if (false === $source) {
-            throw new Twig_Error_Loader(sprintf('Could not load remote template "%s"', $name));
+        $e = null;
+        try {
+            $source = file_get_contents($this->templates[$name]['url']);
+        } catch (\Exception $e) {
+        }
+        if ($e || false === $source) {
+            throw new Twig_Error_Loader(
+                sprintf(
+                    'Could not load remote template "%s" from URL "%s"',
+                    $name,
+                    $this->templates[$name]['url']
+                ),
+                -1,
+                null,
+                $e
+            );
         }
 
         // convert placeholders to blocks
