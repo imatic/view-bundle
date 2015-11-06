@@ -73,12 +73,14 @@ export class HTMLDocumentHandler
      * Handle onclick event
      */
     private onClick = (event: JQueryEventObject): void => {
-        var element = <HTMLElement> event.target;
-        
+        var handled = false;
+        var element: HTMLElement = null;
+
+        // handle link clicks
         if (
-            this.linkHandler.isValidElement(element)
+            this.linkHandler.isValidEvent(event)
+            && (element = this.linkHandler.findValidElement(<HTMLElement> event.target))
             && this.isValidElement(element)
-            && this.linkHandler.isValidEvent(event)
         ) {
             var link = this.linkHandler.getInstance(element);
 
@@ -94,7 +96,12 @@ export class HTMLDocumentHandler
             if (this.dispatchActions(link.createActions(), container)) {
                 event.preventDefault();
             }
-        } else if (this.formHandler.isValidSubmitElement(element)) {
+
+            handled = true;
+        }
+
+        // mark clicked form submit elements
+        if (!handled && (element = this.formHandler.findValidSubmitElement(<HTMLElement> event.target))) {
             this.formHandler.markSubmitElement(element);
         }
     }

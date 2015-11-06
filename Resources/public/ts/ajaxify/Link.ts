@@ -39,6 +39,23 @@ export class LinkHandler
     }
 
     /**
+     * Find valid link element for the given node
+     */
+    findValidElement(element: HTMLElement): HTMLElement {
+        var valid;
+
+        while(!(valid = this.isValidElement(element))) {
+            if (element.parentNode && 1 === element.parentNode.nodeType) {
+                element = <HTMLElement> element.parentNode;
+            } else {
+                break;
+            }
+        }
+
+        return valid ? element : null;
+    }
+
+    /**
      * Validate given event
      */
     isValidEvent(event: JQueryEventObject): boolean {

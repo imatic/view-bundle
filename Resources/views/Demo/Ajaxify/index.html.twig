@@ -194,7 +194,7 @@
                 href="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}"
                 data-target="#link-example2-container"
             >
-                I am a link widget outside of its container
+                <span>I am a link widget outside of its container</span>
             </a>
 
             <div id="link-example2-container" data-role="container">
@@ -272,7 +272,7 @@
             <form action="{{ path('imatic_view_demo_ajaxify_formtest') }}" method="post" data-target="#demo-form-result">
                 Your name: <input type="text" name="name" value="Bob" required>
                 <input type="submit" name="a" value="Submit A">
-                <button type="submit" name="b">Submit B</button>
+                <button type="submit" name="b"><span>Submit B</span></button>
             </form>
 
             <hr>

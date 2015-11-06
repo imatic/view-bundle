@@ -33,6 +33,23 @@ export class FormHandler
     }
 
     /**
+     * Find valid submit element for the given node
+     */
+    findValidSubmitElement(element: HTMLElement): HTMLElement {
+        var valid;
+
+        while(!(valid = this.isValidSubmitElement(element))) {
+            if (element.parentNode && 1 === element.parentNode.nodeType) {
+                element = <HTMLElement> element.parentNode;
+            } else {
+                break;
+            }
+        }
+
+        return valid ? element : null;
+    }
+
+    /**
      * Mark submit element
      */
     markSubmitElement(element: HTMLElement): void {
