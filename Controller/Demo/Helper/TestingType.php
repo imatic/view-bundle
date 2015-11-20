@@ -49,9 +49,17 @@ class TestingType extends AbstractType
             'imatic_type_time_range' => [],
             'imatic_type_range' => [],
             'collection' => [
-                'type' => new NestedCollectionType(),
-                'data' => [['name' => 'Example', 'dates' => [new \DateTime('now')]],
-            ]],
+                [
+                    'type' => new NestedCollectionType(),
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'data' => [['name' => 'Example', 'dates' => [new \DateTime('now')]]],
+                ],
+                [
+                    'type' => 'date',
+                    'data' => [new \DateTime('+1 week'), new \DateTime('+2 weeks')],
+                ]
+            ],
         ];
 
         $defaultOptions = ['required' => false];

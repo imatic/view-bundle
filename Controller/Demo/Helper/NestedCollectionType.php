@@ -11,7 +11,7 @@ class NestedCollectionType extends AbstractType
     {
         $builder
             ->add('name', 'text')
-            ->add('dates', 'collection', ['type' => 'date'])
+            ->add('dates', 'collection', ['type' => 'date', 'allow_add' => true, 'allow_delete' => true])
         ;
     }
 
