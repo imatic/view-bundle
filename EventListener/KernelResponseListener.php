@@ -33,10 +33,15 @@ class KernelResponseListener
     {
         $response = $event->getResponse();
 
-        if (!$this->layoutHelper->hasFlashMessages() && !$response->isRedirection()) {
+        if (
+            !$this->layoutHelper->hasFlashMessages()
+            && !$response->isRedirection()
+            && !$response->headers->has('X-Flash-Messages')
+        ) {
             $flashBag = $this->session->getFlashBag();
 
             $flashes = [];
+
             foreach ($flashBag->all() as $type => $messages) {
                 for ($i = 0; isset($messages[$i]); ++$i) {
                     $flashes[] = [
