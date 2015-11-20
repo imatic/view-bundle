@@ -296,6 +296,7 @@ class ResponseFactory
         response.dataType = request.getDataType();
         response.valid = this.isValidStatus(xhr.status);
         response.successful = this.isSuccessfulStatus(xhr.status);
+        response.code = xhr.status;
         response.aborted = (0 === xhr.status || 'abort' === xhr.statusText);
         response.request = request.getInfo();
         response.flashes = flashes;
@@ -349,6 +350,7 @@ export class Response
     data: any;
     dataType: DataType;
     successful: boolean;
+    code: number;
     valid: boolean;
     aborted: boolean;
     request: RequestInfo;
