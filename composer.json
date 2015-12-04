@@ -23,10 +23,10 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.6",
-        "sensio/framework-extra-bundle": "3.0.*",
-        "knplabs/knp-menu-bundle": "2.0.*",
-        "genemu/form-bundle": "2.2.*",
+        "symfony/framework-bundle": ">=3.0",
+        "sensio/framework-extra-bundle": ">=3.0",
+        "knplabs/knp-menu-bundle": "dev-master",
+        "genemu/form-bundle": "*",
         "imatic/form-bundle": "dev-webpack"
     },
     "require-dev": {
