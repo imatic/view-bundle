@@ -19,7 +19,7 @@
     {% endif %}
 
     {% spaceless %}
-        <div {{ table.attr|imatic_html_attributes({class: 'imatic-view-table table-responsive'}) }}>
+        <div {{ table.attr|imatic_html_attributes({class: 'imatic-view-table'}) }}>
 
         {{ include('ImaticViewBundle:Component:filter.html.twig') }}
 

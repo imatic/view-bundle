@@ -427,7 +427,7 @@ export class Container extends Object implements ContainerInterface
         }
 
         // handle response
-        if (event.response) {
+        if (event.response && event.response.successful) {
             // update current request and initiator
             this.currentRequest = event.response.request;
             this.currentRequestInitiator = event.action.getInitiator();

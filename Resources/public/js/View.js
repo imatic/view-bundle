@@ -1,9 +1,9 @@
-import App from './App';
-import Html from './Html';
-import RegExp from './RegExp';
+import * as App from './App';
+import * as Html from './Html';
+import * as RegExp from './RegExp';
 
-export default {
-    App: App,
-    Html: Html,
-    RegExp: RegExp,
+export {
+    App,
+    Html,
+    RegExp,
 }

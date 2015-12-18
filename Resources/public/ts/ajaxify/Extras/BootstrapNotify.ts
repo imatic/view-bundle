@@ -8,6 +8,7 @@ var flashTypes = {
     info: {delay: 5000, icon: 'glyphicon glyphicon-info-sign'},
     warning: {delay: 10000, icon: 'glyphicon glyphicon-warning-sign'},
     danger: {delay: 10000, icon: 'glyphicon glyphicon-exclamation-sign'},
+    error: {delay: 10000, icon: 'glyphicon glyphicon-exclamation-sign'},
     default: {delay: 10000, icon: 'glyphicon glyphicon-asterisk'},
 };
 
