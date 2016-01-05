@@ -386,7 +386,7 @@ export class RequestAction extends Action
     /**
      * Handle response
      */
-    handleResponse(container: ContainerInterface, response: Response): void {
+    private handleResponse(container: ContainerInterface, response: Response): void {
         // handle response
         if (response.valid) {
             var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, response));

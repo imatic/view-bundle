@@ -1,5 +1,6 @@
 import * as Ajaxify from './Ajaxify';
 import {DomEvents} from './Dom';
+import {EventInterface} from './Event';
 import {Response} from './Ajax';
 import {Modal, ModalSize} from './Modal';
 import {ConfigurationInterface, ConfigurationProcessorInterface} from './Configuration';
@@ -10,9 +11,6 @@ import {Form} from './Form';
 
 /**
  * Modal configuration defaults
- *
- * If you need to change the defaults at runtime, use:
- * imatic.Ajaxify.configBuilder.addDefaults({someKey: 'someValue'})
  */
 export var ModalConfigurationDefaults: ConfigurationInterface = {
     modalSize: ModalSize.NORMAL,
@@ -20,6 +18,7 @@ export var ModalConfigurationDefaults: ConfigurationInterface = {
     modalTitle: '',
     modalFooter: '',
     modalOnClose: '',
+    modalOnCloseMod: '',
     modalCloseOnFormSuccess: true,
     modalForwardFormResponse: true
 };
@@ -95,13 +94,40 @@ export class ModalContainer extends Container
 {
     originalTrigger: WidgetInterface;
 
-    private modal = new Modal();
+    private modal: Modal;
     private actionInitiator: WidgetInterface;
     private responseTitle: string;
     private resendResponse: Response;
+    private performedNonGetRequests: boolean = false;
+
+    constructor(
+        containerHandler: ContainerHandler,
+        element: HTMLElement = null
+    ) {
+        super(containerHandler, element);
+
+        this.modal = new Modal();
+
+        // perform additional tasks when the modal is actually created
+        this.modal.addCallback('created', (event: EventInterface) => {
+            this.onModalCreated();
+        });
+    }
 
     getModal(): Modal {
         return this.modal;
+    }
+
+    private onModalCreated() {
+        // listen to all actions that happen within the modal
+        $(this.modal.getElement()).on(DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
+            var response = (<ActionEvent> event['actionEvent']).response;
+
+            // remember if any non-GET requests happened within the modal
+            if (response && 'GET' !== response.request.method) {
+                this.performedNonGetRequests = true;
+            }
+        });
     }
 
     loadOptions(): ConfigurationInterface {
@@ -112,12 +138,18 @@ export class ModalContainer extends Container
     }
 
     destroy(): void {
+        console.log(this.performedNonGetRequests);
+
         if (this.modal.hasElement()) {
             this.modal.destroy();
         }
 
         if (this.originalTrigger) {
-            this.executeOnClose(this.originalTrigger, this.originalTrigger.getOption('modalOnClose'));
+            this.executeOnClose(
+                this.originalTrigger,
+                <string> this.originalTrigger.getOption('modalOnClose'),
+                <string> this.originalTrigger.getOption('modalOnCloseMod')
+            );
         }
 
         super.destroy();
@@ -126,11 +158,14 @@ export class ModalContainer extends Container
     /**
      * Execute on close action
      */
-    private executeOnClose(originalTrigger: WidgetInterface, onClose: any) {
+    private executeOnClose(originalTrigger: WidgetInterface, onClose?: string, onCloseMod?: string) {
         var actions;
 
-        if (onClose) {
-            // load on close
+        if (onCloseMod && this.performedNonGetRequests) {
+            // perform on close actions (only when a non-GET request has been made within the modal)
+            actions = Ajaxify.actionHelper.parseActionString(onCloseMod, originalTrigger);
+        } else if (onClose) {
+            // perform on close actions
             actions = Ajaxify.actionHelper.parseActionString(onClose, originalTrigger);
         } else if (this.resendResponse) {
             // resend response

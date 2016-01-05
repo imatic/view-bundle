@@ -56,7 +56,7 @@
             <thead>
                 <tr>
                     <th>Attribute</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                     <th>Possible values</th>
                     <th>Default</th>
                 </tr>
@@ -115,7 +115,7 @@
             <thead>
                 <tr>
                     <th>Attribute</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                     <th>Possible values</th>
                     <th>Default</th>
                     <th>Example</th>
@@ -208,7 +208,7 @@
             <thead>
                 <tr>
                     <th>Attribute</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                     <th>Default</th>
                 </tr>
             </thead>
@@ -300,7 +300,7 @@
             <thead>
                 <tr>
                     <th>Attribute</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                     <th>Default</th>
                     <th>Example</th>
                 </tr>
@@ -389,7 +389,7 @@
             <thead>
                 <tr>
                     <th>Attribute</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                     <th>Possible values</th>
                     <th>Default</th>
                 </tr>
@@ -424,6 +424,21 @@
                     <td>
                         <p>perform one or more actions when the modal is closed</p>
                         <ul>
+                            <li>the actions are triggered in context of the widget that opened the modal</li>
+                        </ul>
+                    </td>
+                    <td><a href="#action-strings">&lt;action-string&gt;</a></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><code>data-modal-on-close-mod</code></td>
+                    <td>
+                        <p>
+                            perform one or more actions when the modal is closed, but only if at least one non-GET request
+                            has been performed within the modal
+                        </p>
+                        <ul>
+                            <li>use <code>@reload</code> or <code>@reset</code> to refresh a container only if changes have been made</li>
                             <li>the actions are triggered in context of the widget that opened the modal</li>
                         </ul>
                     </td>
@@ -648,7 +663,7 @@
             <thead>
                 <tr>
                     <th>Segment</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                     <th>Default</th>
                 </tr>
             </thead>
@@ -733,7 +748,7 @@
             <thead>
                 <tr>
                     <th>Class</th>
-                    <th>Meaning</th>
+                    <th>Description</th>
                 </tr>
             </thead>
             <tbody>
