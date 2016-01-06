@@ -23,4 +23,9 @@ class HtmlHelper
 
         return (new DataAttributeCollection($attributes))->render();
     }
+
+    public function unescape($html)
+    {
+        return htmlspecialchars_decode($html, ENT_HTML5 | ENT_QUOTES);
+    }
 }
