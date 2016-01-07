@@ -31,7 +31,7 @@ export function renderFlashMessages(event: JQueryEventObject) {
         var options = {
             message: flash.message,
             delay: flashType.delay,
-            icon: flashType.icon
+            icon: flashType.icon,
         };
         var settings = {
             type: flash.type,
@@ -40,6 +40,7 @@ export function renderFlashMessages(event: JQueryEventObject) {
                 enter: 'animated fadeInRight',
                 exit: 'animated fadeOutRight',
             },
+            z_index: 100000,
         };
 
         // show notification
