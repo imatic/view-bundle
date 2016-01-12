@@ -121,11 +121,24 @@ export class ModalContainer extends Container
     private onModalCreated() {
         // listen to all actions that happen within the modal
         $(this.modal.getElement()).on(DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
-            var response = (<ActionEvent> event['actionEvent']).response;
+            var actionEvent = <ActionEvent> event['actionEvent'];
 
             // remember if any non-GET requests happened within the modal
-            if (response && 'GET' !== response.request.method) {
+            if (actionEvent.response && 'GET' !== actionEvent.response.request.method) {
                 this.performedNonGetRequests = true;
+            }
+
+            // stop further propagation of the event
+            event.stopPropagation();
+
+            // re-emit at the original trigger
+            if (this.originalTrigger) {
+                $(this.originalTrigger.getElement()).trigger(
+                    $.Event(DomEvents.ACTION_COMPLETE, {
+                        container: event['container'],
+                        actionEvent: actionEvent,
+                    })
+                );
             }
         });
     }
