@@ -94,11 +94,7 @@ class LinkFactory
      * Create a link
      */
     create(element: HTMLElement): Link {
-        var link = new Link(element);
-
-        link.url = $(element).attr('href') || $(element).data('href');
-
-        return link;
+        return new Link(element);
     }
 }
 
@@ -107,27 +103,30 @@ class LinkFactory
  */
 export class Link extends Widget
 {
-    url: string;
-
     doCreateActions(): ActionInterface[] {
         var actions = [];
 
         var actionString = this.getOption('action');
 
         if (actionString) {
+            // use action string
             $.merge(actions, Ajaxify.actionHelper.parseActionString(actionString, this));
-        }
+        } else {
+            // use URL from href or data-href
+            var url = $(this.element).attr('href') || $(this.element).data('href');
 
-        if (this.url) {
-            actions.push(new RequestAction(
-                this,
-                new RequestInfo(
-                    this.url,
-                    this.getOption('method') || 'GET',
-                    null,
-                    this.getOption('contentSelector') || null
-                )
-            ));
+            // check URL (ignore anchor links)
+            if (url && '#' !== url.charAt(0)) {
+                actions.push(new RequestAction(
+                    this,
+                    new RequestInfo(
+                        url,
+                        this.getOption('method') || 'GET',
+                        null,
+                        this.getOption('contentSelector') || null
+                    )
+                ));
+            }
         }
 
         return actions;
