@@ -138,8 +138,6 @@ export class ModalContainer extends Container
     }
 
     destroy(): void {
-        console.log(this.performedNonGetRequests);
-
         if (this.modal.hasElement()) {
             this.modal.destroy();
         }
