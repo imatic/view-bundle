@@ -4,6 +4,7 @@ import {CssClasses} from './Css';
 import {RequestInfo} from './Ajax';
 import {Widget, WidgetHandler} from './Widget';
 import {ActionInterface, RequestAction} from './Action';
+import {Url} from './Url';
 
 /**
  * Link handler
@@ -115,17 +116,21 @@ export class Link extends Widget
             // use URL from href or data-href
             var url = $(this.element).attr('href') || $(this.element).data('href');
 
-            // check URL (ignore anchor links)
-            if (url && '#' !== url.charAt(0)) {
-                actions.push(new RequestAction(
-                    this,
-                    new RequestInfo(
-                        url,
-                        this.getOption('method') || 'GET',
-                        null,
-                        this.getOption('contentSelector') || null
-                    )
-                ));
+            if (typeof url !== 'undefined') {
+                var parsedUrl = new Url(url);
+
+                // ignore external, non-HTTP URLS and anchor links
+                if (parsedUrl.isLocal() && parsedUrl.isHttp() && '#' !== url.charAt(0)) {
+                    actions.push(new RequestAction(
+                        this,
+                        new RequestInfo(
+                            url,
+                            this.getOption('method') || 'GET',
+                            null,
+                            this.getOption('contentSelector') || null
+                        )
+                    ));
+                }
             }
         }
 
