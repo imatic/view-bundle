@@ -185,7 +185,7 @@ export class ModalContainer extends Container
             this.resendResponse = null;
         }
 
-        if (actions) {
+        if (actions.length > 0) {
             $(originalTrigger.getElement()).trigger(
                 $.Event(DomEvents.ACTIONS, {actions: actions})
             );
