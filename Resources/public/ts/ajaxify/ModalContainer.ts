@@ -119,24 +119,26 @@ export class ModalContainer extends Container
     }
 
     private onModalCreated() {
-        // listen to all actions that happen within the modal
-        $(this.modal.getElement()).on(DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
+        var modalElement = this.modal.getElement();
+
+        // remember if any non-GET requests happened within the modal
+        $(modalElement).on(DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
             var actionEvent = <ActionEvent> event['actionEvent'];
 
-            // remember if any non-GET requests happened within the modal
             if (actionEvent.response && 'GET' !== actionEvent.response.request.method) {
                 this.performedNonGetRequests = true;
             }
+        });
 
-            // stop further propagation of the event
-            event.stopPropagation();
-
-            // re-emit at the original trigger
+        // redirect action start/complete events through the original trigger
+        $(modalElement).on(DomEvents.ACTION_START + ' ' + DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
             if (this.originalTrigger) {
+                event.stopPropagation();
+
                 $(this.originalTrigger.getElement()).trigger(
-                    $.Event(DomEvents.ACTION_COMPLETE, {
+                    $.Event(event.type + '.' + event.namespace, {
                         container: event['container'],
-                        actionEvent: actionEvent,
+                        actionEvent: event['actionEvent'],
                     })
                 );
             }
@@ -206,6 +208,17 @@ export class ModalContainer extends Container
             }
 
             this.actionInitiator = event.action.getInitiator();
+
+            // dom event
+            var eventTarget = this.getElement() || this.originalTrigger.getElement();
+            if (eventTarget) {
+                $(eventTarget).trigger(
+                    $.Event(DomEvents.ACTION_START, {
+                        container: this,
+                        actionEvent: event,
+                    })
+                );
+            }
         });
 
         action.listen('apply', (event: ActionEvent): void => {

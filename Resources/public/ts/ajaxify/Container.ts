@@ -412,6 +412,14 @@ export class Container extends Object implements ContainerInterface
 
         if (elem) {
             $(elem).addClass(CssClasses.COMPONENT_BUSY);
+
+            // dom event
+            $(elem).trigger(
+                $.Event(DomEvents.ACTION_START, {
+                    container: this,
+                    actionEvent: event,
+                })
+            );
         }
     }
 

@@ -388,12 +388,10 @@ export class RequestAction extends Action
      */
     private handleResponse(container: ContainerInterface, response: Response): void {
         // handle response
-        if (response.valid) {
-            var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, response));
+        var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, response));
 
-            if (event.proceed) {
-                container.setContent(response.data);
-            }
+        if (event.proceed) {
+            container.setContent(response.data);
         }
 
         // flash messages
@@ -429,12 +427,10 @@ export class ResponseAction extends Action
         this.emit(ActionEvent.createBegin(this, container));
 
         // handle response
-        if (this.response.valid) {
-            var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, this.response));
+        var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, this.response));
 
-            if (event.proceed) {
-                container.setContent(this.response.data);
-            }
+        if (event.proceed) {
+            container.setContent(this.response.data);
         }
 
         // complete event
@@ -481,7 +477,7 @@ export class ActionEvent extends Event
         event.action = action;
         event.container = container;
         event.response = response;
-        event.proceed = true;
+        event.proceed = response.valid;
 
         return event;
     }
