@@ -18,7 +18,6 @@ class CommonFormatter implements FormatterInterface
 
     public function format($value, $format, array $options = [])
     {
-
         $method = 'format' . ucfirst($format);
 
         return $this->$method($value, $options);
@@ -35,11 +34,19 @@ class CommonFormatter implements FormatterInterface
 
     public function formatPhone($value, array $options = [])
     {
+        if ($value === null) {
+            return null;
+        }
+
         return sprintf('<a href="callto:%s">%s</a>', $value, $value);
     }
 
     public function formatEmail($value, array $options = [])
     {
+        if ($value === null) {
+            return null;
+        }
+
         if (isset($options['text'])) {
             $text = $options['text'];
         } else {
@@ -51,11 +58,19 @@ class CommonFormatter implements FormatterInterface
 
     public function formatUrl($value, array $options = [])
     {
+        if ($value === null) {
+            return null;
+        }
+
         return sprintf('<a href="%s">%s</a>', $value, $value);
     }
 
     public function formatBoolean($value, array $options = [])
     {
+        if ($value === null) {
+            return null;
+        }
+
         $key = $value ? 'yes' : 'no';
         $text = $this->translator->trans($key, [], 'ImaticViewBundle');
 
@@ -64,6 +79,10 @@ class CommonFormatter implements FormatterInterface
 
     public function formatLink($value, array $options = [])
     {
+        if ($value === null) {
+            return null;
+        }
+
         $url = $options['url'];
         $name = $options['name'];
 
@@ -72,11 +91,12 @@ class CommonFormatter implements FormatterInterface
 
     public function formatFilesize($value, array $options = [])
     {
+        $value = (string) $value;
         $decimals = isset($options['decimals']) ? $options['decimals'] : 2;
 
         $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $factor = floor((strlen($value) - 1) / 3);
 
-        return sprintf("%.{$decimals}f", $value / pow(1024, $factor)) . @$size[$factor];
+        return sprintf("%.{$decimals}f", $value / pow(1024, $factor)) . (isset($size[$factor]) ? $size[$factor] : '');
     }
 }

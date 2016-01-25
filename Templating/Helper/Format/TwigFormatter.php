@@ -38,6 +38,10 @@ class TwigFormatter implements FormatterInterface
 
     protected function formatDateTime($value, array $options)
     {
+        if ($value === null) {
+            return null;
+        }
+
         return twig_date_format_filter(
             $this->twig,
             $value,
@@ -49,6 +53,10 @@ class TwigFormatter implements FormatterInterface
 
     protected function formatTime($value, array $options)
     {
+        if ($value === null) {
+            return null;
+        }
+
         return twig_date_format_filter(
             $this->twig,
             $value,
@@ -60,6 +68,12 @@ class TwigFormatter implements FormatterInterface
 
     protected function formatNumber($value, array $options)
     {
+        _log(_dump($value));
+
+        if ($value === null) {
+            return null;
+        }
+
         return twig_number_format_filter(
             $this->twig,
             $value,

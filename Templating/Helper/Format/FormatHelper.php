@@ -81,7 +81,13 @@ class FormatHelper implements FormatterInterface
             throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
         }
 
-        if (!$this->formaterOptions[$format]['is_safe']) {
+        // escape the value unless the current format is marked as "is_safe"
+        // following values will not escaped: NULL, integer, float, boolean
+        if (
+            !$this->formaterOptions[$format]['is_safe']
+            && null !== $value
+            && (!is_scalar($value) || is_string($value))
+        ) {
             $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         }
 
