@@ -181,6 +181,6 @@ services:
         class: Imatic\Bundle\ViewBundle\EventListener\KernelResponseListener
         arguments:
             - '@imatic_view.templating.helper.layout'
-            - '@session'
+            - '@translator'
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

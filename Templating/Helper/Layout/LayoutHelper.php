@@ -59,16 +59,6 @@ class LayoutHelper
     }
 
     /**
-     * See if flash messages are handled by headers
-     *
-     * @return bool
-     */
-    public function hasFlashMessages()
-    {
-        return $this->hasLayout();
-    }
-
-    /**
      * Get title
      *
      * @return string|null

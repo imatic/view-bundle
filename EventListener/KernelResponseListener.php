@@ -2,8 +2,10 @@
 
 namespace Imatic\Bundle\ViewBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\Translation\TranslatorInterface;
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
 
 /**
@@ -15,13 +17,13 @@ class KernelResponseListener
 {
     /** @var LayoutHelper */
     private $layoutHelper;
-    /** @var SessionInterface */
-    private $session;
+    /** @var TranslatorInterface */
+    private $translator;
 
-    public function __construct(LayoutHelper $layoutHelper, SessionInterface $session)
+    public function __construct(LayoutHelper $layoutHelper, TranslatorInterface $translator)
     {
         $this->layoutHelper = $layoutHelper;
-        $this->session = $session;
+        $this->translator = $translator;
     }
 
     /**
@@ -31,33 +33,45 @@ class KernelResponseListener
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $response = $event->getResponse();
+        if ($event->isMasterRequest()) {
+            $request = $event->getRequest();
+            $response = $event->getResponse();
 
-        if (
-            !$this->layoutHelper->hasFlashMessages()
-            && !$response->isRedirection()
-            && !$response->headers->has('X-Flash-Messages')
-        ) {
-            $flashBag = $this->session->getFlashBag();
-
-            $flashes = [];
-
-            foreach ($flashBag->all() as $type => $messages) {
-                for ($i = 0; isset($messages[$i]); ++$i) {
-                    $flashes[] = [
-                        'type' => $type,
-                        'message' => $messages[$i],
-                    ];
+            if ($request->isXmlHttpRequest() && !$response->isRedirection()) {
+                // flash messages
+                if ($request->hasSession() && !$response->headers->has('X-Flash-Messages')) {
+                    $this->setFlashMessageHeader($response, $request->getSession());
                 }
+
+                // title, fullTitle
+                $this->setTitleHeaders($response);
             }
+        }
+    }
 
-            $response->headers->set(
-                'X-Flash-Messages',
-                json_encode($flashes)
-            );
+    private function setFlashMessageHeader(Response $response, SessionInterface $session)
+    {
+        $flashBag = $session->getFlashBag();
 
+        $flashes = [];
+
+        foreach ($flashBag->all() as $type => $messages) {
+            for ($i = 0; isset($messages[$i]); ++$i) {
+                $flashes[] = [
+                    'type' => $type,
+                    'message' => $this->translator->trans($messages[$i], [], 'messages'),
+                ];
+            }
         }
 
+        $response->headers->set(
+            'X-Flash-Messages',
+            json_encode($flashes)
+        );
+    }
+
+    private function setTitleHeaders(Response $response)
+    {
         $title = [];
 
         if ($this->layoutHelper->hasTitle()) {
