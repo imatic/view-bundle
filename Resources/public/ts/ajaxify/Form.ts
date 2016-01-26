@@ -140,18 +140,19 @@ export class Form extends Widget
             // determine url
             var url = submitButton && submitButton.hasAttribute('formaction')
                 ? submitButton.getAttribute('formaction')
-                : form.action
+                : form.getAttribute('action') || ''
             ;
 
             // determine method
             var method = submitButton && submitButton.hasAttribute('formmethod')
                 ? submitButton.getAttribute('formmethod')
-                : form.method || 'GET'
+                : form.getAttribute('method') || 'GET'
             ;
 
             // create action
             // make sure the url is HTTP and local
             var parsedUrl = new Url(url);
+
             if (parsedUrl.isLocal() && parsedUrl.isHttp()) {
                 actions.push(new RequestAction(
                     this,
