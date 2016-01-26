@@ -68,8 +68,6 @@ class TwigFormatter implements FormatterInterface
 
     protected function formatNumber($value, array $options)
     {
-        _log(_dump($value));
-
         if ($value === null) {
             return null;
         }

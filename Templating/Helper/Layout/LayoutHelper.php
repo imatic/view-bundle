@@ -39,6 +39,7 @@ class LayoutHelper
             || (
                 $currentRequest !== $masterRequest
                 && !$currentRequest->attributes->has('exception')
+                && !$currentRequest->attributes->get('_layout', false)
             )
         ) {
             return false;
