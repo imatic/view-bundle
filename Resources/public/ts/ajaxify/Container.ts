@@ -44,6 +44,21 @@ export interface ContainerInterface extends ObjectInterface
     getCurrentRequestInitiator: () => WidgetInterface;
 
     /**
+     * Get current GET request, if any
+     */
+    getCurrentGetRequest: () => RequestInfo;
+
+    /**
+     * Get initiator of the current GET request, if any
+     */
+    getCurrentGetRequestInitiator: () => WidgetInterface;
+
+    /**
+     * Get initial request
+     */
+    getInitialRequest: () => RequestInfo;
+
+    /**
      * Get container's element
      *
      * NULL may be returned.
@@ -318,6 +333,8 @@ export class Container extends Object implements ContainerInterface
     private currentAction: ActionInterface;
     private currentRequest: RequestInfo = null;
     private currentRequestInitiator: WidgetInterface = null;
+    private currentGetRequest: RequestInfo = null;
+    private currentGetRequestInitiator: WidgetInterface = null;
 
     constructor(
         containerHandler: ContainerHandler,
@@ -372,6 +389,20 @@ export class Container extends Object implements ContainerInterface
 
     getCurrentRequestInitiator(): WidgetInterface {
         return this.currentRequestInitiator;
+    }
+
+    getCurrentGetRequest(): RequestInfo {
+        return this.currentGetRequest;
+    }
+
+    getCurrentGetRequestInitiator(): WidgetInterface {
+        return this.currentGetRequestInitiator;
+    }
+
+    getInitialRequest(): RequestInfo {
+        return Ajaxify.requestHelper.parseRequestString(
+            this.getOption('initial')
+        );
     }
 
     getElement(): HTMLElement {
@@ -444,6 +475,11 @@ export class Container extends Object implements ContainerInterface
             // update current request and initiator
             this.currentRequest = event.response.request;
             this.currentRequestInitiator = event.action.getInitiator();
+
+            if ('GET' === event.response.request.method) {
+                this.currentGetRequest = event.response.request;
+                this.currentGetRequestInitiator = event.action.getInitiator();
+            }
         }
 
         // dom event

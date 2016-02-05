@@ -344,18 +344,18 @@ export class RequestAction extends Action
         ) {
             // determine current request
             var currentRequest = null;
+            var currentRequestInitiator = null;
 
             if ('@reset' !== info.url) {
-                currentRequest = container.getCurrentRequest();
+                currentRequest = container.getCurrentGetRequest();
+                currentRequestInitiator = container.getCurrentGetRequestInitiator();
             }
             if (!currentRequest) {
-                currentRequest = Ajaxify.requestHelper.parseRequestString(
-                    container.getOption('initial')
-                );
+                currentRequest = container.getInitialRequest();
+                currentRequestInitiator = null;
             }
 
             // replace this action's initiator
-            var currentRequestInitiator = container.getCurrentRequestInitiator();
             if (currentRequestInitiator) {
                 this.setInitiator(currentRequestInitiator);
             }
