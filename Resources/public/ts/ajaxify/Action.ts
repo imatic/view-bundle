@@ -398,10 +398,7 @@ export class RequestAction extends Action
         if (response.flashes.length > 0) {
             container.handleFlashes(response.flashes);
         } else if (!response.valid && !response.aborted) {
-            container.handleFlashes([{
-                type: 'danger',
-                message: 'An error occurred'
-            }]);
+            container.handleError('Internal server error', response);
         }
 
         // complete event

@@ -4,7 +4,7 @@ import {Exception} from './Exception';
 import {DomEvents} from './Dom';
 import {FlashMessageInterface} from './FlashMessage';
 import {CssClasses} from './Css';
-import {RequestInfo} from './Ajax';
+import {RequestInfo, Response} from './Ajax';
 import {WidgetInterface} from './Widget';
 import {Object, ObjectInterface} from './Object';
 import {ActionInterface, ActionEvent, RequestAction} from './Action';
@@ -64,6 +64,11 @@ export interface ContainerInterface extends ObjectInterface
      * Handle flash messages
      */
     handleFlashes: (flashes: FlashMessageInterface[]) => void;
+
+    /**
+     * Handle error state
+     */
+    handleError: (message: string, response?: Response) => void;
 
     /**
      * Get parent container
@@ -455,6 +460,12 @@ export class Container extends Object implements ContainerInterface
     handleFlashes(flashes: FlashMessageInterface[]): void {
         // trigger event
         var event = $.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
+        $(this.getElement() || document.body).trigger(event);
+    }
+
+    handleError(message: string, response?: Response): void {
+        // trigger event
+        var event = $.Event(DomEvents.HANDLE_ERROR, {message: message, response: response});
         $(this.getElement() || document.body).trigger(event);
     }
 

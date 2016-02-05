@@ -4,26 +4,47 @@ namespace Imatic\Bundle\ViewBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
 
 /**
- * Kernel response listener
+ * Kernel subscriber
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-class KernelResponseListener
+class KernelSubscriber implements EventSubscriberInterface
 {
     /** @var LayoutHelper */
     private $layoutHelper;
     /** @var TranslatorInterface */
     private $translator;
+    /** @var bool */
+    private $debug;
+    /** @var object|null */
+    private $lastException;
 
-    public function __construct(LayoutHelper $layoutHelper, TranslatorInterface $translator)
+    /**
+     * @param LayoutHelper        $layoutHelper
+     * @param TranslatorInterface $translator
+     * @param bool                $debug
+     */
+    public function __construct(LayoutHelper $layoutHelper, TranslatorInterface $translator, $debug)
     {
         $this->layoutHelper = $layoutHelper;
         $this->translator = $translator;
+        $this->debug = $debug;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::RESPONSE => 'onKernelResponse',
+            KernelEvents::EXCEPTION => 'onKernelException',
+        ];
     }
 
     /**
@@ -45,7 +66,20 @@ class KernelResponseListener
 
                 // title, fullTitle
                 $this->setTitleHeaders($response);
+
+                // exception info (debug only)
+                if ($this->debug && $this->lastException) {
+                    $this->setExceptionHeader($response, $this->lastException);
+                    $this->lastException = null;
+                }
             }
+        }
+    }
+
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        if ($this->debug) {
+            $this->lastException = $event->getException();
         }
     }
 
@@ -88,5 +122,18 @@ class KernelResponseListener
                 json_encode($title)
             );
         }
+    }
+
+    private function setExceptionHeader(Response $response, $exception)
+    {
+        $info = [
+            'className' => get_class($exception),
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'trace' => $exception->getTraceAsString(),
+        ];
+
+        $response->headers->set('X-Debug-Exception', json_encode($info));
     }
 }

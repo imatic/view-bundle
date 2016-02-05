@@ -177,10 +177,11 @@ services:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper
 
     # Event listners
-    imatic_view.event_listener.kernel_response:
-        class: Imatic\Bundle\ViewBundle\EventListener\KernelResponseListener
+    imatic_view.event_listener.kernel_subscriber:
+        class: Imatic\Bundle\ViewBundle\EventListener\KernelSubscriber
         arguments:
             - '@imatic_view.templating.helper.layout'
             - '@translator'
+            - '%kernel.debug%'
         tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_subscriber }

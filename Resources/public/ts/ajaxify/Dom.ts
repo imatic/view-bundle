@@ -69,4 +69,14 @@ export class DomEvents
      * }
      */
     static RENDER_FLASH_MESSAGES = 'render_flash_messages.ajaxify.imatic';
+
+    /**
+     * Even triggered when an error has occured
+     *
+     * Arguments: {
+     *      message: string;
+     *      response?: Response;
+     * }
+     */
+    static HANDLE_ERROR = 'handle_error.ajaxify.imatic';
 }

@@ -4,6 +4,7 @@ import {ModalContainerHandler} from './ModalContainer';
 import {VoidContainerHandler} from './VoidContainer';
 import {LinkHandler} from './Link';
 import {FormHandler} from './Form';
+import {Response} from './Ajax';
 import {FlashMessageInterface} from './FlashMessage';
 import {ContainerInterface, ContainerHandler, ContainerNotFoundException} from './Container';
 import {WidgetInterface, WidgetHandler} from './Widget';
@@ -59,6 +60,7 @@ export class HTMLDocumentHandler
             .on(DomEvents.ACTIONS, this.onActions)
             .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
             .on(DomEvents.HANDLE_FLASH_MESSAGES, this.onHandleFlashMessages)
+            .on(DomEvents.HANDLE_ERROR, this.onHandleError)
         ;
     }
 
@@ -152,7 +154,7 @@ export class HTMLDocumentHandler
     }
 
     /**
-     * Handle beforeContentUpdate event
+     * Handle content update event
      */
     private onBeforeContentUpdate = (event: JQueryEventObject): void => {
         var element = <HTMLElement> event.target;
@@ -171,10 +173,45 @@ export class HTMLDocumentHandler
     };
 
     /**
-     * Handle onHandleFlashMessages event
+     * Handle flash message event
      */
     private onHandleFlashMessages = (event: JQueryEventObject): void => {
         this.showFlashMessages(event['flashes'], <HTMLElement> event.target);
+    };
+
+    /**
+     * Handle error event
+     */
+    private onHandleError = (event: JQueryEventObject): void => {
+        var message = event['message'];
+        var response = <Response> event['response'];
+
+        if (response && response.exception) {
+            // show exception information that is available in debug mode
+            var modal = new Modal();
+
+            var body = '<table class="table">'
+                    + '<tr><th>Message</th><td class="text-danger">' + this.escape(response.exception.message) + '</td></tr>'
+                    + '<tr><th>Class</th><td>' + this.escape(response.exception.className) + '</td></tr>'
+                    + '<tr><th>File</th><td>' + this.escape(response.exception.file) + '</td></tr>'
+                    + '<tr><th>Line</th><td>' + response.exception.line + '</td></tr>'
+                    + '<tr><th>Trace</th><td><pre>' + this.escape(response.exception.trace) + '</pre></td></tr>'
+                + '</table>';
+
+            modal.setSize(ModalSize.LARGE);
+            modal.setTitle(message);
+            modal.setBody(body);
+            
+            $(modal.getElement()).addClass('debug-exception');
+
+            modal.show();
+        } else {
+            // show the generic message
+            this.showFlashMessages(
+                [{type: 'error', message: message}],
+                <HTMLElement> event.target
+            );
+        }
     };
 
     /**
@@ -196,7 +233,7 @@ export class HTMLDocumentHandler
 
             for (var i = 0; i < flashes.length; ++i) {
                 body += '<div class="alert alert-' + flashes[i].type + '">'
-                    + $('<div/>').text(flashes[i].message).html()
+                    + this.escape(flashes[i].message)
                     + '</div>'
                 ;
             }
@@ -207,6 +244,17 @@ export class HTMLDocumentHandler
 
             modal.show();
         }
+    }
+
+    /**
+     * Escape data for HTML output
+     *
+     * Quotes are not escaped.
+     *
+     * For internal use only.
+     */
+    private escape(data: string): string {
+        return $('<div></div>').text(data).html();
     }
 
     /**

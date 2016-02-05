@@ -191,6 +191,19 @@ table.table-auto {
 }
 
 // === Modals ===
+.modal-body {
+    overflow-x: auto;
+}
+
+.modal.debug-exception {
+    .modal-content {
+        border: 3px solid fade(@brand-danger, 80%);
+    }
+    .modal-title {
+        color: @brand-danger;
+    }
+}
+
 @media (min-width: 768px) {
     .modal-dialog.modal-max {
         width: 90%; /* fallback */
