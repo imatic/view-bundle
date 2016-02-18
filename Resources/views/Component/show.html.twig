@@ -10,9 +10,9 @@
         {% set fields = imatic_view_show_fields(fields | default([])) %}
         {% set show = imatic_view_show(show | default([])) %}
 
-        <h2>{{ item }}</h2>
+        {% block title %}<h2>{{ item }}</h2>{% endblock %}
 
-        <table class="table table-condensed">
+        {% block table_tag %}<table class="table table-condensed">{% endblock %}
             {% for field in fields %}
                 <tr class="{{ field.format }} {{ field.class }}">
                     <th>{{ field.label|trans({}, show.translationDomain) }}</th>
