@@ -12,7 +12,7 @@ import {Url} from './Url';
 export class FormHandler
 {
     public submitMarkAttr = 'data-marked-submit-element';
-    public submitElementSelector = 'input[type=submit], button';
+    public submitElementSelector = 'input[type=submit], button:not([type=reset], [type=button])';
     private formFactory = new FormFactory(this);
 
     constructor(
