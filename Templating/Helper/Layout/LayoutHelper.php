@@ -39,6 +39,7 @@ class LayoutHelper
             || (
                 $currentRequest !== $masterRequest
                 && !$currentRequest->attributes->has('exception')
+                && !$currentRequest->attributes->get('_layout', false)
             )
         ) {
             return false;
@@ -55,16 +56,6 @@ class LayoutHelper
     public function isModalDialog()
     {
         return $this->requestStack->getMasterRequest()->headers->has('X-Modal-Dialog');
-    }
-
-    /**
-     * See if flash messages are handled by headers
-     *
-     * @return bool
-     */
-    public function hasFlashMessages()
-    {
-        return $this->hasLayout();
     }
 
     /**

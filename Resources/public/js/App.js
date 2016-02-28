@@ -3,22 +3,29 @@
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-export default {
-    /**
-     * Get current application locale
-     *
-     * @returns {String}
-     */
-    getLocale: function () {
-        return document.documentElement.getAttribute('lang');
-    },
 
-    /**
-     * Get base application path
-     *
-     * @returns {String}
-     */
-    getBasePath: function () {
-        return document.documentElement.getAttribute('data-base-path');
-    },
+/**
+ * Get current application locale
+ *
+ * @returns {String}
+ */
+function getLocale()
+{
+    return document.documentElement.getAttribute('lang');
+}
+
+/**
+ * Get base application path
+ *
+ * @returns {String}
+ */
+function getBasePath()
+{
+    return document.documentElement.getAttribute('data-base-path');
+}
+
+// exports
+export {
+    getLocale,
+    getBasePath,
 }

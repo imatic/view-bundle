@@ -127,7 +127,7 @@ table.table-auto {
             &.text {
                 .text-left;
             }
-            &.number, &.money, &.date {
+            &.number, &.money, &.date, &.datetime {
                 .text-right;
             }
             &.boolean, &.actions {
@@ -191,11 +191,35 @@ table.table-auto {
 }
 
 // === Modals ===
+.modal.debug-exception {
+    .modal-content {
+        border: 3px solid fade(@brand-danger, 80%);
+    }
+    .modal-title {
+        color: @brand-danger;
+    }
+}
+
 @media (min-width: 768px) {
     .modal-dialog.modal-max {
         width: 90%; /* fallback */
         width: ~"calc(100% - 60px) !important";
     }
+}
+
+// === Select2 ===
+.select2-container {
+    width: 100% !important;
+    padding: 0;
+}
+.select2-search__field {
+    width: 100% !important;
+}
+.select2-close-mask{
+    z-index: 10099;
+}
+.select2-dropdown{
+    z-index: 10051;
 }
 
 // === Alerts ===

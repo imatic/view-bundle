@@ -1,5 +1,6 @@
 import * as Ajaxify from './Ajaxify';
 import {DomEvents} from './Dom';
+import {EventDispatcher, Event} from './Event';
 
 /**
  * Modal size
@@ -132,7 +133,7 @@ export class ModalStackHandler
 /**
  * Modal
  */
-export class Modal
+export class Modal extends EventDispatcher
 {
     static uidCounter = 0;
 
@@ -141,6 +142,8 @@ export class Modal
     private closable: boolean = true;
 
     constructor() {
+        super();
+
         this.uid = ++Modal.uidCounter;
     }
 
@@ -202,6 +205,8 @@ export class Modal
                 .trigger(DomEvents.BEFORE_CONTENT_UPDATE)
                 .remove()
             ;
+
+            this.dispatch('destroyed', new ModalEvent(this));
         }
     }
 
@@ -365,5 +370,17 @@ export class Modal
         $(this.element).on('hidden.bs.modal', (): void => {
             this.destroy();
         });
+
+        this.dispatch('created', new ModalEvent(this));
+    }
+}
+
+/**
+ * Modal event
+ */
+export class ModalEvent extends Event
+{
+    constructor(public modal: Modal) {
+        super();
     }
 }

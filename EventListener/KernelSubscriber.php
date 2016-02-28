@@ -1,0 +1,139 @@
+<?php
+
+namespace Imatic\Bundle\ViewBundle\EventListener;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
+
+/**
+ * Kernel subscriber
+ *
+ * @author Pavel Batecko <pavel.batecko@imatic.cz>
+ */
+class KernelSubscriber implements EventSubscriberInterface
+{
+    /** @var LayoutHelper */
+    private $layoutHelper;
+    /** @var TranslatorInterface */
+    private $translator;
+    /** @var bool */
+    private $debug;
+    /** @var object|null */
+    private $lastException;
+
+    /**
+     * @param LayoutHelper        $layoutHelper
+     * @param TranslatorInterface $translator
+     * @param bool                $debug
+     */
+    public function __construct(LayoutHelper $layoutHelper, TranslatorInterface $translator, $debug)
+    {
+        $this->layoutHelper = $layoutHelper;
+        $this->translator = $translator;
+        $this->debug = $debug;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::RESPONSE => 'onKernelResponse',
+            KernelEvents::EXCEPTION => 'onKernelException',
+        ];
+    }
+
+    /**
+     * On kernel response
+     *
+     * @param FilterResponseEvent $event
+     */
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        if ($event->isMasterRequest()) {
+            $request = $event->getRequest();
+            $response = $event->getResponse();
+
+            if ($request->isXmlHttpRequest() && !$response->isRedirection()) {
+                // flash messages
+                if ($request->hasSession() && !$response->headers->has('X-Flash-Messages')) {
+                    $this->setFlashMessageHeader($response, $request->getSession());
+                }
+
+                // title, fullTitle
+                $this->setTitleHeaders($response);
+
+                // exception info (debug only)
+                if ($this->debug && $this->lastException) {
+                    $this->setExceptionHeader($response, $this->lastException);
+                    $this->lastException = null;
+                }
+            }
+        }
+    }
+
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        if ($this->debug) {
+            $this->lastException = $event->getException();
+        }
+    }
+
+    private function setFlashMessageHeader(Response $response, SessionInterface $session)
+    {
+        $flashBag = $session->getFlashBag();
+
+        $flashes = [];
+
+        foreach ($flashBag->all() as $type => $messages) {
+            for ($i = 0; isset($messages[$i]); ++$i) {
+                $flashes[] = [
+                    'type' => $type,
+                    'message' => $this->translator->trans($messages[$i], [], 'messages'),
+                ];
+            }
+        }
+
+        $response->headers->set(
+            'X-Flash-Messages',
+            json_encode($flashes)
+        );
+    }
+
+    private function setTitleHeaders(Response $response)
+    {
+        $title = [];
+
+        if ($this->layoutHelper->hasTitle()) {
+            $title['title'] = $this->layoutHelper->getTitle();
+        }
+
+        if ($this->layoutHelper->hasFullTitle()) {
+            $title['fullTitle'] = $this->layoutHelper->getFullTitle();
+        }
+
+        if (!empty($title)) {
+            $response->headers->set(
+                'X-Title',
+                json_encode($title)
+            );
+        }
+    }
+
+    private function setExceptionHeader(Response $response, $exception)
+    {
+        $info = [
+            'className' => get_class($exception),
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'trace' => $exception->getTraceAsString(),
+        ];
+
+        $response->headers->set('X-Debug-Exception', json_encode($info));
+    }
+}

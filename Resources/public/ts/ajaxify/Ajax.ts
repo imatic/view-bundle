@@ -13,6 +13,18 @@ export enum DataType
 }
 
 /**
+ * Exception info
+ */
+interface ExceptionInfoInterface
+{
+    className: string;
+    message: string;
+    file: string;
+    line: number;
+    trace: string;
+}
+
+/**
  * Request info
  *
  * Holds information about a request.
@@ -289,6 +301,13 @@ class ResponseFactory
             fullTitle = titles['fullTitle'];
         }
 
+        // parse exception info
+        var exception;
+        var exceptionJson = xhr.getResponseHeader('X-Debug-Exception');
+        if (exceptionJson) {
+            exception = $.parseJSON(exceptionJson);
+        }
+
         // populate the response object
         response.title = title || '';
         response.fullTitle = fullTitle || '';
@@ -300,6 +319,7 @@ class ResponseFactory
         response.aborted = (0 === xhr.status || 'abort' === xhr.statusText);
         response.request = request.getInfo();
         response.flashes = flashes;
+        response.exception = exception;
 
         return response;
     }
@@ -347,6 +367,7 @@ export class Response
     title: string;
     fullTitle: string;
     flashes: FlashMessageInterface[];
+    exception: ExceptionInfoInterface;
     data: any;
     dataType: DataType;
     successful: boolean;

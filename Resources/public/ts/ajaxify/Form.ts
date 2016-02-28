@@ -4,6 +4,7 @@ import {CssClasses} from './Css';
 import {RequestInfo} from './Ajax';
 import {Widget, WidgetHandler} from './Widget';
 import {ActionInterface, RequestAction} from './Action';
+import {Url} from './Url';
 
 /**
  * Form handler
@@ -11,7 +12,7 @@ import {ActionInterface, RequestAction} from './Action';
 export class FormHandler
 {
     public submitMarkAttr = 'data-marked-submit-element';
-    public submitElementSelector = 'input[type=submit], button';
+    public submitElementSelector = 'input[type=submit], button:not([type=reset], [type=button])';
     private formFactory = new FormFactory(this);
 
     constructor(
@@ -113,6 +114,7 @@ export class Form extends Widget
         var form = <HTMLFormElement> this.element;
         var formData;
         var formTarget = form.getAttribute('target');
+        var actions = [];
 
         // get used submit button
         var submitButton = this.getUsedSubmitButton(form);
@@ -138,30 +140,33 @@ export class Form extends Widget
             // determine url
             var url = submitButton && submitButton.hasAttribute('formaction')
                 ? submitButton.getAttribute('formaction')
-                : form.action
+                : form.getAttribute('action') || ''
             ;
 
             // determine method
             var method = submitButton && submitButton.hasAttribute('formmethod')
                 ? submitButton.getAttribute('formmethod')
-                : form.method || 'GET'
+                : form.getAttribute('method') || 'GET'
             ;
 
             // create action
-            var action = new RequestAction(
-                this,
-                new RequestInfo(
-                    url,
-                    method,
-                    formData,
-                    this.getOption('contentSelector') || null
-                )
-            );
+            // make sure the url is HTTP and local
+            var parsedUrl = new Url(url);
 
-            return [action];
+            if (parsedUrl.isLocal() && parsedUrl.isHttp()) {
+                actions.push(new RequestAction(
+                    this,
+                    new RequestInfo(
+                        url,
+                        method,
+                        formData,
+                        this.getOption('contentSelector') || null
+                    )
+                ));
+            }
         }
 
-        return [];
+        return actions;
     }
 
     getDefaultConfirmMessage(): string {

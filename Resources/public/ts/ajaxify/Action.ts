@@ -344,18 +344,18 @@ export class RequestAction extends Action
         ) {
             // determine current request
             var currentRequest = null;
+            var currentRequestInitiator = null;
 
             if ('@reset' !== info.url) {
-                currentRequest = container.getCurrentRequest();
+                currentRequest = container.getCurrentGetRequest();
+                currentRequestInitiator = container.getCurrentGetRequestInitiator();
             }
             if (!currentRequest) {
-                currentRequest = Ajaxify.requestHelper.parseRequestString(
-                    container.getOption('initial')
-                );
+                currentRequest = container.getInitialRequest();
+                currentRequestInitiator = null;
             }
 
             // replace this action's initiator
-            var currentRequestInitiator = container.getCurrentRequestInitiator();
             if (currentRequestInitiator) {
                 this.setInitiator(currentRequestInitiator);
             }
@@ -386,24 +386,19 @@ export class RequestAction extends Action
     /**
      * Handle response
      */
-    handleResponse(container: ContainerInterface, response: Response): void {
+    private handleResponse(container: ContainerInterface, response: Response): void {
         // handle response
-        if (response.valid) {
-            var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, response));
+        var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, response));
 
-            if (event.proceed) {
-                container.setContent(response.data);
-            }
+        if (event.proceed) {
+            container.setContent(response.data);
         }
 
         // flash messages
         if (response.flashes.length > 0) {
             container.handleFlashes(response.flashes);
         } else if (!response.valid && !response.aborted) {
-            container.handleFlashes([{
-                type: 'danger',
-                message: 'An error occurred'
-            }]);
+            container.handleError('Internal server error', response);
         }
 
         // complete event
@@ -429,12 +424,10 @@ export class ResponseAction extends Action
         this.emit(ActionEvent.createBegin(this, container));
 
         // handle response
-        if (this.response.valid) {
-            var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, this.response));
+        var event = <ActionEvent> this.emit(ActionEvent.createApply(this, container, this.response));
 
-            if (event.proceed) {
-                container.setContent(this.response.data);
-            }
+        if (event.proceed) {
+            container.setContent(this.response.data);
         }
 
         // complete event
@@ -481,7 +474,7 @@ export class ActionEvent extends Event
         event.action = action;
         event.container = container;
         event.response = response;
-        event.proceed = true;
+        event.proceed = response.valid;
 
         return event;
     }

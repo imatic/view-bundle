@@ -43,13 +43,19 @@
                 </li>
             </ul>
             {% if pager_options.page_text|default('expanded') == 'expanded' %}
-                <p>{{ 'pagination'|trans({
-                        '%first%':pager.firstIndice,
-                        '%last%':pager.lastIndice,
-                        '%total%':pager.total
-                    }, 'ImaticViewBundleComponent') }}</p>
+                <p class="pagination-text">
+                    {{ 'pagination'|transchoice(
+                        pager.total, {
+                            '%first%': pager.firstIndice,
+                            '%last%': pager.lastIndice,
+                        },
+                        'ImaticViewBundleComponent'
+                    ) }}
+                </p>
             {% else %}
-                <p>{{ pager.page }}/{{ pager.total }}</p>
+                <p class="pagination-text">
+                    {{ pager.page }}/{{ pager.total }}
+                </p>
             {% endif %}
         {% endif %}
     {% endspaceless %}

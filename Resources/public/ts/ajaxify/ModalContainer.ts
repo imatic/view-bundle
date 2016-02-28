@@ -1,5 +1,6 @@
 import * as Ajaxify from './Ajaxify';
 import {DomEvents} from './Dom';
+import {EventInterface} from './Event';
 import {Response} from './Ajax';
 import {Modal, ModalSize} from './Modal';
 import {ConfigurationInterface, ConfigurationProcessorInterface} from './Configuration';
@@ -10,9 +11,6 @@ import {Form} from './Form';
 
 /**
  * Modal configuration defaults
- *
- * If you need to change the defaults at runtime, use:
- * imatic.Ajaxify.configBuilder.addDefaults({someKey: 'someValue'})
  */
 export var ModalConfigurationDefaults: ConfigurationInterface = {
     modalSize: ModalSize.NORMAL,
@@ -20,6 +18,7 @@ export var ModalConfigurationDefaults: ConfigurationInterface = {
     modalTitle: '',
     modalFooter: '',
     modalOnClose: '',
+    modalOnCloseMod: '',
     modalCloseOnFormSuccess: true,
     modalForwardFormResponse: true
 };
@@ -95,13 +94,55 @@ export class ModalContainer extends Container
 {
     originalTrigger: WidgetInterface;
 
-    private modal = new Modal();
+    private modal: Modal;
     private actionInitiator: WidgetInterface;
     private responseTitle: string;
     private resendResponse: Response;
+    private performedNonGetRequests: boolean = false;
+
+    constructor(
+        containerHandler: ContainerHandler,
+        element: HTMLElement = null
+    ) {
+        super(containerHandler, element);
+
+        this.modal = new Modal();
+
+        // perform additional tasks when the modal is actually created
+        this.modal.addCallback('created', (event: EventInterface) => {
+            this.onModalCreated();
+        });
+    }
 
     getModal(): Modal {
         return this.modal;
+    }
+
+    private onModalCreated() {
+        var modalElement = this.modal.getElement();
+
+        // remember if any non-GET requests happened within the modal
+        $(modalElement).on(DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
+            var actionEvent = <ActionEvent> event['actionEvent'];
+
+            if (actionEvent.response && 'GET' !== actionEvent.response.request.method) {
+                this.performedNonGetRequests = true;
+            }
+        });
+
+        // redirect action start/complete events through the original trigger
+        $(modalElement).on(DomEvents.ACTION_START + ' ' + DomEvents.ACTION_COMPLETE, (event: JQueryEventObject) => {
+            if (this.originalTrigger) {
+                event.stopPropagation();
+
+                $(this.originalTrigger.getElement()).trigger(
+                    $.Event(event.type + '.' + event.namespace, {
+                        container: event['container'],
+                        actionEvent: event['actionEvent'],
+                    })
+                );
+            }
+        });
     }
 
     loadOptions(): ConfigurationInterface {
@@ -117,7 +158,11 @@ export class ModalContainer extends Container
         }
 
         if (this.originalTrigger) {
-            this.executeOnClose(this.originalTrigger, this.originalTrigger.getOption('modalOnClose'));
+            this.executeOnClose(
+                this.originalTrigger,
+                <string> this.originalTrigger.getOption('modalOnClose'),
+                <string> this.originalTrigger.getOption('modalOnCloseMod')
+            );
         }
 
         super.destroy();
@@ -126,11 +171,14 @@ export class ModalContainer extends Container
     /**
      * Execute on close action
      */
-    private executeOnClose(originalTrigger: WidgetInterface, onClose: any) {
+    private executeOnClose(originalTrigger: WidgetInterface, onClose?: string, onCloseMod?: string) {
         var actions;
 
-        if (onClose) {
-            // load on close
+        if (onCloseMod && this.performedNonGetRequests) {
+            // perform on close actions (only when a non-GET request has been made within the modal)
+            actions = Ajaxify.actionHelper.parseActionString(onCloseMod, originalTrigger);
+        } else if (onClose) {
+            // perform on close actions
             actions = Ajaxify.actionHelper.parseActionString(onClose, originalTrigger);
         } else if (this.resendResponse) {
             // resend response
@@ -139,7 +187,7 @@ export class ModalContainer extends Container
             this.resendResponse = null;
         }
 
-        if (actions) {
+        if (actions && actions.length > 0) {
             $(originalTrigger.getElement()).trigger(
                 $.Event(DomEvents.ACTIONS, {actions: actions})
             );
@@ -160,6 +208,17 @@ export class ModalContainer extends Container
             }
 
             this.actionInitiator = event.action.getInitiator();
+
+            // dom event
+            var eventTarget = this.getElement() || this.originalTrigger.getElement();
+            if (eventTarget) {
+                $(eventTarget).trigger(
+                    $.Event(DomEvents.ACTION_START, {
+                        container: this,
+                        actionEvent: event,
+                    })
+                );
+            }
         });
 
         action.listen('apply', (event: ActionEvent): void => {

@@ -4,6 +4,7 @@ import {CssClasses} from './Css';
 import {RequestInfo} from './Ajax';
 import {Widget, WidgetHandler} from './Widget';
 import {ActionInterface, RequestAction} from './Action';
+import {Url} from './Url';
 
 /**
  * Link handler
@@ -94,11 +95,7 @@ class LinkFactory
      * Create a link
      */
     create(element: HTMLElement): Link {
-        var link = new Link(element);
-
-        link.url = $(element).attr('href') || $(element).data('href');
-
-        return link;
+        return new Link(element);
     }
 }
 
@@ -107,27 +104,34 @@ class LinkFactory
  */
 export class Link extends Widget
 {
-    url: string;
-
     doCreateActions(): ActionInterface[] {
         var actions = [];
 
         var actionString = this.getOption('action');
 
         if (actionString) {
+            // use action string
             $.merge(actions, Ajaxify.actionHelper.parseActionString(actionString, this));
-        }
+        } else {
+            // use URL from href or data-href
+            var url = $(this.element).attr('href') || $(this.element).data('href');
 
-        if (this.url) {
-            actions.push(new RequestAction(
-                this,
-                new RequestInfo(
-                    this.url,
-                    this.getOption('method') || 'GET',
-                    null,
-                    this.getOption('contentSelector') || null
-                )
-            ));
+            if (typeof url !== 'undefined') {
+                var parsedUrl = new Url(url);
+
+                // ignore external, non-HTTP URLS and anchor links
+                if (parsedUrl.isLocal() && parsedUrl.isHttp() && '#' !== url.charAt(0)) {
+                    actions.push(new RequestAction(
+                        this,
+                        new RequestInfo(
+                            url,
+                            this.getOption('method') || 'GET',
+                            null,
+                            this.getOption('contentSelector') || null
+                        )
+                    ));
+                }
+            }
         }
 
         return actions;

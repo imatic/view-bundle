@@ -4,7 +4,7 @@ import {Exception} from './Exception';
 import {DomEvents} from './Dom';
 import {FlashMessageInterface} from './FlashMessage';
 import {CssClasses} from './Css';
-import {RequestInfo} from './Ajax';
+import {RequestInfo, Response} from './Ajax';
 import {WidgetInterface} from './Widget';
 import {Object, ObjectInterface} from './Object';
 import {ActionInterface, ActionEvent, RequestAction} from './Action';
@@ -44,6 +44,21 @@ export interface ContainerInterface extends ObjectInterface
     getCurrentRequestInitiator: () => WidgetInterface;
 
     /**
+     * Get current GET request, if any
+     */
+    getCurrentGetRequest: () => RequestInfo;
+
+    /**
+     * Get initiator of the current GET request, if any
+     */
+    getCurrentGetRequestInitiator: () => WidgetInterface;
+
+    /**
+     * Get initial request
+     */
+    getInitialRequest: () => RequestInfo;
+
+    /**
      * Get container's element
      *
      * NULL may be returned.
@@ -64,6 +79,11 @@ export interface ContainerInterface extends ObjectInterface
      * Handle flash messages
      */
     handleFlashes: (flashes: FlashMessageInterface[]) => void;
+
+    /**
+     * Handle error state
+     */
+    handleError: (message: string, response?: Response) => void;
 
     /**
      * Get parent container
@@ -313,6 +333,8 @@ export class Container extends Object implements ContainerInterface
     private currentAction: ActionInterface;
     private currentRequest: RequestInfo = null;
     private currentRequestInitiator: WidgetInterface = null;
+    private currentGetRequest: RequestInfo = null;
+    private currentGetRequestInitiator: WidgetInterface = null;
 
     constructor(
         containerHandler: ContainerHandler,
@@ -369,6 +391,20 @@ export class Container extends Object implements ContainerInterface
         return this.currentRequestInitiator;
     }
 
+    getCurrentGetRequest(): RequestInfo {
+        return this.currentGetRequest;
+    }
+
+    getCurrentGetRequestInitiator(): WidgetInterface {
+        return this.currentGetRequestInitiator;
+    }
+
+    getInitialRequest(): RequestInfo {
+        return Ajaxify.requestHelper.parseRequestString(
+            this.getOption('initial')
+        );
+    }
+
     getElement(): HTMLElement {
         return this._element;
     }
@@ -412,6 +448,14 @@ export class Container extends Object implements ContainerInterface
 
         if (elem) {
             $(elem).addClass(CssClasses.COMPONENT_BUSY);
+
+            // dom event
+            $(elem).trigger(
+                $.Event(DomEvents.ACTION_START, {
+                    container: this,
+                    actionEvent: event,
+                })
+            );
         }
     }
 
@@ -427,10 +471,15 @@ export class Container extends Object implements ContainerInterface
         }
 
         // handle response
-        if (event.response) {
+        if (event.response && event.response.successful) {
             // update current request and initiator
             this.currentRequest = event.response.request;
             this.currentRequestInitiator = event.action.getInitiator();
+
+            if ('GET' === event.response.request.method) {
+                this.currentGetRequest = event.response.request;
+                this.currentGetRequestInitiator = event.action.getInitiator();
+            }
         }
 
         // dom event
@@ -447,6 +496,12 @@ export class Container extends Object implements ContainerInterface
     handleFlashes(flashes: FlashMessageInterface[]): void {
         // trigger event
         var event = $.Event(DomEvents.HANDLE_FLASH_MESSAGES, {flashes: flashes});
+        $(this.getElement() || document.body).trigger(event);
+    }
+
+    handleError(message: string, response?: Response): void {
+        // trigger event
+        var event = $.Event(DomEvents.HANDLE_ERROR, {message: message, response: response});
         $(this.getElement() || document.body).trigger(event);
     }
 

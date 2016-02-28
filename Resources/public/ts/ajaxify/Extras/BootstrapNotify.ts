@@ -8,6 +8,7 @@ var flashTypes = {
     info: {delay: 5000, icon: 'glyphicon glyphicon-info-sign'},
     warning: {delay: 10000, icon: 'glyphicon glyphicon-warning-sign'},
     danger: {delay: 10000, icon: 'glyphicon glyphicon-exclamation-sign'},
+    error: {delay: 10000, icon: 'glyphicon glyphicon-exclamation-sign'},
     default: {delay: 10000, icon: 'glyphicon glyphicon-asterisk'},
 };
 
@@ -30,7 +31,7 @@ export function renderFlashMessages(event: JQueryEventObject) {
         var options = {
             message: flash.message,
             delay: flashType.delay,
-            icon: flashType.icon
+            icon: flashType.icon,
         };
         var settings = {
             type: flash.type,
@@ -39,6 +40,7 @@ export function renderFlashMessages(event: JQueryEventObject) {
                 enter: 'animated fadeInRight',
                 exit: 'animated fadeOutRight',
             },
+            z_index: 100000,
         };
 
         // show notification

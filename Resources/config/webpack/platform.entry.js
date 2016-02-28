@@ -15,6 +15,7 @@ require('eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js');
 require('select2/dist/js/select2.js');
 require('select2/dist/js/i18n/cs.js');
 require('select2/dist/js/i18n/en.js');
+require('./../../public/js/select2/select2-focus-war-fix.js');
 
 // Platform - view
 require('./../../public/ts/ajaxify/Ajaxify.ts');
