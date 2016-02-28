@@ -26,7 +26,7 @@
         "symfony/framework-bundle": "~2.7|~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "knplabs/knp-menu-bundle": "~2.0",
-        "imatic/genemuform-bundle": "dev-master#c42e1beaec5a7ab270b7ff279a49553111a43f71",
+        "imatic/genemuform-bundle": "~3.0",
         "imatic/form-bundle": "~3.0"
     },
     "require-dev": {
