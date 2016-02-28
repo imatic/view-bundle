@@ -4,29 +4,35 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Knp\Menu\ItemInterface;
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class Helper
 {
-    /**
-     * @var SecurityContextInterface
-     */
-    protected $securityContext;
+
     /**
      * @var TranslatorInterface
      */
     protected $translator;
-
     /**
-     * @param TranslatorInterface      $translator
-     * @param SecurityContextInterface $securityContext
+     * @var AuthorizationCheckerInterface
      */
-    public function __construct(TranslatorInterface $translator, SecurityContextInterface $securityContext = null)
+    private $authorizationChecker;
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        AuthorizationCheckerInterface $authorizationChecker = null,
+        TokenStorageInterface $tokenStorage = null)
     {
-        $this->securityContext = $securityContext;
         $this->translator = $translator;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -152,8 +158,8 @@ class Helper
     public function isUserLogged()
     {
         $logged = false;
-        if ($this->securityContext && $this->securityContext->getToken()) {
-            $logged = $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        if ($this->tokenStorage && $this->tokenStorage->getToken()) {
+            $logged = $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED');
         }
 
         return $logged;
@@ -165,8 +171,8 @@ class Helper
     public function getUser()
     {
         $user = null;
-        if ($this->securityContext && $this->securityContext->getToken()) {
-            $user = $this->securityContext->getToken()->getUser();
+        if ($this->tokenStorage && $this->tokenStorage->getToken()) {
+            $user = $this->tokenStorage->getToken()->getUser();
         }
 
         return $user;
@@ -183,8 +189,8 @@ class Helper
     public function isUserGranted($attributes, $object = null)
     {
         $granted = false;
-        if ($this->securityContext && $this->securityContext->getToken()) {
-            $granted = $this->securityContext->isGranted($attributes, $object);
+        if ($this->tokenStorage && $this->tokenStorage->getToken()) {
+            $granted = $this->authorizationChecker->isGranted($attributes, $object);
         }
 
         return $granted;

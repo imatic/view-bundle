@@ -4,7 +4,7 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Grid;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionOptions;
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TableOptions extends AbstractOptions
 {
@@ -29,7 +29,7 @@ class TableOptions extends AbstractOptions
         return $options;
     }
 
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'actions' => [],
@@ -41,15 +41,14 @@ class TableOptions extends AbstractOptions
             'translationDomain' => 'messages',
             'exports' => [],
         ]);
-        $resolver->setAllowedTypes([
-            'actions' => 'array',
-            'rowActions' => 'array',
-            'batchActions' => 'array',
-            'selectable' => 'bool',
-            'selectableColumn' => 'string',
-            'attr' => 'array',
-            'translationDomain' => 'string',
-            'exports' => 'array',
-        ]);
+
+        $resolver->setAllowedTypes('actions', 'array');
+        $resolver->setAllowedTypes('rowActions', 'array');
+        $resolver->setAllowedTypes('batchActions', 'array');
+        $resolver->setAllowedTypes('selectable', 'bool');
+        $resolver->setAllowedTypes('selectableColumn', 'string');
+        $resolver->setAllowedTypes('attr', 'array');
+        $resolver->setAllowedTypes('translationDomain', 'string');
+        $resolver->setAllowedTypes('exports', 'array');
     }
 }

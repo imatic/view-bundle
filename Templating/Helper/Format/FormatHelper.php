@@ -4,7 +4,6 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
@@ -22,7 +21,7 @@ class FormatHelper implements FormatterInterface
     private $formaterOptions;
 
     /**
-     * @var OptionsResolverInterface
+     * @var OptionsResolver
      */
     private $resolver;
 
@@ -50,9 +49,7 @@ class FormatHelper implements FormatterInterface
         $this->resolver->setDefaults([
             'is_safe' => false,
         ]);
-        $this->resolver->setAllowedTypes([
-            'is_safe' => 'bool'
-        ]);
+        $this->resolver->setAllowedTypes('is_safe', 'bool');
     }
 
     public function addFormatter($name, FormatterInterface $formatter, array $options = [])

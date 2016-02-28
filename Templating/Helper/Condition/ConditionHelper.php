@@ -2,9 +2,10 @@
 
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ConditionHelper
 {
@@ -19,25 +20,33 @@ class ConditionHelper
     private $layoutHelper;
 
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface
      */
-    private $securityContext;
+    private $tokenStorage;
+
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authorizationChecker;
 
     public function __construct(
-        SecurityContextInterface $securityContext,
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $authorizationChecker,
         LayoutHelper $layoutHelper,
         ExpressionLanguage $expressionLanguage = null
-    ) {
-        $this->expressionLanguage = $expressionLanguage ? : new ExpressionLanguage();
+    )
+    {
+        $this->expressionLanguage = $expressionLanguage ?: new ExpressionLanguage();
+        $this->authorizationChecker = $authorizationChecker;
         $this->expressionLanguage->register(
             'isGranted',
             function ($str) {
                 throw new \Exception($str . ' function is not implemented');
             }, function (array $values, $str) {
-                return $this->securityContext->isGranted($str);
-            });
+            return $this->authorizationChecker->isGranted($str);
+        });
         $this->layoutHelper = $layoutHelper;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function evaluate($expression, array $context = [])
@@ -51,8 +60,8 @@ class ConditionHelper
         }
 
         $context['user'] = null;
-        if ($this->securityContext->getToken()) {
-            $context['user'] = $this->securityContext->getToken()->getUser();
+        if ($this->tokenStorage->getToken()) {
+            $context['user'] = $this->tokenStorage->getToken()->getUser();
         }
         $context['hasLayout'] = $this->layoutHelper->hasLayout();
 

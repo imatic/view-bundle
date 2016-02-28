@@ -3,7 +3,6 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class AbstractOptions
 {
@@ -63,5 +62,5 @@ abstract class AbstractOptions
         return $options;
     }
 
-    abstract protected function configureOptions(OptionsResolverInterface $resolver);
+    abstract protected function configureOptions(OptionsResolver $resolver);
 }

@@ -5,11 +5,11 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Show;
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FieldOptions extends AbstractOptions
 {
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['name']);
         $resolver->setDefaults([
@@ -23,13 +23,12 @@ class FieldOptions extends AbstractOptions
                 return $options['name'];
             }
         ]);
-        $resolver->setAllowedTypes([
-            'name' => 'string',
-            'format' => 'string',
-            'formatOptions' => 'array',
-            'class' => 'string',
-            'label' => 'string',
-            'propertyPath' => ['string', 'NULL'],
-        ]);
+
+        $resolver->setAllowedTypes('name', 'string');
+        $resolver->setAllowedTypes('format', 'string');
+        $resolver->setAllowedTypes('formatOptions', 'array');
+        $resolver->setAllowedTypes('class', 'string');
+        $resolver->setAllowedTypes('label', 'string');
+        $resolver->setAllowedTypes('propertyPath', ['string', 'NULL']);
     }
 }
