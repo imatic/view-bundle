@@ -16,7 +16,7 @@ class StringUtilTest extends \PHPUnit_Framework_TestCase
     public function testSlugify()
     {
         $this->assertEquals('lorem-ipsum', StringUtil::slugify('lorem ipsum'));
-        $this->assertEquals('internationalization', StringUtil::slugify('Iñtërnâtiônàlizátiøn'));
+        $this->assertEquals('internationalization', StringUtil::slugify('Iñtërnâtiônàlizátión'));
     }
 
     public function testHumanize()

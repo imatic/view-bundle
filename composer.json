@@ -22,15 +22,15 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=3.0",
-        "sensio/framework-extra-bundle": ">=3.0",
-        "knplabs/knp-menu-bundle": "dev-master",
-        "genemu/form-bundle": "*",
-        "imatic/form-bundle": "dev-webpack"
+        "php": ">=5.4",
+        "symfony/framework-bundle": "~2.7|~3.0",
+        "sensio/framework-extra-bundle": "~3.0",
+        "knplabs/knp-menu-bundle": "~2.0",
+        "genemu/form-bundle": "~2.2",
+        "imatic/form-bundle": "~3.0"
     },
     "require-dev": {
-        "imatic/testing-bundle": "2.4.*"
+        "imatic/testing-bundle": "~3.0"
     },
     "autoload": {
         "psr-4": {
@@ -39,9 +39,7 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.6.x-dev"
-        }
+    "config": {
+        "secure-http": false
     }
 }
