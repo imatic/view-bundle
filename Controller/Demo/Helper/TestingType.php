@@ -2,7 +2,34 @@
 
 namespace Imatic\Bundle\ViewBundle\Controller\Demo\Helper;
 
+use Imatic\Bundle\FormBundle\Form\Type\DateRangeType;
+use Imatic\Bundle\FormBundle\Form\Type\DateTimeRangeType;
+use Imatic\Bundle\FormBundle\Form\Type\RangeType;
+use Imatic\Bundle\FormBundle\Form\Type\TimeRangeType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\PercentType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class TestingType extends AbstractType
@@ -11,72 +38,60 @@ class TestingType extends AbstractType
     {
         $choices = ['One', 'Two'];
         $types = [
-            'text' => [],
-            'textarea' => [],
-            'email' => [],
-            'integer' => [],
-            'money' => [],
-            'number' => [],
-            'password' => [],
-            'percent' => [],
-            'search' => [],
-            'url' => [],
-            'checkbox' => [],
-            'file' => [],
-            'radio' => [],
-            'choice' => [
-                ['choices' => $choices, 'expanded' => true, 'multiple' => true],
-                ['choices' => $choices, 'expanded' => false, 'multiple' => false],
-                ['choices' => $choices, 'expanded' => false, 'multiple' => true],
-                ['choices' => $choices, 'expanded' => true, 'multiple' => true],
+            'text' => ['type' => TextType::class],
+            'textarea' => ['type' => TextareaType::class],
+            'email' => ['type' => EmailType::class],
+            'money' => ['type' => MoneyType::class],
+            'number' => ['type' => NumberType::class],
+            'password' => ['type' => PasswordType::class],
+            'percent' => ['type' => PercentType::class],
+            'search' => ['type' => SearchType::class],
+            'url' => ['type' => UrlType::class],
+            'checkbox' => ['type' => CheckboxType::class],
+            'file' => ['type' => FileType::class],
+            'radio' => ['type' => RadioType::class],
+            'choice_1' => ['choices' => $choices, 'expanded' => true, 'multiple' => true, 'type' => ChoiceType::class],
+            'choice_2' => ['choices' => $choices, 'expanded' => false, 'multiple' => false, 'type' => ChoiceType::class],
+            'choice_3' => ['choices' => $choices, 'expanded' => false, 'multiple' => true, 'type' => ChoiceType::class],
+            'choice_4' => ['choices' => $choices, 'expanded' => true, 'multiple' => false, 'type' => ChoiceType::class],
+//            'genemu_jqueryselect2_choice' => ['choices' => $choices],
+//            'imatic_type_ajax_choice' => [
+//                ['route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) { return 1 == $value ? 'Test initial value' : null; }],
+//                ['route' => 'imatic_view_demo_component_formajaxchoice', 'multiple' => true],
+//            ],
+            'country' => ['type' => CountryType::class],
+            'language' => ['type' => LanguageType::class],
+            'locale' => ['type' => LocaleType::class],
+            'timezone' => ['type' => TimezoneType::class],
+            'currency' => ['type' => CurrencyType::class],
+            'date' => ['data' => new \DateTime('-1 week'), 'type' => DateType::class],
+            'datetime' => ['data' => new \DateTime('-1 week 17:00'), 'type' => DateTimeType::class],
+            'time' => ['data' => new \DateTime('12:00'), 'type' => TimeType::class],
+            'birthday' => ['type' => BirthdayType::class],
+            'imatic_type_date_range' => ['type' => DateRangeType::class],
+            'imatic_type_datetime_range' => ['type' => DateTimeRangeType::class],
+            'imatic_type_time_range' => ['type' => TimeRangeType::class],
+            'imatic_type_range' => ['type' => RangeType::class],
+            'collection_a' => [
+                'type' => CollectionType::class,
+                'entry_type' => NestedCollectionType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'data' => [['name' => 'Example', 'dates' => [new \DateTime('now')]]],
             ],
-            'genemu_jqueryselect2_choice' => ['choices' => $choices],
-            'imatic_type_ajax_choice' => [
-                ['route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) { return 1 == $value ? 'Test initial value' : null; }],
-                ['route' => 'imatic_view_demo_component_formajaxchoice', 'multiple' => true],
-            ],
-            'country' => [],
-            'language' => [],
-            'locale' => [],
-            'timezone' => [],
-            'currency' => [],
-            'date' => ['data' => new \DateTime('-1 week')],
-            'datetime' => ['data' => new \DateTime('-1 week 17:00')],
-            'time' => ['data' => new \DateTime('12:00')],
-            'birthday' => [],
-            'imatic_type_date_range' => [],
-            'imatic_type_datetime_range' => [],
-            'imatic_type_time_range' => [],
-            'imatic_type_range' => [],
-            'collection' => [
-                [
-                    'type' => new NestedCollectionType(),
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'data' => [['name' => 'Example', 'dates' => [new \DateTime('now')]]],
-                ],
-                [
-                    'type' => 'date',
-                    'data' => [new \DateTime('+1 week'), new \DateTime('+2 weeks')],
-                ]
+            'collection_b' => [
+                'type' => CollectionType::class,
+                'entry_type' => DateType::class,
+                'data' => [new \DateTime('+1 week'), new \DateTime('+2 weeks')],
             ],
         ];
 
         $defaultOptions = ['required' => false];
 
-        foreach ($types as $type => $options) {
-            if (is_int(key($options))) {
-                foreach ($options as $subKey => $subOptions) {
-                    $builder->add("{$type}_{$subKey}", $type, $subOptions + $defaultOptions);
-                }
-            } else {
-                $builder->add($type, $type, $options + $defaultOptions);
-            }
+        foreach ($types as $name => $options) {
+            $type = $options['type'];
+            unset($options['type']);
+            $builder->add($name, $type, $options + $defaultOptions);
         }
-    }
-
-    public function getName()
-    {
-        return 'testing';
     }
 }

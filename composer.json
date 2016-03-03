@@ -22,8 +22,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "symfony/framework-bundle": "~2.7|~3.0",
+        "php": ">=5.5",
+        "symfony/framework-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "knplabs/knp-menu-bundle": "~2.0",
         "imatic/genemuform-bundle": "~3.0",

@@ -66,7 +66,7 @@ class ComponentController extends Controller
      */
     public function formAction()
     {
-        $form = $this->createForm(new TestingType());
+        $form = $this->createForm(TestingType::class);
 
         return ['form' => $form->createView()];
     }
