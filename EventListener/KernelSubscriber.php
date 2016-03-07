@@ -134,6 +134,18 @@ class KernelSubscriber implements EventSubscriberInterface
             'trace' => $exception->getTraceAsString(),
         ];
 
-        $response->headers->set('X-Debug-Exception', json_encode($info));
+        // make sure all string values are valid UTF-8
+        // (error messages coming from the OS may not be UTF-8 encoded)
+        array_walk($info, function (&$value) {
+            if (is_string($value)) {
+                $value = iconv('UTF-8', 'UTF-8//IGNORE', $value);
+            }
+        });
+
+        $jsonString = json_encode($info);
+
+        if (false !== $jsonString) {
+            $response->headers->set('X-Debug-Exception', $jsonString);
+        }
     }
 }
