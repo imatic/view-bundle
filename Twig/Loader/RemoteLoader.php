@@ -2,16 +2,14 @@
 
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
-use Twig_Environment;
 use Twig_LoaderInterface;
-use Twig_ExistsLoaderInterface;
 use Twig_Error_Loader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Remote loader
  */
-class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
+class RemoteLoader implements Twig_LoaderInterface
 {
     /** @var ContainerInterface */
     private $container;
@@ -24,7 +22,7 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     }
 
     /**
-     * Add remote template
+     * Add a remote template
      *
      * @param string $name
      * @param string $url
@@ -44,27 +42,6 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         ];
     }
 
-    /**
-     * Check if we have the source code of a template, given its name.
-     *
-     * @param string $name The name of the template to check if we can load
-     *
-     * @return boolean If the template source code is handled by this loader or not
-     */
-    public function exists($name)
-    {
-        return isset($this->templates[$name]);
-    }
-
-    /**
-     * Gets the source code of a template, given its name.
-     *
-     * @param string $name The name of the template to load
-     *
-     * @return string The template source code
-     *
-     * @throws \Twig_Error_Loader When $name is not found
-     */
     public function getSource($name)
     {
         $this->ensureExists($name);
@@ -98,15 +75,6 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         return $source;
     }
 
-    /**
-     * Gets the cache key to use for the cache for a given template name.
-     *
-     * @param string $name The name of the template to load
-     *
-     * @return string The cache key
-     *
-     * @throws \Twig_Error_Loader When $name is not found
-     */
     public function getCacheKey($name)
     {
         $this->ensureExists($name);
@@ -125,20 +93,9 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         return $name;
     }
 
-    /**
-     * Returns true if the template is still fresh.
-     *
-     * @param string $name The template name
-     * @param timestamp $time The last modification time of the cached template
-     *
-     * @return Boolean true if the template is fresh, false otherwise
-     *
-     * @throws \Twig_Error_Loader When $name is not found
-     */
     public function isFresh($name, $time)
     {
         // this method is called only if env->isAutoReload() == TRUE
-        // that is usually true in DEV environments
         $this->ensureExists($name);
 
         return time() - $time < $this->templates[$name]['ttl'];
@@ -152,7 +109,6 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     private function checkCacheFileTtl($name)
     {
         // this method is called only if env->isAutoReload() == FALSE
-        // that is usually true in PROD environments
         if (
             false !== ($cacheFile = $this->container->get('twig')->getCacheFilename($name))
             && is_file($cacheFile)
@@ -171,7 +127,7 @@ class RemoteLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      */
     private function ensureExists($name)
     {
-        if (!$this->exists($name)) {
+        if (!isset($this->templates[$name])) {
             throw new Twig_Error_Loader(sprintf('Template "%s" is not a known remote template', $name));
         }
     }

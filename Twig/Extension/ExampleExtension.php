@@ -26,9 +26,6 @@ class ExampleExtension extends \Twig_Extension
         $this->templatingLocator = $templatingLocator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTokenParsers()
     {
         return [
@@ -39,9 +36,6 @@ class ExampleExtension extends \Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName()
     {
         return 'imatic_view_example';

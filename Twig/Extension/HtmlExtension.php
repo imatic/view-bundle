@@ -16,9 +16,6 @@ class HtmlExtension extends \Twig_Extension
         $this->htmlHelper = $htmlHelper;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFilters()
     {
         return [
@@ -28,9 +25,6 @@ class HtmlExtension extends \Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName()
     {
         return 'imatic_view_html';

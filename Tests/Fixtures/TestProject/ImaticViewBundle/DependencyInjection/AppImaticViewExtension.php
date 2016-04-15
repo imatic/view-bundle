@@ -8,9 +8,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class AppImaticDataExtension extends Extension
 {
-    /**
-     * {@inheritDoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

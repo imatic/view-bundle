@@ -21,9 +21,6 @@ class LayoutExtension extends Twig_Extension
         $this->layoutHelper = $layoutHelper;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFunctions()
     {
         return [
@@ -34,9 +31,6 @@ class LayoutExtension extends Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName()
     {
         return 'imatic_view_layout';

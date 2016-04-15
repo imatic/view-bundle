@@ -15,9 +15,6 @@ class UrlExtension extends \Twig_Extension
         $this->urlHelper = $urlHelper;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFilters()
     {
         return [
@@ -25,9 +22,6 @@ class UrlExtension extends \Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFunctions()
     {
         return [
@@ -38,9 +32,6 @@ class UrlExtension extends \Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName()
     {
         return 'imatic_view_url';

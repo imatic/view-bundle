@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class ImaticViewExtension extends Extension
 {
-    /**
-     * {@inheritDoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();

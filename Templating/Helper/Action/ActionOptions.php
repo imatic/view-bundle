@@ -7,17 +7,18 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @property string label
- * @property string name
- * @property string class
- * @property string type
- * @property array data
- * @property string route
- * @property array routeParams
- * @property string url
- * @property array nested
- * @property string condition
- * @property string tag
+ * @property string $label
+ * @property string $name
+ * @property string $class
+ * @property string $type
+ * @property array $data
+ * @property string $route
+ * @property array $routeParams
+ * @property string $url
+ * @property array $nested
+ * @property string $condition
+ * @property string $tag
+ * @property array $attrs
  */
 class ActionOptions extends AbstractOptions
 {
@@ -35,6 +36,7 @@ class ActionOptions extends AbstractOptions
             'nested' => [],
             'condition' => '',
             'tag' => 'a',
+            'attrs' => [],
         ]);
         $resolver->setAllowedTypes('label', 'string');
         $resolver->setAllowedTypes('name', 'string');
@@ -47,14 +49,16 @@ class ActionOptions extends AbstractOptions
         $resolver->setAllowedTypes('nested', 'array');
         $resolver->setAllowedTypes('condition', ['string', 'bool']);
         $resolver->setAllowedTypes('tag', 'string');
+        $resolver->setAllowedTypes('attrs', 'array');
         $resolver->setNormalizer(
-            'nested', function (Options $options, $nested) {
-            foreach ($nested as &$nestedAction) {
-                $nestedAction = new static($nestedAction);
-            }
+            'nested',
+            function (Options $options, $nested) {
+                foreach ($nested as &$nestedAction) {
+                    $nestedAction = new static($nestedAction);
+                }
 
-            return $nested;
-        }
+                return $nested;
+            }
         );
     }
 }

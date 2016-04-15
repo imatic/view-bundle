@@ -68,7 +68,7 @@ services:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.example:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ExampleExtension
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\ExampleExtension
         arguments:
             - '@templating.name_parser'
             - '@templating.locator'
@@ -77,7 +77,7 @@ services:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.component:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension
         arguments:
             - '@imatic_view.templating.helper.grid'
             - '@imatic_view.templating.helper.show'
@@ -86,22 +86,22 @@ services:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.layout:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\LayoutExtension
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\LayoutExtension
         arguments:
             - '@imatic_view.templating.helper.layout'
         tags:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.format:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\FormatExtension
-        lazy:         true
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\FormatExtension
+        lazy: true
         arguments:
             - '@imatic_view.templating.helper.format'
         tags:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.condition:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\ConditionExtension
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\ConditionExtension
         arguments:
             - '@imatic_view.templating.helper.condition'
         tags:
@@ -109,18 +109,15 @@ services:
 
     # Twig loaders
     imatic_view.twig.loader.remote:
-        class:        Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
+        class: Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
         arguments:
             - '@service_container'
         tags:
             - { name: 'twig.loader' }
 
     # Formatters
-    imatic_view.twig.extension.format.twig:
-        class:        Imatic\Bundle\ViewBundle\Templating\Helper\Format\TwigFormatter
-        lazy:         true
-        arguments:
-            - '@twig'
+    imatic_view.twig.extension.format.intl:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter
         tags:
             - { name: imatic_view.formatter, alias: time, is_safe: true }
             - { name: imatic_view.formatter, alias: date, is_safe: true }
@@ -128,7 +125,7 @@ services:
             - { name: imatic_view.formatter, alias: number }
 
     imatic_view.twig.extension.format.common:
-        class:        Imatic\Bundle\ViewBundle\Templating\Helper\Format\CommonFormatter
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Format\CommonFormatter
         arguments:
             - '@translator'
         tags:

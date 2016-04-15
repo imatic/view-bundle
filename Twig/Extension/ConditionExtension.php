@@ -18,9 +18,6 @@ class ConditionExtension extends Twig_Extension
         $this->conditionHelper = $conditionHelper;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFunctions()
     {
         return [
@@ -28,9 +25,6 @@ class ConditionExtension extends Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName()
     {
         return 'imatic_view_condition';

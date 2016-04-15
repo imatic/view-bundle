@@ -2,6 +2,8 @@
 
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Html;
 
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+
 class HtmlElement
 {
     protected static $emptyElements = ['img' => 1, 'hr' => 1, 'br' => 1, 'input' => 1, 'meta' => 1, 'area' => 1, 'embed' => 1, 'keygen' => 1,
@@ -56,8 +58,8 @@ class HtmlElement
         $elementString = trim(implode(' ', [$this->attributes, $this->classes, $this->data]));
         $elementString = strlen($elementString) ? ' ' . $elementString : $elementString;
 
-        if ($this->value || !array_key_exists($this->name, self::$emptyElements)) {
-            return sprintf('<%s%s>%s</%s>', $this->name, $elementString, $this->value, $this->name);
+        if ($this->value || !isset(self::$emptyElements[$this->name])) {
+            return sprintf('<%s%s>%s</%s>', $this->name, $elementString, StringUtil::escape($this->value), $this->name);
         } else {
             return sprintf('<%s%s>', $this->name, $elementString);
         }

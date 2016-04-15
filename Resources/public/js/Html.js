@@ -12,7 +12,7 @@
  */
 function escape(s)
 {
-    return s.replace(escapeRgxp, replaceHtmlChar);
+    return String(s).replace(escapeRgxp, replaceHtmlChar);
 }
 
 /**
