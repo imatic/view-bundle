@@ -47,21 +47,21 @@ services:
 
     # Twig extensions
     imatic_view.twig.extension.menu:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension
-        arguments:    [ '@imatic_view.menu.factory', '@knp_menu.renderer.twig' ]
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension
+        arguments: [ '@imatic_view.menu.factory', '@knp_menu.renderer.twig' ]
         lazy: true
         tags:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.url:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\UrlExtension
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\UrlExtension
         arguments:
             - '@imatic_view.templating.helper.url'
         tags:
             - { name: 'twig.extension' }
 
     imatic_view.twig.extension.html:
-        class:        Imatic\Bundle\ViewBundle\Twig\Extension\HtmlExtension
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\HtmlExtension
         arguments:
             - '@imatic_view.templating.helper.html'
         tags:

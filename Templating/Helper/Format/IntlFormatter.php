@@ -49,7 +49,7 @@ class IntlFormatter implements FormatterInterface
             // use intl
             return $this->intlDateTimeFormat(
                 $value,
-                isset($options['type']) ? $options['type'] : 'short',
+                isset($options['type']) ? $options['type'] : 'medium',
                 'none',
                 isset($options['timezone']) ? $options['timezone'] : null,
                 isset($options['locale']) ? $options['locale'] : null

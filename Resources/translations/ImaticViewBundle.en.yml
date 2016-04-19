@@ -22,5 +22,8 @@ Exports:                Exports
 
 Do filter:              Filter
 Reset filter:           Reset filter
+Default filter:         Default filter
 Filter:                 "{0}Filter|[1,Inf]Filter (%count% filters set)"
 Filter errors:          "{0}Filter (has errors)|[1,Inf]Filter (%count% filters set, has errors)"
+
+All elements:           All items

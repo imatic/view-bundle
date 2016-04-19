@@ -19,16 +19,11 @@ class ExampleNode extends Twig_Node
      * @param int                $lineno
      * @param string             $tag
      */
-    public function __construct(Twig_NodeInterface $body, $rawBody, $lineno, $tag = 'spaceless')
+    public function __construct(Twig_NodeInterface $body, $rawBody, $lineno, $tag = 'example')
     {
         parent::__construct(['body' => $body], ['raw_body' => $rawBody], $lineno, $tag);
     }
 
-    /**
-     * Compiles the node to PHP.
-     *
-     * @param Twig_Compiler A Twig_Compiler instance
-     */
     public function compile(Twig_Compiler $compiler)
     {
         $compiler
@@ -44,6 +39,5 @@ class ExampleNode extends Twig_Node
             ->write('echo "</div>";')
             ->write('unset($content);')
         ;
-
     }
 }

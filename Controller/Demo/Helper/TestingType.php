@@ -54,16 +54,15 @@ class TestingType extends AbstractType
             'checkbox' => ['type' => CheckboxType::class],
             'file' => ['type' => FileType::class],
             'radio' => ['type' => RadioType::class],
-            'choice_1' => ['choices' => $choices, 'expanded' => true, 'multiple' => true, 'type' => ChoiceType::class],
-            'choice_2' => ['choices' => $choices, 'expanded' => false, 'multiple' => false, 'type' => ChoiceType::class],
-            'choice_3' => ['choices' => $choices, 'expanded' => false, 'multiple' => true, 'type' => ChoiceType::class],
-            'choice_4' => ['choices' => $choices, 'expanded' => true, 'multiple' => false, 'type' => ChoiceType::class],
+            'choice' => ['choices' => $choices, 'expanded' => false, 'multiple' => false, 'type' => ChoiceType::class],
+            'choice_multi' => ['choices' => $choices, 'expanded' => false, 'multiple' => true, 'type' => ChoiceType::class],
+            'choice_expanded' => ['choices' => $choices, 'expanded' => true, 'multiple' => false, 'type' => ChoiceType::class],
+            'choice_expanded_multi' => ['choices' => $choices, 'expanded' => true, 'multiple' => true, 'type' => ChoiceType::class],
         ];
 
         if ($imaticFormBundle) {
             $types += [
-                // @TODO
-                //'genemu_jqueryselect2_choice' => ['choices' => $choices],
+               'choice_not_rich' => ['choices' => $choices, 'expanded' => false, 'multiple' => false, 'rich' => false, 'type' => ChoiceType::class],
                'imatic_type_ajax_choice' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) { return 1 == $value ? 'Test initial value' : null; }],
                'imatic_type_ajax_choice_multi' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'multiple' => true],
             ];
