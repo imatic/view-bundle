@@ -10,7 +10,7 @@ use NumberFormatter;
 class IntlFormatter implements FormatterInterface
 {
     /** @var int[] */
-    protected static $intlFormatTypes = [
+    protected static $dateFormatTypes = [
         'none' => IntlDateFormatter::NONE,
         'short' => IntlDateFormatter::SHORT,
         'medium' => IntlDateFormatter::MEDIUM,
@@ -49,7 +49,7 @@ class IntlFormatter implements FormatterInterface
             // use intl
             return $this->intlDateTimeFormat(
                 $value,
-                isset($options['type']) ? $options['type'] : 'medium',
+                isset($options['type']) ? $options['type'] : 'short',
                 'none',
                 isset($options['timezone']) ? $options['timezone'] : null,
                 isset($options['locale']) ? $options['locale'] : null
@@ -130,6 +130,12 @@ class IntlFormatter implements FormatterInterface
                 $type
             );
 
+            if (NumberFormatter::PERCENT === $type) {
+                $formatter->setAttribute(NumberFormatter::MULTIPLIER, isset($options['multiplier']) ? $options['multiplier'] : 1);
+                $formatter->setTextAttribute(NumberFormatter::POSITIVE_SUFFIX, '%');
+                $formatter->setTextAttribute(NumberFormatter::NEGATIVE_SUFFIX, '%');
+            }
+
             return $formatter->format($value);
         }
     }
@@ -144,17 +150,17 @@ class IntlFormatter implements FormatterInterface
      */
     protected function intlDateTimeFormat(DateTime $dateTime, $dateType, $timeType, $timezone, $locale)
     {
-        if (!isset(static::$intlFormatTypes[$dateType])) {
-            throw new \InvalidArgumentException(sprintf('Invalid date type "%s", valid types are: %s', $dateType, implode(', ', array_keys(static::$intlFormatTypes))));
+        if (!isset(static::$dateFormatTypes[$dateType])) {
+            throw new \InvalidArgumentException(sprintf('Invalid date type "%s", valid types are: %s', $dateType, implode(', ', array_keys(static::$dateFormatTypes))));
         }
-        if (!isset(static::$intlFormatTypes[$dateType])) {
-            throw new \InvalidArgumentException(sprintf('Invalid time type "%s", valid types are: %s', $timeType, implode(', ', array_keys(static::$intlFormatTypes))));
+        if (!isset(static::$dateFormatTypes[$dateType])) {
+            throw new \InvalidArgumentException(sprintf('Invalid time type "%s", valid types are: %s', $timeType, implode(', ', array_keys(static::$dateFormatTypes))));
         }
 
         $formatter = new IntlDateFormatter(
             $locale ?: Locale::getDefault(),
-            static::$intlFormatTypes[$dateType],
-            static::$intlFormatTypes[$timeType],
+            static::$dateFormatTypes[$dateType],
+            static::$dateFormatTypes[$timeType],
             $timezone ?: $dateTime->getTimezone()
         );
 
