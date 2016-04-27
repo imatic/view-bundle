@@ -103,4 +103,13 @@ class ComponentController extends Controller
     {
         return [];
     }
+
+    /**
+     * @Config\Route("/formatter/{_locale}", defaults={"_locale": ""})
+     * @Config\Template()
+     */
+    public function formatterAction()
+    {
+        return [];
+    }
 }

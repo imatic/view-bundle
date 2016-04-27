@@ -107,6 +107,11 @@ services:
         tags:
             - { name: 'twig.extension' }
 
+    imatic_view.twig.extension.type:
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\TypeExtension
+        tags:
+            - { name: 'twig.extension' }
+
     # Twig loaders
     imatic_view.twig.loader.remote:
         class: Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
@@ -133,9 +138,11 @@ services:
             - { name: imatic_view.formatter, alias: phone }
             - { name: imatic_view.formatter, alias: email }
             - { name: imatic_view.formatter, alias: text }
+            - { name: imatic_view.formatter, alias: html, is_safe: true }
             - { name: imatic_view.formatter, alias: boolean, is_safe: true }
             - { name: imatic_view.formatter, alias: link, is_safe: true }
             - { name: imatic_view.formatter, alias: filesize }
+            - { name: imatic_view.formatter, alias: translatable, is_safe: true }
 
     # Templating Helpers
     imatic_view.templating.helper.format:

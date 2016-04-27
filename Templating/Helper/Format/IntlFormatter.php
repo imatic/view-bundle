@@ -28,6 +28,18 @@ class IntlFormatter implements FormatterInterface
         'ordinal' => NumberFormatter::ORDINAL,
         'duration' => NumberFormatter::DURATION,
     ];
+    /** @var array */
+    protected $datePatternOverrides = [
+        'cs.date.short' => 'dd.MM.y',
+        'cs.datetime.short:short' => 'dd.MM.y H:mm',
+        'sk.date.short' => 'dd.MM.y',
+        'sk.datetime.short:short' => 'dd.MM.y H:mm',
+    ];
+    
+    public function addDatePatternOverrides(array $overrides)
+    {
+        $this->datePatternOverrides = $overrides + $this->datePatternOverrides;
+    }
 
     public function format($value, $format, array $options = [])
     {
@@ -103,10 +115,6 @@ class IntlFormatter implements FormatterInterface
     {
         if (isset($options['decimal']) || isset($options['decimalPoint']) || isset($options['thousandSep'])) {
             // use number_format()
-            if (isset($options['type'])) {
-                throw new \LogicException('The "type" option has no effect when the "decimal", "decimalPoint" or "thousandSep" option is used');
-            }
-
             return number_format(
                 $value,
                 isset($options['decimal']) ? $options['decimal'] : 0,
@@ -136,7 +144,11 @@ class IntlFormatter implements FormatterInterface
                 $formatter->setTextAttribute(NumberFormatter::NEGATIVE_SUFFIX, '%');
             }
 
-            return $formatter->format($value);
+            if (NumberFormatter::CURRENCY === $type) {
+                return $formatter->formatCurrency($value, $options['currency']);
+            } else {
+                return $formatter->format($value);
+            }
         }
     }
 
@@ -156,14 +168,47 @@ class IntlFormatter implements FormatterInterface
         if (!isset(static::$dateFormatTypes[$dateType])) {
             throw new \InvalidArgumentException(sprintf('Invalid time type "%s", valid types are: %s', $timeType, implode(', ', array_keys(static::$dateFormatTypes))));
         }
+        if (!$locale) {
+            $locale = Locale::getDefault();
+        }
 
         $formatter = new IntlDateFormatter(
-            $locale ?: Locale::getDefault(),
+            $locale,
             static::$dateFormatTypes[$dateType],
             static::$dateFormatTypes[$timeType],
             $timezone ?: $dateTime->getTimezone()
         );
 
+        if ($pattern = $this->getIntlDatePattern($locale, $dateType, $timeType)) {
+            $formatter->setPattern($pattern);
+        }
+
         return $formatter->format($dateTime);
+    }
+
+    /**
+     * @param string $locale
+     * @param int    $dateType
+     * @param int    $timeType
+     * @return string|null
+     */
+    protected function getIntlDatePattern($locale, $dateType, $timeType)
+    {
+        $hasDate = 'none' !== $dateType;
+        $hasTime = 'none' !== $timeType;
+
+        if ($hasDate && $hasTime) {
+            $overrideKey = "{$locale}.datetime.{$dateType}:{$timeType}";
+        } elseif ($hasDate) {
+            $overrideKey = "{$locale}.date.{$dateType}";
+        } elseif ($hasTime) {
+            $overrideKey = "{$locale}.time.{$timeType}";
+        } else {
+            $overrideKey = null;
+        }
+
+        if ($overrideKey && isset($this->datePatternOverrides[$overrideKey])) {
+            return $this->datePatternOverrides[$overrideKey];
+        }
     }
 }

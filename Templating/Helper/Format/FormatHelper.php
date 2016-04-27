@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 
 class FormatHelper implements FormatterInterface
 {
@@ -85,7 +86,7 @@ class FormatHelper implements FormatterInterface
             && null !== $value
             && (!is_scalar($value) || is_string($value))
         ) {
-            $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $value = StringUtil::escape($value);
         }
 
         return $this->formatters[$format]->format($value, $format, $options);

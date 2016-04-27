@@ -3,6 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper;
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 
 class HtmlExtension extends \Twig_Extension
 {
@@ -21,7 +22,7 @@ class HtmlExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFilter('imatic_html_attributes', [$this->htmlHelper, 'attributes'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('imatic_html_data_attributes', [$this->htmlHelper, 'dataAttributes'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('imatic_html_unescape', [$this->htmlHelper, 'unescape']),
+            new \Twig_SimpleFilter('imatic_html_unescape', [StringUtil::class, 'unescape']),
         ];
     }
 

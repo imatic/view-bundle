@@ -1,0 +1,252 @@
+{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+
+{% block headline 'Formatter component' %}
+
+{% block action %}
+    <h2>Twig functions</h2>
+    {% example %}
+    {# Format a value #}
+    {# imatic_view_format(value, format[, options]) #}
+    {{ imatic_view_format(123456, 'number', {type: 'currency', currency: 'CZK'}) }}<br>
+
+    {# Render an object/array property #}
+    {# imatic_view_render_value(object or array, property_path[, options] #}
+    {{ imatic_view_render_value({status: 110}, 'status', 'number', {type: 'percent'}) }}
+    {% endexample %}
+
+    <h2 id="list">Built-in formatter list</h2>
+
+    <p>
+        <strong>Switch to locale:</strong>
+
+        <a class="btn btn-sm btn-default" href="{{ path('imatic_view_demo_component_formatter', {_locale: none}) }}#list">default</a>
+        {% for locale in ['en', 'cs', 'sk', 'pl', 'de', 'ru', 'ja'] %}
+            <a class="btn btn-sm btn-default{% if app.request.locale == locale %} active{% endif %}" href="{{ path('imatic_view_demo_component_formatter', {_locale: locale}) }}#list">{{ locale }}</a>
+        {% endfor %}
+    </p>
+    
+    {% set formatters = {
+        date: {
+            descr: 'Format a date value. Accepts a string or a DateTime object.',
+            options: {
+                format: 'custom format (incompatible with other options!)',
+                type: 'none, short (default), medium, long, full',
+                timezone: 'valid ICU timezone identifier (defults to current)',
+                locale: 'ICU locale (defaults to current)',
+            },
+            examples: [
+                ['now', {type: 'short'}],
+                ['now', {type: 'medium'}],
+                ['now', {type: 'long'}],
+                ['now', {type: 'full'}],
+            ],
+        },
+        datetime: {
+            descr: 'Format a datetime value. Accepts a string or a DateTime object.',
+            options: {
+                format: 'custom format (incompatible with other options!)',
+                date_type: 'none, short (default), medium, long, full',
+                time_type: 'none, short (default), medium, long, full',
+                timezone: 'valid ICU timezone identifier (defults to current)',
+                locale: 'ICU locale (defaults to current)',
+            },
+            examples: [
+                ['now', {date_type: 'short', time_type: 'short'}],
+                ['now', {date_type: 'medium', time_type: 'medium'}],
+                ['now', {date_type: 'long', time_type: 'long'}],
+                ['now', {date_type: 'full', time_type: 'full'}],
+            ],
+        },
+        time: {
+            descr: 'Format a time value. Accepts a string or a DateTime object.',
+            options: {
+                format: 'custom format (incompatible with other options!)',
+                type: 'none, short (default), medium, long, full',
+                timezone: 'valid ICU timezone identifier (defults to current)',
+                locale: 'ICU locale (defaults to current)',
+            },
+            examples: [
+                ['now', {type: 'short'}],
+                ['now', {type: 'medium'}],
+                ['now', {type: 'long'}],
+                ['now', {type: 'full'}],
+            ],
+        },
+        number: {
+            descr: 'Format a number.',
+            options: {
+                'decimal, decimalPoint, thousandSep': 'format using PHP\'s number_format() (incompatible with other options!)',
+                type: 'default (default), decimal, currency, percent, scientific, spellout, ordinal, duration',
+                multiplier: 'used if type = percent, defaults to 1',
+                currency: '3-letter ISO 4217 currency code, used if type = currency',
+                locale: 'ICU locale (defaults to current)',
+            },
+            examples: [
+                [12345],
+                [12345, {type: 'decimal'}],
+                [12345, {type: 'currency', currency: 'CZK'}],
+                [12345, {type: 'percent'}],
+                [12345, {type: 'percent', multiplier: 100}],
+                [12345, {type: 'scientific'}],
+                [12345, {type: 'spellout'}],
+                [12345, {type: 'ordinal'}],
+                [12345, {type: 'duration'}],
+                [12345, {decimal: 3, decimalPoint: '.', thousandSep: ' '}],
+            ],
+        },
+        url: {
+            descr: 'Create a link.',
+            options: {
+                text: 'custom link text (defaults to the value)',
+            },
+            examples: [
+                ['http://example.com/'],
+                ['http://example.com/', {text: 'open link'}],
+            ],
+        },
+        link: {
+            deprecated: 'use "url" formatter with "text" option instead',
+            descr: 'Create a link. The value is not used.',
+            options: {
+                url: 'the URL to link to (required)',
+                name: 'the text of the link (required)',
+            },
+            examples: [
+                ['unused', {url: 'http://example.com/', name: 'open link'}],
+            ],
+        },
+        phone: {
+            descr: 'Create a callto link.',
+            options: {},
+            examples: [
+                ['+420123456'],
+            ],
+        },
+        email: {
+            descr: 'Create a mailto link.',
+            options: {
+                text: 'custom link text',
+            },
+            examples: [
+                ['foo.bar@example.com'],
+                ['foo.bar@example.com', {text: 'send email'}],
+            ],
+        },
+        text: {
+            descr: 'Show plain text.',
+            options: {
+                convert_newlines: 'convert newlines to <br>',
+            },
+            examples: [
+                ['hello world'],
+            ],
+        },
+        html: {
+            descr: 'Show raw HTML.',
+            options: {},
+            examples: [
+                ['<strong>hello</strong> <em>world</em>'],
+            ],
+        },
+        translatable: {
+            descr: 'Translate a value.',
+            options: {
+                domain: 'translation domain (required)',
+                locale: 'locale (defaults to the current)',
+                params: 'translation parameters',
+                prefix: 'prefix the value before translating it',
+            },
+            examples: [
+                ['Copyright', {domain: 'ImaticViewBundle'}],
+                ['not found', {domain: 'ImaticViewBundle', prefix: 'Page '}],
+            ],
+        },
+        boolean: {
+            descr: 'Display a boolean value as a yes/no icon.',
+            options: {},
+            examples: [
+                [1],
+                [0],
+            ],
+        },
+        filesize: {
+            descr: 'Format a file size in bytes.',
+            options: {},
+            examples: [
+                [123456],
+                [123456789],
+            ],
+        },
+    } %}
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Format</th>
+                <th>Description</th>
+                <th>Options</th>
+                <th>Examples</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for format, info in formatters %}
+                <tr>
+                    <td>
+                        <code>
+                            {%- if info.deprecated is defined -%}
+                                <del>{{ format }}</del>
+                            {%- else -%}
+                                {{ format }}
+                            {%- endif -%}
+                        </code>
+                    </td>
+                    <td>
+                        <p>{{ info.descr }}</p>
+
+                        {% if info.deprecated is defined %}
+                            <p class="text-warning">This formatter is deprecated - {{ info.deprecated }}</p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if info.options is not empty %}
+                            <table class="table table-condensed">
+                            {% for option, option_descr in info.options %}
+                                <tr>
+                                    <th><code>{{ option }}</code></th>
+                                    <td>{{ option_descr }}</td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <ul class="list-unstyled">
+                            {% for example in info.examples %}
+                                <li>
+                                    <code>
+                                        {{- '{{ imatic_view_format(' ~ (example[0] is string ? "'#{example[0]}'" : example[0]) ~ ", '#{format}'" -}}
+                                        {%- if example[1] is defined -%}
+                                            , {
+                                            {%- for option_name, option_value in example[1] -%}
+                                                {{- loop.index > 1 ? ', ' : '' -}}
+                                                {{- option_name }}: {{ (option_value is string ? "'#{option_value}'" : option_value) -}}
+                                            {%- endfor -%}
+                                            }
+                                        {%- endif -%}
+                                        {{- ' }}' -}}
+                                    </code>
+                                    <ul><li>
+                                        {{ imatic_view_format(example[0], format, example[1]|default([])) }}
+                                    </li></ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

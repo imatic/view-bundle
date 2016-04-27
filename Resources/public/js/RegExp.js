@@ -4,20 +4,15 @@
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
 
+var regexEscape = /[-\/\\^$*+?.()|[\]{}]/g;
+
 /**
  * Escape a string for usage in a RegEx pattern
  *
  * @param {String} s
  * @returns {String}
  */
-function escape(s)
+export function escape(s)
 {
     return s.replace(regexEscape, '\\$&');
-}
-
-var regexEscape = /[-\/\\^$*+?.()|[\]{}]/g;
-
-// exports
-export {
-    escape
 }
