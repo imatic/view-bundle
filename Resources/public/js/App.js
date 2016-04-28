@@ -9,9 +9,9 @@
  *
  * @returns {String}
  */
-function getLocale()
+export function getLocale()
 {
-    return document.documentElement.getAttribute('lang');
+    return document.documentElement.getAttribute('lang') || '';
 }
 
 /**
@@ -19,13 +19,7 @@ function getLocale()
  *
  * @returns {String}
  */
-function getBasePath()
+export function getBasePath()
 {
-    return document.documentElement.getAttribute('data-base-path');
-}
-
-// exports
-export {
-    getLocale,
-    getBasePath,
+    return document.documentElement.getAttribute('data-base-path') || '';
 }

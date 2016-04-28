@@ -5,9 +5,6 @@ use Imatic\Bundle\TestingBundle\Test\TestKernel as BaseTestKernel;
 
 class TestKernel extends BaseTestKernel
 {
-    /**
-     * {@inheritdoc}
-     */
     public function registerBundles()
     {
         $parentBundles = parent::registerBundles();
@@ -17,8 +14,6 @@ class TestKernel extends BaseTestKernel
             new \Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Imatic\Bundle\FormBundle\ImaticFormBundle(),
-            new \Genemu\Bundle\FormBundle\GenemuFormBundle(),
-
             new \Imatic\Bundle\ViewBundle\ImaticViewBundle(),
             new \Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\ImaticViewBundle\AppImaticViewBundle(),
         ];

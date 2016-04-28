@@ -32,18 +32,17 @@ class ExampleTokenParser extends Twig_TokenParser
         $this->templatingLocator = $templatingLocator;
     }
 
-    /**
-     * Parses a token and returns a node.
-     *
-     * @param Twig_Token $token A Twig_Token instance
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
-     */
+    public function getTag()
+    {
+        return 'example';
+    }
+
     public function parse(Twig_Token $token)
     {
         $lineno = $token->getLine();
 
         $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse([$this, 'decideExampleEnd'], true);
+        $body = $this->parser->subparse(function (Twig_Token $token) { return $token->test('endexample'); }, true);
         $rawBody = $this->parseRawBody($lineno);
         $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);      
 
@@ -123,26 +122,5 @@ class ExampleTokenParser extends Twig_TokenParser
         } else {
             return $string;
         }
-    }
-
-    /**
-     * Decide example end
-     *
-     * @param Twig_Token $token
-     * @return bool
-     */
-    public function decideExampleEnd(Twig_Token $token)
-    {
-        return $token->test('endexample');
-    }
-
-    /**
-     * Gets the tag name associated with this token parser.
-     *
-     * @return string The tag name
-     */
-    public function getTag()
-    {
-        return 'example';
     }
 }

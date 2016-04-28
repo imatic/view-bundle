@@ -1,6 +1,5 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: '@ImaticViewBundle/Resources/config/config.yml' }
 
 framework:
     secret:                     test

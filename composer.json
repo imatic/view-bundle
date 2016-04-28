@@ -18,19 +18,18 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://composer.imatic.cz"
+            "url": "https://composer.imatic.cz"
         }
     ],
     "require": {
         "php": ">=5.5",
         "symfony/framework-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
-        "knplabs/knp-menu-bundle": "~2.0",
-        "imatic/genemuform-bundle": "~3.0",
-        "imatic/form-bundle": "~3.0"
+        "knplabs/knp-menu-bundle": "~2.0"
     },
     "require-dev": {
-        "imatic/testing-bundle": "~3.0"
+        "imatic/testing-bundle": "~3.0",
+        "imatic/form-bundle": "~3.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,8 +37,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "secure-http": false
-    }
+    "prefer-stable": true
 }

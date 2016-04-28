@@ -2,6 +2,8 @@
 
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Html;
 
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+
 class AttributeCollection extends AbstractCollection
 {
     protected $attributes;
@@ -52,7 +54,7 @@ class AttributeCollection extends AbstractCollection
     public function render()
     {
         return $this->attributes ? implode(' ', array_map(function ($k, $v) {
-            return sprintf('%s="%s"', $k, $v);
+            return sprintf('%s="%s"', $k, StringUtil::escape($v));
         }, array_keys($this->attributes), $this->attributes)) : '';
     }
 }

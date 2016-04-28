@@ -2,6 +2,8 @@
 
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Html;
 
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+
 class ClassCollection extends AbstractCollection
 {
     protected $classes;
@@ -46,6 +48,6 @@ class ClassCollection extends AbstractCollection
 
     public function render()
     {
-        return $this->classes ? 'class="' . implode(' ', $this->classes) . '"' : '';
+        return $this->classes ? 'class="' . StringUtil::escape(implode(' ', $this->classes)) . '"' : '';
     }
 }

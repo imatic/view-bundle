@@ -5,12 +5,25 @@ namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 class StringUtil
 {
     /**
+     * Escape a string for use in HTML 5 code
+     *
      * @param string $string
      * @return string
      */
     public static function escape($string)
     {
-        return htmlspecialchars($string, ENT_QUOTES);
+        return htmlspecialchars($string, ENT_HTML5 | ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    /**
+     * Unescape a HTML 5 encoded string
+     *
+     * @param string $html
+     * @return string
+     */
+    public static function unescape($html)
+    {
+        return htmlspecialchars_decode($html, ENT_HTML5 | ENT_QUOTES);
     }
 
     /**

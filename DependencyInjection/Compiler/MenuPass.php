@@ -4,14 +4,8 @@ namespace Imatic\Bundle\ViewBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
-/**
- * Menu pass
- */
 class MenuPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $definition = $container->getDefinition('imatic_view.menu.provider_container');

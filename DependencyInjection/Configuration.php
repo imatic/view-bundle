@@ -12,9 +12,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
@@ -22,6 +19,17 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('formatters')
+                    ->children()
+                        ->arrayNode('intl')
+                            ->children()
+                                ->arrayNode('date_pattern_overrides')
+                                    ->prototype('variable')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('templates')
                     ->canBeUnset(true)
                     ->children()

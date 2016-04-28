@@ -26,6 +26,7 @@ class DemoMenuBuilder
         $componentIndex->addChild($factory->createItem('Show', ['route' => 'imatic_view_demo_component_show']));
         $componentIndex->addChild($factory->createItem('Tabs', ['route' => 'imatic_view_demo_component_tabs']));
         $componentIndex->addChild($factory->createItem('Menu', ['route' => 'imatic_view_demo_component_menu']));
+        $componentIndex->addChild($factory->createItem('Formatter', ['route' => 'imatic_view_demo_component_formatter']));
 
         $javaScriptIndex = $menu->addChild('JavaScript', ['uri' => '#']);
         $helper->setDropdown($javaScriptIndex);

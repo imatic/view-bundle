@@ -2,6 +2,8 @@
 
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Html;
 
+use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+
 class HtmlHelper
 {
     public function attributes(array $attributes, array $default = [])
@@ -24,8 +26,13 @@ class HtmlHelper
         return (new DataAttributeCollection($attributes))->render();
     }
 
+    /**
+     * @deprecated use StringUtil::unescape() instead
+     * @param string $html
+     * @return string
+     */
     public function unescape($html)
     {
-        return htmlspecialchars_decode($html, ENT_HTML5 | ENT_QUOTES);
+        return StringUtil::unescape($html);
     }
 }

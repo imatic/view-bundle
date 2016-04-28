@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class ImaticViewExtension extends Extension
 {
-    /**
-     * {@inheritDoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
@@ -37,6 +34,13 @@ class ImaticViewExtension extends Extension
                     isset($remoteTemplate['metadata']) ? $remoteTemplate['metadata'] : [],
                 ]);
             }
+        }
+
+        if (!empty($config['formatters']['intl']['date_pattern_overrides'])) {
+            $container
+                ->getDefinition('imatic_view.twig.extension.format.intl')
+                ->addMethodCall('addDatePatternOverrides', [$config['formatters']['intl']['date_pattern_overrides']])
+            ;
         }
     }
 }
