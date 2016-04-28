@@ -15,3 +15,8 @@ Upgrade na verzi 3.0
 - `imatic_form_javascript_prototype()` se prejmenovalo na `imatic_form_javascript_prototypes()`
 - `number` format jiz nebere ohled na nastaveni twigu (jelikoz se uz interne nepouziva)
     - options decimal, decimalPoint a thousandSep stale funguji
+    
+# Form typy
+
+- `genemu_jqueryselect2_choice` (resp `Select2Type::class`) zmenit na choice
+
