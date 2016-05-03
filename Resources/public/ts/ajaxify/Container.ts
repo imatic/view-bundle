@@ -286,11 +286,11 @@ export class ContainerHandler
      *
      * If no element is given, the whole document is searched.
      */
-    findElements(element?: HTMLElement): HTMLElement[] {
+    findElements(element?: HTMLElement, checkRoot = true): HTMLElement[] {
         var elements: HTMLElement[] = [];
         element = element || document.body;
 
-        if (this.isValidElement(element)) {
+        if (checkRoot && this.isValidElement(element)) {
             elements.push(element);
         }
 
@@ -299,6 +299,20 @@ export class ContainerHandler
         });
 
         return elements;
+    }
+
+    /**
+     * Initialize any autoload-enabled containers in the given context
+     */
+    autoload(context: HTMLElement): void {
+        for (var element of this.findElements(context, false)) {
+            if ($(element).data('autoload')) {
+                var container = this.getInstance(element, true);
+                var action = new RequestAction(null, container.getInitialRequest());
+
+                container.handleAction(action);
+            }
+        }
     }
 }
 

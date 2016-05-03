@@ -50,6 +50,13 @@
         </div>
         {% endexample %}
 
+        <p>Autoloading container:</p>
+
+        {% example %}
+        <div data-role="container" data-initial="{{ path('imatic_view_demo_ajaxify_ajaxtest') }}" data-autoload="true">
+        </div>
+        {% endexample %}
+
         <h4>Supported attributes</h4>
 
         <table class="table table-bordered">
@@ -72,6 +79,12 @@
                     </td>
                     <td><a href="#request-strings">&lt;request string&gt;</a></td>
                     <td>current URL as a GET request</td>
+                </tr>
+                <tr>
+                    <td><code>data-autoload</code></td>
+                    <td>Automatically loads the <code>data-initial</code> request into the container.</td>
+                    <td>true or false</td>
+                    <td>false</td>
                 </tr>
             </tbody>
         </table>

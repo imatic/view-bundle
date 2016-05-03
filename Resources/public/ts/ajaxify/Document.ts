@@ -54,14 +54,7 @@ export class HTMLDocumentHandler
      * Attach the handler
      */
     attach(): void {
-        $(document)
-            .on('click', this.onClick)
-            .on('submit', this.onSubmit)
-            .on(DomEvents.ACTIONS, this.onActions)
-            .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
-            .on(DomEvents.HANDLE_FLASH_MESSAGES, this.onHandleFlashMessages)
-            .on(DomEvents.HANDLE_ERROR, this.onHandleError)
-        ;
+        $(this.onDocumentReady);
     }
 
     /**
@@ -69,6 +62,25 @@ export class HTMLDocumentHandler
      */
     isValidElement(element: HTMLElement): boolean {
         return false !== $(element).data('ajaxify');
+    }
+
+    /**
+     * Initialize on document ready
+     */
+    private onDocumentReady = (event: JQueryEventObject): void => {
+        // event listeners
+        $(document)
+            .on('click', this.onClick)
+            .on('submit', this.onSubmit)
+            .on(DomEvents.ACTIONS, this.onActions)
+            .on(DomEvents.BEFORE_CONTENT_UPDATE, this.onBeforeContentUpdate)
+            .on(DomEvents.AFTER_CONTENT_UPDATE, this.onAfterContentUpdate)
+            .on(DomEvents.HANDLE_FLASH_MESSAGES, this.onHandleFlashMessages)
+            .on(DomEvents.HANDLE_ERROR, this.onHandleError)
+        ;
+
+        // autoload containers in the body
+        this.containerHandler.autoload(document.body);
     }
 
     /**
@@ -154,7 +166,7 @@ export class HTMLDocumentHandler
     }
 
     /**
-     * Handle content update event
+     * Handle before content update event
      */
     private onBeforeContentUpdate = (event: JQueryEventObject): void => {
         var element = <HTMLElement> event.target;
@@ -170,14 +182,22 @@ export class HTMLDocumentHandler
         for (var i = 0; i < containers.length; ++i) {
             containers[i].destroy();
         }
-    };
+    }
+
+    /**
+     * Handle after content update event
+     */
+    private onAfterContentUpdate = (event: JQueryEventObject): void => {
+        // autoload containers in the new content
+        this.containerHandler.autoload(<HTMLElement> event.target);
+    }
 
     /**
      * Handle flash message event
      */
     private onHandleFlashMessages = (event: JQueryEventObject): void => {
         this.showFlashMessages(event['flashes'], <HTMLElement> event.target);
-    };
+    }
 
     /**
      * Handle error event
@@ -212,7 +232,7 @@ export class HTMLDocumentHandler
                 <HTMLElement> event.target
             );
         }
-    };
+    }
 
     /**
      * Show flash messages
