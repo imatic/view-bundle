@@ -3,11 +3,9 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
-use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 
 class FormatHelper implements FormatterInterface
 {
@@ -17,14 +15,9 @@ class FormatHelper implements FormatterInterface
     private $formatters;
 
     /**
-     * @var array
+     * @var array[]
      */
-    private $formaterOptions;
-
-    /**
-     * @var OptionsResolver
-     */
-    private $resolver;
+    private $formatterOptions;
 
     /**
      * @var ContainerInterface
@@ -38,27 +31,43 @@ class FormatHelper implements FormatterInterface
 
     public function __construct(ContainerInterface $container)
     {
-        // need a container instance, because circular reference
-        $this->container = $container;
-
+        $this->container = $container; // need a container instance because of a circular dependency
         $this->accessor = PropertyAccess::createPropertyAccessor();
-
-        $this->formatters = [];
-        $this->formaterOptions = [];
-
-        $this->resolver = new OptionsResolver();
-        $this->resolver->setDefaults([
-            'is_safe' => false,
-        ]);
-        $this->resolver->setAllowedTypes('is_safe', 'bool');
     }
 
-    public function addFormatter($name, FormatterInterface $formatter, array $options = [])
+    /**
+     * @param string             $format
+     * @param FormatterInterface $formatter
+     * @param array              $options
+     */
+    public function addFormatter($format, FormatterInterface $formatter, array $options = [])
     {
-        $this->formatters[$name] = $formatter;
-        $this->formaterOptions[$name] = $this->resolver->resolve($options);
+        $this->formatters[$format] = $formatter;
+        $this->formatterOptions[$format] = $options;
     }
 
+    /**
+     * @param string $format
+     * @param string $context templating context (e.g. "html")
+     * @throws \InvalidArgumentException if the formatter doesn't exist
+     * @return bool
+     */
+    public function isSafe($format, $context)
+    {
+        if (!isset($this->formatterOptions[$format])) {
+            throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
+        }
+
+        return $context === $this->formatterOptions[$format]['is_safe'];
+    }
+
+    /**
+     * @param mixed  $value
+     * @param string $format
+     * @param array  $options
+     * @throws \InvalidArgumentException if the formatter doesn't exist
+     * @return string|null
+     */
     public function format($value, $format = null, array $options = [])
     {
         if (null === $format) {
@@ -68,30 +77,24 @@ class FormatHelper implements FormatterInterface
         if (!empty($options['template'])) {
             return $this->container->get('templating')->render(
                 $options['template'],
-                array_merge(
-                    $options,
-                    ['value' => $value, 'options' => $options, 'format' => $format]
-                )
+                ['value' => $value, 'options' => $options, 'format' => $format] + $options
             );
         }
 
-        if (!array_key_exists($format, $this->formatters)) {
+        if (!isset($this->formatters[$format])) {
             throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
-        }
-
-        // escape the value unless the current format is marked as "is_safe"
-        // following values will not escaped: NULL, integer, float, boolean
-        if (
-            !$this->formaterOptions[$format]['is_safe']
-            && null !== $value
-            && (!is_scalar($value) || is_string($value))
-        ) {
-            $value = StringUtil::escape($value);
         }
 
         return $this->formatters[$format]->format($value, $format, $options);
     }
 
+    /**
+     * @param array|object $objectOrArray
+     * @param string|null  $propertyPath
+     * @param string       $format
+     * @param array        $options
+     * @return string|null
+     */
     public function renderValue($objectOrArray, $propertyPath, $format = null, array $options = [])
     {
         if (is_array($objectOrArray) && $propertyPath && $propertyPath[0] !== '[') {
@@ -128,6 +131,11 @@ class FormatHelper implements FormatterInterface
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws \RuntimeException if the format could not be determined
+     * @return string
+     */
     protected function guessFormat($value)
     {
         $format = null;

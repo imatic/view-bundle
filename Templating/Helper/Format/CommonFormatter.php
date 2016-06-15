@@ -26,8 +26,10 @@ class CommonFormatter implements FormatterInterface
 
     public function formatText($value, array $options = [])
     {
+        $value = StringUtil::escape($value);
+
         if (isset($options['convert_newlines']) && $options['convert_newlines']) {
-            return nl2br($value, false);
+            $value = nl2br($value, false);
         }
 
         return $value;
@@ -40,31 +42,42 @@ class CommonFormatter implements FormatterInterface
 
     public function formatPhone($value, array $options = [])
     {
+        $value = StringUtil::escape($value);
+
         return sprintf('<a href="callto:%s">%s</a>', $value, $value);
     }
 
     public function formatEmail($value, array $options = [])
     {
-        if (isset($options['text'])) {
-            $text = StringUtil::escape($options['text']);
-        } else {
-            $text = $value;
-        }
+        $value = StringUtil::escape($value);
 
-        return sprintf('<a href="mailto:%s">%s</a>', $value, $text);
+        return sprintf(
+            '<a href="mailto:%s">%s</a>',
+            $value,
+            isset($options['text']) ? StringUtil::escape($options['text']) : $value
+        );
     }
 
     public function formatUrl($value, array $options = [])
     {
-        return sprintf('<a href="%s">%s</a>', $value, isset($options['text']) ? StringUtil::escape($options['text']) : $value);
+        $value = StringUtil::escape($value);
+
+        return sprintf(
+            '<a href="%s">%s</a>',
+            $value,
+            isset($options['text']) ? StringUtil::escape($options['text']) : $value
+        );
     }
 
     public function formatBoolean($value, array $options = [])
     {
         $key = $value ? 'yes' : 'no';
-        $text = $this->translator->trans($key, [], 'ImaticViewBundle');
 
-        return sprintf('<span title="%s" class="%s"></span>', $text, $key);
+        return sprintf(
+            '<span title="%s" class="%s"></span>',
+            StringUtil::escape($this->translator->trans($key, [], 'ImaticViewBundle')),
+            $key
+        );
     }
 
     /**
@@ -72,7 +85,13 @@ class CommonFormatter implements FormatterInterface
      */
     public function formatLink($value, array $options = [])
     {
-        return sprintf('<a href="%s">%s</a>', StringUtil::escape($options['url']), StringUtil::escape($options['name']));
+        trigger_error('The "link" format is deprecated since ImaticViewBundle 3.0.6. Use the "url" format with "text" option instead.', E_USER_DEPRECATED);
+
+        return sprintf(
+            '<a href="%s">%s</a>',
+            StringUtil::escape($options['url']),
+            StringUtil::escape($options['name'])
+        );
     }
 
     public function formatFilesize($value, array $options = [])
@@ -88,17 +107,11 @@ class CommonFormatter implements FormatterInterface
 
     public function formatTranslatable($value, array $options)
     {
-        if (isset($options['prefix'])) {
-            $key = $options['prefix'] . $value;
-        } else {
-            $key = $value;
-        }
-
-        return StringUtil::escape($this->translator->trans(
-            $key,
+        return $this->translator->trans(
+            isset($options['prefix']) ? $options['prefix'] . $value : $value,
             isset($options['params']) ? $options['params'] : [],
             $options['domain'],
             isset($options['locale']) ? $options['locale'] : null
-        ));
+        );
     }
 }

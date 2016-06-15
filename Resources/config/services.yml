@@ -124,9 +124,9 @@ services:
     imatic_view.twig.extension.format.intl:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter
         tags:
-            - { name: imatic_view.formatter, alias: time, is_safe: true }
-            - { name: imatic_view.formatter, alias: date, is_safe: true }
-            - { name: imatic_view.formatter, alias: datetime, is_safe: true }
+            - { name: imatic_view.formatter, alias: time }
+            - { name: imatic_view.formatter, alias: date }
+            - { name: imatic_view.formatter, alias: datetime }
             - { name: imatic_view.formatter, alias: number }
 
     imatic_view.twig.extension.format.common:
@@ -134,15 +134,15 @@ services:
         arguments:
             - '@translator'
         tags:
-            - { name: imatic_view.formatter, alias: url }
-            - { name: imatic_view.formatter, alias: phone }
-            - { name: imatic_view.formatter, alias: email }
-            - { name: imatic_view.formatter, alias: text }
-            - { name: imatic_view.formatter, alias: html, is_safe: true }
-            - { name: imatic_view.formatter, alias: boolean, is_safe: true }
-            - { name: imatic_view.formatter, alias: link, is_safe: true }
+            - { name: imatic_view.formatter, alias: url, is_safe: html }
+            - { name: imatic_view.formatter, alias: phone, is_safe: html }
+            - { name: imatic_view.formatter, alias: email, is_safe: html }
+            - { name: imatic_view.formatter, alias: text, is_safe: html }
+            - { name: imatic_view.formatter, alias: html, is_safe: html }
+            - { name: imatic_view.formatter, alias: boolean, is_safe: html }
+            - { name: imatic_view.formatter, alias: link, is_safe: html }
             - { name: imatic_view.formatter, alias: filesize }
-            - { name: imatic_view.formatter, alias: translatable, is_safe: true }
+            - { name: imatic_view.formatter, alias: translatable }
 
     # Templating Helpers
     imatic_view.templating.helper.format:
