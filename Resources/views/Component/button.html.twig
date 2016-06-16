@@ -3,13 +3,14 @@
 {% endmacro %}
 
 {% macro button(action, context) %}{% spaceless %}
+    {%- import _self as this -%}
     {% set action = imatic_view_action(action) %}
     {% if imatic_view_condition_evaluate(action.condition|default(''), context|default({})) %}
         {% set element = imatic_view_action_create(action, context) %}
         {% if action.nested is not empty %}
-            {{ _self._nested(element, action, context) }}
+            {{ this._nested(element, action, context) }}
         {% else %}
-            {{ _self._button(element, action) }}
+            {{ this._button(element, action) }}
         {% endif %}
     {% endif %}
 {% endspaceless %}{% endmacro %}
@@ -20,10 +21,11 @@
 {% endspaceless %}{% endmacro %}
 
 {% macro _nested(element, action, context) %}
+    {%- import _self as this -%}
     {% set nested -%}
         {% for nested in action.nested -%}
             {% if imatic_view_condition_evaluate(nested.condition|default(''), context|default({})) %}
-                <li>{{ _self.action(nested, context) }}</li>
+                <li>{{ this.action(nested, context) }}</li>
             {% endif %}
         {%- endfor %}
     {%- endset %}
@@ -34,7 +36,7 @@
     {% endif %}
 
     {% if action.url is not empty or action.route is not empty %}
-        {{ _self._button(element, action) }}
+        {{ this._button(element, action) }}
         {% if hasNested %}
             <button type="button"
                     class="btn btn-{{ action.type | default('default') }} dropdown-toggle"
@@ -47,7 +49,7 @@
         {% do element.setValue(action.label ~ ' <span class="caret"></span>') %}
         {% do element.data.set('toggle', 'dropdown') %}
         {% do element.classes.add('dropdown-toggle') %}
-        {{ _self._button(element, action) }}
+        {{ this._button(element, action) }}
     {% endif %}
 
     {% if hasNested %}
@@ -59,17 +61,19 @@
 {% endmacro %}
 
 {% macro group(buttons, context) %}{% spaceless %}
+    {%- import _self as this -%}
     <div class="btn-group">
         {% for button in buttons %}
-            {{ _self.button(button, context) }}
+            {{ this.button(button, context) }}
         {% endfor %}
     </div>
 {% endspaceless %}{% endmacro %}
 
 {% macro toolbar(buttonGroups, context) %}{% spaceless %}
+    {%- import _self as this -%}
     <div class="btn-toolbar" role="toolbar">
         {% for buttons in buttonGroups %}
-            {{ _self.group(buttons, context) }}
+            {{ this.group(buttons, context) }}
         {% endfor %}
     </div>
 {% endspaceless %}{% endmacro %}

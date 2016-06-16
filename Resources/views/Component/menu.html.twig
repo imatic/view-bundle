@@ -1,30 +1,37 @@
 {% macro navbar(menu, options, renderer, config) %}
+    {%- import _self as this -%}
+
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
-            {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
+            {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
         </div>
     </nav>
 {% endmacro %}
 
 {% macro menu(menu, options, renderer, config) %}
-    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
+    {%- import _self as this -%}
+    {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
 {% endmacro %}
 
 {% macro side(menu, options, renderer, config) %}
+    {%- import _self as this -%}
     <nav class="sidebar-nav">
-        {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills nav-stacked' })) }}
+        {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills nav-stacked' })) }}
     </nav>
 {% endmacro %}
 
 {% macro tabs(menu, options, renderer, config) %}
-    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-tabs' })) }}
+    {%- import _self as this -%}
+    {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-tabs' })) }}
 {% endmacro %}
 
 {% macro pills(menu, options, renderer, config) %}
-    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills' })) }}
+    {%- import _self as this -%}
+    {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills' })) }}
 {% endmacro %}
 
 {%- macro _menu(menu, options, renderer, config) -%}
+    {%- import _self as this -%}
     {% spaceless %}
         {#{% set config = config|default({}) %}#}
         {% set children_class = '' %}
