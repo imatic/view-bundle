@@ -42,6 +42,11 @@ class RemoteLoader implements Twig_LoaderInterface
         ];
     }
 
+    public function exists($name)
+    {
+        return isset($this->templates[$name]);
+    }
+
     public function getSource($name)
     {
         $this->ensureExists($name);
