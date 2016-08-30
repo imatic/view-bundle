@@ -6,4 +6,4 @@ last:       Poslední strana
 first:      První strana
 current:    Aktuální strana
 
-pagination: "[0,99]%first% - %last% z %count%|[100,199]%first% - %last% ze %count%|[200,Inf]%first% - %last% z %count%"
+pagination: "%first% - %last% z %total%"

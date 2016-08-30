@@ -44,12 +44,12 @@
             </ul>
             {% if pager_options.page_text|default('expanded') == 'expanded' %}
                 <p class="pagination-text">
-                    {{ 'pagination'|transchoice(
-                        pager.total, {
-                            '%first%': pager.firstIndice,
-                            '%last%': pager.lastIndice,
-                        },
-                        'ImaticViewBundleComponent'
+                    {{ 'pagination'|trans({
+                        '%first%': pager.firstIndice,
+                        '%last%': pager.lastIndice,
+                        '%total%': pager.total,
+                    },
+                    'ImaticViewBundleComponent'
                     ) }}
                 </p>
             {% else %}
