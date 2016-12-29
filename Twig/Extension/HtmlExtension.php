@@ -25,9 +25,4 @@ class HtmlExtension extends \Twig_Extension
             new \Twig_SimpleFilter('imatic_html_unescape', [StringUtil::class, 'unescape']),
         ];
     }
-
-    public function getName()
-    {
-        return 'imatic_view_html';
-    }
 }

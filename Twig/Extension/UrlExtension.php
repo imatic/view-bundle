@@ -31,9 +31,4 @@ class UrlExtension extends \Twig_Extension
             new \Twig_SimpleFunction('imatic_view_update_pager_url', [$this->urlHelper, 'updatePagerUrl']),
         ];
     }
-
-    public function getName()
-    {
-        return 'imatic_view_url';
-    }
 }

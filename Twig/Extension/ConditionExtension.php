@@ -24,9 +24,4 @@ class ConditionExtension extends Twig_Extension
             new Twig_SimpleFunction('imatic_view_condition_evaluate', [$this->conditionHelper, 'evaluate']),
         ];
     }
-
-    public function getName()
-    {
-        return 'imatic_view_condition';
-    }
 }

@@ -42,14 +42,4 @@ class ComponentExtension extends Twig_Extension
             new \Twig_SimpleFunction('imatic_view_action_create', [$this->actionHelper, 'create']),
         ];
     }
-
-    /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
-     */
-    public function getName()
-    {
-        return 'imatic_view_component';
-    }
 }

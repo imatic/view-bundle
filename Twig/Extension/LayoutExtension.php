@@ -30,9 +30,4 @@ class LayoutExtension extends Twig_Extension
             new Twig_SimpleFunction('imatic_view_set_full_title', [$this->layoutHelper, 'setFullTitle']),
         ];
     }
-
-    public function getName()
-    {
-        return 'imatic_view_layout';
-    }
 }

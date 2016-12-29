@@ -55,9 +55,4 @@ class FormatExtension extends \Twig_Extension
             ),
         ];
     }
-
-    public function getName()
-    {
-        return 'imatic_view_format';
-    }
 }

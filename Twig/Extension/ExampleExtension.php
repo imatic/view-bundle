@@ -35,9 +35,4 @@ class ExampleExtension extends \Twig_Extension
             ),
         ];
     }
-
-    public function getName()
-    {
-        return 'imatic_view_example';
-    }
 }

@@ -9,11 +9,6 @@ use Imatic\Bundle\ViewBundle\Twig\Node\InstanceofNode;
 
 class TypeExtension extends Twig_Extension
 {
-    public function getName()
-    {
-        return 'imatic_view_type';
-    }
-
     public function getTests()
     {
         return [
