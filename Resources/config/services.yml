@@ -32,7 +32,7 @@ services:
         arguments: [ '@translator', '@?security.authorization_checker', '@?security.token_storage' ]
 
     imatic_view.menu.main:
-        class: %imatic_view.menu.main.class%
+        class: '%imatic_view.menu.main.class%'
         arguments: [ '@imatic_view.menu.provider_container' ]
         tags:
             - { name: imatic_view.menu, alias: imatic.main }
