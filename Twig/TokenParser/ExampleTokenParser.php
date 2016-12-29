@@ -9,7 +9,7 @@ use Twig_TokenParser;
 use Twig_Token;
 
 /**
- * Generate an example
+ * Generate an example.
  *
  * {% example %}
  *      <a href="http://example.com/">An example</a>
@@ -42,17 +42,20 @@ class ExampleTokenParser extends Twig_TokenParser
         $lineno = $token->getLine();
 
         $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse(function (Twig_Token $token) { return $token->test('endexample'); }, true);
+        $body = $this->parser->subparse(function (Twig_Token $token) {
+            return $token->test('endexample');
+        }, true);
         $rawBody = $this->parseRawBody($lineno);
-        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);      
+        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
 
         return new ExampleNode($body, $rawBody, $lineno, $this->getTag());
     }
 
     /**
-     * Parse raw template body
+     * Parse raw template body.
      *
      * @param int $startLine
+     *
      * @return string
      */
     private function parseRawBody($startLine)
@@ -87,9 +90,10 @@ class ExampleTokenParser extends Twig_TokenParser
     }
 
     /**
-     * Remove extra indentation from a string
+     * Remove extra indentation from a string.
      *
      * @param string $string
+     *
      * @return string
      */
     private function removeExtraIndentation($string)

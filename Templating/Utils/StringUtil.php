@@ -5,9 +5,10 @@ namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 class StringUtil
 {
     /**
-     * Escape a string for use in HTML 5 code
+     * Escape a string for use in HTML 5 code.
      *
      * @param string $string
+     *
      * @return string
      */
     public static function escape($string)
@@ -16,9 +17,10 @@ class StringUtil
     }
 
     /**
-     * Unescape a HTML 5 encoded string
+     * Unescape a HTML 5 encoded string.
      *
      * @param string $html
+     *
      * @return string
      */
     public static function unescape($html)
@@ -28,6 +30,7 @@ class StringUtil
 
     /**
      * @param string $string
+     *
      * @return string
      */
     public static function slugify($string)
@@ -41,6 +44,7 @@ class StringUtil
 
     /**
      * @param string $string
+     *
      * @return string
      */
     public static function humanize($string)

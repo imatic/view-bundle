@@ -1,4 +1,5 @@
 <?php
+
 namespace Imatic\Bundle\ViewBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

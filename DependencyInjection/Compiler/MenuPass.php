@@ -1,4 +1,5 @@
 <?php
+
 namespace Imatic\Bundle\ViewBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;

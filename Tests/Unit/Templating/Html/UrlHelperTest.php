@@ -1,4 +1,5 @@
 <?php
+
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper;
@@ -15,7 +16,7 @@ class UrlHelperTest extends \PHPUnit_Framework_TestCase
             'scheme' => 'https',
             'host' => 'www.example.com',
             'path' => '/path/file.html',
-            'query' => ['param1' => 'value1', 'param2' => ['sub1' => 'valueSub1', 'sub2' => 'valueSub2']]
+            'query' => ['param1' => 'value1', 'param2' => ['sub1' => 'valueSub1', 'sub2' => 'valueSub2']],
         ];
         $result = $urlHelper->buildUrl($components);
 
@@ -30,7 +31,7 @@ class UrlHelperTest extends \PHPUnit_Framework_TestCase
             'scheme' => 'https',
             'host' => 'www.example.com',
             'path' => '/path/file.html',
-            'query' => 'param1=value1&param2%5Bsub1%5D=valueSub1&param2%5Bsub2%5D=valueSub2'
+            'query' => 'param1=value1&param2%5Bsub1%5D=valueSub1&param2%5Bsub2%5D=valueSub2',
         ];
         $result = $urlHelper->buildUrl($components);
 

@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class Helper
 {
-
     /**
      * @var TranslatorInterface
      */
@@ -36,37 +35,39 @@ class Helper
     }
 
     /**
-     * Adds a vertical/horizontal divider
+     * Adds a vertical/horizontal divider.
      *
-     * @param  ItemInterface $item
-     * @param  bool          $vertical
+     * @param ItemInterface $item
+     * @param bool          $vertical
+     *
      * @return ItemInterface
      */
     public function addDivider(ItemInterface $item, $vertical = false)
     {
         $class = $vertical ? 'divider-vertical' : 'divider';
 
-        return $item->addChild('divider_' . rand())
+        return $item->addChild('divider_'.rand())
             ->setLabel('')
             ->setAttribute('class', $class);
     }
 
     /**
-     * Adds a menu header
+     * Adds a menu header.
      *
      * @param ItemInterface $item
      * @param $text
+     *
      * @return ItemInterface
      */
     public function addHeader(ItemInterface $item, $text)
     {
-        return $item->addChild('header_' . rand())
+        return $item->addChild('header_'.rand())
             ->setLabel($text)
             ->setAttribute('class', 'nav-header');
     }
 
     /**
-     * Creates a drop down menu item from item
+     * Creates a drop down menu item from item.
      *
      * @param ItemInterface $dropDownItem
      */
@@ -79,12 +80,12 @@ class Helper
             ->setAttribute('class', 'dropdown')
             ->setChildrenAttribute('class', 'dropdown-menu');
 
-        $dropDownItem->setLabel($dropDownItem->getLabel() . '<b class="caret"></b>');
+        $dropDownItem->setLabel($dropDownItem->getLabel().'<b class="caret"></b>');
         $dropDownItem->setExtra('safe_label', true);
     }
 
     /**
-     * Creates a sub menu item from item
+     * Creates a sub menu item from item.
      *
      * @param ItemInterface $item
      */
@@ -98,7 +99,7 @@ class Helper
         $badge = sprintf(' <span class="badge badge-%s %s">%s</span>', $type, $right ? ' pull-right' : '', $content);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel(StringUtil::escape($item->getLabel()) . $badge);
+            ->setLabel(StringUtil::escape($item->getLabel()).$badge);
     }
 
     public function setIcon(ItemInterface $item, $icon, $right = null)
@@ -106,17 +107,17 @@ class Helper
         $icon = sprintf('<i class="imatic-view-menu-icon icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
         $item
             ->setExtra('safe_label', true)
-            ->setLabel($icon . StringUtil::escape($item->getLabel()));
+            ->setLabel($icon.StringUtil::escape($item->getLabel()));
     }
 
     /**
      * Translates the given choice message by choosing a translation according to a number.
      *
-     * @param string  $id         The message id
-     * @param integer $number     The number to use to find the indice of the message
-     * @param array   $parameters An array of parameters for the message
-     * @param string  $domain     The domain for the message
-     * @param string  $locale     The locale
+     * @param string $id         The message id
+     * @param int    $number     The number to use to find the indice of the message
+     * @param array  $parameters An array of parameters for the message
+     * @param string $domain     The domain for the message
+     * @param string $locale     The locale
      *
      * @return string The translated string
      */
@@ -151,7 +152,7 @@ class Helper
     }
 
     /**
-     * Returns true if current user is logged
+     * Returns true if current user is logged.
      *
      * @return bool
      */
@@ -184,7 +185,7 @@ class Helper
      * @param array $attributes
      * @param mixed $object
      *
-     * @return Boolean
+     * @return bool
      */
     public function isUserGranted($attributes, $object = null)
     {

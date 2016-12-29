@@ -35,9 +35,8 @@ class ContainerProvider implements MenuProviderInterface
     }
 
     /**
-     * @param  string $alias Menu alias
-     * @param  array  $info  Menu info (service ID, method name)
-     * @return void
+     * @param string $alias Menu alias
+     * @param array  $info  Menu info (service ID, method name)
      */
     public function addService($alias, $info)
     {
@@ -45,11 +44,13 @@ class ContainerProvider implements MenuProviderInterface
     }
 
     /**
-     * Retrieves a menu by its name
+     * Retrieves a menu by its name.
      *
-     * @param  string                    $name
-     * @param  array                     $options
+     * @param string $name
+     * @param array  $options
+     *
      * @return ItemInterface
+     *
      * @throws \InvalidArgumentException if the menu does not exists
      */
     public function get($name, array $options = [])
@@ -67,7 +68,7 @@ class ContainerProvider implements MenuProviderInterface
             $menu = $this->container->get($service)->$method($factory, $helper);
 
             $event = new ConfigureMenuEvent($menu, $factory, $helper, $name);
-            $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.' . $name, $event);
+            $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.'.$name, $event);
 
             $this->menuCollection[$name] = $menu;
         }
@@ -76,10 +77,11 @@ class ContainerProvider implements MenuProviderInterface
     }
 
     /**
-     * Checks whether a menu exists in this provider
+     * Checks whether a menu exists in this provider.
      *
-     * @param  string $name
-     * @param  array  $options
+     * @param string $name
+     * @param array  $options
+     *
      * @return bool
      */
     public function has($name, array $options = [])

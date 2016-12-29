@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
 
 /**
- * Kernel subscriber
+ * Kernel subscriber.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
@@ -48,7 +48,7 @@ class KernelSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * On kernel response
+     * On kernel response.
      *
      * @param FilterResponseEvent $event
      */

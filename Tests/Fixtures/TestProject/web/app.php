@@ -1,5 +1,6 @@
 <?php
-require __DIR__ . '/../../../bootstrap.php';
+
+require __DIR__.'/../../../bootstrap.php';
 umask(0007);
 
 use Symfony\Component\HttpFoundation\Request;

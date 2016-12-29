@@ -27,7 +27,8 @@ class ActionHelper
 
     /**
      * @param ActionOptions|array $actionOptions
-     * @param array|null $contextOptions
+     * @param array|null          $contextOptions
+     *
      * @return HtmlElement
      */
     public function create($actionOptions, $contextOptions = null)
@@ -62,7 +63,8 @@ class ActionHelper
 
     /**
      * @param object|array $object
-     * @param array $parameters
+     * @param array        $parameters
+     *
      * @return array
      */
     public function applyParameters($object, array $parameters)
@@ -80,6 +82,7 @@ class ActionHelper
 
     /**
      * @param ActionOptions|array $action
+     *
      * @return ActionOptions
      */
     public function getActionOptions($action)
@@ -93,7 +96,8 @@ class ActionHelper
 
     /**
      * @param ActionOptions $actionOptions
-     * @param array $contextOptions
+     * @param array         $contextOptions
+     *
      * @return string
      */
     public function getActionUrl(ActionOptions $actionOptions, array $contextOptions)

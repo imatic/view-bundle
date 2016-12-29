@@ -7,7 +7,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 
 /**
- * Example extension
+ * Example extension.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */

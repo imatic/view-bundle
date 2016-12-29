@@ -21,7 +21,7 @@ class FieldOptions extends AbstractOptions
             },
             'propertyPath' => function (Options $options, $x) {
                 return $options['name'];
-            }
+            },
         ]);
 
         $resolver->setAllowedTypes('name', 'string');

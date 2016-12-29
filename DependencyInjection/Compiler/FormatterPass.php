@@ -1,4 +1,5 @@
 <?php
+
 namespace Imatic\Bundle\ViewBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -38,7 +39,7 @@ class FormatterPass implements CompilerPassInterface
                 $formatterDef->addMethodCall('addFormatter', [
                     $attributes['alias'],
                     new Reference($id),
-                    $options
+                    $options,
                 ]);
             }
         }

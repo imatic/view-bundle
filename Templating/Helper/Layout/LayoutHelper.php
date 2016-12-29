@@ -5,7 +5,7 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Layout;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Layout helper
+ * Layout helper.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
@@ -24,7 +24,7 @@ class LayoutHelper
     }
 
     /**
-     * See if the layout should be enabled
+     * See if the layout should be enabled.
      *
      * @return bool
      */
@@ -49,7 +49,7 @@ class LayoutHelper
     }
 
     /**
-     * See if the request comes from inside of a modal dialog
+     * See if the request comes from inside of a modal dialog.
      *
      * @return bool
      */
@@ -59,7 +59,7 @@ class LayoutHelper
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string|null
      */
@@ -69,7 +69,7 @@ class LayoutHelper
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string|null $title
      */
@@ -79,7 +79,7 @@ class LayoutHelper
     }
 
     /**
-     * Check for title
+     * Check for title.
      *
      * @return bool
      */
@@ -89,7 +89,7 @@ class LayoutHelper
     }
 
     /**
-     * Get full title
+     * Get full title.
      *
      * @return string|null
      */
@@ -99,7 +99,7 @@ class LayoutHelper
     }
 
     /**
-     * Set full title
+     * Set full title.
      *
      * @param string|null $fullTitle
      */
@@ -109,7 +109,7 @@ class LayoutHelper
     }
 
     /**
-     * Check for full title
+     * Check for full title.
      *
      * @return bool
      */

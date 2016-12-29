@@ -31,13 +31,14 @@ class TypeExtension extends Twig_Extension
             // binary
             [
                 'instanceof' => ['precedence' => 400, 'class' => InstanceofNode::class, 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT],
-            ]
+            ],
         ];
     }
 
     /**
      * @param object        $left
      * @param object|string $right
+     *
      * @return bool
      */
     public function isInstanceOf($left, $right)

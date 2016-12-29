@@ -8,7 +8,7 @@ use Twig_Compiler;
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 
 /**
- * Represents an example node
+ * Represents an example node.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */

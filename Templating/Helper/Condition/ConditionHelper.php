@@ -34,17 +34,16 @@ class ConditionHelper
         AuthorizationCheckerInterface $authorizationChecker,
         LayoutHelper $layoutHelper,
         ExpressionLanguage $expressionLanguage = null
-    )
-    {
+    ) {
         $this->expressionLanguage = $expressionLanguage ?: new ExpressionLanguage();
         $this->authorizationChecker = $authorizationChecker;
         $this->expressionLanguage->register(
             'isGranted',
             function ($str) {
-                throw new \Exception($str . ' function is not implemented');
+                throw new \Exception($str.' function is not implemented');
             }, function (array $values, $str) {
-            return $this->authorizationChecker->isGranted($str);
-        });
+                return $this->authorizationChecker->isGranted($str);
+            });
         $this->layoutHelper = $layoutHelper;
         $this->tokenStorage = $tokenStorage;
     }

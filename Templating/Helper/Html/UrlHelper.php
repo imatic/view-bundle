@@ -65,17 +65,17 @@ class UrlHelper
 
     public function buildUrl($components)
     {
-        $scheme = isset($components['scheme']) ? $components['scheme'] . '://' : '';
+        $scheme = isset($components['scheme']) ? $components['scheme'].'://' : '';
         $host = isset($components['host']) ? $components['host'] : '';
-        $port = isset($components['port']) ? ':' . $components['port'] : '';
+        $port = isset($components['port']) ? ':'.$components['port'] : '';
         $user = isset($components['user']) ? $components['user'] : '';
-        $pass = isset($components['pass']) ? ':' . $components['pass'] : '';
+        $pass = isset($components['pass']) ? ':'.$components['pass'] : '';
         $pass = ($user || $pass) ? "$pass@" : '';
         $path = isset($components['path']) ? $components['path'] : '';
-        $query = isset($components['query']) ? '?' . (is_array($components['query']) ? http_build_query($components['query']) : $components['query']) : '';
-        $fragment = isset($components['fragment']) ? '#' . $components['fragment'] : '';
+        $query = isset($components['query']) ? '?'.(is_array($components['query']) ? http_build_query($components['query']) : $components['query']) : '';
+        $fragment = isset($components['fragment']) ? '#'.$components['fragment'] : '';
 
-        return $scheme . $user . $pass . $host . $port . $path . $query . $fragment;
+        return $scheme.$user.$pass.$host.$port.$path.$query.$fragment;
     }
 
     private function buildQueryArray(array $query, $componentId = null)

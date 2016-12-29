@@ -29,7 +29,7 @@ class FormatHelperTest extends PHPUnit_Framework_TestCase
     {
         $data = [
             'name' => 'jmeno',
-            'surname' => 'prijmeni'
+            'surname' => 'prijmeni',
         ];
 
         $this->assertEquals('jmeno', $this->formatHelper->renderValue($data, 'name'));

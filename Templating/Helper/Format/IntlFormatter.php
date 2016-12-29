@@ -35,7 +35,7 @@ class IntlFormatter implements FormatterInterface
         'sk.date.short' => 'dd.MM.y',
         'sk.datetime.short:short' => 'dd.MM.y H:mm',
     ];
-    
+
     public function addDatePatternOverrides(array $overrides)
     {
         $this->datePatternOverrides = $overrides + $this->datePatternOverrides;
@@ -158,6 +158,7 @@ class IntlFormatter implements FormatterInterface
      * @param string      $timeType
      * @param mixed       $timezone
      * @param string|null $locale
+     *
      * @return string|bool
      */
     protected function intlDateTimeFormat(DateTime $dateTime, $dateType, $timeType, $timezone, $locale)
@@ -190,6 +191,7 @@ class IntlFormatter implements FormatterInterface
      * @param string $locale
      * @param int    $dateType
      * @param int    $timeType
+     *
      * @return string|null
      */
     protected function getIntlDatePattern($locale, $dateType, $timeType)

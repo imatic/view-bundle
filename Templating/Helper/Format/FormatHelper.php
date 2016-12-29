@@ -49,7 +49,9 @@ class FormatHelper implements FormatterInterface
     /**
      * @param string $format
      * @param string $context templating context (e.g. "html")
+     *
      * @throws \InvalidArgumentException if the formatter doesn't exist
+     *
      * @return bool
      */
     public function isSafe($format, $context)
@@ -65,7 +67,9 @@ class FormatHelper implements FormatterInterface
      * @param mixed  $value
      * @param string $format
      * @param array  $options
+     *
      * @throws \InvalidArgumentException if the formatter doesn't exist
+     *
      * @return string|null
      */
     public function format($value, $format = null, array $options = [])
@@ -93,6 +97,7 @@ class FormatHelper implements FormatterInterface
      * @param string|null  $propertyPath
      * @param string       $format
      * @param array        $options
+     *
      * @return string|null
      */
     public function renderValue($objectOrArray, $propertyPath, $format = null, array $options = [])
@@ -133,7 +138,9 @@ class FormatHelper implements FormatterInterface
 
     /**
      * @param mixed $value
+     *
      * @throws \RuntimeException if the format could not be determined
+     *
      * @return string
      */
     protected function guessFormat($value)

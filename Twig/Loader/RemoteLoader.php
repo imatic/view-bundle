@@ -7,7 +7,7 @@ use Twig_Error_Loader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Remote loader
+ * Remote loader.
  */
 class RemoteLoader implements Twig_LoaderInterface
 {
@@ -22,7 +22,7 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Add a remote template
+     * Add a remote template.
      *
      * @param string $name
      * @param string $url
@@ -75,7 +75,7 @@ class RemoteLoader implements Twig_LoaderInterface
 
         // add metadata variable
         $metadata = $this->getMetadata($name);
-        $source = sprintf('{%% set _remote = %s %%}', json_encode($metadata)) . $source;
+        $source = sprintf('{%% set _remote = %s %%}', json_encode($metadata)).$source;
 
         return $source;
     }
@@ -107,7 +107,7 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Check cache file TTL
+     * Check cache file TTL.
      *
      * @param string $name
      */
@@ -125,9 +125,10 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Make sure the given template is a known remote template
+     * Make sure the given template is a known remote template.
      *
      * @param string $name
+     *
      * @throws Twig_Error_loader
      */
     private function ensureExists($name)
@@ -138,10 +139,11 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Convert placeholders to blocks in the source
+     * Convert placeholders to blocks in the source.
      *
      * @param array  $blocks
      * @param string $source
+     *
      * @return string
      */
     private function placeholdersToBlocks(array $blocks, $source)
@@ -154,7 +156,7 @@ class RemoteLoader implements Twig_LoaderInterface
         foreach ($blocks as $blockName => $block) {
             $first ? $first = false : $pattern .= '|';
             $pattern .= preg_quote($block['placeholder'], '/');
-            
+
             $placeholderToBlockMap[$block['placeholder']] = $blockName;
         }
 
@@ -176,9 +178,10 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Create placeholder block syntax
+     * Create placeholder block syntax.
      *
      * @param string $blockName
+     *
      * @return string
      */
     private function createPlaceholderBlockSyntax($blockName)
@@ -187,9 +190,10 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Create repeated placeholder block syntax
+     * Create repeated placeholder block syntax.
      *
      * @param string $blockName
+     *
      * @return string
      */
     private function createRepeatedPlaceholderBlockSyntax($blockName)
@@ -198,9 +202,10 @@ class RemoteLoader implements Twig_LoaderInterface
     }
 
     /**
-     * Get template metadata array
+     * Get template metadata array.
      *
      * @param string $name template name
+     *
      * @return string
      */
     private function getMetadata($name)

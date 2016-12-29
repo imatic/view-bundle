@@ -102,13 +102,13 @@ class CommonFormatter implements FormatterInterface
         $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $factor = floor((strlen($value) - 1) / 3);
 
-        return sprintf("%.{$decimals}f", $value / pow(1024, $factor)) . (isset($size[$factor]) ? $size[$factor] : '');
+        return sprintf("%.{$decimals}f", $value / pow(1024, $factor)).(isset($size[$factor]) ? $size[$factor] : '');
     }
 
     public function formatTranslatable($value, array $options)
     {
         return $this->translator->trans(
-            isset($options['prefix']) ? $options['prefix'] . $value : $value,
+            isset($options['prefix']) ? $options['prefix'].$value : $value,
             isset($options['params']) ? $options['params'] : [],
             $options['domain'],
             isset($options['locale']) ? $options['locale'] : null

@@ -3,7 +3,7 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Node;
 
 /**
- * Format function node
+ * Format function node.
  *
  * Used by imatic_view_format() and imatic_view_render_value().
  *

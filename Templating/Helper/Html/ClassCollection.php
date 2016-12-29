@@ -48,6 +48,6 @@ class ClassCollection extends AbstractCollection
 
     public function render()
     {
-        return $this->classes ? 'class="' . StringUtil::escape(implode(' ', $this->classes)) . '"' : '';
+        return $this->classes ? 'class="'.StringUtil::escape(implode(' ', $this->classes)).'"' : '';
     }
 }

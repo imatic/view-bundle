@@ -5,8 +5,8 @@
 
 {% block panel %}
     <div class="panel panel-{{ panel.type|default('default') }}">
-        {% set panel_header = block('panel_header') %}
-        {% set panel_title = block('panel_title') %}
+        {% set panel_header = block('panel_header') is defined ? block('panel_header') : null  %}
+        {% set panel_title = block('panel_title') is defined ? block('panel_title') : null %}
         {% if panel_header is not empty or panel_title is not empty %}
             <div class="panel-heading">
                 {% if panel_title is not empty %}

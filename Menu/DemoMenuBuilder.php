@@ -5,8 +5,9 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 class DemoMenuBuilder
 {
     /**
-     * @param  Factory $factory
-     * @param  Helper $helper
+     * @param Factory $factory
+     * @param Helper  $helper
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function getMenu(Factory $factory, Helper $helper)
@@ -37,8 +38,9 @@ class DemoMenuBuilder
     }
 
     /**
-     * @param  Factory $factory
-     * @param  Helper $helper
+     * @param Factory $factory
+     * @param Helper  $helper
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function getSubMenu(Factory $factory, Helper $helper)
@@ -63,8 +65,9 @@ class DemoMenuBuilder
     }
 
     /**
-     * @param  Factory $factory
-     * @param  Helper $helper
+     * @param Factory $factory
+     * @param Helper  $helper
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function getNormalMenu(Factory $factory, Helper $helper)

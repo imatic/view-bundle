@@ -56,6 +56,6 @@ abstract class AbstractCollection implements \ArrayAccess
 
     public function __toString()
     {
-        return (string)$this->render();
+        return (string) $this->render();
     }
 }

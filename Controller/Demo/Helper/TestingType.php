@@ -63,7 +63,9 @@ class TestingType extends AbstractType
         if ($imaticFormBundle) {
             $types += [
                'choice_not_rich' => ['choices' => $choices, 'expanded' => false, 'multiple' => false, 'rich' => false, 'type' => ChoiceType::class],
-               'imatic_type_ajax_choice' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) { return 1 == $value ? 'Test initial value' : null; }],
+               'imatic_type_ajax_choice' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) {
+                   return 1 == $value ? 'Test initial value' : null;
+               }],
                'imatic_type_ajax_choice_multi' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'multiple' => true],
             ];
         }

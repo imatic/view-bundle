@@ -31,7 +31,7 @@ class ColumnOptions extends AbstractOptions
             },
             'propertyPath' => function (Options $options) {
                 return $options['name'];
-            }
+            },
         ]);
 
         $resolver->setAllowedTypes('name', 'string');

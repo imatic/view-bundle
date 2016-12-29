@@ -19,7 +19,7 @@ class MenuExtension extends Twig_Extension
     protected $renderer;
 
     /**
-     * @param Factory $factory
+     * @param Factory           $factory
      * @param RendererInterface $renderer
      */
     public function __construct(Factory $factory, RendererInterface $renderer)
@@ -31,7 +31,7 @@ class MenuExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('imatic_view_menu_render_array', [$this, 'renderArrayMenu'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('imatic_view_menu_render_array', [$this, 'renderArrayMenu'], ['is_safe' => ['html']]),
         ];
     }
 

@@ -65,7 +65,7 @@ class AjaxifyController extends Controller
     {
         return [];
     }
-    
+
     /**
      * @Config\Route("/test/flashes")
      * @Config\Template()
@@ -73,7 +73,7 @@ class AjaxifyController extends Controller
     public function flashesTestAction()
     {
         $flashBag = $this->get('session')->getFlashBag();
-        
+
         $flashBag->add('success', 'I am a success!');
         $flashBag->add('info', 'I am an information!');
         $flashBag->add('warning', 'I am a warning!');

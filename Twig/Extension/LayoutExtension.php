@@ -7,7 +7,7 @@ use Twig_Extension;
 use Twig_SimpleFunction;
 
 /**
- * Layout extension
+ * Layout extension.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */

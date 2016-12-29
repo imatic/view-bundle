@@ -6,7 +6,7 @@ use Twig_Node_Expression_Binary;
 use Twig_Compiler;
 
 /**
- * Represents an instanceof node
+ * Represents an instanceof node.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */

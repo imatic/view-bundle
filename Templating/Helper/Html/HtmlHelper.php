@@ -28,7 +28,9 @@ class HtmlHelper
 
     /**
      * @deprecated use StringUtil::unescape() instead
+     *
      * @param string $html
+     *
      * @return string
      */
     public function unescape($html)
