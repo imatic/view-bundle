@@ -217,4 +217,9 @@ class RemoteLoader implements Twig_LoaderInterface
             + $this->templates[$name]['metadata']
         ;
     }
+
+    public function getSourceContext($name)
+    {
+        return new \Twig_Source($this->getSource($name));
+    }
 }
