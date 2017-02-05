@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block headline (resource.config.name|capitalize ~ ' edit')|trans({('%'~resource.config.name~'%'): item|default('new')}, resource.config.translation_domain) %}
+
+
+{#{% set page_actions = [] %}#}
+{#{% if item is defined %}#}
+    {#{% set page_actions = page_actions | merge([{ label: 'Show'|trans({}, 'ImaticViewBundle'), route: 'imatic_directory_company_show', routeParams: {id: item.id} }]) %}#}
+{#{% endif %}#}
+{#{% set page_actions = page_actions | merge([{ label: 'List'|trans({}, 'ImaticViewBundle'), route: resource.config.translation_domain }]) %}#}
+
+{% block action %}
+
+    {% include 'ImaticViewBundle:Component:form.html.twig' %}
+
+{% endblock %}
