@@ -1,24 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% block headline (resource.config.name|capitalize ~ ' list')|trans({}, resource.config.translation_domain) %}
+{% block headline (resource.config.name|capitalize ~ ' ' ~ action.name)|trans({}, resource.config.translation_domain) %}
 
-{#{% set page_actions = [#}
-{#{ label: 'Create'|trans({}, 'ImaticViewBundle'), route: resource.actions.create.route.name, condition: 'isGranted("ROLE_IMATIC_DIRECTORY_COMPANY_CREATE")' }#}
-{#] %}#}
 {% set page_actions = imatic_view_resource_create_page_actions(resource, action.name) %}
 
 {% block action %}
-
-    {% set nestedActions = [] %}
-    {% if is_granted('ROLE_IMATIC_DIRECTORY_COMPANY_EDIT') %}
-        {% set nestedActions = nestedActions|merge([{label: 'Edit'|trans({}, 'ImaticViewBundle'), route: resource.actions.edit.route.name, routeParams: {id: '#id'}, data: {ajaxify: 'false'} }]) %}
-    {% endif %}
-    {% if is_granted('ROLE_IMATIC_DIRECTORY_COMPANY_DELETE') %}
-        {% set nestedActions = nestedActions|merge([{label: 'Delete'|trans({}, 'ImaticViewBundle'), route: resource.actions.delete.route.name, routeParams: {id: '#id'}, data: {method: 'delete', confirm: 'Are you sure?'} }]) %}
-    {% endif %}
-    {#[#}
-    {#{label: 'Show'|trans({}, 'ImaticViewBundle'), route: resource.actions.show.route.name, routeParams: {id: '#id'}, data: {target: 'modal', 'modal-size': 'large'}, nested: nestedActions}#}
-    {#]#}
 
     {% set rowActions = imatic_view_resource_create_row_actions(resource, action.name) %}
 

@@ -18,27 +18,40 @@ class ResourceHelper
         $this->translator = $translator;
     }
 
-    public function createPageActionConfiguration(Resource $resource, $currentAction, $itemId = null)
+    public function createPageActionConfiguration(Resource $resource, $currentActionName, $itemId = null)
     {
-        $actions = $this->filterActions($resource, 'page', $currentAction);
+        $currentAction = $resource->getAction($currentActionName);
+        $filterActions = 'list' === $currentAction->group ? ['list'] : ['list', 'item'];
+        $actions = $this->filterActions($resource, $filterActions, $currentActionName);
 
-        return array_map(function (ResourceAction $action) use ($resource) {
+        $result = array_map(function (ResourceAction $action) use ($resource, $currentAction, $itemId) {
             $configuration = $this->createDefaultConfiguration($action, $resource);
+            if ('item' === $currentAction->group && 'list' !== $action->group) {
+                $configuration['routeParams'] = ['id' => $itemId];
+            }
 
             return $configuration;
         }, $actions);
+
+        $result = $this->groupNestedConfiguration($result, true);
+
+        return $result;
     }
 
     public function createRowActionConfiguration(Resource $resource)
     {
-        $actions = $this->filterActions($resource, 'object');
+        $actions = $this->filterActions($resource, ['item']);
 
-        return array_map(function (ResourceAction $action) use ($resource) {
+        $result = array_map(function (ResourceAction $action) use ($resource) {
             $configuration = $this->createDefaultConfiguration($action, $resource);
             $configuration['routeParams'] = ['id' => '#id'];
 
             return $configuration;
         }, $actions);
+
+        $result = $this->groupNestedConfiguration($result);
+
+        return $result;
     }
 
     private function createDefaultConfiguration(ResourceAction $action, Resource $resource)
@@ -56,17 +69,37 @@ class ResourceHelper
             $configuration['data'] = $action['extra']['button_data'];
         }
 
-//            'class' => '',
-//            'type' => '',
-//            'nested' => [],
+        if (isset($action['extra']['button_parent'])) {
+            $configuration['parent'] = $action['extra']['button_parent'];
+        }
 
         return $configuration;
     }
 
-    private function filterActions(Resource $resource, $type, $excludeAction = null)
+    private function groupNestedConfiguration(array $configuration, $removeParentOnly = false)
     {
-        return array_filter($resource->getActions(), function (ResourceAction $action) use ($type, $excludeAction) {
-            return $type === $action['group'] && (null === $excludeAction || $excludeAction !== $action['name']);
+        foreach ($configuration as $actionName => &$actionConfig) {
+            $parentActionName = empty($actionConfig['parent']) ? null : $actionConfig['parent'];
+            unset($actionConfig['parent']);
+
+            if (!$removeParentOnly && null !== $parentActionName && !empty($configuration[$parentActionName])) {
+
+                if (empty($configuration[$parentActionName]['nested'])) {
+                    $configuration[$parentActionName]['nested'] = [];
+                }
+
+                $configuration[$parentActionName]['nested'][$actionName] = $actionConfig;
+                unset($configuration[$actionName]);
+            }
+        }
+
+        return $configuration;
+    }
+
+    private function filterActions(Resource $resource, array $types, $excludeAction = null)
+    {
+        return array_filter($resource->getActions(), function (ResourceAction $action) use ($types, $excludeAction) {
+            return in_array($action['group'], $types, true) && (null === $excludeAction || $excludeAction !== $action['name']);
         });
     }
 

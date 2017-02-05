@@ -1,23 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% block headline (resource.config.name|capitalize ~ ' show')|trans({('%'~resource.config.name~'%'): item}, resource.config.translation_domain) %}
+{% block headline (resource.config.name|capitalize ~ ' ' ~ action.name)|trans({('%'~resource.config.name~'%'): item}, resource.config.translation_domain) %}
 
-
-{#{% set page_actions = [#}
-{#{ label: 'Edit'|trans({}, 'ImaticViewBundle'), route: 'imatic_directory_company_edit', routeParams: {id: item.id} },#}
-{#{ label: 'List'|trans({}, 'ImaticViewBundle'), route: 'imatic_directory_company_list' }#}
-{#] %}#}
+{% set page_actions = imatic_view_resource_create_page_actions(resource, action.name, item.id) %}
 
 {% block action %}
-    {#<hr>#}
-    {#{{ dump(item.id) }}#}
-    {#<hr>#}
-    {#{% set name = 'item.id' %}#}
-    {#{% set names = name|split('.') %}#}
-
-    {#{{ dump(attribute(attribute(_context, names[0]), names[1])) }}#}
-    {#<hr>#}
-
     {% set fields = action.fields %}
 
     {% set show = {

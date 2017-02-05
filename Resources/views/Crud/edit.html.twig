@@ -1,13 +1,8 @@
 {% extends '::base.html.twig' %}
 
-{% block headline (resource.config.name|capitalize ~ ' edit')|trans({('%'~resource.config.name~'%'): item|default('new')}, resource.config.translation_domain) %}
+{% block headline (resource.config.name|capitalize ~ ' ' ~ action.name)|trans({('%'~resource.config.name~'%'): item|default('new')}, resource.config.translation_domain) %}
 
-
-{#{% set page_actions = [] %}#}
-{#{% if item is defined %}#}
-    {#{% set page_actions = page_actions | merge([{ label: 'Show'|trans({}, 'ImaticViewBundle'), route: 'imatic_directory_company_show', routeParams: {id: item.id} }]) %}#}
-{#{% endif %}#}
-{#{% set page_actions = page_actions | merge([{ label: 'List'|trans({}, 'ImaticViewBundle'), route: resource.config.translation_domain }]) %}#}
+{% set page_actions = imatic_view_resource_create_page_actions(resource, action.name, item.id|default(null)) %}
 
 {% block action %}
 
