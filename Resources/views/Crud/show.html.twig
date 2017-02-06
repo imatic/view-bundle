@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block headline (resource.config.name|capitalize ~ ' ' ~ action.name)|trans({('%'~resource.config.name~'%'): item}, resource.config.translation_domain) %}
+{% block headline imatic_view_resource_create_headline(resource, action, item) %}
 
 {% set page_actions = imatic_view_resource_create_page_actions(resource, action.name, item.id) %}
 

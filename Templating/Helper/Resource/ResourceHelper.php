@@ -18,6 +18,22 @@ class ResourceHelper
         $this->translator = $translator;
     }
 
+    public function createHeadline(Resource $resource, ResourceAction $action, $item = null)
+    {
+        $tranKey = sprintf('%s %s', ucfirst($resource->getConfig()->name), $action->name);
+        $transParam = sprintf('%%%s%%', $resource->getConfig()->name);
+
+        return $this->translator->trans($tranKey, [$transParam => $item ? $item : 'new'], $resource->getConfig()->translation_domain);
+    }
+
+    public function createActionConfiguration(Resource $resource, $actionName, array $merge = [])
+    {
+        $action = $this->createDefaultConfiguration($resource->getAction($actionName), $resource);
+        unset($action['parent']);
+
+        return array_replace_recursive($action, $merge);
+    }
+
     public function createPageActionConfiguration(Resource $resource, $currentActionName, $itemId = null)
     {
         $currentAction = $resource->getAction($currentActionName);
@@ -98,9 +114,18 @@ class ResourceHelper
 
     private function filterActions(Resource $resource, array $types, $excludeAction = null)
     {
-        return array_filter($resource->getActions(), function (ResourceAction $action) use ($types, $excludeAction) {
-            return in_array($action['group'], $types, true) && (null === $excludeAction || $excludeAction !== $action['name']);
+        $actions = $resource->getActions();
+        $actions = array_filter($actions, function (ResourceAction $action) use ($types, $excludeAction) {
+            return
+                in_array($action['group'], $types, true)
+                && (null === $excludeAction || $excludeAction !== $action['name']);
         });
+
+        $actions = array_filter($actions, function (ResourceAction $action) use ($types, $excludeAction) {
+            return !isset($action['extra']['button_show']) || false !== $action['extra']['button_show'];
+        });
+
+        return $actions;
     }
 
     private function translate($id, $domain)
