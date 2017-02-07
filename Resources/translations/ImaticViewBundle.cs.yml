@@ -15,6 +15,7 @@ Create:                 Vytvořit
 Show:                   Zobrazit
 Edit:                   Editovat
 Delete:                 Smazat
+Delete confirmation:    "Opravdu si přejete smazat položku \"%item%\"?"
 
 Confirm:                Opravdu chcete provést tuto akci?
 Actions:                Akce

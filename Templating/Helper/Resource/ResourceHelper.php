@@ -46,6 +46,9 @@ class ResourceHelper
                 $configuration['routeParams'] = ['id' => $itemId];
             }
 
+            // We don't need Ajaxify for page actions.
+            $configuration = $this->removeDataAttributes($configuration);
+
             return $configuration;
         }, $actions);
 
@@ -61,6 +64,11 @@ class ResourceHelper
         $result = array_map(function (ResourceAction $action) use ($resource) {
             $configuration = $this->createDefaultConfiguration($action, $resource);
             $configuration['routeParams'] = ['id' => '#id'];
+
+            // Disable Ajaxify by resource config.
+            if (empty($resource->getConfig()['extra']['ajaxify'])) {
+                $configuration = $this->removeDataAttributes($configuration);
+            }
 
             return $configuration;
         }, $actions);
@@ -88,6 +96,13 @@ class ResourceHelper
         if (isset($action['extra']['button_parent'])) {
             $configuration['parent'] = $action['extra']['button_parent'];
         }
+
+        return $configuration;
+    }
+
+    private function removeDataAttributes(array $configuration)
+    {
+        unset($configuration['data']);
 
         return $configuration;
     }

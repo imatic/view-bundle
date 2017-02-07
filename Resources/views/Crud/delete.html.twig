@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block headline imatic_view_resource_create_headline(resource, action, item) %}
+
+{% set page_actions = imatic_view_resource_create_page_actions(resource, action.name, item.id) %}
+
+{% block action %}
+
+    <div class="text-center">
+        <h3>{{ 'Delete confirmation'|trans({('%item%'): item}, 'ImaticViewBundle') }}</h3>
+
+        <form method="post">
+            <input type="hidden" name="_method" value="delete">
+            <input
+                    type="submit"
+                    value="{{ 'Delete'|trans({}, 'ImaticViewBundle') }}"
+                    class="btn btn-danger btn-lg"
+            >
+        </form>
+    </div>
+
+{% endblock %}
