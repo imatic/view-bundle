@@ -41,8 +41,8 @@ class ConditionHelper
             'isGranted',
             function ($str) {
                 throw new \Exception($str.' function is not implemented');
-            }, function (array $values, $str) {
-                return $this->authorizationChecker->isGranted($str);
+            }, function (array $values, $attributes, $object = null) {
+                return $this->authorizationChecker->isGranted($attributes, $object);
             });
         $this->layoutHelper = $layoutHelper;
         $this->tokenStorage = $tokenStorage;
