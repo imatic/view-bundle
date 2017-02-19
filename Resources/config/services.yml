@@ -190,6 +190,7 @@ services:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Resource\ResourceHelper
         arguments:
             - '@translator'
+            - '@imatic_view.templating.helper.condition'
 
     # Event listners
     imatic_view.event_listener.kernel_subscriber:

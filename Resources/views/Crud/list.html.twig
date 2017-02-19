@@ -5,12 +5,15 @@
 {% set page_actions = imatic_view_resource_create_page_actions(resource, action.name) %}
 
 {% block action %}
-    {% set rowActions = imatic_view_resource_create_row_actions(resource, action.name) %}
+    {% set row_actions = imatic_view_resource_create_row_actions(resource, action.name) %}
+    {% set batch_actions = imatic_view_resource_create_batch_actions(resource) %}
 
     {% set table = {
     attr: {data: (resource.config.extra.ajaxify|default(false) ? {role:'container'} : {}), id: resource.name},
-    selectable: false,
-    rowActions: rowActions,
+    selectableColumn: 'id',
+    selectable: imatic_view_resource_filter_available_actions(batch_actions)|length > 0,
+    batchActions: batch_actions,
+    rowActions: row_actions,
     translationDomain: resource.config.translation_domain} %}
 
     {% set columns = action.fields %}

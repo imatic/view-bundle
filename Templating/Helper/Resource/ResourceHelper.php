@@ -4,6 +4,7 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Resource;
 
 use Imatic\Bundle\ControllerBundle\Resource\Config\Resource;
 use Imatic\Bundle\ControllerBundle\Resource\Config\ResourceAction;
+use Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ResourceHelper
@@ -13,9 +14,15 @@ class ResourceHelper
      */
     private $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    /**
+     * @var ConditionHelper
+     */
+    private $conditionHelper;
+
+    public function __construct(TranslatorInterface $translator, ConditionHelper $conditionHelper)
     {
         $this->translator = $translator;
+        $this->conditionHelper = $conditionHelper;
     }
 
     public function createHeadline(Resource $resource, ResourceAction $action, $item = null)
@@ -78,10 +85,52 @@ class ResourceHelper
         return $result;
     }
 
+    public function createBatchActionConfiguration(Resource $resource)
+    {
+        $actions = $this->filterActions($resource, ['batch']);
+
+        $result = array_map(function (ResourceAction $action) use ($resource) {
+            $configuration = $this->createDefaultConfiguration($action, $resource);
+
+            // We don't need Ajaxify for page actions.
+            $configuration = $this->removeDataAttributes($configuration);
+            // Set tag to input (form action) and form method (one button = one route)
+            $configuration['tag'] = 'input';
+            $configuration['attrs'] = ['formmethod' => $action['route']['methods'][0]];
+
+            return $configuration;
+        }, $actions);
+
+        $result = $this->groupNestedConfiguration($result, true);
+
+        return $result;
+    }
+
+    public function filterAvailableActions(array $actions)
+    {
+        return array_filter($actions, function (array $action) {
+            if (
+                !empty($action['role'])
+                && !$this->conditionHelper->evaluate(sprintf('isGranted("%s")', $action['role']))
+            ) {
+                return false;
+            }
+
+            if (
+                !empty($action['condition'])
+                && !$this->conditionHelper->evaluate($action['condition'])
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
     private function createDefaultConfiguration(ResourceAction $action, Resource $resource)
     {
         $configuration['label'] = $this->translate(
-            ucfirst($action->name), $resource->getConfig()['translation_domain']
+            ucfirst(str_replace('_', ' ', $action->name)), $resource->getConfig()['translation_domain']
         );
         $configuration['route'] = $action['route']['name'];
 

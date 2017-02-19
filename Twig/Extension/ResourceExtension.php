@@ -21,6 +21,8 @@ class ResourceExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFunction('imatic_view_resource_create_page_actions', [$this->resourceHelper, 'createPageActionConfiguration']),
             new \Twig_SimpleFunction('imatic_view_resource_create_row_actions', [$this->resourceHelper, 'createRowActionConfiguration']),
+            new \Twig_SimpleFunction('imatic_view_resource_create_batch_actions', [$this->resourceHelper, 'createBatchActionConfiguration']),
+            new \Twig_SimpleFunction('imatic_view_resource_filter_available_actions', [$this->resourceHelper, 'filterAvailableActions']),
             new \Twig_SimpleFunction('imatic_view_resource_create_headline', [$this->resourceHelper, 'createHeadline']),
             new \Twig_SimpleFunction('imatic_view_resource_create_action', [$this->resourceHelper, 'createActionConfiguration']),
         ];
