@@ -18,6 +18,8 @@
 
     {% set columns = action.fields %}
 
-    {{ include('ImaticViewBundle:Component:table.html.twig') }}
+    {% block list_table %}
+        {{ include('ImaticViewBundle:Component:table.html.twig') }}
+    {% endblock %}
 
 {% endblock %}
