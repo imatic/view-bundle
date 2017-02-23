@@ -4,7 +4,7 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Resource;
 
 use Imatic\Bundle\ControllerBundle\Resource\Config\Resource;
 use Imatic\Bundle\ControllerBundle\Resource\Config\ResourceAction;
-use Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ResourceHelper
@@ -15,14 +15,14 @@ class ResourceHelper
     private $translator;
 
     /**
-     * @var ConditionHelper
+     * @var AuthorizationCheckerInterface
      */
-    private $conditionHelper;
+    private $authorizationChecker;
 
-    public function __construct(TranslatorInterface $translator, ConditionHelper $conditionHelper)
+    public function __construct(TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->translator = $translator;
-        $this->conditionHelper = $conditionHelper;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function createHeadline(Resource $resource, ResourceAction $action, $item = null)
@@ -109,18 +109,9 @@ class ResourceHelper
     public function filterAvailableActions(array $actions)
     {
         return array_filter($actions, function (array $action) {
-            if (
-                !empty($action['role'])
-                && !$this->conditionHelper->evaluate(sprintf('isGranted("%s")', $action['role']))
-            ) {
-                return false;
-            }
-
-            if (
-                !empty($action['condition'])
-                && !$this->conditionHelper->evaluate($action['condition'])
-            ) {
-                return false;
+            $expression = $this->createAuthorizationExpression($action);
+            if ($expression) {
+                return $this->authorizationChecker->isGranted($expression);
             }
 
             return true;
@@ -134,8 +125,8 @@ class ResourceHelper
         );
         $configuration['route'] = $action['route']['name'];
 
-        if ($action['role']) {
-            $configuration['condition'] = sprintf('isGranted("%s")', $action['role']);
+        if ($expression = $this->createAuthorizationExpression($action->toArray())) {
+            $configuration['condition'] = $expression;
         }
 
         if (isset($action['extra']['button_data'])) {
@@ -200,5 +191,20 @@ class ResourceHelper
         }
 
         return $translated;
+    }
+
+    private function createAuthorizationExpression(array $action)
+    {
+        $rules = [];
+
+        if (isset($action['role']) && $action['role']) {
+            $rules[] = sprintf('isGranted("%s")', $action['role']);
+        }
+
+        if (isset($action['data_authorization']) && $action['data_authorization'] && 'item' === $action['group']) {
+            $rules[] = sprintf('isGranted("%s", %s)', strtoupper($action['name']), 'item');
+        }
+
+        return implode(' AND ', $rules);
     }
 }
