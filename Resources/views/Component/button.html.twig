@@ -5,13 +5,18 @@
 {% macro button(action, context) %}{% spaceless %}
     {%- import _self as this -%}
     {% set action = imatic_view_action(action) %}
-    {% if imatic_view_condition_evaluate(action.condition|default(''), context|default({})) %}
+    {% set condition = imatic_view_condition_evaluate(action.condition|default(''), context|default({})) %}
+    {% set nested = action.nested is not empty %}
+
+    {% if condition and nested %}
         {% set element = imatic_view_action_create(action, context) %}
-        {% if action.nested is not empty %}
-            {{ this._nested(element, action, context) }}
-        {% else %}
-            {{ this._button(element, action) }}
-        {% endif %}
+        {{ this._nested(element, action, context) }}
+    {% elseif condition %}
+        {% set element = imatic_view_action_create(action, context) %}
+        {{ this._button(element, action) }}
+    {% elseif nested %}
+        {% set element = imatic_view_action_create({label: ''}, context) %}
+        {{ this._nested(element, action, context) }}
     {% endif %}
 {% endspaceless %}{% endmacro %}
 
@@ -30,13 +35,15 @@
         {%- endfor %}
     {%- endset %}
     {% set hasNested = nested is not empty %}
-    
+
     {% if hasNested %}
         <div class="btn-group">
     {% endif %}
 
     {% if action.url is not empty or action.route is not empty %}
-        {{ this._button(element, action) }}
+        {% if element.value is not empty %}
+            {{ this._button(element, action) }}
+        {% endif %}
         {% if hasNested %}
             <button type="button"
                     class="btn btn-{{ action.type | default('default') }} dropdown-toggle"

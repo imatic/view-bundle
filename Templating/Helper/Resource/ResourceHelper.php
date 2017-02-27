@@ -120,6 +120,8 @@ class ResourceHelper
 
     private function createDefaultConfiguration(ResourceAction $action, Resource $resource)
     {
+        $configuration = [];
+
         $configuration['label'] = $this->translate(
             ucfirst(str_replace('_', ' ', $action->name)), $resource->getConfig()['translation_domain']
         );
