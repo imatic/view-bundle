@@ -50,14 +50,12 @@ class FormatHelper implements FormatterInterface
      * @param string $format
      * @param string $context templating context (e.g. "html")
      *
-     * @throws \InvalidArgumentException if the formatter doesn't exist
-     *
      * @return bool
      */
     public function isSafe($format, $context)
     {
         if (!isset($this->formatterOptions[$format])) {
-            throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
+            return false;
         }
 
         return $context === $this->formatterOptions[$format]['is_safe'];
