@@ -57,7 +57,7 @@ class FormatHelper implements FormatterInterface
     public function isSafe($format, $context)
     {
         if (!isset($this->formatterOptions[$format])) {
-            throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
+            return false;
         }
 
         return $context === $this->formatterOptions[$format]['is_safe'];
