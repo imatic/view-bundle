@@ -14,6 +14,7 @@
     {% set columns = imatic_view_table_columns(columns | default([])) %}
     {% set uri = uri|default(app.request.uri) %}
     {% set item_count = items|length %}
+    {% set responsive = responsive|default(false) %}
     {% if sorter is not defined and display_criteria is defined %}
         {% set sorter = display_criteria.sorter %}
     {% endif %}
@@ -31,6 +32,7 @@
             <form action="{{ uri }}" method="post">
         {% endif %}
 
+        {% if responsive %}<div class="table-responsive">{% endif %}
         {% block table_tag %}<table class="table">{% endblock %}
             <caption></caption>
             {% block table_head %}
@@ -98,6 +100,7 @@
                 </tbody>
             {% endblock %}
         </table>
+        {% if responsive %}</div>{% endif %}
 
         <div class="row">
             {% set table_batch_actions -%}
