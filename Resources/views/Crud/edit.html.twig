@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+
+{% block headline imatic_view_resource_create_headline(resource, action, item|default(null)) %}
+
+{% set page_actions = imatic_view_resource_create_page_actions(resource, action.name, item.id|default(null)) %}
+
+{% block action %}
+
+    {% include 'ImaticViewBundle:Component:form.html.twig' %}
+
+{% endblock %}

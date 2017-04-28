@@ -15,6 +15,7 @@ Create:                 Create
 Show:                   Show
 Edit:                   Edit
 Delete:                 Delete
+Delete confirmation:    "Do you really want to delete the item \"%item%\"?"
 
 Confirm:                Do you really want to perform this action?
 Actions:                Actions

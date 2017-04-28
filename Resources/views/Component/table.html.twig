@@ -36,7 +36,7 @@
             {% block table_head %}
                 <thead>
                 <tr>
-                    {% if table.selectable %}
+                    {% if table.selectable  %}
                         <th class="batch-selector-switch">
                             <input type="checkbox" onchange="jQuery('tbody td.batch-selector input', jQuery(this).parents('table')[0]).prop('checked', this.checked)">
                         </th>
@@ -102,7 +102,7 @@
         <div class="row">
             {% set table_batch_actions -%}
                 {% block table_batch_actions -%}
-                    {% if table.batchActions is not empty %}
+                    {% if table.selectable %}
                         <label><input type="checkbox" name="selectedAll"> {{ 'All elements'|trans({}, 'ImaticViewBundle') }}</label>&nbsp;
                         {% for action in table.batchActions %}
                             {% if action.nested is not empty %}

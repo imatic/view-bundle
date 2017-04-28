@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block headline imatic_view_resource_create_headline(resource, action, item) %}
+
+{% set page_actions = imatic_view_resource_create_page_actions(resource, action.name, item.id) %}
+
+{% block action %}
+    {% set fields = action.fields %}
+
+    {% set show = {
+    translationDomain: resource.config.translation_domain
+    } %}
+
+    {% include 'ImaticViewBundle:Component:show.html.twig' %}
+
+{% endblock %}

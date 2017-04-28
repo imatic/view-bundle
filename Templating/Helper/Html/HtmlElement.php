@@ -53,6 +53,11 @@ class HtmlElement
         $this->value = $value;
     }
 
+    public function getValue()
+    {
+        return $this->value;
+    }
+
     public function render()
     {
         $elementString = trim(implode(' ', [$this->attributes, $this->classes, $this->data]));

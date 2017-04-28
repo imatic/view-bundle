@@ -112,6 +112,13 @@ services:
         tags:
             - { name: 'twig.extension' }
 
+    imatic_view.twig.extension.resource:
+        class: Imatic\Bundle\ViewBundle\Twig\Extension\ResourceExtension
+        arguments:
+            - '@imatic_view.templating.helper.resource'
+        tags:
+            - { name: 'twig.extension' }
+
     # Twig loaders
     imatic_view.twig.loader.remote:
         class: Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader
@@ -178,6 +185,12 @@ services:
 
     imatic_view.templating.helper.html:
         class: Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper
+
+    imatic_view.templating.helper.resource:
+        class: Imatic\Bundle\ViewBundle\Templating\Helper\Resource\ResourceHelper
+        arguments:
+            - '@translator'
+            - '@security.authorization_checker'
 
     # Event listners
     imatic_view.event_listener.kernel_subscriber:

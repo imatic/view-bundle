@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+
+{% block headline imatic_view_resource_create_headline(resource, action) %}
+
+{% set page_actions = imatic_view_resource_create_page_actions(resource, action.name) %}
+
+{% block action %}
+    {% set row_actions = imatic_view_resource_create_row_actions(resource, action.name) %}
+    {% set batch_actions = imatic_view_resource_create_batch_actions(resource) %}
+    {% set container = not (action.extra.ajaxify_container is defined and action.extra.ajaxify_container is same as(false)) %}
+    {% set ajaxify = resource.config.extra.ajaxify|default(false) %}
+
+    {% set table = {
+    attr: {data: (ajaxify and container ? {role:'container'} : {}), id: resource.name},
+    selectableColumn: 'id',
+    selectable: imatic_view_resource_filter_available_actions(batch_actions)|length > 0,
+    batchActions: batch_actions,
+    rowActions: row_actions,
+    translationDomain: resource.config.translation_domain} %}
+
+    {% set columns = action.fields %}
+
+    {% block list_table %}
+        {{ include('ImaticViewBundle:Component:table.html.twig') }}
+    {% endblock %}
+
+{% endblock %}
