@@ -1,1 +1,4 @@
-Resources/frontend/dist/*    -diff
+Resources/public/demo.js        -diff
+Resources/public/demo.css       -diff
+Resources/public/platform.js    -diff
+Resources/public/platform.css   -diff
