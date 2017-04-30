@@ -1,6 +1,6 @@
 // jQuery
-require('expose?jQuery!jquery');
-require('expose?$!jquery');
+require('expose-loader?jQuery!jquery');
+require('expose-loader?$!jquery');
 
 // Bootstrap
 require('bootstrap');
@@ -15,14 +15,14 @@ require('eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js');
 require('select2/dist/js/select2.js');
 require('select2/dist/js/i18n/cs.js');
 require('select2/dist/js/i18n/en.js');
-require('./../../public/js/select2/select2-focus-war-fix.js');
+require('./js/select2/select2-focus-war-fix.js');
 
 // Platform - view
-require('./../../public/ts/ajaxify/Ajaxify.ts');
-require('./../../public/ts/ajaxify/Extras/BootstrapNotify.ts');
-require('./../../public/ts/toggle/Toggle.ts');
-require('expose?Imatic!./../../public/js/Imatic.js');
-require('expose?Imatic.View!./../../public/js/View.js');
+require('./ts/ajaxify/Ajaxify.ts');
+require('./ts/ajaxify/Extras/BootstrapNotify.ts');
+require('./ts/toggle/Toggle.ts');
+require('expose-loader?Imatic!./js/Imatic.js');
+require('expose-loader?Imatic.View!./js/View.js');
 
 // Form bundle
-require('expose?Imatic.Form!./../../../../form-bundle/Resources/public/js/Form.js');
+require('expose-loader?Imatic.Form!../../vendor/imatic/form-bundle/Resources/public/js/Form.js');

@@ -1,8 +1,13 @@
 {
   "name": "imatic-viewbundle",
   "version": "3.1.0",
-  "main": "platform.js",
+  "main": "dist/platform.js",
   "license": "MIT",
+  "scripts": {
+    "build": "webpack --progress --env.prod",
+    "build:watch": "webpack --progress --env.prod --watch",
+    "build:watch-dev": "webpack --progress --env.dev --watch"
+  },
   "dependencies": {
     "animate.css": "^3.5.2",
     "bootstrap": "^3.3.7",
@@ -13,6 +18,20 @@
     "select2-bootstrap-theme": "^0.1.0-beta.10"
   },
   "devDependencies": {
-    "highlight.js": "^9.11.0"
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-modern-browsers": "^9.0.2",
+    "babili-webpack-plugin": "^0.0.11",
+    "css-loader": "^0.28.0",
+    "expose-loader": "^0.7.3",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "highlight.js": "^9.11.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "style-loader": "^0.16.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.3.2",
+    "webpack": "^2.4.1"
   }
 }
