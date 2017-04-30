@@ -1,5 +1,5 @@
 // LESS
-require('./platform.entry.less');
+require('./platform.less');
 
 // Highlight
 require('expose?hljs!highlight.js');
