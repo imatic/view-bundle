@@ -102,7 +102,7 @@
         </table>
         {% if responsive %}</div>{% endif %}
 
-        <div class="row">
+        <div class="row table-footer">
             {% set table_batch_actions -%}
                 {% block table_batch_actions -%}
                     {% if table.selectable %}
@@ -145,7 +145,7 @@
                 <div class="{% if table_batch_actions is not empty or table_exports is not empty %}col-md-4 {% endif %}text-center">{{ table_pager }}</div>
             {% endif %}
             {% if table_exports is not empty %}
-                <div class="col-md-4 text-right">{{ table_exports }}</div>
+                <div class="col-md-4 table-exports">{{ table_exports }}</div>
             {% endif %}
         </div>
 
