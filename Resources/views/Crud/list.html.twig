@@ -21,7 +21,7 @@
     {% set columns = action.fields %}
 
     {% block list_table %}
-        {{ include('ImaticViewBundle:Component:table.html.twig') }}
+        {{ include('ImaticViewBundle:Component:table.html.twig', {responsive: true}) }}
     {% endblock %}
 
 {% endblock %}

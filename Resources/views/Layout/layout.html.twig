@@ -75,8 +75,14 @@
 
             <div class="headline">
                 <div class="container-fluid">
-                    <div class="pull-right">{% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}</div>
-                    <h1>{% spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endspaceless %}</h1>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1>{% spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endspaceless %}</h1>
+                        </div>
+                        <div class="col-md-5 headline-side">
+                            {% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}
+                        </div>
+                    </div>
 
                     {% block breadcrumbs %}
                     {% endblock %}
