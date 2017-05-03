@@ -1,28 +1,30 @@
+import "babel-polyfill";
+
 // jQuery
-require('expose-loader?jQuery!jquery');
-require('expose-loader?$!jquery');
+import "expose-loader?jQuery!jquery";
+import "expose-loader?$!jquery";
 
 // Bootstrap
-require('bootstrap');
+import "bootstrap";
 
 // Bootstrap notify
-require('bootstrap-notify');
+import "bootstrap-notify";
 
 // Bootstrap datetime picker
-require('eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js');
+import "eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js";
 
 // Select2
-require('select2/dist/js/select2.js');
-require('select2/dist/js/i18n/cs.js');
-require('select2/dist/js/i18n/en.js');
-require('./js/select2/select2-focus-war-fix.js');
+import "select2/dist/js/select2.js";
+import "select2/dist/js/i18n/cs.js";
+import "select2/dist/js/i18n/en.js";
+import "./js/select2/select2-focus-war-fix.js";
 
 // Platform - view
-require('./ts/ajaxify/Ajaxify.ts');
-require('./ts/ajaxify/Extras/BootstrapNotify.ts');
-require('./ts/toggle/Toggle.ts');
-require('expose-loader?Imatic!./js/Imatic.js');
-require('expose-loader?Imatic.View!./js/View.js');
+import "./ts/ajaxify/Ajaxify.ts";
+import "./ts/ajaxify/Extras/BootstrapNotify.ts";
+import "./ts/toggle/Toggle.ts";
+import "expose-loader?Imatic!./js/Imatic.js";
+import "expose-loader?Imatic.View!./js/View.js";
 
 // Form bundle
-require('expose-loader?Imatic.Form!../../vendor/imatic/form-bundle/Resources/public/js/Form.js');
+import "expose-loader?Imatic.Form!imatic/form-bundle/Resources/public/js/Form";

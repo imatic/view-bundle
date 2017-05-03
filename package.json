@@ -3,16 +3,20 @@
   "version": "3.1.0",
   "main": "dist/platform.js",
   "license": "MIT",
+  "browserslist": [
+    "> 0.9% in CZ"
+  ],
   "scripts": {
     "build": "webpack --progress --env.prod",
     "build:watch": "webpack --progress --env.prod --watch",
     "build:watch-dev": "webpack --progress --env.dev --watch",
-    "build:analyze": "webpack --env.prod --env.analyze",
-    "build:analyze-dev": "webpack --env.dev --env.analyze"
+    "build:analyze": "webpack --progress --env.prod --env.analyze",
+    "build:analyze-dev": "webpack --progress --env.dev --env.analyze"
   },
   "dependencies": {
     "@types/jquery": "^2.0.42",
     "animate.css": "^3.5.2",
+    "babel-polyfill": "^6.23.0",
     "bootstrap": "^3.3.7",
     "bootstrap-notify": "^3.1.3",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
@@ -21,10 +25,12 @@
     "select2-bootstrap-theme": "^0.1.0-beta.10"
   },
   "devDependencies": {
+    "autoprefixer": "^6.7.7",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
-    "babel-preset-modern-browsers": "^9.0.2",
+    "babel-preset-env": "^1.4.0",
     "babili-webpack-plugin": "^0.0.11",
+    "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.28.0",
     "expose-loader": "^0.7.3",
     "extract-text-webpack-plugin": "^2.1.0",
@@ -32,6 +38,7 @@
     "highlight.js": "^9.11.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
+    "postcss-loader": "^1.3.3",
     "style-loader": "^0.16.1",
     "ts-loader": "^2.0.3",
     "typescript": "^2.3.2",
