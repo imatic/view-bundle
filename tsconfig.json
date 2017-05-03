@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "es6",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "Resources/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "vendor",
+    "**/*.spec.ts"
+  ]
+}

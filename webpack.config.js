@@ -9,33 +9,33 @@ module.exports = function configure(env, opts) {
     const babelOptions = {
         babelrc: false,
         presets: [
-            [require.resolve('babel-preset-modern-browsers'), {modules: false}]
+            ['modern-browsers', {modules: false, loose: true}]
         ]
-    }
+    };
 
     const config = {
         /*
          * Source map depends on environment ...
          */
         devtool: !!env.prod
-            ? 'hidden-source-map'
-            : 'eval-source-map',
+            ? 'nosources-source-map'
+            : 'cheap-module-eval-source-map',
 
         /*
          * Entries for platform and demo ...
          */
         entry: {
-            platform: ['./platform.less', './platform'],
-            demo: ['./platform.less', './demo']
+            platform: ['./Resources/assets/platform.less', './Resources/assets/platform'],
+            demo: ['./Resources/assets/platform.less', './Resources/assets/demo']
         },
 
         /*
          * Output to dist folder ...
          */
         output: {
-            path: path.resolve(__dirname, '../public'),
+            path: path.resolve(__dirname, 'Resources/public'),
             filename: '[name].js',
-            sourceMapFilename: '[name].map'
+            publicPath: '/bundles/imaticview'
         },
 
         /*
@@ -50,7 +50,8 @@ module.exports = function configure(env, opts) {
                         use: {
                             loader: 'css-loader',
                             options: {
-                                minimize: !!env.prod
+                                minimize: !!env.prod,
+                                sourceMaps: false
                             }
                         }
                     })
@@ -64,7 +65,8 @@ module.exports = function configure(env, opts) {
                                 loader: 'css-loader',
                                 options: {
                                     minimize: !!env.prod,
-                                    importLoaders: 1
+                                    importLoaders: 1,
+                                    sourceMaps: false
                                 }
                             },
                             'less-loader'
@@ -126,11 +128,18 @@ module.exports = function configure(env, opts) {
                 filename: '[name].css'
             })
         ]
-    }
+    };
 
     if (!!env.prod) {
-        config.plugins.push(new BabiliPlugin());
+        config.plugins.push(new BabiliPlugin({
+            mangle: true,
+            deadcode: true,
+            evaluate: true, // constant folding,
+            simplify: true, // simplify, undef to void,
+            booleans: true,
+            properties: true,
+        }));
     }
 
     return config;
-}
+};
