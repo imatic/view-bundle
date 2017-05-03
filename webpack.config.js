@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const BabiliPlugin = require('babili-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = function configure(env, opts) {
     env = env || {dev: true};
@@ -25,7 +26,7 @@ module.exports = function configure(env, opts) {
          * Entries for platform and demo ...
          */
         entry: {
-            platform: ['./Resources/assets/platform.less', './Resources/assets/platform'],
+            platform: ['./Resources/assets/platform.less', 'jquery', './Resources/assets/platform'],
             demo: ['./Resources/assets/platform.less', './Resources/assets/demo']
         },
 
@@ -90,7 +91,10 @@ module.exports = function configure(env, opts) {
                             options: babelOptions
                         },
                         {
-                            loader: 'ts-loader'
+                            loader: 'ts-loader',
+                            options: {
+                                silent: !!opts.json
+                            }
                         }
                     ]
                 },
@@ -124,6 +128,10 @@ module.exports = function configure(env, opts) {
         },
 
         plugins: [
+            new webpack.DefinePlugin({
+                NODE_ENV: JSON.stringify(!!env.prod ? 'production' : 'development')
+            }),
+            new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en|cs|sk)$/),
             new ExtractTextPlugin({
                 filename: '[name].css'
             })
@@ -139,6 +147,10 @@ module.exports = function configure(env, opts) {
             booleans: true,
             properties: true,
         }));
+    }
+
+    if (!!env.analyze) {
+        config.plugins.push(new BundleAnalyzerPlugin());
     }
 
     return config;

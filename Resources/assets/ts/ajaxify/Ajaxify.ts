@@ -1,5 +1,3 @@
-/// <reference path="../jquery/jquery.d.ts" />
-
 import {HTMLDocumentHandler} from './Document';
 import {ConfigurationBuilder} from './Configuration';
 import {RequestHelper} from './Ajax';
