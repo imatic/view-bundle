@@ -12,9 +12,9 @@ class FormatHelperTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $formatter = $this->getMock('Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatterInterface');
+        $formatter = $this->createMock('Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatterInterface');
         $formatter->expects($this->any())
             ->method('format')
             ->willReturnCallback(function ($value) {
