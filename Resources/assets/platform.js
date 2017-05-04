@@ -1,8 +1,7 @@
 import "babel-polyfill";
 
 // jQuery
-import "expose-loader?jQuery!jquery";
-import "expose-loader?$!jquery";
+import "jquery";
 
 // Bootstrap
 import "bootstrap";

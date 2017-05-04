@@ -6,7 +6,7 @@ import {FlashMessageInterface} from './FlashMessage';
 import {CssClasses} from './Css';
 import {RequestInfo, Response} from './Ajax';
 import {WidgetInterface} from './Widget';
-import {Object, ObjectInterface} from './Object';
+import {AjaxifyObject, AjaxifyObjectInterface} from './AjaxifyObject';
 import {ActionInterface, ActionEvent, RequestAction} from './Action';
 
 /**
@@ -19,7 +19,7 @@ export class ContainerNotFoundException extends Exception {
 /**
  * Container interface
  */
-export interface ContainerInterface extends ObjectInterface
+export interface ContainerInterface extends AjaxifyObjectInterface
 {
     /**
      * Get ID
@@ -339,7 +339,7 @@ export class ContainerFactory
 /**
  * Container
  */
-export class Container extends Object implements ContainerInterface
+export class Container extends AjaxifyObject implements ContainerInterface
 {
     public containerHandler: ContainerHandler;
 

@@ -1,7 +1,7 @@
 import * as Ajaxify from './Ajaxify';
 import {ContainerInterface} from './Container';
 import {WidgetInterface} from './Widget';
-import {Object, ObjectInterface} from './Object';
+import {AjaxifyObject, AjaxifyObjectInterface} from './AjaxifyObject';
 import {DataType, Request, RequestInfo, Response} from './Ajax';
 import {EventDispatcherInterface, EventDispatcher, Event} from './Event';
 
@@ -83,7 +83,7 @@ export class ActionHelper
  * Action interface
  * Represents an interaction between Widget and its Container.
  */
-export interface ActionInterface extends ObjectInterface
+export interface ActionInterface extends AjaxifyObjectInterface
 {
     /**
      * See if the action has an initiator
@@ -146,7 +146,7 @@ export interface ActionInterface extends ObjectInterface
 /**
  * Base action
  */
-export class Action extends Object implements ActionInterface
+export class Action extends AjaxifyObject implements ActionInterface
 {
     private initiator: WidgetInterface = null;
     private target: string = null;

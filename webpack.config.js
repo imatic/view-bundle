@@ -52,13 +52,13 @@ module.exports = function configure(env, opts) {
          */
         devtool: !!env.prod
             ? 'nosources-source-map'
-            : 'cheap-module-eval-source-map',
+            : 'inline-source-map',
 
         /*
          * Entries for platform and demo ...
          */
         entry: {
-            platform: ['./Resources/assets/platform.less', 'jquery', './Resources/assets/platform'],
+            platform: ['./Resources/assets/platform.less', './Resources/assets/platform'],
             demo: ['./Resources/assets/platform.less', './Resources/assets/demo']
         },
 
@@ -68,7 +68,7 @@ module.exports = function configure(env, opts) {
         output: {
             path: path.resolve(__dirname, 'Resources/public'),
             filename: '[name].js',
-            publicPath: '/bundles/imaticview'
+            publicPath: '/bundles/imaticview/'
         },
 
         /*
@@ -193,6 +193,20 @@ module.exports = function configure(env, opts) {
                             }
                         }
                     ]
+                },
+
+                /*
+                 * expose jQuery
+                 */
+                {
+                    test: require.resolve('jquery'),
+                    use: [{
+                        loader: 'expose-loader',
+                        options: 'jQuery'
+                    },{
+                        loader: 'expose-loader',
+                        options: '$'
+                    }]
                 }
             ]
         },
@@ -230,7 +244,7 @@ module.exports = function configure(env, opts) {
             /*
              * Only require en cs and sk locales for moment.js.
              */
-            new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en|cs|sk)$/),
+            new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^\.\/(en|cs)$/),
 
             /*
              * Extract css files imported throughout the bundle into a separate css file.
