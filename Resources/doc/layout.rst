@@ -8,10 +8,12 @@ Twig templates
 
   - this is the main template that should be used and/or extended
 
-  - it automatically includes the following assets (``asset_bundle_name`` defaults to ``platform``):
+  - it automatically includes the following assets:
 
-    - assets/js/#{asset_bundle_name}.css
-    - assets/js/#{asset_bundle_name}.js
+    - bundles/imaticview/platform.css
+    - bundles/imaticview/platform.js
+
+  - these can be overriden by providing ``asset_bundle_name`` in case files are served from different location.
 
 - ``ImaticViewBundle:Layout:layout.html.twig``
 
