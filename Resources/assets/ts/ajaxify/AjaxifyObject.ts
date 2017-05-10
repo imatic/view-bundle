@@ -4,7 +4,7 @@ import {EventDispatcher, EventDispatcherInterface, EventInterface, ListenerCallb
 /**
  * Base object interface
  */
-export interface ObjectInterface
+export interface AjaxifyObjectInterface
 {
     /**
      * Run the object's cleanup code
@@ -42,10 +42,12 @@ export interface ObjectInterface
 /**
  * Base object with event and configuration support
  */
-export class Object implements ObjectInterface
+export class AjaxifyObject implements AjaxifyObjectInterface
 {
     private options: ConfigurationInterface = null;
     private eventDispatcher: EventDispatcherInterface = null;
+
+    constructor() {}
 
     destroy(): void {
     }

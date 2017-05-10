@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "es6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "Resources/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "vendor",
+    "**/*.spec.ts"
+  ]
+}

@@ -1,14 +1,14 @@
 import * as Ajaxify from './Ajaxify';
 import {CssClasses} from './Css';
 import {ConfigurationInterface} from './Configuration';
-import {Object, ObjectInterface} from './Object';
+import {AjaxifyObject, AjaxifyObjectInterface} from './AjaxifyObject';
 import {ActionInterface, NoAction, ActionEvent} from './Action';
 
 /**
  * Widget interface
  * Represents an object that generates actions for it's container.
  */
-export interface WidgetInterface extends ObjectInterface
+export interface WidgetInterface extends AjaxifyObjectInterface
 {
     /**
      * Create actions
@@ -82,7 +82,7 @@ export class WidgetHandler
  *
  * Base class for other element-based widgets.
  */
-export class Widget extends Object implements WidgetInterface
+export class Widget extends AjaxifyObject implements WidgetInterface
 {
     private pendingActions: ActionInterface[] = [];
     private busyElement: HTMLElement = null;

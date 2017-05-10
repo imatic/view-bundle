@@ -5,6 +5,8 @@
 .DS_Store
 Thumbs.db
 
+node_modules
+
 Tests/Fixtures/TestProject/web/*
 !Tests/Fixtures/TestProject/web/app.php
 

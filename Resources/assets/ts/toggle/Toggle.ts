@@ -1,5 +1,3 @@
-/// <reference path="../jquery/jquery.d.ts"/>
-
 /**
  * Handle onclick event
  */
