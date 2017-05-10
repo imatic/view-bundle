@@ -1,7 +1,7 @@
 {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
 {% import 'ImaticViewBundle:Component:message.html.twig' as message %}
 {% import 'ImaticViewBundle:Component:button.html.twig' as button %}
-{% set asset_bundle_name = asset_bundle_name is defined ? asset_bundle_name : '/bundles/imaticview/platform' %}
+{% set asset_bundle_name = asset_bundle_name is defined ? asset_bundle_name : 'bundles/imaticview/platform' %}
 {% block document -%}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|slice(0, 2) }}" data-base-path="{{ app.request.basePath }}">
