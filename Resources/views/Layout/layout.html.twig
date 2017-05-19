@@ -92,7 +92,9 @@
     {% endblock %}
 
     <div class="container-fluid">
-        {{ message.session_message() }}
+        {% block flashes %}
+            {{ message.session_message() }}
+        {% endblock %}
 
         {% block action_before %}{% endblock %}
         {% block action %}{% endblock %}
