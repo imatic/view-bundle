@@ -1714,11 +1714,11 @@
         },
         {
             "name": "imatic/form-bundle",
-            "version": "v3.0.8",
+            "version": "v3.0.12",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:imatic/imatic-formbundle.git",
-                "reference": "2d3e3c2648ee1c409de8df05318f381eac325ca3"
+                "reference": "9c2bcf28fafd1cc0179033f4b7541974ce300992"
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.2",
@@ -1751,7 +1751,7 @@
                 }
             ],
             "description": "Imatic Form Bundle",
-            "time": "2016-12-30T00:32:38+00:00"
+            "time": "2017-06-26T13:06:14+00:00"
         },
         {
             "name": "imatic/testing-bundle",
