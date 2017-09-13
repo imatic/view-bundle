@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const BabiliPlugin = require('babili-webpack-plugin');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
@@ -263,19 +263,14 @@ module.exports = function configure(env, opts) {
     };
 
     /*
-     * In production, include BabiliPlugin which serves as a replacement for UglifyJs plugin.
+     * In production, include MinifyPlugin which serves as a replacement for UglifyJs plugin.
      * UglifyJs only minifies ES% code which is not desirable when generating partially ES6 code.
      * ES6 is generated thanks to env babel preset. There is no need to transpile code
      * which is already supported in all major browsers.
      */
     if (!!env.prod) {
-        config.plugins.push(new BabiliPlugin({
-            mangle: true,
-            deadcode: true,
-            evaluate: true, // constant folding,
-            simplify: true, // simplify, undef to void,
-            booleans: true,
-            properties: true,
+        config.plugins.push(new MinifyPlugin({
+            evaluate: false,
         }));
     }
 
