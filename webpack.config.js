@@ -271,6 +271,8 @@ module.exports = function configure(env, opts) {
     if (!!env.prod) {
         config.plugins.push(new MinifyPlugin({
             evaluate: false,
+            numericLiterals: false,
+            propertyLiterals: false,
         }));
     }
 
