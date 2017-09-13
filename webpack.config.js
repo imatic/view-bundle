@@ -269,7 +269,9 @@ module.exports = function configure(env, opts) {
      * which is already supported in all major browsers.
      */
     if (!!env.prod) {
-        config.plugins.push(new MinifyPlugin());
+        config.plugins.push(new MinifyPlugin({
+            evaluate: false,
+        }));
     }
 
     /*
