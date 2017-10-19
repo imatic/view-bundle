@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	./vendor/bin/phpunit
+	LC_ALL='C.UTF-8' ./vendor/bin/phpunit
 
 composer:
 ifeq ($(shell which composer 2> /dev/null),)
