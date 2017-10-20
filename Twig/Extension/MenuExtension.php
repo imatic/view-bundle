@@ -5,7 +5,6 @@ namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 use Imatic\Bundle\ViewBundle\Menu\Factory;
 use Knp\Menu\Renderer\RendererInterface;
 use Twig_Extension;
-use Twig_SimpleFunction;
 
 class MenuExtension extends Twig_Extension
 {
@@ -31,7 +30,7 @@ class MenuExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('imatic_view_menu_render_array', [$this, 'renderArrayMenu'], ['is_safe' => ['html']]),
+            new \Twig_Function('imatic_view_menu_render_array', [$this, 'renderArrayMenu'], ['is_safe' => ['html']]),
         ];
     }
 

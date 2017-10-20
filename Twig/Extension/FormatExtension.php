@@ -20,7 +20,7 @@ class FormatExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction(
+            new \Twig_Function(
                 'imatic_view_format',
                 function (\Twig_Environment $env, $templateFormat, $value, $format = null, array $options = []) {
                     $output = $this->formatHelper->format($value, $format, $options);
@@ -37,7 +37,7 @@ class FormatExtension extends \Twig_Extension
                 ]
             ),
 
-            new \Twig_SimpleFunction(
+            new \Twig_Function(
                 'imatic_view_render_value',
                 function (\Twig_Environment $env, $templateFormat, $objectOrArray, $propertyPath = null, $format = null, array $options = []) {
                     $output = $this->formatHelper->renderValue($objectOrArray, $propertyPath, $format, $options);

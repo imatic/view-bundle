@@ -19,17 +19,17 @@ class UrlExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('imatic_slug', 'Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil::slugify'),
+            new \Twig_Filter('imatic_slug', 'Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil::slugify'),
         ];
     }
 
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('imatic_view_update_url', [$this->urlHelper, 'updateUrl']),
-            new \Twig_SimpleFunction('imatic_view_update_sorter_url', [$this->urlHelper, 'updateSorterUrl']),
-            new \Twig_SimpleFunction('imatic_view_update_filter_url', [$this->urlHelper, 'updateFilterUrl']),
-            new \Twig_SimpleFunction('imatic_view_update_pager_url', [$this->urlHelper, 'updatePagerUrl']),
+            new \Twig_Function('imatic_view_update_url', [$this->urlHelper, 'updateUrl']),
+            new \Twig_Function('imatic_view_update_sorter_url', [$this->urlHelper, 'updateSorterUrl']),
+            new \Twig_Function('imatic_view_update_filter_url', [$this->urlHelper, 'updateFilterUrl']),
+            new \Twig_Function('imatic_view_update_pager_url', [$this->urlHelper, 'updatePagerUrl']),
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Node;
 
 use Twig_Node;
-use Twig_NodeInterface;
 use Twig_Compiler;
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 
@@ -15,12 +14,12 @@ use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 class ExampleNode extends Twig_Node
 {
     /**
-     * @param Twig_NodeInterface $body
+     * @param Twig_Node $body
      * @param string             $rawBody
      * @param int                $lineno
      * @param string             $tag
      */
-    public function __construct(Twig_NodeInterface $body, $rawBody, $lineno, $tag = 'example')
+    public function __construct(Twig_Node $body, $rawBody, $lineno, $tag = 'example')
     {
         parent::__construct(['body' => $body], ['raw_body' => $rawBody], $lineno, $tag);
     }

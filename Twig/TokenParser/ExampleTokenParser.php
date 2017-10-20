@@ -63,7 +63,7 @@ class ExampleTokenParser extends Twig_TokenParser
         // fetch template source
         $templatePath = $this->templatingLocator->locate(
             $this->templatingNameParser->parse(
-                $this->parser->getFilename()
+                $this->parser->getStream()->getSourceContext()->getPath()
             )
          );
         $templateSource = file_get_contents($templatePath);

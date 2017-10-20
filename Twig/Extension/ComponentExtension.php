@@ -34,12 +34,12 @@ class ComponentExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('imatic_view_table_columns', [$this->gridHelper, 'getColumnsOptions']),
-            new \Twig_SimpleFunction('imatic_view_table', [$this->gridHelper, 'getTableOptions']),
-            new \Twig_SimpleFunction('imatic_view_show_fields', [$this->showHelper, 'getFieldsOptions']),
-            new \Twig_SimpleFunction('imatic_view_show', [$this->showHelper, 'getShowOptions']),
-            new \Twig_SimpleFunction('imatic_view_action', [$this->actionHelper, 'getActionOptions']),
-            new \Twig_SimpleFunction('imatic_view_action_create', [$this->actionHelper, 'create']),
+            new \Twig_Function('imatic_view_table_columns', [$this->gridHelper, 'getColumnsOptions']),
+            new \Twig_Function('imatic_view_table', [$this->gridHelper, 'getTableOptions']),
+            new \Twig_Function('imatic_view_show_fields', [$this->showHelper, 'getFieldsOptions']),
+            new \Twig_Function('imatic_view_show', [$this->showHelper, 'getShowOptions']),
+            new \Twig_Function('imatic_view_action', [$this->actionHelper, 'getActionOptions']),
+            new \Twig_Function('imatic_view_action_create', [$this->actionHelper, 'create']),
         ];
     }
 }

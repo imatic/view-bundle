@@ -14,8 +14,8 @@ class FormatFunctionNode extends \Twig_Node_Expression_Function
     public function compile(\Twig_Compiler $compiler)
     {
         // guess template format and compile it as an additional argument
-        $templateFormat = \Twig_FileExtensionEscapingStrategy::guess($compiler->getFilename());
-        $this->setNode('node', new \Twig_Node_Expression_Constant($templateFormat, $this->getLine()));
+        $templateFormat = \Twig_FileExtensionEscapingStrategy::guess($this->getTemplateName());
+        $this->setNode('node', new \Twig_Node_Expression_Constant($templateFormat, $this->getTemplateLine()));
 
         parent::compile($compiler);
     }

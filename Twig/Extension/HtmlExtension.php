@@ -20,9 +20,9 @@ class HtmlExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('imatic_html_attributes', [$this->htmlHelper, 'attributes'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('imatic_html_data_attributes', [$this->htmlHelper, 'dataAttributes'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('imatic_html_unescape', [StringUtil::class, 'unescape']),
+            new \Twig_Filter('imatic_html_attributes', [$this->htmlHelper, 'attributes'], ['is_safe' => ['html']]),
+            new \Twig_Filter('imatic_html_data_attributes', [$this->htmlHelper, 'dataAttributes'], ['is_safe' => ['html']]),
+            new \Twig_Filter('imatic_html_unescape', [StringUtil::class, 'unescape']),
         ];
     }
 }

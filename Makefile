@@ -17,4 +17,4 @@ update-test: | composer
 configure-pipelines:
 	apt-get update
 	apt-get install --yes git
-
+	cp ./Tests/Fixtures/TestProject/config/parameters.yml.dist ./Tests/Fixtures/TestProject/config/parameters.yml

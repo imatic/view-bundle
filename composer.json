@@ -26,7 +26,7 @@
         "symfony/framework-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "knplabs/knp-menu-bundle": "~2.0",
-        "twig/twig": "~1.7"
+        "twig/twig": "^2.0"
     },
     "require-dev": {
         "imatic/testing-bundle": "~3.0",

@@ -3,7 +3,6 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Twig_Extension;
-use Twig_SimpleTest;
 use Twig_ExpressionParser;
 use Imatic\Bundle\ViewBundle\Twig\Node\InstanceofNode;
 
@@ -12,13 +11,13 @@ class TypeExtension extends Twig_Extension
     public function getTests()
     {
         return [
-            new Twig_SimpleTest('integer', 'is_int'),
-            new Twig_SimpleTest('float', 'is_float'),
-            new Twig_SimpleTest('numeric', 'is_numeric'),
-            new Twig_SimpleTest('boolean', 'is_bool'),
-            new Twig_SimpleTest('string', 'is_string'),
-            new Twig_SimpleTest('array', 'is_array'),
-            new Twig_SimpleTest('object', 'is_object'),
+            new \Twig_Test('integer', 'is_int'),
+            new \Twig_Test('float', 'is_float'),
+            new \Twig_Test('numeric', 'is_numeric'),
+            new \Twig_Test('boolean', 'is_bool'),
+            new \Twig_Test('string', 'is_string'),
+            new \Twig_Test('array', 'is_array'),
+            new \Twig_Test('object', 'is_object'),
         ];
     }
 
