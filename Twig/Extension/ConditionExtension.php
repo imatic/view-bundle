@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper;

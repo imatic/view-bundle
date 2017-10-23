@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Tests\Integration\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;

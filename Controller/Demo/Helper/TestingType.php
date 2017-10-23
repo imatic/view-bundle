@@ -1,13 +1,12 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Controller\Demo\Helper;
 
-use Imatic\Bundle\FormBundle\ImaticFormBundle;
+use Imatic\Bundle\FormBundle\Form\Type\AjaxChoiceType;
 use Imatic\Bundle\FormBundle\Form\Type\DateRangeType;
 use Imatic\Bundle\FormBundle\Form\Type\DateTimeRangeType;
 use Imatic\Bundle\FormBundle\Form\Type\RangeType;
 use Imatic\Bundle\FormBundle\Form\Type\TimeRangeType;
-use Imatic\Bundle\FormBundle\Form\Type\AjaxChoiceType;
+use Imatic\Bundle\FormBundle\ImaticFormBundle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -38,7 +37,7 @@ class TestingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $imaticFormBundle = class_exists(ImaticFormBundle::class);
+        $imaticFormBundle = \class_exists(ImaticFormBundle::class);
 
         $choices = ['One', 'Two'];
         $types = [
@@ -64,7 +63,7 @@ class TestingType extends AbstractType
             $types += [
                'choice_not_rich' => ['choices' => $choices, 'expanded' => false, 'multiple' => false, 'rich' => false, 'type' => ChoiceType::class],
                'imatic_type_ajax_choice' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'allow_clear' => true, 'data' => 1, 'text_provider' => function ($value) {
-                   return 1 == $value ? 'Test initial value' : null;
+                   return 1 === $value ? 'Test initial value' : null;
                }],
                'imatic_type_ajax_choice_multi' => ['type' => AjaxChoiceType::class, 'route' => 'imatic_view_demo_component_formajaxchoice', 'multiple' => true],
             ];

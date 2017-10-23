@@ -1,10 +1,9 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
-use Twig_Extension;
-use Twig_ExpressionParser;
 use Imatic\Bundle\ViewBundle\Twig\Node\InstanceofNode;
+use Twig_ExpressionParser;
+use Twig_Extension;
 
 class TypeExtension extends Twig_Extension
 {

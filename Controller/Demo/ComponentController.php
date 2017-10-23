@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TableData;

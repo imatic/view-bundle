@@ -1,9 +1,8 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
-use Imatic\Bundle\ViewBundle\Twig\Node\FormatFunctionNode;
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;
+use Imatic\Bundle\ViewBundle\Twig\Node\FormatFunctionNode;
 
 class FormatExtension extends \Twig_Extension
 {
@@ -27,8 +26,7 @@ class FormatExtension extends \Twig_Extension
 
                     return !$templateFormat || $this->formatHelper->isSafe($format, $templateFormat)
                         ? $output
-                        : twig_escape_filter($env, $output, $templateFormat)
-                    ;
+                        : twig_escape_filter($env, $output, $templateFormat);
                 },
                 [
                     'is_safe' => ['all'],
@@ -44,8 +42,7 @@ class FormatExtension extends \Twig_Extension
 
                     return !$templateFormat || $this->formatHelper->isSafe($format, $templateFormat)
                         ? $output
-                        : twig_escape_filter($env, $output, $templateFormat)
-                    ;
+                        : twig_escape_filter($env, $output, $templateFormat);
                 },
                 [
                     'is_safe' => ['all'],

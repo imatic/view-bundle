@@ -1,9 +1,8 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Node;
 
-use Twig_Node_Expression_Binary;
 use Twig_Compiler;
+use Twig_Node_Expression_Binary;
 
 /**
  * Represents an instanceof node.
@@ -19,8 +18,7 @@ class InstanceofNode extends Twig_Node_Expression_Binary
             ->subcompile($this->getNode('left'))
             ->raw(', ')
             ->subcompile($this->getNode('right'))
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 
     public function operator(Twig_Compiler $compiler)

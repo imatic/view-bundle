@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,7 +20,7 @@ abstract class AbstractOptions
     public function get($name)
     {
         if (!$this->__isset($name)) {
-            throw new \InvalidArgumentException(sprintf('Option "%s" not exists in class "%s"', $name, get_class($this)));
+            throw new \InvalidArgumentException(\sprintf('Option "%s" not exists in class "%s"', $name, \get_class($this)));
         }
 
         return $this->options[$name];
@@ -44,7 +43,7 @@ abstract class AbstractOptions
 
     public function has($name)
     {
-        return array_key_exists($name, $this->options);
+        return \array_key_exists($name, $this->options);
     }
 
     public function __isset($name)

@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Html;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
@@ -17,8 +16,8 @@ class ClassCollection extends AbstractCollection
 
     public function add($name)
     {
-        if (is_string($name)) {
-            $name = explode(' ', $name);
+        if (\is_string($name)) {
+            $name = \explode(' ', $name);
         }
 
         foreach ($name as $class) {
@@ -38,7 +37,7 @@ class ClassCollection extends AbstractCollection
 
     public function has($name)
     {
-        return array_key_exists($name, $this->classes);
+        return \array_key_exists($name, $this->classes);
     }
 
     public function remove($name)
@@ -48,6 +47,6 @@ class ClassCollection extends AbstractCollection
 
     public function render()
     {
-        return $this->classes ? 'class="'.StringUtil::escape(implode(' ', $this->classes)).'"' : '';
+        return $this->classes ? 'class="' . StringUtil::escape(\implode(' ', $this->classes)) . '"' : '';
     }
 }

@@ -1,15 +1,14 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\EventListener;
 
+use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
 
 /**
  * Kernel subscriber.
@@ -100,7 +99,7 @@ class KernelSubscriber implements EventSubscriberInterface
 
         $response->headers->set(
             'X-Flash-Messages',
-            json_encode($flashes)
+            \json_encode($flashes)
         );
     }
 
@@ -119,7 +118,7 @@ class KernelSubscriber implements EventSubscriberInterface
         if (!empty($title)) {
             $response->headers->set(
                 'X-Title',
-                json_encode($title)
+                \json_encode($title)
             );
         }
     }
@@ -127,7 +126,7 @@ class KernelSubscriber implements EventSubscriberInterface
     private function setExceptionHeader(Response $response, $exception)
     {
         $info = [
-            'className' => get_class($exception),
+            'className' => \get_class($exception),
             'message' => $exception->getMessage(),
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
@@ -136,13 +135,13 @@ class KernelSubscriber implements EventSubscriberInterface
 
         // make sure all string values are valid UTF-8
         // (error messages coming from the OS may not be UTF-8 encoded)
-        array_walk($info, function (&$value) {
-            if (is_string($value)) {
-                $value = iconv('UTF-8', 'UTF-8//IGNORE', $value);
+        \array_walk($info, function (&$value) {
+            if (\is_string($value)) {
+                $value = \iconv('UTF-8', 'UTF-8//IGNORE', $value);
             }
         });
 
-        $jsonString = json_encode($info);
+        $jsonString = \json_encode($info);
 
         if (false !== $jsonString) {
             $response->headers->set('X-Debug-Exception', $jsonString);

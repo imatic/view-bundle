@@ -1,10 +1,9 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Twig\TokenParser\ExampleTokenParser;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * Example extension.

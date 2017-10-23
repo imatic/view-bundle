@@ -7,5 +7,9 @@ pipelines:
           - composer
         script:
           - make configure-pipelines
+
           - make update-test
+          - make test
+
+          - make update-test-min
           - make test

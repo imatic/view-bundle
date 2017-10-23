@@ -1,10 +1,9 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
-use Twig_LoaderInterface;
-use Twig_Error_Loader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig_Error_Loader;
+use Twig_LoaderInterface;
 
 /**
  * Remote loader.
@@ -54,12 +53,12 @@ class RemoteLoader implements Twig_LoaderInterface
         // fetch source
         $e = null;
         try {
-            $source = file_get_contents($this->templates[$name]['url']);
+            $source = \file_get_contents($this->templates[$name]['url']);
         } catch (\Exception $e) {
         }
         if ($e || false === $source) {
             throw new Twig_Error_Loader(
-                sprintf(
+                \sprintf(
                     'Could not load remote template "%s" from URL "%s"',
                     $name,
                     $this->templates[$name]['url']
@@ -75,7 +74,7 @@ class RemoteLoader implements Twig_LoaderInterface
 
         // add metadata variable
         $metadata = $this->getMetadata($name);
-        $source = sprintf('{%% set _remote = %s %%}', json_encode($metadata)).$source;
+        $source = \sprintf('{%% set _remote = %s %%}', \json_encode($metadata)) . $source;
 
         return $source;
     }
@@ -103,7 +102,7 @@ class RemoteLoader implements Twig_LoaderInterface
         // this method is called only if env->isAutoReload() == TRUE
         $this->ensureExists($name);
 
-        return time() - $time < $this->templates[$name]['ttl'];
+        return \time() - $time < $this->templates[$name]['ttl'];
     }
 
     /**
@@ -116,11 +115,11 @@ class RemoteLoader implements Twig_LoaderInterface
         // this method is called only if env->isAutoReload() == FALSE
         if (
             false !== ($cacheFile = $this->container->get('twig')->getCacheFilename($name))
-            && is_file($cacheFile)
-            && time() - filemtime($cacheFile) >= $this->templates[$name]['ttl']
+            && \is_file($cacheFile)
+            && \time() - \filemtime($cacheFile) >= $this->templates[$name]['ttl']
         ) {
             // remove expired cache file
-            unlink($cacheFile);
+            \unlink($cacheFile);
         }
     }
 
@@ -134,7 +133,7 @@ class RemoteLoader implements Twig_LoaderInterface
     private function ensureExists($name)
     {
         if (!isset($this->templates[$name])) {
-            throw new Twig_Error_Loader(sprintf('Template "%s" is not a known remote template', $name));
+            throw new Twig_Error_Loader(\sprintf('Template "%s" is not a known remote template', $name));
         }
     }
 
@@ -155,23 +154,22 @@ class RemoteLoader implements Twig_LoaderInterface
         $first = true;
         foreach ($blocks as $blockName => $block) {
             $first ? $first = false : $pattern .= '|';
-            $pattern .= preg_quote($block['placeholder'], '/');
+            $pattern .= \preg_quote($block['placeholder'], '/');
 
             $placeholderToBlockMap[$block['placeholder']] = $blockName;
         }
 
-        return preg_replace_callback(
-            sprintf('/(%s)/', $pattern),
+        return \preg_replace_callback(
+            \sprintf('/(%s)/', $pattern),
             function (array $match) use ($placeholderToBlockMap, &$usedBlockMap) {
                 $blockName = $placeholderToBlockMap[$match[0]];
 
                 if (isset($usedBlockMap[$blockName])) {
                     return $this->createRepeatedPlaceholderBlockSyntax($blockName);
-                } else {
-                    $usedBlockMap[$blockName] = true;
-
-                    return $this->createPlaceholderBlockSyntax($blockName);
                 }
+                $usedBlockMap[$blockName] = true;
+
+                return $this->createPlaceholderBlockSyntax($blockName);
             },
             $source
         );
@@ -186,7 +184,7 @@ class RemoteLoader implements Twig_LoaderInterface
      */
     private function createPlaceholderBlockSyntax($blockName)
     {
-        return sprintf('{%% block %s %%}{%% endblock %%}', $blockName);
+        return \sprintf('{%% block %s %%}{%% endblock %%}', $blockName);
     }
 
     /**
@@ -198,7 +196,7 @@ class RemoteLoader implements Twig_LoaderInterface
      */
     private function createRepeatedPlaceholderBlockSyntax($blockName)
     {
-        return sprintf('{{ block("%s") }}', $blockName);
+        return \sprintf('{{ block("%s") }}', $blockName);
     }
 
     /**
@@ -214,8 +212,7 @@ class RemoteLoader implements Twig_LoaderInterface
 
         return
             ['url' => $this->templates[$name]['url']]
-            + $this->templates[$name]['metadata']
-        ;
+            + $this->templates[$name]['metadata'];
     }
 
     public function getSourceContext($name)
