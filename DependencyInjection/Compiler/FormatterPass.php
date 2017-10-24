@@ -1,12 +1,11 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FormatterPass implements CompilerPassInterface
 {
@@ -20,17 +19,16 @@ class FormatterPass implements CompilerPassInterface
             foreach ($tagAttributes as $attributes) {
                 // resolve tag options
                 $options = $attributes;
-                unset($options['name']);
-                unset($options['alias']);
+                unset($options['name'], $options['alias']);
 
                 try {
                     $options = $tagOptionsResolver->resolve($options);
                 } catch (ExceptionInterface $e) {
-                    throw new \RuntimeException(sprintf('Invalid options for tag "%s" on service "%s"', $tag, $id), 0, $e);
+                    throw new \RuntimeException(\sprintf('Invalid options for tag "%s" on service "%s"', $tag, $id), 0, $e);
                 }
 
                 // process tag options
-                if (is_bool($options['is_safe'])) {
+                if (\is_bool($options['is_safe'])) {
                     // BC with <= 3.0.7
                     $options['is_safe'] = $options['is_safe'] ? 'html' : null;
                 }

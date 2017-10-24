@@ -1,11 +1,10 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Menu;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Imatic\Bundle\ViewBundle\Event\ConfigureMenuEvent;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
-use Imatic\Bundle\ViewBundle\Event\ConfigureMenuEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContainerProvider implements MenuProviderInterface
 {
@@ -57,7 +56,7 @@ class ContainerProvider implements MenuProviderInterface
     {
         if (!isset($this->menuCollection[$name])) {
             if (!isset($this->menuInfoCollection[$name])) {
-                throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
+                throw new \InvalidArgumentException(\sprintf('The menu "%s" is not defined.', $name));
             }
 
             $menuInfo = $this->menuInfoCollection[$name];
@@ -68,7 +67,7 @@ class ContainerProvider implements MenuProviderInterface
             $menu = $this->container->get($service)->$method($factory, $helper);
 
             $event = new ConfigureMenuEvent($menu, $factory, $helper, $name);
-            $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.'.$name, $event);
+            $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.' . $name, $event);
 
             $this->menuCollection[$name] = $menu;
         }

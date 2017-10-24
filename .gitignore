@@ -2,6 +2,9 @@
 /vendor/
 /nbproject/
 /phpunit.xml
+/composer
+/.php_cs.cache
+/phpda.svg
 .DS_Store
 Thumbs.db
 

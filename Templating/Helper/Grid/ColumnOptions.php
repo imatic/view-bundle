@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Grid;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
@@ -11,7 +10,7 @@ class ColumnOptions extends AbstractOptions
 {
     protected function prepare($options)
     {
-        if (is_string($options)) {
+        if (\is_string($options)) {
             $options = ['name' => $options];
         }
 

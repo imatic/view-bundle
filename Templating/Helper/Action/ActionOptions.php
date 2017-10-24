@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Action;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
@@ -22,6 +21,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ActionOptions extends AbstractOptions
 {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariables)
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

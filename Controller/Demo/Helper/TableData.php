@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Controller\Demo\Helper;
 
 class TableData implements \IteratorAggregate
@@ -28,12 +27,12 @@ class TableData implements \IteratorAggregate
         for ($i = 1; $i <= $this->total; ++$i) {
             $this->data[$i] = new User([
                 'id' => $i,
-                'name' => 'User '.$i,
-                'age' => rand(15, 80),
-                'active' => $i % 2 == 0,
+                'name' => 'User ' . $i,
+                'age' => \rand(15, 80),
+                'active' => $i % 2 === 0,
                 'lastOnline' => new \DateTime(),
                 'phone' => 123456789,
-                'email' => 'user-'.$i.'@example.com',
+                'email' => 'user-' . $i . '@example.com',
                 'url' => 'http://www.example.com',
             ]);
         }
@@ -49,7 +48,7 @@ class TableData implements \IteratorAggregate
 
     public function getData()
     {
-        return array_slice($this->data, $this->offset, $this->limit);
+        return \array_slice($this->data, $this->offset, $this->limit);
     }
 
     public function getIterator()

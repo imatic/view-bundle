@@ -1,0 +1,15 @@
+image: php:7.1
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - composer
+        script:
+          - make configure-pipelines
+
+          - make update-test
+          - make test
+
+          - make update-test-min
+          - make test

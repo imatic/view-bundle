@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Controller\Demo\Helper;
 
 use Symfony\Component\Form\AbstractType;

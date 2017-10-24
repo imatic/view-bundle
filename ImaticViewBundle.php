@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle;
 
 use Imatic\Bundle\ViewBundle\DependencyInjection\Compiler\FormatterPass;

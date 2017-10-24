@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Show;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;
@@ -19,7 +18,7 @@ class FieldOptions extends AbstractOptions
             'label' => function (Options $options) {
                 return StringUtil::humanize($options['name']);
             },
-            'propertyPath' => function (Options $options, $x) {
+            'propertyPath' => function (Options $options) {
                 return $options['name'];
             },
         ]);
