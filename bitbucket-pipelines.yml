@@ -10,6 +10,3 @@ pipelines:
 
           - make update-test
           - make test
-
-          - make update-test-min
-          - make test

@@ -31,13 +31,7 @@ composer:
 .PHONY: update-test
 update-test: | composer
 	rm -rf Tests/Fixtures/TestProject/cache/test/
-	git checkout -- ./composer.lock
 	./composer install
-
-.PHONY: update-test-min
-update-test-min: | composer
-	rm -rf Tests/Fixtures/TestProject/cache/test/ ./composer.lock
-	./composer update --prefer-lowest
 
 .PHONY: configure-pipelines
 configure-pipelines:
