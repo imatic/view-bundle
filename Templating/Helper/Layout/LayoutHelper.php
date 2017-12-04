@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Layout;
 
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -43,9 +42,8 @@ class LayoutHelper
             )
         ) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**

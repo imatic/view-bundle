@@ -1,12 +1,11 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\TokenParser;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\ExampleNode;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Config\FileLocatorInterface;
-use Twig_TokenParser;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 use Twig_Token;
+use Twig_TokenParser;
 
 /**
  * Generate an example.
@@ -63,18 +62,18 @@ class ExampleTokenParser extends Twig_TokenParser
         // fetch template source
         $templatePath = $this->templatingLocator->locate(
             $this->templatingNameParser->parse(
-                $this->parser->getFilename()
+                $this->parser->getStream()->getSourceContext()->getPath()
             )
          );
-        $templateSource = file_get_contents($templatePath);
+        $templateSource = \file_get_contents($templatePath);
 
         // parse tag contents
-        preg_match(
+        \preg_match(
             '/\\s*\\{%\s*example\\s*%\\}(.*?)\\s*\\{%\\s*endexample\\s*%\\}/s',
-            implode(
+            \implode(
                 "\n",
-                array_slice(
-                    preg_split('/\\n|\\r\\n?/', $templateSource),
+                \array_slice(
+                    \preg_split('/\\n|\\r\\n?/', $templateSource),
                     $startLine - 1,
                     $this->parser->getCurrentToken()->getLine() - $startLine + 1
                 )
@@ -84,9 +83,8 @@ class ExampleTokenParser extends Twig_TokenParser
 
         if (isset($match[1])) {
             return $this->removeExtraIndentation($match[1]);
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -98,14 +96,14 @@ class ExampleTokenParser extends Twig_TokenParser
      */
     private function removeExtraIndentation($string)
     {
-        $lines = preg_split('/\\n|\\r\\n?/', $string);
+        $lines = \preg_split('/\\n|\\r\\n?/', $string);
 
         // determine indentation length
         $indentLen = null;
         for ($i = 0; isset($lines[$i]); ++$i) {
-            if ('' !== trim($lines[$i])) {
-                preg_match('/^\\s*/', $lines[$i], $match);
-                $indentLen = strlen($match[0]);
+            if ('' !== \trim($lines[$i])) {
+                \preg_match('/^\\s*/', $lines[$i], $match);
+                $indentLen = \strlen($match[0]);
                 break;
             }
         }
@@ -114,8 +112,8 @@ class ExampleTokenParser extends Twig_TokenParser
             // cut each line
             $out = '';
             for (; isset($lines[$i]); ++$i) {
-                if (substr($lines[$i], 0, $indentLen) === $match[0]) {
-                    $out .= substr($lines[$i], $indentLen);
+                if (\substr($lines[$i], 0, $indentLen) === $match[0]) {
+                    $out .= \substr($lines[$i], $indentLen);
                 } else {
                     $out .= $lines[$i];
                 }
@@ -123,8 +121,7 @@ class ExampleTokenParser extends Twig_TokenParser
             }
 
             return $out;
-        } else {
-            return $string;
         }
+        return $string;
     }
 }

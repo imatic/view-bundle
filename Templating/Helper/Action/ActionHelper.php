@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Action;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlElement;
@@ -36,13 +35,13 @@ class ActionHelper
         if (!($actionOptions instanceof ActionOptions)) {
             $actionOptions = new ActionOptions($actionOptions);
         }
-        if (is_null($contextOptions) || !is_array($contextOptions)) {
+        if (\is_null($contextOptions) || !\is_array($contextOptions)) {
             $contextOptions = [];
         }
 
         $url = $this->getActionUrl($actionOptions, $contextOptions);
 
-        if ('input' == $actionOptions->tag) {
+        if ('input' === $actionOptions->tag) {
             $element = new HtmlElement('input', null, $actionOptions->attrs + [
                 'type' => 'submit',
                 'formaction' => $url ? $url : null,
@@ -70,8 +69,8 @@ class ActionHelper
     public function applyParameters($object, array $parameters)
     {
         foreach ($parameters as $name => $value) {
-            if (0 === strpos($value, '#')) {
-                $key = substr($value, 1);
+            if (0 === \strpos($value, '#')) {
+                $key = \substr($value, 1);
                 $value = $this->accessor->getValue($object, $key);
                 $parameters[$name] = $value;
             }
@@ -105,7 +104,7 @@ class ActionHelper
         $url = $actionOptions->url;
         if (!$url && $actionOptions->route) {
             $routeParameters = $actionOptions->routeParams;
-            if (array_key_exists('item', $contextOptions)) {
+            if (\array_key_exists('item', $contextOptions)) {
                 $routeParameters = $this->applyParameters($contextOptions['item'], $routeParameters);
             }
             $url = $this->urlGenerator->generate($actionOptions->route, $routeParameters);

@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Tests\Unit\Templating\Helper\Format;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;

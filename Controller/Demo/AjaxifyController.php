@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
@@ -31,7 +30,7 @@ class AjaxifyController extends Controller
     public function ajaxTestAction()
     {
         return [
-            'uniqid' => uniqid('', true),
+            'uniqid' => \uniqid('', true),
         ];
     }
 

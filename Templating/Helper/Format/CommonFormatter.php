@@ -1,9 +1,8 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CommonFormatter implements FormatterInterface
 {
@@ -29,7 +28,7 @@ class CommonFormatter implements FormatterInterface
         $value = StringUtil::escape($value);
 
         if (isset($options['convert_newlines']) && $options['convert_newlines']) {
-            $value = nl2br($value, false);
+            $value = \nl2br($value, false);
         }
 
         return $value;
@@ -44,14 +43,14 @@ class CommonFormatter implements FormatterInterface
     {
         $value = StringUtil::escape($value);
 
-        return sprintf('<a href="callto:%s">%s</a>', $value, $value);
+        return \sprintf('<a href="callto:%s">%s</a>', $value, $value);
     }
 
     public function formatEmail($value, array $options = [])
     {
         $value = StringUtil::escape($value);
 
-        return sprintf(
+        return \sprintf(
             '<a href="mailto:%s">%s</a>',
             $value,
             isset($options['text']) ? StringUtil::escape($options['text']) : $value
@@ -62,7 +61,7 @@ class CommonFormatter implements FormatterInterface
     {
         $value = StringUtil::escape($value);
 
-        return sprintf(
+        return \sprintf(
             '<a href="%s">%s</a>',
             $value,
             isset($options['text']) ? StringUtil::escape($options['text']) : $value
@@ -73,7 +72,7 @@ class CommonFormatter implements FormatterInterface
     {
         $key = $value ? 'yes' : 'no';
 
-        return sprintf(
+        return \sprintf(
             '<span title="%s" class="%s"></span>',
             StringUtil::escape($this->translator->trans($key, [], 'ImaticViewBundle')),
             $key
@@ -85,9 +84,9 @@ class CommonFormatter implements FormatterInterface
      */
     public function formatLink($value, array $options = [])
     {
-        trigger_error('The "link" format is deprecated since ImaticViewBundle 3.0.6. Use the "url" format with "text" option instead.', E_USER_DEPRECATED);
+        \trigger_error('The "link" format is deprecated since ImaticViewBundle 3.0.6. Use the "url" format with "text" option instead.', E_USER_DEPRECATED);
 
-        return sprintf(
+        return \sprintf(
             '<a href="%s">%s</a>',
             StringUtil::escape($options['url']),
             StringUtil::escape($options['name'])
@@ -100,15 +99,15 @@ class CommonFormatter implements FormatterInterface
         $decimals = isset($options['decimals']) ? $options['decimals'] : 2;
 
         $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        $factor = floor((strlen($value) - 1) / 3);
+        $factor = \floor((\strlen($value) - 1) / 3);
 
-        return sprintf("%.{$decimals}f", $value / pow(1024, $factor)).(isset($size[$factor]) ? $size[$factor] : '');
+        return \sprintf("%.{$decimals}f", $value / \pow(1024, $factor)) . (isset($size[$factor]) ? $size[$factor] : '');
     }
 
     public function formatTranslatable($value, array $options)
     {
         return $this->translator->trans(
-            isset($options['prefix']) ? $options['prefix'].$value : $value,
+            isset($options['prefix']) ? $options['prefix'] . $value : $value,
             isset($options['params']) ? $options['params'] : [],
             $options['domain'],
             isset($options['locale']) ? $options['locale'] : null

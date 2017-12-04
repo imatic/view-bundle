@@ -1,12 +1,11 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Grid;
 
 class GridHelper
 {
     public function getColumnsOptions(array $columns = [])
     {
-        if (0 === count($columns)) {
+        if (0 === \count($columns)) {
             throw new \InvalidArgumentException('Table must contain some columns');
         }
 

@@ -1,13 +1,12 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Menu;
 
-use Knp\Menu\ItemInterface;
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+use Knp\Menu\ItemInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class Helper
 {
@@ -27,8 +26,8 @@ class Helper
     public function __construct(
         TranslatorInterface $translator,
         AuthorizationCheckerInterface $authorizationChecker = null,
-        TokenStorageInterface $tokenStorage = null)
-    {
+        TokenStorageInterface $tokenStorage = null
+    ) {
         $this->translator = $translator;
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
@@ -46,7 +45,7 @@ class Helper
     {
         $class = $vertical ? 'divider-vertical' : 'divider';
 
-        return $item->addChild('divider_'.rand())
+        return $item->addChild('divider_' . \rand())
             ->setLabel('')
             ->setAttribute('class', $class);
     }
@@ -61,7 +60,7 @@ class Helper
      */
     public function addHeader(ItemInterface $item, $text)
     {
-        return $item->addChild('header_'.rand())
+        return $item->addChild('header_' . \rand())
             ->setLabel($text)
             ->setAttribute('class', 'nav-header');
     }
@@ -80,7 +79,7 @@ class Helper
             ->setAttribute('class', 'dropdown')
             ->setChildrenAttribute('class', 'dropdown-menu');
 
-        $dropDownItem->setLabel($dropDownItem->getLabel().'<b class="caret"></b>');
+        $dropDownItem->setLabel($dropDownItem->getLabel() . '<b class="caret"></b>');
         $dropDownItem->setExtra('safe_label', true);
     }
 
@@ -96,18 +95,18 @@ class Helper
 
     public function setBadge(ItemInterface $item, $content, $type = null, $right = null)
     {
-        $badge = sprintf(' <span class="badge badge-%s %s">%s</span>', $type, $right ? ' pull-right' : '', $content);
+        $badge = \sprintf(' <span class="badge badge-%s %s">%s</span>', $type, $right ? ' pull-right' : '', $content);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel(StringUtil::escape($item->getLabel()).$badge);
+            ->setLabel(StringUtil::escape($item->getLabel()) . $badge);
     }
 
     public function setIcon(ItemInterface $item, $icon, $right = null)
     {
-        $icon = sprintf('<i class="imatic-view-menu-icon icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
+        $icon = \sprintf('<i class="imatic-view-menu-icon icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
         $item
             ->setExtra('safe_label', true)
-            ->setLabel($icon.StringUtil::escape($item->getLabel()));
+            ->setLabel($icon . StringUtil::escape($item->getLabel()));
     }
 
     /**

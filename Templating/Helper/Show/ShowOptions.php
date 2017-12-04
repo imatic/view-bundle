@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Show;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\AbstractOptions;

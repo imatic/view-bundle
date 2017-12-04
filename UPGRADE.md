@@ -1,5 +1,4 @@
-Upgrade na verzi 3.0
-====================
+# 3.0
 
 ## Konfigurace aplikace
 
@@ -20,8 +19,7 @@ Upgrade na verzi 3.0
 
 - `genemu_jqueryselect2_choice` (resp `Select2Type::class`) zmenit na choice
 
-Upgrade na verzi 3.1
-====================
+# 3.1
 
 ## Konfigurace assetu
 
@@ -63,3 +61,10 @@ viz. *webpack.config.js* v hlavnim adresari tohohle bundle.
                 }]
             }
         ```
+
+# 4.0
+
+## Changed
+
+- `twig/twig` upgraded to version 2
+

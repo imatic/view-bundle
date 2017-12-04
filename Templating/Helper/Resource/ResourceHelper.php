@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Resource;
 
 use Imatic\Bundle\ControllerBundle\Resource\Config\Resource;
@@ -27,8 +26,8 @@ class ResourceHelper
 
     public function createHeadline(Resource $resource, ResourceAction $action, $item = null)
     {
-        $tranKey = sprintf('%s %s', ucfirst($resource->getConfig()->name), $action->name);
-        $transParam = sprintf('%%%s%%', $resource->getConfig()->name);
+        $tranKey = \sprintf('%s %s', \ucfirst($resource->getConfig()->name), $action->name);
+        $transParam = \sprintf('%%%s%%', $resource->getConfig()->name);
 
         return $this->translator->trans($tranKey, [$transParam => $item ? $item : 'new'], $resource->getConfig()->translation_domain);
     }
@@ -38,7 +37,7 @@ class ResourceHelper
         $action = $this->createDefaultConfiguration($resource->getAction($actionName), $resource);
         unset($action['parent']);
 
-        return array_replace_recursive($action, $merge);
+        return \array_replace_recursive($action, $merge);
     }
 
     public function createPageActionConfiguration(Resource $resource, $currentActionName, $itemId = null)
@@ -47,7 +46,7 @@ class ResourceHelper
         $filterActions = 'list' === $currentAction->group ? ['list'] : ['list', 'item'];
         $actions = $this->filterActions($resource, $filterActions, $currentActionName);
 
-        $result = array_map(function (ResourceAction $action) use ($resource, $currentAction, $itemId) {
+        $result = \array_map(function (ResourceAction $action) use ($resource, $currentAction, $itemId) {
             $configuration = $this->createDefaultConfiguration($action, $resource);
             if ('item' === $currentAction->group && 'list' !== $action->group) {
                 $configuration['routeParams'] = ['id' => $itemId];
@@ -68,7 +67,7 @@ class ResourceHelper
     {
         $actions = $this->filterActions($resource, ['item']);
 
-        $result = array_map(function (ResourceAction $action) use ($resource) {
+        $result = \array_map(function (ResourceAction $action) use ($resource) {
             $configuration = $this->createDefaultConfiguration($action, $resource);
             $configuration['routeParams'] = ['id' => '#id'];
 
@@ -89,7 +88,7 @@ class ResourceHelper
     {
         $actions = $this->filterActions($resource, ['batch']);
 
-        $result = array_map(function (ResourceAction $action) use ($resource) {
+        $result = \array_map(function (ResourceAction $action) use ($resource) {
             $configuration = $this->createDefaultConfiguration($action, $resource);
 
             // We don't need Ajaxify for page actions.
@@ -108,7 +107,7 @@ class ResourceHelper
 
     public function filterAvailableActions(array $actions)
     {
-        return array_filter($actions, function (array $action) {
+        return \array_filter($actions, function (array $action) {
             $expression = $this->createAuthorizationExpression($action);
             if ($expression) {
                 return $this->authorizationChecker->isGranted($expression);
@@ -123,7 +122,8 @@ class ResourceHelper
         $configuration = [];
 
         $configuration['label'] = $this->translate(
-            ucfirst(str_replace('_', ' ', $action->name)), $resource->getConfig()['translation_domain']
+            \ucfirst(\str_replace('_', ' ', $action->name)),
+            $resource->getConfig()['translation_domain']
         );
         $configuration['route'] = $action['route']['name'];
 
@@ -156,7 +156,6 @@ class ResourceHelper
             unset($actionConfig['parent']);
 
             if (!$removeParentOnly && null !== $parentActionName && !empty($configuration[$parentActionName])) {
-
                 if (empty($configuration[$parentActionName]['nested'])) {
                     $configuration[$parentActionName]['nested'] = [];
                 }
@@ -172,13 +171,13 @@ class ResourceHelper
     private function filterActions(Resource $resource, array $types, $excludeAction = null)
     {
         $actions = $resource->getActions();
-        $actions = array_filter($actions, function (ResourceAction $action) use ($types, $excludeAction) {
+        $actions = \array_filter($actions, function (ResourceAction $action) use ($types, $excludeAction) {
             return
-                in_array($action['group'], $types, true)
+                \in_array($action['group'], $types, true)
                 && (null === $excludeAction || $excludeAction !== $action['name']);
         });
 
-        $actions = array_filter($actions, function (ResourceAction $action) use ($types, $excludeAction) {
+        $actions = \array_filter($actions, function (ResourceAction $action) use ($types, $excludeAction) {
             return !isset($action['extra']['button_show']) || false !== $action['extra']['button_show'];
         });
 
@@ -200,13 +199,13 @@ class ResourceHelper
         $rules = [];
 
         if (isset($action['role']) && $action['role']) {
-            $rules[] = sprintf('isGranted("%s")', $action['role']);
+            $rules[] = \sprintf('isGranted("%s")', $action['role']);
         }
 
         if (isset($action['data_authorization']) && $action['data_authorization'] && 'item' === $action['group']) {
-            $rules[] = sprintf('isGranted("%s", %s)', strtoupper($action['name']), 'item');
+            $rules[] = \sprintf('isGranted("%s", %s)', \strtoupper($action['name']), 'item');
         }
 
-        return implode(' AND ', $rules);
+        return \implode(' AND ', $rules);
     }
 }

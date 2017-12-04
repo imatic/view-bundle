@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
@@ -29,6 +28,9 @@ class ConditionHelper
      */
     private $authorizationChecker;
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariables)
+     */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -40,17 +42,19 @@ class ConditionHelper
         $this->expressionLanguage->register(
             'isGranted',
             function ($str) {
-                throw new \Exception($str.' function is not implemented');
-            }, function (array $values, $attributes, $object = null) {
+                throw new \Exception($str . ' function is not implemented');
+            },
+            function (array $values, $attributes, $object = null) {
                 return $this->authorizationChecker->isGranted($attributes, $object);
-            });
+            }
+        );
         $this->layoutHelper = $layoutHelper;
         $this->tokenStorage = $tokenStorage;
     }
 
     public function evaluate($expression, array $context = [])
     {
-        if (is_bool($expression)) {
+        if (\is_bool($expression)) {
             return $expression;
         }
 

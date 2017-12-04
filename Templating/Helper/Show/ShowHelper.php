@@ -1,12 +1,11 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Show;
 
 class ShowHelper
 {
     public function getFieldsOptions(array $fields = [])
     {
-        if (0 === count($fields)) {
+        if (0 === \count($fields)) {
             throw new \InvalidArgumentException('Show must contain some fields');
         }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Grid;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionOptions;

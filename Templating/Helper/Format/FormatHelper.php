@@ -1,11 +1,10 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
 class FormatHelper implements FormatterInterface
 {
@@ -84,7 +83,7 @@ class FormatHelper implements FormatterInterface
         }
 
         if (!isset($this->formatters[$format])) {
-            throw new \InvalidArgumentException(sprintf('Formatter "%s" not found', $format));
+            throw new \InvalidArgumentException(\sprintf('Formatter "%s" not found', $format));
         }
 
         return $this->formatters[$format]->format($value, $format, $options);
@@ -100,8 +99,8 @@ class FormatHelper implements FormatterInterface
      */
     public function renderValue($objectOrArray, $propertyPath, $format = null, array $options = [])
     {
-        if (is_array($objectOrArray) && $propertyPath && $propertyPath[0] !== '[') {
-            $propertyPath = sprintf('[%s]', $propertyPath);
+        if (\is_array($objectOrArray) && $propertyPath && $propertyPath[0] !== '[') {
+            $propertyPath = \sprintf('[%s]', $propertyPath);
         }
 
         if (null === $propertyPath) {
@@ -129,9 +128,9 @@ class FormatHelper implements FormatterInterface
                 'format' => $format,
                 'propertyPath' => $propertyPath,
             ]);
-        } else {
-            return $this->format($value, $format, $options);
         }
+
+        return $this->format($value, $format, $options);
     }
 
     /**
@@ -144,7 +143,7 @@ class FormatHelper implements FormatterInterface
     protected function guessFormat($value)
     {
         $format = null;
-        $type = gettype($value);
+        $type = \gettype($value);
 
         switch ($type) {
             case 'boolean':
@@ -169,7 +168,7 @@ class FormatHelper implements FormatterInterface
         }
 
         if (null === $format) {
-            throw new \RuntimeException(sprintf(
+            throw new \RuntimeException(\sprintf(
                 'Could not guess format for a value of type "%s". Please provide a format.',
                 $type
             ));
