@@ -14,8 +14,6 @@ import "eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js";
 
 // Select2
 import "select2/dist/js/select2.js";
-import "select2/dist/js/i18n/cs.js";
-import "select2/dist/js/i18n/en.js";
 import "./js/select2/select2-focus-war-fix.js";
 
 // Platform - view
