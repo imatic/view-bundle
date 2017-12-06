@@ -1,10 +1,10 @@
 {
     "name": "imatic/view-bundle",
     "type": "symfony-bundle",
-    "description": "Imatic View Bundle",
+    "description": "Bundle with predefined UI components",
     "keywords": [],
     "homepage": "http://imatic.cz",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Stepan Koci",
@@ -13,12 +13,6 @@
         {
             "name": "Imatic Software s.r.o.",
             "homepage": "http://imatic.cz/"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.imatic.cz"
         }
     ],
     "require": {
