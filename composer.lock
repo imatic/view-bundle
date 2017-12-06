@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "058cd50cd719a57eb5693a4422e769a4",
+    "content-hash": "aaf2d02f8da81a4f44ee4bb4f72fdf0b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -513,7 +513,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -2320,8 +2320,14 @@
             "version": "v3.0.12",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:imatic/imatic-formbundle.git",
+                "url": "https://github.com/imatic/form-bundle.git",
                 "reference": "9c2bcf28fafd1cc0179033f4b7541974ce300992"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/9c2bcf28fafd1cc0179033f4b7541974ce300992",
+                "reference": "9c2bcf28fafd1cc0179033f4b7541974ce300992",
+                "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.2",
@@ -2340,29 +2346,36 @@
                     "Imatic\\Bundle\\FormBundle\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "proprietary"
             ],
             "authors": [
                 {
-                    "name": "Viliam Husár",
-                    "email": "viliam.husar@imatic.cz"
-                },
-                {
                     "name": "Imatic Software s.r.o.",
                     "homepage": "http://imatic.cz/"
+                },
+                {
+                    "name": "Viliam Husár",
+                    "email": "viliam.husar@imatic.cz"
                 }
             ],
             "description": "Imatic Form Bundle",
             "time": "2017-06-26T13:06:14+00:00"
         },
         {
-            "name": "imatic/testing-bundle",
+            "name": "imatic/testing",
             "version": "3.0",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:imatic/imatic-testingbundle.git",
-                "reference": "07cbdf5fc0384bde2c1b65e10b7a72ac7d882fe3"
+                "url": "https://github.com/imatic/testing.git",
+                "reference": "e1fa6cb1ac6abec0173639816b5ea7e39636bd4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imatic/testing/zipball/e1fa6cb1ac6abec0173639816b5ea7e39636bd4e",
+                "reference": "e1fa6cb1ac6abec0173639816b5ea7e39636bd4e",
+                "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.2",
@@ -2382,6 +2395,7 @@
                     "Imatic\\Bundle\\TestingBundle\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Imatic"
             ],
