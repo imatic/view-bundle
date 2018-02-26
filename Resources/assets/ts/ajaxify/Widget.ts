@@ -70,7 +70,9 @@ export class WidgetHandler
         }
 
         $(selector, element).each(function () {
-            widgets.push(self.getInstance(this));
+            if (self.hasInstance(this)) {
+                widgets.push(self.getInstance(this));
+            }
         });
 
         return widgets;
