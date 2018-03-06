@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Runtime;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;

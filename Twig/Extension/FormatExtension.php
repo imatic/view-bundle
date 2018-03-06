@@ -1,5 +1,4 @@
 <?php
-
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\FormatFunctionNode;
@@ -13,7 +12,7 @@ class FormatExtension extends \Twig_Extension
             new \Twig_Function(
                 'imatic_view_format',
                 [
-                    FormatRuntime::class, 'format'
+                    FormatRuntime::class, 'format',
                 ],
                 [
                     'is_safe' => ['all'],
@@ -25,7 +24,7 @@ class FormatExtension extends \Twig_Extension
             new \Twig_Function(
                 'imatic_view_render_value',
                 [
-                    FormatRuntime::class, 'renderValue'
+                    FormatRuntime::class, 'renderValue',
                 ],
                 [
                     'is_safe' => ['all'],
