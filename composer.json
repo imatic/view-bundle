@@ -4,7 +4,7 @@
     "description": "Imatic View Bundle",
     "keywords": [],
     "homepage": "http://imatic.cz",
-    "license": "Imatic",
+    "license": "MIT",
     "authors": [
         {
             "name": "Stepan Koci",
