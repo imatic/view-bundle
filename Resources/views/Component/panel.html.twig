@@ -19,7 +19,7 @@
         <div class="panel-body">
             {% block panel_body %}{% endblock %}
         </div>
-        {% set panel_footer = panel_footer is defined ? block('panel_footer') : null %}
+        {% set panel_footer = block('panel_footer') is defined ? block('panel_footer') : null %}
         {% if panel_footer is not empty %}
             <div class="panel-footer">
                 {{ panel_footer | raw }}
