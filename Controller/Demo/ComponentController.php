@@ -3,75 +3,88 @@ namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TableData;
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TestingType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Config\Route("/component")
+ * @Route("/component")
  */
 class ComponentController extends Controller
 {
     /**
-     * @Config\Route()
-     * @Config\Template()
+     * @Route("/")
+     *
+     * @return Response
      */
     public function indexAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Component/index.html.twig');
     }
 
     /**
-     * @Config\Route("/panel")
-     * @Config\Template()
+     * @Route("/panel")
+     *
+     * @return Response
      */
     public function panelAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Component/panel.html.twig');
     }
 
     /**
-     * @Config\Route("/layout")
-     * @Config\Template()
+     * @Route("/layout")
+     *
+     * @return Response
      */
     public function layoutAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Component/layout.html.twig');
     }
 
     /**
-     * @Config\Route("/grid")
-     * @Config\Template()
+     * @Route("/grid")
+     *
+     * @return Response
      */
     public function gridAction()
     {
         $data = new TableData();
 
-        return ['items' => $data];
+        return $this->render('@ImaticView/Demo/Component/grid.html.twig', [
+            'items' => $data,
+        ]);
     }
 
     /**
-     * @Config\Route("/tabs")
-     * @Config\Template()
+     * @Route("/tabs")
+     *
+     * @return Response
      */
     public function tabsAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Component/tabs.html.twig');
     }
 
     /**
-     * @Config\Route("/form")
-     * @Config\Template()
+     * @Route("/form")
+     *
+     * @return Response
      */
     public function formAction()
     {
         $form = $this->createForm(TestingType::class);
 
-        return ['form' => $form->createView()];
+        return $this->render('@ImaticView/Demo/Component/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
-     * @Config\Route("/form/ajax-choice")
+     * @Route("/form/ajax-choice")
+     *
+     * @return Response
      */
     public function formAjaxChoiceAction()
     {
@@ -83,32 +96,37 @@ class ComponentController extends Controller
     }
 
     /**
-     * @Config\Route("/show")
-     * @Config\Template()
+     * @Route("/show")
+     *
+     * @return Response
      */
     public function showAction()
     {
         $data = new TableData(1);
         $item = $data->get(1);
 
-        return ['item' => $item];
+        return $this->render('@ImaticView/Demo/Component/show.html.twig', [
+            'item' => $item,
+        ]);
     }
 
     /**
-     * @Config\Route("/menu")
-     * @Config\Template()
+     * @Route("/menu")
+     *
+     * @return Response
      */
     public function menuAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Component/menu.html.twig');
     }
 
     /**
-     * @Config\Route("/formatter/{_locale}", defaults={"_locale": ""})
-     * @Config\Template()
+     * @Route("/formatter/{_locale}", defaults={"_locale": ""})
+     *
+     * @return Response
      */
     public function formatterAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Component/formatter.html.twig');
     }
 }

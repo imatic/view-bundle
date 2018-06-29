@@ -12,7 +12,6 @@ class TestKernel extends BaseTestKernel
         $bundles = [
             new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle(),
             new \Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Imatic\Bundle\FormBundle\ImaticFormBundle(),
             new \Imatic\Bundle\ViewBundle\ImaticViewBundle(),
             new \Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\ImaticViewBundle\AppImaticViewBundle(),

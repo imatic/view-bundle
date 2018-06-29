@@ -1,44 +1,44 @@
 <?php
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Config\Route("/ajaxify")
+ * @Route("/ajaxify")
  */
 class AjaxifyController extends Controller
 {
     /**
-     * @Config\Route()
-     * @Config\Route("/counter/{counter}")
-     * @Config\Template()
+     * @Route("/")
+     *
+     * @return Response
      */
-    public function indexAction($counter = 0)
+    public function indexAction()
     {
-        return [
-            'current_counter_value' => $counter,
-            'next_counter_value' => $counter + 1,
-        ];
+        return $this->render('@ImaticView/Demo/Ajaxify/index.html.twig');
     }
 
     /**
-     * @Config\Route("/test/ajax")
-     * @Config\Template()
+     * @Route("/test/ajax")
+     *
+     * @return Response
      */
     public function ajaxTestAction()
     {
-        return [
+        return $this->render('@ImaticView/Demo/Ajaxify/ajax_test.html.twig', [
             'uniqid' => \uniqid('', true),
-        ];
+        ]);
     }
 
     /**
-     * @Config\Route("/test/form")
-     * @Config\Template()
+     * @Route("/test/form")
      *
      * @param Request $request
+     *
+     * @return Response
      */
     public function formTestAction(Request $request)
     {
@@ -50,24 +50,26 @@ class AjaxifyController extends Controller
             $pressedButton = '?';
         }
 
-        return [
+        return $this->render('@ImaticView/Demo/Ajaxify/form_test.html.twig', [
             'name' => $request->request->get('name'),
             'pressed_button' => $pressedButton,
-        ];
+        ]);
     }
 
     /**
-     * @Config\Route("/test/modal")
-     * @Config\Template()
+     * @Route("/test/modal")
+     *
+     * @return Response
      */
     public function modalTestAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Ajaxify/modal_test.html.twig');
     }
 
     /**
-     * @Config\Route("/test/flashes")
-     * @Config\Template()
+     * @Route("/test/flashes")
+     *
+     * @return Response
      */
     public function flashesTestAction()
     {
@@ -78,6 +80,6 @@ class AjaxifyController extends Controller
         $flashBag->add('warning', 'I am a warning!');
         $flashBag->add('danger', 'I am a danger!');
 
-        return [];
+        return $this->render('@ImaticView/Demo/Ajaxify/flashes_test.html.twig');
     }
 }

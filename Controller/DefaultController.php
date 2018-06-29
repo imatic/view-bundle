@@ -1,20 +1,22 @@
 <?php
 namespace Imatic\Bundle\ViewBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Config\Route()
+ * @Route()
  */
 class DefaultController extends Controller
 {
     /**
-     * @Config\Route("/", name="homepage")
-     * @Config\Template()
+     * @Route("/", name="homepage")
+     *
+     * @return Response
      */
     public function indexAction()
     {
-        return [];
+        return $this->render('@ImaticView/Default/index.html.twig');
     }
 }
