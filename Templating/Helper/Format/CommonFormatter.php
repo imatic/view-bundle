@@ -79,20 +79,6 @@ class CommonFormatter implements FormatterInterface
         );
     }
 
-    /**
-     * @deprecated use "url" formatter with "text" option instead
-     */
-    public function formatLink($value, array $options = [])
-    {
-        \trigger_error('The "link" format is deprecated since ImaticViewBundle 3.0.6. Use the "url" format with "text" option instead.', E_USER_DEPRECATED);
-
-        return \sprintf(
-            '<a href="%s">%s</a>',
-            StringUtil::escape($options['url']),
-            StringUtil::escape($options['name'])
-        );
-    }
-
     public function formatFilesize($value, array $options = [])
     {
         $value = (string) $value;
