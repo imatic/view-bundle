@@ -17,10 +17,9 @@
     ],
     "require": {
         "php": "^7.1",
-        "symfony/framework-bundle": "^3.3 | ^4.0",
-        "sensio/framework-extra-bundle": "^3.0.28 | ^4.0 | ^5.0",
-        "knplabs/knp-menu-bundle": "^2.1.1",
-        "twig/twig": "^2.4.4"
+        "symfony/framework-bundle": "^3.4 | ^4.0",
+        "knplabs/knp-menu-bundle": "^2.2",
+        "twig/twig": "^2.4"
     },
     "require-dev": {
         "imatic/form-bundle": "^3.0.12",

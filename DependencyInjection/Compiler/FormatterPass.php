@@ -1,6 +1,7 @@
 <?php
 namespace Imatic\Bundle\ViewBundle\DependencyInjection\Compiler;
 
+use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -11,11 +12,10 @@ class FormatterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $tag = 'imatic_view.formatter';
         $tagOptionsResolver = $this->getTagOptionsResolver();
-        $formatterDef = $container->findDefinition('imatic_view.templating.helper.format');
+        $formatterDef = $container->findDefinition(FormatHelper::class);
 
-        foreach ($container->findTaggedServiceIds($tag) as $id => $tagAttributes) {
+        foreach ($container->findTaggedServiceIds('imatic_view.formatter') as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 // resolve tag options
                 $options = $attributes;
@@ -24,7 +24,7 @@ class FormatterPass implements CompilerPassInterface
                 try {
                     $options = $tagOptionsResolver->resolve($options);
                 } catch (ExceptionInterface $e) {
-                    throw new \RuntimeException(\sprintf('Invalid options for tag "%s" on service "%s"', $tag, $id), 0, $e);
+                    throw new \RuntimeException(\sprintf('Invalid options for tag "imatic_view.formatter" on service "%s"', $id), 0, $e);
                 }
 
                 // process tag options

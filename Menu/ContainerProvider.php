@@ -14,6 +14,16 @@ class ContainerProvider implements MenuProviderInterface
     protected $container;
 
     /**
+     * @var Factory
+     */
+    protected $factory;
+
+    /**
+     * @var Helper
+     */
+    protected $helper;
+
+    /**
      * @var array
      */
     protected $menuInfoCollection;
@@ -25,10 +35,15 @@ class ContainerProvider implements MenuProviderInterface
 
     /**
      * @param ContainerInterface $container
+     * @param Factory            $factory
+     * @param Helper             $helper
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Factory $factory, Helper $helper)
     {
         $this->container = $container;
+        $this->factory = $factory;
+        $this->helper = $helper;
+
         $this->menuInfoCollection = [];
         $this->menuCollection = [];
     }
@@ -62,11 +77,9 @@ class ContainerProvider implements MenuProviderInterface
             $menuInfo = $this->menuInfoCollection[$name];
             $service = $menuInfo['id'];
             $method = isset($menuInfo['method']) ? $menuInfo['method'] : 'getMenu';
-            $factory = $this->container->get('imatic_view.menu.factory');
-            $helper = $this->container->get('imatic_view.menu.helper');
-            $menu = $this->container->get($service)->$method($factory, $helper);
+            $menu = $this->container->get($service)->$method($this->factory, $this->helper);
 
-            $event = new ConfigureMenuEvent($menu, $factory, $helper, $name);
+            $event = new ConfigureMenuEvent($menu, $this->factory, $this->helper, $name);
             $this->container->get('event_dispatcher')->dispatch('imatic_view.configure_menu.' . $name, $event);
 
             $this->menuCollection[$name] = $menu;

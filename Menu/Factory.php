@@ -3,7 +3,9 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
+use Knp\Menu\Loader\ArrayLoader;
 use Knp\Menu\Loader\LoaderInterface;
+use Knp\Menu\Loader\NodeLoader;
 use Knp\Menu\NodeInterface;
 
 class Factory implements FactoryInterface
@@ -26,14 +28,12 @@ class Factory implements FactoryInterface
     /**
      * @param FactoryInterface $factory
      */
-    public function __construct(
-        FactoryInterface $factory,
-        LoaderInterface $arrayLoader,
-        LoaderInterface $nodeLoader
-    ) {
+    public function __construct(FactoryInterface $factory)
+    {
         $this->factory = $factory;
-        $this->arrayLoader = $arrayLoader;
-        $this->nodeLoader = $nodeLoader;
+
+        $this->arrayLoader = new ArrayLoader($factory);
+        $this->nodeLoader = new NodeLoader($factory);
     }
 
     public function createItem($name, array $options = [])
