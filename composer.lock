@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44dece0e17b9077ab46ee7018dae8565",
+    "content-hash": "625a5afdf99254faa19cfe01944c9e5f",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2305,28 +2305,29 @@
         },
         {
             "name": "imatic/form-bundle",
-            "version": "v3.0.13",
+            "version": "dev-parklane",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imatic/form-bundle.git",
-                "reference": "7f379dcf0a17030a2a62342c05765b47bbc23db7"
+                "reference": "f11805eb5b581aee19bd370458d1418afa914f67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/7f379dcf0a17030a2a62342c05765b47bbc23db7",
-                "reference": "7f379dcf0a17030a2a62342c05765b47bbc23db7",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/f11805eb5b581aee19bd370458d1418afa914f67",
+                "reference": "f11805eb5b581aee19bd370458d1418afa914f67",
                 "shasum": ""
             },
             "require": {
-                "doctrine/doctrine-bundle": "~1.2",
-                "doctrine/orm": "~2.3",
-                "php": ">=5.5",
-                "symfony/form": "~3.0",
-                "symfony/framework-bundle": "~3.0",
-                "symfony/validator": "~3.0"
+                "doctrine/doctrine-bundle": "^1.2",
+                "doctrine/orm": "^2.3",
+                "php": "^7.1",
+                "symfony/form": "^3.0|^4.0",
+                "symfony/framework-bundle": "^3.4|^4.0",
+                "symfony/validator": "^3.0|^4.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.7",
+                "imatic/testing": "dev-parklane",
                 "mamuz/php-dependency-analysis": "^1.3",
                 "phpdocumentor/reflection-docblock": "4.1.1 as 3.3.0",
                 "phpmd/phpmd": "^2.6",
@@ -2353,7 +2354,7 @@
                 }
             ],
             "description": "Bundle for working with Symfony forms",
-            "time": "2017-12-07T08:28:32+00:00"
+            "time": "2018-07-13T12:15:07+00:00"
         },
         {
             "name": "imatic/testing",
@@ -4239,7 +4240,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "imatic/form-bundle": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

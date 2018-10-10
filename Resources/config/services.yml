@@ -41,6 +41,11 @@ services:
         tags:
             - { name: twig.runtime }
 
+    # Expression Language Providers
+    Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguageProvider:
+        tags:
+            - { name: imatic_view.expression_language_provider }
+
     # Formatters
     Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter:
         tags:

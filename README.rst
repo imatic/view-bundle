@@ -11,8 +11,47 @@ ImaticViewBundle
 
 See *Resources/doc/index.rst* for documentation.
 
-## Build Process
+Build Process
+-------------
 
 In case any asset sources are changed run ``yarn build`` command which will compile them.
 Any compiled assets are commited with project. Build process is provided by standard webpack configuration.
 More details can be found in ``webpack.config.js``.
+
+Extending ExpressionLanguage
+----------------------------
+
+Bundle ExpressionLanguage can be extended easily extended. To do so, you can create a new expression provider tagged
+with ``imatic_view.expression_language_provider``.
+
+.. sourcecode:: php
+
+    use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+    use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+
+   <?php
+
+    class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
+    {
+        public function getFunctions()
+        {
+            return [
+                new ExpressionFunction(
+                    'myFunction',
+                    function () {
+                        // ...
+                    },
+                    function () {
+                        // ...
+                    }
+                ),
+            ];
+        }
+    }
+
+.. sourcecode:: yaml
+
+   services:
+       ExpressionLanguageProvider:
+           tags:
+               - { name: imatic_view.expression_language_provider }

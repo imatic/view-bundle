@@ -2,7 +2,6 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Security\Core\Security;
 
 class ConditionHelper
@@ -23,24 +22,15 @@ class ConditionHelper
     private $layoutHelper;
 
     /**
-     * @param Security     $security
-     * @param LayoutHelper $layoutHelper
+     * @param Security           $security
+     * @param LayoutHelper       $layoutHelper
+     * @param ExpressionLanguage $expressionLanguage
      */
-    public function __construct(Security $security, LayoutHelper $layoutHelper)
+    public function __construct(Security $security, LayoutHelper $layoutHelper, ExpressionLanguage $expressionLanguage)
     {
         $this->security = $security;
         $this->layoutHelper = $layoutHelper;
-        $this->expressionLanguage = new ExpressionLanguage();
-
-        $this->expressionLanguage->register(
-            'isGranted',
-            function ($str) {
-                throw new \Exception($str . ' function is not implemented');
-            },
-            function (array $values, $attributes, $object = null) {
-                return $this->security->isGranted($attributes, $object);
-            }
-        );
+        $this->expressionLanguage = $expressionLanguage;
     }
 
     public function evaluate($expression, array $context = [])

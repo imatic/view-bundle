@@ -1,6 +1,6 @@
 {
     "name": "imatic/view-bundle",
-    "type": "symfony-bundle",
+    "type": "library",
     "description": "Bundle with predefined UI components",
     "keywords": [],
     "homepage": "http://imatic.cz",
@@ -22,7 +22,7 @@
         "twig/twig": "^2.4"
     },
     "require-dev": {
-        "imatic/form-bundle": "^3.0.12",
+        "imatic/form-bundle": "dev-parklane",
         "friendsofphp/php-cs-fixer": "^2.7",
         "phpmd/phpmd": "^2.6",
         "phpdocumentor/reflection-docblock": "4.1.1 as 3.3.0",
