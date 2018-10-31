@@ -13,6 +13,11 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
 {
     public const EXPRESSION_LANGUAGE_PROVIDER_TAG = 'imatic_view.expression_language_provider';
 
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariables)
+     */
     public function process(ContainerBuilder $container)
     {
         $definition = $container->findDefinition(ExpressionLanguage::class);

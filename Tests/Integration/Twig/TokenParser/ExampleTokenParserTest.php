@@ -5,12 +5,9 @@ use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;
 
 class ExampleTokenParserTest extends WebTestCase
 {
-    private $container;
-
     protected function setUp()
     {
-        parent::setUp();
-        $this->container = static::createClient()->getContainer();
+        static::createClient();
     }
 
     public function testExample()
@@ -35,6 +32,6 @@ HTML
      */
     private function getTwig()
     {
-        return $this->container->get('twig');
+        return self::$container->get('twig');
     }
 }

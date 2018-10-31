@@ -2,8 +2,9 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\ClassCollection;
+use PHPUnit\Framework\TestCase;
 
-class ClassCollectionTest extends \PHPUnit_Framework_TestCase
+class ClassCollectionTest extends TestCase
 {
     public function testConstructorAdd()
     {

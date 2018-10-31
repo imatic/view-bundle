@@ -2,8 +2,9 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlElement;
+use PHPUnit\Framework\TestCase;
 
-class HtmlElementTest extends \PHPUnit_Framework_TestCase
+class HtmlElementTest extends TestCase
 {
     public function testSimplePairRender()
     {

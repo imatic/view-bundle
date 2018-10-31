@@ -2,10 +2,10 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Unit\Templating\Helper\Format;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class FormatHelperTest extends PHPUnit_Framework_TestCase
+class FormatHelperTest extends TestCase
 {
     private $formatHelper;
 

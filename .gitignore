@@ -13,7 +13,6 @@ node_modules
 Tests/Fixtures/TestProject/web/*
 !Tests/Fixtures/TestProject/web/app.php
 
-Tests/Fixtures/TestProject/config/parameters.yml
 Tests/Fixtures/TestProject/node_modules
 Tests/Fixtures/TestProject/cache
 Tests/Fixtures/TestProject/logs

@@ -1,7 +1,7 @@
 <?php
 namespace Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject;
 
-use Imatic\Bundle\TestingBundle\Test\TestKernel as BaseTestKernel;
+use Imatic\Testing\Test\TestKernel as BaseTestKernel;
 
 class TestKernel extends BaseTestKernel
 {

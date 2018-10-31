@@ -23,6 +23,11 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
         $this->security = $security;
     }
 
+    /**
+     * @return array|ExpressionFunction[]
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariables)
+     */
     public function getFunctions()
     {
         return [

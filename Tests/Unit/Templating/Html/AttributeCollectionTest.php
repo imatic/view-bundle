@@ -2,8 +2,9 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\AttributeCollection;
+use PHPUnit\Framework\TestCase;
 
-class AttributeCollectionTest extends \PHPUnit_Framework_TestCase
+class AttributeCollectionTest extends TestCase
 {
     public function testConstructorSet()
     {
@@ -33,7 +34,7 @@ class AttributeCollectionTest extends \PHPUnit_Framework_TestCase
         $attributes = new AttributeCollection();
         $attributes->name = 'Andy';
 
-        $this->assertEquals(true, isset($attributes->name));
+        $this->assertTrue(isset($attributes->name));
     }
 
     public function testRemove()
@@ -41,10 +42,10 @@ class AttributeCollectionTest extends \PHPUnit_Framework_TestCase
         $attributes = new AttributeCollection();
         $attributes->name = 'Andy';
 
-        $this->assertEquals(true, isset($attributes->name));
+        $this->assertTrue(isset($attributes->name));
 
         unset($attributes->name);
 
-        $this->assertEquals(false, isset($attributes->name));
+        $this->assertFalse(isset($attributes->name));
     }
 }

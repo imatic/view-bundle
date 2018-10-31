@@ -2,8 +2,9 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
+use PHPUnit\Framework\TestCase;
 
-class StringUtilTest extends \PHPUnit_Framework_TestCase
+class StringUtilTest extends TestCase
 {
     public function testEscape()
     {
