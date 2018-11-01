@@ -1,3 +1,0 @@
-imatic_view_demo:
-    resource: "@ImaticViewBundle/Controller/Demo"
-    type:     annotation

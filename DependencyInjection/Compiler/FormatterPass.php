@@ -27,12 +27,6 @@ class FormatterPass implements CompilerPassInterface
                     throw new \RuntimeException(\sprintf('Invalid options for tag "imatic_view.formatter" on service "%s"', $id), 0, $e);
                 }
 
-                // process tag options
-                if (\is_bool($options['is_safe'])) {
-                    // BC with <= 3.0.7
-                    $options['is_safe'] = $options['is_safe'] ? 'html' : null;
-                }
-
                 // register formatter
                 $formatterDef->addMethodCall('addFormatter', [
                     $attributes['alias'],
@@ -56,7 +50,6 @@ class FormatterPass implements CompilerPassInterface
         $resolver->setAllowedTypes('is_safe', [
             'string',
             'NULL',
-            'bool', // BC with <= 3.0.7
         ]);
 
         return $resolver;
