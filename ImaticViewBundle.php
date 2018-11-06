@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle;
 
 use Imatic\Bundle\ViewBundle\DependencyInjection\Compiler\AddExpressionLanguageProvidersPass;

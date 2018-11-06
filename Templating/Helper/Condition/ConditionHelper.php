@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;

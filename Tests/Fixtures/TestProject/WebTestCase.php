@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject;
 
 use Imatic\Testing\Test\WebTestCase as BaseWebTestCase;

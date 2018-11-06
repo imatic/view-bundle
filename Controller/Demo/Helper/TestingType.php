@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Controller\Demo\Helper;
 
 use Imatic\Bundle\FormBundle\Form\Type\AjaxChoiceType;

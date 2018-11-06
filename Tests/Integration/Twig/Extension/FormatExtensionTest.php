@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Integration\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;

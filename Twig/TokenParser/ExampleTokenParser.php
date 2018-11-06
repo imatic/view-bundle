@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\TokenParser;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\ExampleNode;
