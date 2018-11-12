@@ -17,7 +17,7 @@ class StringUtilTest extends TestCase
     public function testSlugify()
     {
         // https://travis-ci.org/imatic/view-bundle/builds/451436649?utm_source=github_status&utm_medium=notification
-        $this->markTestSkipped("Does not work with Travis");
+        $this->markTestSkipped('Does not work with Travis');
 
         $this->assertEquals('lorem-ipsum', StringUtil::slugify('lorem ipsum'));
         $this->assertEquals('internationalization', StringUtil::slugify('Iñtërnâtiônàlizátión'));
