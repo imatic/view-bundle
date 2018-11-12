@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc0a09723749c6571025105cd4fefbae",
+    "content-hash": "80f735c17a8cf4ee200155ee1d21047e",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1787,16 +1787,16 @@
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
-            "version": "1.3.3",
+            "version": "1.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineCacheBundle.git",
-                "reference": "4c8e363f96427924e7e519c5b5119b4f54512697"
+                "reference": "5514c90d9fb595e1095e6d66ebb98ce9ef049927"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineCacheBundle/zipball/4c8e363f96427924e7e519c5b5119b4f54512697",
-                "reference": "4c8e363f96427924e7e519c5b5119b4f54512697",
+                "url": "https://api.github.com/repos/doctrine/DoctrineCacheBundle/zipball/5514c90d9fb595e1095e6d66ebb98ce9ef049927",
+                "reference": "5514c90d9fb595e1095e6d66ebb98ce9ef049927",
                 "shasum": ""
             },
             "require": {
@@ -1809,7 +1809,7 @@
                 "instaclick/coding-standard": "~1.1",
                 "instaclick/object-calisthenics-sniffs": "dev-master",
                 "instaclick/symfony2-coding-standard": "dev-remaster",
-                "phpunit/phpunit": "~4|~5",
+                "phpunit/phpunit": "~4.8.36|~5.6|~6.5|~7.0",
                 "predis/predis": "~0.8",
                 "satooshi/php-coveralls": "^1.0",
                 "squizlabs/php_codesniffer": "~1.5",
@@ -1833,7 +1833,10 @@
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Bundle\\DoctrineCacheBundle\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1866,12 +1869,12 @@
                 }
             ],
             "description": "Symfony Bundle for Doctrine Cache",
-            "homepage": "http://www.doctrine-project.org",
+            "homepage": "https://www.doctrine-project.org",
             "keywords": [
                 "cache",
                 "caching"
             ],
-            "time": "2018-03-27T09:22:12+00:00"
+            "time": "2018-11-09T06:25:35+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -2102,16 +2105,16 @@
         },
         {
             "name": "imatic/form-bundle",
-            "version": "dev-parklane",
+            "version": "v4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imatic/form-bundle.git",
-                "reference": "548c49d6cbdfd29d114fd5ec055f6e87429c5c27"
+                "reference": "eac215a99fe6ff525ecaf97fcfd6f5b7f41d60e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/548c49d6cbdfd29d114fd5ec055f6e87429c5c27",
-                "reference": "548c49d6cbdfd29d114fd5ec055f6e87429c5c27",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/eac215a99fe6ff525ecaf97fcfd6f5b7f41d60e8",
+                "reference": "eac215a99fe6ff525ecaf97fcfd6f5b7f41d60e8",
                 "shasum": ""
             },
             "require": {
@@ -2150,7 +2153,7 @@
                 }
             ],
             "description": "Bundle for working with Symfony forms",
-            "time": "2018-11-05T15:57:34+00:00"
+            "time": "2018-11-07T15:45:12+00:00"
         },
         {
             "name": "imatic/testing",
@@ -4085,9 +4088,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "imatic/form-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

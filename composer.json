@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",
-        "imatic/form-bundle": "dev-parklane",
+        "imatic/form-bundle": "^4.0",
         "imatic/testing": "^5.0",
         "phpdocumentor/reflection-docblock": "4.1.1 as 3.3.0",
         "phpmd/phpmd": "^2.6",
