@@ -1,13 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ConditionHelper
 {
+    /**
+     * @var Security
+     */
+    private $security;
+
     /**
      * @var ExpressionLanguage
      */
@@ -19,37 +22,15 @@ class ConditionHelper
     private $layoutHelper;
 
     /**
-     * @var TokenStorageInterface
+     * @param Security           $security
+     * @param LayoutHelper       $layoutHelper
+     * @param ExpressionLanguage $expressionLanguage
      */
-    private $tokenStorage;
-
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariables)
-     */
-    public function __construct(
-        TokenStorageInterface $tokenStorage,
-        AuthorizationCheckerInterface $authorizationChecker,
-        LayoutHelper $layoutHelper,
-        ExpressionLanguage $expressionLanguage = null
-    ) {
-        $this->expressionLanguage = $expressionLanguage ?: new ExpressionLanguage();
-        $this->authorizationChecker = $authorizationChecker;
-        $this->expressionLanguage->register(
-            'isGranted',
-            function ($str) {
-                throw new \Exception($str . ' function is not implemented');
-            },
-            function (array $values, $attributes, $object = null) {
-                return $this->authorizationChecker->isGranted($attributes, $object);
-            }
-        );
+    public function __construct(Security $security, LayoutHelper $layoutHelper, ExpressionLanguage $expressionLanguage)
+    {
+        $this->security = $security;
         $this->layoutHelper = $layoutHelper;
-        $this->tokenStorage = $tokenStorage;
+        $this->expressionLanguage = $expressionLanguage;
     }
 
     public function evaluate($expression, array $context = [])
@@ -62,10 +43,10 @@ class ConditionHelper
             return true;
         }
 
-        $context['user'] = null;
-        if ($this->tokenStorage->getToken()) {
-            $context['user'] = $this->tokenStorage->getToken()->getUser();
+        if (!isset($context['user'])) {
+            $context['user'] = $this->security->getUser();
         }
+
         $context['hasLayout'] = $this->layoutHelper->hasLayout();
 
         return $this->expressionLanguage->evaluate($expression, $context);

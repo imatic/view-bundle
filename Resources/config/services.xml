@@ -1,0 +1,178 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="imatic_view.menu.main.class">Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder</parameter>
+    </parameters>
+
+    <services>
+        <defaults public="false" />
+
+        <!-- Menu -->
+        <service id="Imatic\Bundle\ViewBundle\Menu\Factory">
+            <argument type="service" id="knp_menu.factory" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Menu\Helper">
+            <argument type="service" id="translator" />
+            <argument type="service" id="security.helper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Menu\ContainerProvider">
+            <tag name="knp_menu.provider" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Menu\Factory" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Menu\Helper" />
+        </service>
+
+        <service id="imatic_view.menu.main" class="%imatic_view.menu.main.class%" public="true">
+            <tag name="imatic_view.menu" alias="imatic.main" />
+            <tag name="imatic_view.menu" alias="imatic.main_side" method="getSideMenu" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Menu\ContainerProvider" />
+        </service>
+
+        <service id="imatic_view.menu.demo" class="Imatic\Bundle\ViewBundle\Menu\DemoMenuBuilder" public="true">
+            <tag name="imatic_view.menu" alias="imatic.demo" />
+            <tag name="imatic_view.menu" alias="imatic.demo_normal" method="getNormalMenu" />
+            <tag name="imatic_view.menu" alias="imatic.demo_sub" method="getSubMenu" />
+        </service>
+
+        <!-- Event listeners -->
+        <service id="Imatic\Bundle\ViewBundle\EventListener\KernelSubscriber">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper" />
+            <argument type="service" id="translator" />
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <!-- Expression Language -->
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguageProvider">
+            <tag name="imatic_view.expression_language_provider" />
+            <argument type="service" id="security.helper" />
+        </service>
+
+        <!-- Formators -->
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter">
+            <tag name="imatic_view.formatter" alias="time" />
+            <tag name="imatic_view.formatter" alias="date" />
+            <tag name="imatic_view.formatter" alias="datetime" />
+            <tag name="imatic_view.formatter" alias="number" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\CommonFormatter">
+            <tag name="imatic_view.formatter" alias="url" is_safe="html" />
+            <tag name="imatic_view.formatter" alias="phone" is_safe="html" />
+            <tag name="imatic_view.formatter" alias="email" is_safe="html" />
+            <tag name="imatic_view.formatter" alias="text" is_safe="html" />
+            <tag name="imatic_view.formatter" alias="html" is_safe="html" />
+            <tag name="imatic_view.formatter" alias="boolean" is_safe="html" />
+            <tag name="imatic_view.formatter" alias="filesize" />
+            <tag name="imatic_view.formatter" alias="translatable" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <!-- Templating Helpers -->
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguage" />
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper" />
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper" />
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper">
+            <argument type="service" id="request_stack" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper">
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper">
+            <argument type="service" id="security.helper" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguage" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper" />
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper" />
+
+        <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Resource\ResourceHelper">
+            <argument type="service" id="translator" />
+            <argument type="service" id="security.helper" />
+        </service>
+
+        <!-- Twig extensions -->
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\UrlExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\HtmlExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\ExampleExtension">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\LayoutExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\FormatExtension">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\ConditionExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\TypeExtension">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Extension\ResourceExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Resource\ResourceHelper" />
+        </service>
+
+        <!-- Twig loaders -->
+        <service id="Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader">
+            <tag name="twig.loader" />
+            <argument type="service" id="service_container" />
+        </service>
+
+        <!-- Twig runtime -->
+        <service id="Imatic\Bundle\ViewBundle\Twig\Runtime\FormatRuntime">
+            <tag name="twig.runtime" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper" />
+        </service>
+
+        <service id="Imatic\Bundle\ViewBundle\Twig\Runtime\MenuRuntime">
+            <tag name="twig.runtime" />
+            <argument type="service" id="Imatic\Bundle\ViewBundle\Menu\Factory" />
+            <argument type="service" id="knp_menu.renderer.twig" />
+        </service>
+    </services>
+</container>

@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper;
+use PHPUnit\Framework\TestCase;
 
-class UrlHelperTest extends \PHPUnit_Framework_TestCase
+class UrlHelperTest extends TestCase
 {
     private $testUrl = 'https://www.example.com/path/file.html?param1=value1&param2%5Bsub1%5D=valueSub1&param2%5Bsub2%5D=valueSub2';
 

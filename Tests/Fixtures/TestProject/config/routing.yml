@@ -7,10 +7,10 @@ _wdt:
     prefix:   /_wdt
 
 imatic_view_bundle:
-    resource: "@ImaticViewBundle/Resources/config/routing.yml"
+    resource: "@ImaticViewBundle/Resources/config/routing.xml"
 
 imatic_view_bundle_demo:
-    resource: "@ImaticViewBundle/Resources/config/routing_demo.yml"
+    resource: "@ImaticViewBundle/Resources/config/routing_demo.xml"
     prefix: /demo
 
 app_imatic_view_bundle:

@@ -9,7 +9,6 @@ addons:
 
 before_script:
     - phpenv config-rm xdebug.ini
-    - cp ./Tests/Fixtures/TestProject/config/parameters.yml.dist ./Tests/Fixtures/TestProject/config/parameters.yml
     - composer install
 
 script:

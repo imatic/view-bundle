@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Utils;
 
 class StringUtil
@@ -12,7 +12,7 @@ class StringUtil
      */
     public static function escape($string)
     {
-        return \htmlspecialchars($string, ENT_HTML5 | ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return \htmlspecialchars((string) $string, ENT_HTML5 | ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

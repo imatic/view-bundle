@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Templating\Utils;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Html\DataAttributeCollection;
+use PHPUnit\Framework\TestCase;
 
-class DataAttributeCollectionTest extends \PHPUnit_Framework_TestCase
+class DataAttributeCollectionTest extends TestCase
 {
     public function testConstructorSet()
     {

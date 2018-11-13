@@ -1,9 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\TokenParser;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\ExampleNode;
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Twig_Token;
 use Twig_TokenParser;
 
@@ -18,19 +16,6 @@ use Twig_TokenParser;
  */
 class ExampleTokenParser extends Twig_TokenParser
 {
-    /** @var TemplateNameParserInterface */
-    private $templatingNameParser;
-    /** @var FileLocatorInterface */
-    private $templatingLocator;
-
-    public function __construct(
-        TemplateNameParserInterface $templatingNameParser,
-        FileLocatorInterface $templatingLocator
-    ) {
-        $this->templatingNameParser = $templatingNameParser;
-        $this->templatingLocator = $templatingLocator;
-    }
-
     public function getTag()
     {
         return 'example';
@@ -59,13 +44,7 @@ class ExampleTokenParser extends Twig_TokenParser
      */
     private function parseRawBody($startLine)
     {
-        // fetch template source
-        $templatePath = $this->templatingLocator->locate(
-            $this->templatingNameParser->parse(
-                $this->parser->getStream()->getSourceContext()->getPath()
-            )
-         );
-        $templateSource = \file_get_contents($templatePath);
+        $templateSource = \file_get_contents($this->parser->getStream()->getSourceContext()->getPath());
 
         // parse tag contents
         \preg_match(
@@ -84,6 +63,7 @@ class ExampleTokenParser extends Twig_TokenParser
         if (isset($match[1])) {
             return $this->removeExtraIndentation($match[1]);
         }
+
         return '';
     }
 
@@ -122,6 +102,7 @@ class ExampleTokenParser extends Twig_TokenParser
 
             return $out;
         }
+
         return $string;
     }
 }

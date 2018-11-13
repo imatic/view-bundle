@@ -1,6 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\DependencyInjection;
 
+use Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter;
+use Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -18,11 +20,11 @@ class ImaticViewExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('services.xml');
 
         if (!empty($config['templates']['remote'])) {
-            $remoteLoaderDefinition = $container->getDefinition('imatic_view.twig.loader.remote');
+            $remoteLoaderDefinition = $container->getDefinition(RemoteLoader::class);
 
             foreach ($config['templates']['remote'] as $remoteTemplateName => $remoteTemplate) {
                 $remoteLoaderDefinition->addMethodCall('addTemplate', [
@@ -37,7 +39,7 @@ class ImaticViewExtension extends Extension
 
         if (!empty($config['formatters']['intl']['date_pattern_overrides'])) {
             $container
-                ->getDefinition('imatic_view.twig.extension.format.intl')
+                ->getDefinition(IntlFormatter::class)
                 ->addMethodCall('addDatePatternOverrides', [$config['formatters']['intl']['date_pattern_overrides']]);
         }
     }

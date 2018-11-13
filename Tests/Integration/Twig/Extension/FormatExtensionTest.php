@@ -1,16 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Integration\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;
 
 class FormatExtensionTest extends WebTestCase
 {
-    private $container;
-
     protected function setUp()
     {
-        parent::setUp();
-        $this->container = static::createClient()->getContainer();
+        static::createClient();
     }
 
     /**
@@ -43,6 +40,6 @@ class FormatExtensionTest extends WebTestCase
      */
     private function getTwig()
     {
-        return $this->container->get('twig');
+        return self::$container->get('twig');
     }
 }

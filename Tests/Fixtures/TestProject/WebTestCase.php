@@ -1,15 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject;
 
-use Imatic\Bundle\TestingBundle\Test\WebTestCase as BaseWebTestCase;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Imatic\Testing\Test\WebTestCase as BaseWebTestCase;
 
 class WebTestCase extends BaseWebTestCase
 {
-    protected static function initData(KernelInterface $kernel)
-    {
-    }
-
     /**
      * @return string
      */

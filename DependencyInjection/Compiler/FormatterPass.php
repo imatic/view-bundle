@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\DependencyInjection\Compiler;
 
+use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -11,11 +12,10 @@ class FormatterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $tag = 'imatic_view.formatter';
         $tagOptionsResolver = $this->getTagOptionsResolver();
-        $formatterDef = $container->findDefinition('imatic_view.templating.helper.format');
+        $formatterDef = $container->findDefinition(FormatHelper::class);
 
-        foreach ($container->findTaggedServiceIds($tag) as $id => $tagAttributes) {
+        foreach ($container->findTaggedServiceIds('imatic_view.formatter') as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 // resolve tag options
                 $options = $attributes;
@@ -24,13 +24,7 @@ class FormatterPass implements CompilerPassInterface
                 try {
                     $options = $tagOptionsResolver->resolve($options);
                 } catch (ExceptionInterface $e) {
-                    throw new \RuntimeException(\sprintf('Invalid options for tag "%s" on service "%s"', $tag, $id), 0, $e);
-                }
-
-                // process tag options
-                if (\is_bool($options['is_safe'])) {
-                    // BC with <= 3.0.7
-                    $options['is_safe'] = $options['is_safe'] ? 'html' : null;
+                    throw new \RuntimeException(\sprintf('Invalid options for tag "imatic_view.formatter" on service "%s"', $id), 0, $e);
                 }
 
                 // register formatter
@@ -56,7 +50,6 @@ class FormatterPass implements CompilerPassInterface
         $resolver->setAllowedTypes('is_safe', [
             'string',
             'NULL',
-            'bool', // BC with <= 3.0.7
         ]);
 
         return $resolver;

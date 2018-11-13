@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
 use DateTime;
@@ -49,7 +49,7 @@ class IntlFormatter implements FormatterInterface
 
     protected function formatDate($value, array $options)
     {
-        if (!$value instanceof DateTime) {
+        if (!$value instanceof \DateTimeInterface) {
             $value = new DateTime($value);
         }
 
@@ -59,17 +59,17 @@ class IntlFormatter implements FormatterInterface
         }
         // use intl
         return $this->intlDateTimeFormat(
-                $value,
-                isset($options['type']) ? $options['type'] : 'short',
-                'none',
-                isset($options['timezone']) ? $options['timezone'] : null,
-                isset($options['locale']) ? $options['locale'] : null
-            );
+            $value,
+            isset($options['type']) ? $options['type'] : 'short',
+            'none',
+            isset($options['timezone']) ? $options['timezone'] : null,
+            isset($options['locale']) ? $options['locale'] : null
+        );
     }
 
     protected function formatDateTime($value, array $options)
     {
-        if (!$value instanceof DateTime) {
+        if (!$value instanceof \DateTimeInterface) {
             $value = new DateTime($value);
         }
 
@@ -79,17 +79,17 @@ class IntlFormatter implements FormatterInterface
         }
         // use intl
         return $this->intlDateTimeFormat(
-                $value,
-                isset($options['date_type']) ? $options['date_type'] : 'short',
-                isset($options['time_type']) ? $options['time_type'] : 'short',
-                isset($options['timezone']) ? $options['timezone'] : null,
-                isset($options['locale']) ? $options['locale'] : null
-            );
+            $value,
+            isset($options['date_type']) ? $options['date_type'] : 'short',
+            isset($options['time_type']) ? $options['time_type'] : 'short',
+            isset($options['timezone']) ? $options['timezone'] : null,
+            isset($options['locale']) ? $options['locale'] : null
+        );
     }
 
     protected function formatTime($value, array $options)
     {
-        if (!$value instanceof DateTime) {
+        if (!$value instanceof \DateTimeInterface) {
             $value = new DateTime($value);
         }
 
@@ -99,12 +99,12 @@ class IntlFormatter implements FormatterInterface
         }
         // use intl
         return $this->intlDateTimeFormat(
-                $value,
-                'none',
-                isset($options['type']) ? $options['type'] : 'short',
-                isset($options['timezone']) ? $options['timezone'] : null,
-                isset($options['locale']) ? $options['locale'] : null
-            );
+            $value,
+            'none',
+            isset($options['type']) ? $options['type'] : 'short',
+            isset($options['timezone']) ? $options['timezone'] : null,
+            isset($options['locale']) ? $options['locale'] : null
+        );
     }
 
     protected function formatNumber($value, array $options)
@@ -130,9 +130,9 @@ class IntlFormatter implements FormatterInterface
         }
 
         $formatter = new NumberFormatter(
-                isset($options['locale']) ? $options['locale'] : Locale::getDefault(),
-                $type
-            );
+            isset($options['locale']) ? $options['locale'] : Locale::getDefault(),
+            $type
+        );
 
         if (NumberFormatter::PERCENT === $type) {
             $formatter->setAttribute(NumberFormatter::MULTIPLIER, isset($options['multiplier']) ? $options['multiplier'] : 1);
@@ -147,15 +147,15 @@ class IntlFormatter implements FormatterInterface
     }
 
     /**
-     * @param DateTime    $dateTime
-     * @param string      $dateType
-     * @param string      $timeType
-     * @param mixed       $timezone
+     * @param \DateTimeInterface $dateTime
+     * @param string $dateType
+     * @param string $timeType
+     * @param mixed $timezone
      * @param string|null $locale
      *
      * @return string|bool
      */
-    protected function intlDateTimeFormat(DateTime $dateTime, $dateType, $timeType, $timezone, $locale)
+    protected function intlDateTimeFormat(\DateTimeInterface $dateTime, $dateType, $timeType, $timezone, $locale)
     {
         if (!isset(static::$dateFormatTypes[$dateType])) {
             throw new \InvalidArgumentException(\sprintf('Invalid date type "%s", valid types are: %s', $dateType, \implode(', ', \array_keys(static::$dateFormatTypes))));

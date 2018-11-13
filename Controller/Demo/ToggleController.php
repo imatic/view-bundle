@@ -1,20 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Config\Route("/toggle")
+ * @Route("/toggle")
  */
 class ToggleController extends Controller
 {
     /**
-     * @Config\Route()
-     * @Config\Template()
+     * @Route("/")
      */
     public function indexAction()
     {
-        return [];
+        return $this->render('@ImaticView/Demo/Toggle/index.html.twig');
     }
 }

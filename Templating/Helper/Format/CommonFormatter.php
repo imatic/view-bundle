@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
@@ -76,20 +76,6 @@ class CommonFormatter implements FormatterInterface
             '<span title="%s" class="%s"></span>',
             StringUtil::escape($this->translator->trans($key, [], 'ImaticViewBundle')),
             $key
-        );
-    }
-
-    /**
-     * @deprecated use "url" formatter with "text" option instead
-     */
-    public function formatLink($value, array $options = [])
-    {
-        \trigger_error('The "link" format is deprecated since ImaticViewBundle 3.0.6. Use the "url" format with "text" option instead.', E_USER_DEPRECATED);
-
-        return \sprintf(
-            '<a href="%s">%s</a>',
-            StringUtil::escape($options['url']),
-            StringUtil::escape($options['name'])
         );
     }
 

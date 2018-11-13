@@ -29,9 +29,14 @@ Installation
 
 .. sourcecode:: yaml
 
-    # app/config/config.yml
-
+    # config/packages/imatic_view.yaml
     imatic_view:
+        formatters:
+            intl:
+                # overrides default formats (see Templating/Helper/Format/IntlFormatter.php)
+                date_pattern_overrides:
+                    cs.date.short: 'dd.MM.y'
+                    cs.datetime.short:short: 'dd.MM.y H:mm'
         templates:
             remote:
     #          example_remote_template:

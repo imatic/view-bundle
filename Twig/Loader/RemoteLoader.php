@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -217,6 +217,6 @@ class RemoteLoader implements Twig_LoaderInterface
 
     public function getSourceContext($name)
     {
-        return new \Twig_Source($this->getSource($name));
+        return new \Twig_Source($this->getSource($name), $name);
     }
 }

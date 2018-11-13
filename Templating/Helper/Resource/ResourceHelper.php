@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Resource;
 
 use Imatic\Bundle\ControllerBundle\Resource\Config\Resource;
 use Imatic\Bundle\ControllerBundle\Resource\Config\ResourceAction;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ResourceHelper
@@ -14,14 +14,18 @@ class ResourceHelper
     private $translator;
 
     /**
-     * @var AuthorizationCheckerInterface
+     * @var Security
      */
-    private $authorizationChecker;
+    private $security;
 
-    public function __construct(TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker)
+    /**
+     * @param TranslatorInterface $translator
+     * @param Security            $security
+     */
+    public function __construct(TranslatorInterface $translator, Security $security)
     {
         $this->translator = $translator;
-        $this->authorizationChecker = $authorizationChecker;
+        $this->security = $security;
     }
 
     public function createHeadline(Resource $resource, ResourceAction $action, $item = null)
@@ -110,7 +114,7 @@ class ResourceHelper
         return \array_filter($actions, function (array $action) {
             $expression = $this->createAuthorizationExpression($action);
             if ($expression) {
-                return $this->authorizationChecker->isGranted($expression);
+                return $this->security->isGranted($expression);
             }
 
             return true;

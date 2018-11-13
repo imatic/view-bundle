@@ -1,3 +1,0 @@
-imatic_view:
-    resource: "@ImaticViewBundle/Controller/DefaultController.php"
-    type:     annotation

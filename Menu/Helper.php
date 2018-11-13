@@ -1,10 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 use Knp\Menu\ItemInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -15,22 +14,14 @@ class Helper
      */
     protected $translator;
     /**
-     * @var AuthorizationCheckerInterface
+     * @var Security
      */
-    private $authorizationChecker;
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
+    private $security;
 
-    public function __construct(
-        TranslatorInterface $translator,
-        AuthorizationCheckerInterface $authorizationChecker = null,
-        TokenStorageInterface $tokenStorage = null
-    ) {
+    public function __construct(TranslatorInterface $translator, Security $security)
+    {
         $this->translator = $translator;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
+        $this->security = $security;
     }
 
     /**
@@ -120,9 +111,9 @@ class Helper
      *
      * @return string The translated string
      */
-    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
+    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null): string
     {
-        $this->transChoice($id, $number, $parameters, $domain, $locale);
+        return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
     }
 
     /**
@@ -135,7 +126,7 @@ class Helper
      *
      * @return string The translated string
      */
-    public function trans($id, array $parameters = [], $domain = null, $locale = null)
+    public function trans($id, array $parameters = [], $domain = null, $locale = null): string
     {
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
@@ -145,9 +136,9 @@ class Helper
      *
      * @return string The locale
      */
-    public function getLocale()
+    public function getLocale(): string
     {
-        $this->translator->getLocale();
+        return $this->translator->getLocale();
     }
 
     /**
@@ -155,44 +146,29 @@ class Helper
      *
      * @return bool
      */
-    public function isUserLogged()
+    public function isUserLogged(): bool
     {
-        $logged = false;
-        if ($this->tokenStorage && $this->tokenStorage->getToken()) {
-            $logged = $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED');
-        }
-
-        return $logged;
+        return $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
     }
 
     /**
      * @return null|UserInterface
      */
-    public function getUser()
+    public function getUser(): ?UserInterface
     {
-        $user = null;
-        if ($this->tokenStorage && $this->tokenStorage->getToken()) {
-            $user = $this->tokenStorage->getToken()->getUser();
-        }
-
-        return $user;
+        return $this->security->getUser();
     }
 
     /**
      * Checks if the attributes are granted against the current authentication token and optionally supplied object.
      *
-     * @param array $attributes
-     * @param mixed $object
+     * @param mixed $attributes
+     * @param mixed $subject
      *
      * @return bool
      */
-    public function isUserGranted($attributes, $object = null)
+    public function isUserGranted($attributes, $subject = null): bool
     {
-        $granted = false;
-        if ($this->tokenStorage && $this->tokenStorage->getToken()) {
-            $granted = $this->authorizationChecker->isGranted($attributes, $object);
-        }
-
-        return $granted;
+        return $this->security->isGranted($attributes, $subject);
     }
 }

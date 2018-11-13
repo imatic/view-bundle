@@ -1,9 +1,9 @@
 {
     "name": "imatic/view-bundle",
-    "type": "symfony-bundle",
+    "type": "library",
     "description": "Bundle with predefined UI components",
     "keywords": [],
-    "homepage": "http://imatic.cz",
+    "homepage": "https://www.imatic.cz",
     "license": "MIT",
     "authors": [
         {
@@ -12,28 +12,30 @@
         },
         {
             "name": "Imatic Software s.r.o.",
-            "homepage": "http://imatic.cz/"
+            "homepage": "https://www.imatic.cz"
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "symfony/framework-bundle": "^3.3",
-        "sensio/framework-extra-bundle": "^3.0.28",
-        "knplabs/knp-menu-bundle": "^2.1.1",
-        "twig/twig": "^2.4.4"
+        "php": "^7.1",
+        "knplabs/knp-menu-bundle": "^2.2",
+        "symfony/framework-bundle": "^3.4|^4.0",
+        "twig/twig": "^2.4"
     },
     "require-dev": {
-        "imatic/form-bundle": "^3.0.12",
         "friendsofphp/php-cs-fixer": "^2.7",
-        "phpmd/phpmd": "^2.6",
+        "imatic/form-bundle": "^4.0",
+        "imatic/testing": "^5.0",
         "phpdocumentor/reflection-docblock": "4.1.1 as 3.3.0",
-        "mamuz/php-dependency-analysis": "^1.3.1",
-        "imatic/testing": "^3.0"
+        "phpmd/phpmd": "^2.6",
+        "symfony/phpunit-bridge": "^4.1"
     },
     "autoload": {
         "psr-4": {
             "Imatic\\Bundle\\ViewBundle\\": ""
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true

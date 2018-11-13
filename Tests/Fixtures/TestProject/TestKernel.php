@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject;
 
-use Imatic\Bundle\TestingBundle\Test\TestKernel as BaseTestKernel;
+use Imatic\Testing\Test\TestKernel as BaseTestKernel;
 
 class TestKernel extends BaseTestKernel
 {
@@ -12,7 +12,6 @@ class TestKernel extends BaseTestKernel
         $bundles = [
             new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle(),
             new \Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Imatic\Bundle\FormBundle\ImaticFormBundle(),
             new \Imatic\Bundle\ViewBundle\ImaticViewBundle(),
             new \Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\ImaticViewBundle\AppImaticViewBundle(),

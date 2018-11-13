@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 
 .PHONY: test
-test: phpunit phpmd phpcs phpda
+test: phpunit phpmd phpcs
 
 .PHONY: phpcs
 phpcs:
@@ -19,10 +19,6 @@ phpmd:
 phpunit:
 	LC_ALL='C.UTF-8' ./vendor/bin/phpunit
 
-.PHONY: phpda
-phpda:
-	./vendor/bin/phpda analyze phpda.yml
-
 composer:
 	$(if $(shell which composer 2> /dev/null),\
         ln --symbolic $$(which composer) composer,\
@@ -37,4 +33,3 @@ update-test: | composer
 configure-pipelines:
 	apt-get update
 	apt-get install --yes git graphviz
-	cp ./Tests/Fixtures/TestProject/config/parameters.yml.dist ./Tests/Fixtures/TestProject/config/parameters.yml

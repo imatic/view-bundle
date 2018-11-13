@@ -1,3 +1,0 @@
-parameters:
-    application.name: ViewBundle
-    node.bin: node

@@ -1,5 +1,8 @@
-imports:
-    - { resource: parameters.yml }
+parameters:
+    env(TESTING_DATA_INIT): '0'
+
+    application.name: ViewBundle
+    testing.data_init: '%env(TESTING_DATA_INIT)%'
 
 framework:
     secret:                     test
@@ -31,7 +34,7 @@ doctrine:
     dbal:
         connections:
             default:
-                wrapper_class: "Imatic\\Bundle\\TestingBundle\\Doctrine\\DBAL\\PersistedConnection"
+                wrapper_class: "Imatic\\Testing\\Doctrine\\DBAL\\PersistedConnection"
                 driver:         pdo_sqlite
                 memory:         false
                 path:           "%kernel.root_dir%/cache/test.db"
