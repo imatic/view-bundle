@@ -1,6 +1,8 @@
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
 // === Mixins ===
-.header-font {
-    font-family: Dosis, @font-family-sans-serif;
+@mixin header-font() {
+    font-family: Dosis, $font-family-sans-serif;
     font-weight: normal;
     text-transform: uppercase;
 }
@@ -12,37 +14,37 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-    .header-font();
+    @include header-font();
 }
 
 legend {
-    .header-font();
-    font-size: @font-size-h4;
+    @include header-font();
+    font-size: $font-size-h4;
 }
 
 .navbar, .nav {
-    .header-font();
+    @include header-font();
 }
 
 .container.error {
-    .text-center;
+    text-align: center;
     margin-top: 1em;
 }
 
 header .navbar {
     margin-bottom: 0;
-    #gradient > .vertical(lighten(@gray-dark, 10%), @gray-dark);
+    @include gradient-vertical(lighten($gray-dark, 10%), $gray-dark);
 }
 
 footer {
-    margin-top: @line-height-computed;
+    margin-top: $line-height-computed;
 
     .footer-content {
         padding-left:15px;
         padding-right:15px;
-        border-top: 1px solid darken(@gray-lighter, 10%);
-        #gradient > .vertical(@gray-lighter, darken(@gray-lighter, 10%));
-        .header-font();
+        border-top: 1px solid darken($gray-lighter, 10%);
+        @include gradient-vertical($gray-lighter, darken($gray-lighter, 10%));
+        @include header-font();
     }
 
     &.container-fluid {
@@ -55,8 +57,8 @@ footer {
 .headline {
     margin-bottom: 20px;
     padding: 15px 0 10px 0;
-    border-bottom: 1px solid darken(@gray-lighter, 10%);
-    #gradient > .vertical(darken(@gray-lighter, 10%), @gray-lighter);
+    border-bottom: 1px solid darken($gray-lighter, 10%);
+    @include gradient-vertical(darken($gray-lighter, 10%), $gray-lighter);
 }
 
 .headline .breadcrumb {
@@ -76,16 +78,16 @@ footer {
 .headline .headline-side {
     text-align: right;
 
-    @media screen and (max-width: @screen-xs-max) {
+    @media screen and (max-width: $screen-xs-max) {
         text-align: left;
     }
 }
 
 .footer-content {
     padding: 10px;
-    border-top: 1px solid darken(@gray-lighter, 10%);
-    #gradient > .vertical(@gray-lighter, darken(@gray-lighter, 10%));
-    .header-font()
+    border-top: 1px solid darken($gray-lighter, 10%);
+    @include gradient-vertical($gray-lighter, darken($gray-lighter, 10%));
+    @include header-font();
 }
 
 // === Dropdowns ===
@@ -95,16 +97,31 @@ footer {
     min-width: 100%;
     text-align: left;
 
-    &:extend(.dropdown-menu > li > a);
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: $line-height-base;
+    color: $dropdown-link-color;
+    white-space: nowrap; // prevent links from randomly breaking onto new lines
 
     &:hover,
     &:focus {
-        &:extend(.dropdown-menu > li > a:hover);
+        text-decoration: none;
+        color: $dropdown-link-hover-color;
+        background-color: $dropdown-link-hover-bg;
     }
 }
 
 .dropdown-menu > .active > input[type=submit] {
-    &:extend(.dropdown-menu > .active > a);
+    &,
+    &:hover,
+    &:focus {
+        color: $dropdown-link-active-color;
+        text-decoration: none;
+        outline: 0;
+        background-color: $dropdown-link-active-bg;
+    }
 }
 
 // === Tables ===
@@ -114,39 +131,39 @@ table.table-auto {
 
 // === Classes ===
 .yes {
-    .glyphicon;
-    .glyphicon-ok;
-    .text-success;
+    @extend .glyphicon;
+    @extend .glyphicon-ok;
+    @extend .text-success;
 }
 
 .no {
-    .glyphicon;
-    .glyphicon-remove;
-    .text-danger;
+    @extend .glyphicon;
+    @extend .glyphicon-remove;
+    @extend .text-danger;
 }
 
 // === Components ===
 .imatic-view-table {
     table {
         th {
-            .text-center;
+            text-align: center;
         }
         td.batch-selector, th.batch-selector-switch {
-            .text-center;
+            text-align: center;
         }
         td, th {
             vertical-align: middle !important;
 
             &.text {
-                .text-left;
+                text-align: left;
             }
             &.number, &.money, &.date, &.datetime {
-                .text-right;
+                text-align: right;
             }
             &.boolean, &.actions {
-                .text-center;
+                text-align: left;
                 * {
-                    .text-left;
+                    text-align: right;
                 }
             }
         }
@@ -170,13 +187,13 @@ table.table-auto {
     .table-exports {
         text-align: right;
 
-        @media screen and (max-width: @screen-xs-max) {
+        @media screen and (max-width: $screen-xs-max) {
             text-align: left;
         }
     }
 
     .table-footer > div {
-        margin-bottom: @padding-base-vertical;
+        margin-bottom: $padding-base-vertical;
     }
 }
 
@@ -189,8 +206,8 @@ table.table-auto {
 }
 
 .imatic-view-filter {
-    padding-top: @padding-base-vertical;
-    padding-bottom: @padding-base-vertical;
+    padding-top: $padding-base-vertical;
+    padding-bottom: $padding-base-vertical;
 }
 
 .imatic-view-filter legend {
@@ -202,11 +219,11 @@ table.table-auto {
 }
 
 .panel-app {
-    .panel-variant(@panel-default-border; @white; @gray-dark; @orange);
+    @include panel-variant($panel-default-border, $white, $gray-dark, $orange);
 
     .panel-heading {
         border-width: 2px;
-        #gradient > .vertical(lighten(@gray-dark, 10%), @gray-dark);
+        @include gradient-vertical(lighten($gray-dark, 10%), $gray-dark);
 
         h1 {
             margin: 0;
@@ -218,20 +235,20 @@ table.table-auto {
 // === Modals ===
 .modal.debug-exception {
     .modal-content {
-        border: 3px solid fade(@brand-danger, 80%);
+        border: 3px solid fade($brand-danger, 80%);
     }
     .modal-body {
         overflow-x: auto;
     }
     .modal-title {
-        color: @brand-danger;
+        color: $brand-danger;
     }
 }
 
 @media (min-width: 768px) {
     .modal-dialog.modal-max {
         width: 90%; /* fallback */
-        width: ~"calc(100% - 60px) !important";
+        width: calc(100% - 60px) !important;
     }
 }
 
@@ -252,28 +269,10 @@ table.table-auto {
 
 // === Alerts ===
 .alert-error {
-    .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);
+    @include alert-variant($alert-danger-bg, $alert-danger-border, $alert-danger-text);
 }
 
 // Disable border radius for select
 select {
     -webkit-appearance: none;
 }
-
-// === Variables ===
-@orange: #f89406;
-@white: #fff;
-@font-size-base: 13px;
-
-@border-radius-base: 0;
-@border-radius-large: 0;
-@border-radius-small: 0;
-
-@link-color: #08c;
-@link-hover-color: darken(@link-color, 15%);
-
-@navbar-inverse-border: @orange;
-@navbar-inverse-bg: @gray-dark;
-@navbar-inverse-link-active-bg: @gray-dark;
-@navbar-inverse-link-color: @white;
-@navbar-inverse-link-hover-color: @orange;

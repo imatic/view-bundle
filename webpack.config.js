@@ -58,8 +58,8 @@ module.exports = function configure(env, opts) {
          * Entries for platform and demo ...
          */
         entry: {
-            platform: ['./Resources/assets/platform.less', './Resources/assets/platform'],
-            demo: ['./Resources/assets/platform.less', './Resources/assets/demo']
+            platform: ['./Resources/assets/platform.scss', './Resources/assets/platform'],
+            demo: ['./Resources/assets/platform.scss', './Resources/assets/demo']
         },
 
         /*
@@ -126,6 +126,40 @@ module.exports = function configure(env, opts) {
                                 options: postcssOptions
                             },
                             'less-loader'
+                        ]
+                    })
+                },
+
+                /*
+                 * Sass compilation.
+                 *
+                 * Same rules as for css loader apply.
+                 */
+                {
+                    test: /\.s[ca]ss$/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: [
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    minimize: !!env.prod,
+                                    sourceMaps: !env.prod,
+                                    importLoaders: 3,
+                                }
+                            },
+                            {
+                                loader: 'postcss-loader',
+                                options: postcssOptions
+                            },
+                            'resolve-url-loader',
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    sourceMap: true,
+                                    sourceMapContents: false
+                                }
+                            }
                         ]
                     })
                 },

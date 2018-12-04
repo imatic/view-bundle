@@ -1,0 +1,43 @@
+// LESS variables are resolved only when webpack require .less files at once.
+
+$icon-font-path: '../../fonts/bootstrap/';
+
+// === Variables ===
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+$orange: #f89406;
+$white: #fff;
+$font-size-base: 13px;
+
+$border-radius-base: 0;
+$border-radius-large: 0;
+$border-radius-small: 0;
+
+$link-color: #08c;
+$link-hover-color: darken($link-color, 15%);
+
+$navbar-inverse-border: $orange;
+$navbar-inverse-bg: $gray-dark;
+$navbar-inverse-link-active-bg: $gray-dark;
+$navbar-inverse-link-color: $white;
+$navbar-inverse-link-hover-color: $orange;
+
+// Bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Bootstrap datetime picker
+@import "~eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss";
+
+// Select2
+@import "~select2/dist/css/select2.css";
+@import "~select2-bootstrap-theme/src/select2-bootstrap.scss";
+
+// Platform
+@import "styles/style.scss";
+@import "styles/components/ajaxify.css";
+
+// Form bundle
+//@import "~imatic/form-bundle/Resources/public/less/forms.less";
+
+// Animate.css
+@import "~animate.css";
