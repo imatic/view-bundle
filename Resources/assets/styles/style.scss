@@ -1,4 +1,6 @@
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "~bootstrap/scss/mixins";
+@import "~font-awesome/scss/mixins";
+@import "~font-awesome/scss/variables";
 
 // === Mixins ===
 @mixin header-font() {
@@ -19,7 +21,7 @@ h1, h2, h3, h4, h5, h6 {
 
 legend {
     @include header-font();
-    font-size: $font-size-h4;
+    font-size: $h4-font-size;
 }
 
 .navbar, .nav {
@@ -33,17 +35,17 @@ legend {
 
 header .navbar {
     margin-bottom: 0;
-    @include gradient-vertical(lighten($gray-dark, 10%), $gray-dark);
+    @include gradient-y(lighten(theme-color('dark'), 10%), theme-color('dark'));
 }
 
 footer {
-    margin-top: $line-height-computed;
+    margin-top: $font-size-base * $line-height-base;
 
     .footer-content {
         padding-left:15px;
         padding-right:15px;
-        border-top: 1px solid darken($gray-lighter, 10%);
-        @include gradient-vertical($gray-lighter, darken($gray-lighter, 10%));
+        border-top: 1px solid darken($gray-200, 10%);
+        @include gradient-y($gray-200, darken($gray-200, 10%));
         @include header-font();
     }
 
@@ -57,8 +59,8 @@ footer {
 .headline {
     margin-bottom: 20px;
     padding: 15px 0 10px 0;
-    border-bottom: 1px solid darken($gray-lighter, 10%);
-    @include gradient-vertical(darken($gray-lighter, 10%), $gray-lighter);
+    border-bottom: 1px solid darken($gray-200, 10%);
+    @include gradient-y(darken($gray-200, 10%), $gray-200);
 }
 
 .headline .breadcrumb {
@@ -78,15 +80,15 @@ footer {
 .headline .headline-side {
     text-align: right;
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media screen and (max-width: breakpoint-max('xs')) {
         text-align: left;
     }
 }
 
 .footer-content {
     padding: 10px;
-    border-top: 1px solid darken($gray-lighter, 10%);
-    @include gradient-vertical($gray-lighter, darken($gray-lighter, 10%));
+    border-top: 1px solid darken($gray-200, 10%);
+    @include gradient-y($gray-200, darken($gray-200, 10%));
     @include header-font();
 }
 
@@ -131,14 +133,14 @@ table.table-auto {
 
 // === Classes ===
 .yes {
-    @extend .glyphicon;
-    @extend .glyphicon-ok;
+    @include fa-icon();
+    content: $fa-var-check;
     @extend .text-success;
 }
 
 .no {
-    @extend .glyphicon;
-    @extend .glyphicon-remove;
+    @include fa-icon();
+    content: $fa-var-times;
     @extend .text-danger;
 }
 
@@ -187,13 +189,13 @@ table.table-auto {
     .table-exports {
         text-align: right;
 
-        @media screen and (max-width: $screen-xs-max) {
+        @media screen and (max-width: breakpoint-max('xs')) {
             text-align: left;
         }
     }
 
     .table-footer > div {
-        margin-bottom: $padding-base-vertical;
+        margin-bottom: spacer(2);
     }
 }
 
@@ -206,8 +208,8 @@ table.table-auto {
 }
 
 .imatic-view-filter {
-    padding-top: $padding-base-vertical;
-    padding-bottom: $padding-base-vertical;
+    padding-top: spacer(2);
+    padding-bottom: spacer(2);
 }
 
 .imatic-view-filter legend {
@@ -218,30 +220,31 @@ table.table-auto {
     display: none;
 }
 
-.panel-app {
-    @include panel-variant($panel-default-border, $white, $gray-dark, $orange);
-
-    .panel-heading {
-        border-width: 2px;
-        @include gradient-vertical(lighten($gray-dark, 10%), $gray-dark);
-
-        h1 {
-            margin: 0;
-            padding: 0;
-        }
-    }
-}
+// UNKNOWN EQUIVALENTS
+//.panel-app {
+//    @include panel-variant($panel-default-border, $white, theme-color('dark'), $orange);
+//
+//    .panel-heading {
+//        border-width: 2px;
+//        @include gradient-y(lighten(theme-color('dark'), 10%), theme-color('dark'));
+//
+//        h1 {
+//            margin: 0;
+//            padding: 0;
+//        }
+//    }
+//}
 
 // === Modals ===
 .modal.debug-exception {
     .modal-content {
-        border: 3px solid fade($brand-danger, 80%);
+        border: 3px solid fade(theme-color('danger'), 80%);
     }
     .modal-body {
         overflow-x: auto;
     }
     .modal-title {
-        color: $brand-danger;
+        color: theme-color('danger');
     }
 }
 
@@ -269,7 +272,7 @@ table.table-auto {
 
 // === Alerts ===
 .alert-error {
-    @include alert-variant($alert-danger-bg, $alert-danger-border, $alert-danger-text);
+    @include alert-variant(theme-color-level('danger', $alert-bg-level), theme-color-level('danger', $alert-border-level), theme-color-level('danger', $alert-color-level));
 }
 
 // Disable border radius for select

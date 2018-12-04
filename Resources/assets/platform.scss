@@ -1,36 +1,43 @@
-// LESS variables are resolved only when webpack require .less files at once.
-
-$icon-font-path: '../../fonts/bootstrap/';
-
 // === Variables ===
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~font-awesome/scss/font-awesome";
 
 $orange: #f89406;
 $white: #fff;
-$font-size-base: 13px;
+$font-size-base: 13rem / 16;
 
-$border-radius-base: 0;
-$border-radius-large: 0;
-$border-radius-small: 0;
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
 
 $link-color: #08c;
 $link-hover-color: darken($link-color, 15%);
 
+// UNKNOWN EQUIVALENTS
 $navbar-inverse-border: $orange;
-$navbar-inverse-bg: $gray-dark;
-$navbar-inverse-link-active-bg: $gray-dark;
+$navbar-inverse-bg: theme-color('dark');
+$navbar-inverse-link-active-bg: theme-color('dark');
 $navbar-inverse-link-color: $white;
 $navbar-inverse-link-hover-color: $orange;
 
 // Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 // Bootstrap datetime picker
+$bs-datetimepicker-border-radius: $border-radius;
+$bs-datetimepicker-active-bg: theme-color('primary');
+$bs-datetimepicker-active-color: color-yiq(theme-color('primary'));
+$bs-datetimepicker-btn-hover-bg: $gray-500;
+$bs-datetimepicker-disabled-color: theme-color('light');
+$bs-datetimepicker-alternate-color: theme-color('light');
+$screen-sm-min: breakpoint-min('sm');
+$screen-md-min: breakpoint-min('md');
+$screen-lg-min: breakpoint-min('lg');
 @import "~eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss";
 
 // Select2
-@import "~select2/dist/css/select2.css";
-@import "~select2-bootstrap-theme/src/select2-bootstrap.scss";
+@import "./styles/util/select2-bootstrap";
 
 // Platform
 @import "styles/style.scss";
