@@ -104,33 +104,6 @@ module.exports = function configure(env, opts) {
                 },
 
                 /*
-                 * Less compilation.
-                 *
-                 * Same rules as for css loader apply.
-                 */
-                {
-                    test: /\.less$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    minimize: !!env.prod,
-                                    sourceMaps: !env.prod,
-                                    importLoaders: 2,
-                                }
-                            },
-                            {
-                                loader: 'postcss-loader',
-                                options: postcssOptions
-                            },
-                            'less-loader'
-                        ]
-                    })
-                },
-
-                /*
                  * Sass compilation.
                  *
                  * Same rules as for css loader apply.
