@@ -69,9 +69,9 @@ security:
         main:
             provider:           in_memory
             context:            user
-            pattern:            /admin/(.*)
+            pattern:            /demo/(.*)
             http_basic:
             anonymous:          false
 
     access_control:
-        - { path: ^/admin, role: [ROLE_ADMIN] }
+        - { path: ^/demo, role: [ROLE_ADMIN] }

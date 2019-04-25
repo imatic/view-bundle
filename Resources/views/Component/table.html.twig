@@ -32,8 +32,7 @@
             <form action="{{ uri }}" method="post">
         {% endif %}
 
-        {% if responsive %}<div class="table-responsive">{% endif %}
-        {% block table_tag %}<table class="table">{% endblock %}
+        {% block table_tag %}<table class="table{% if responsive %} table-responsive{% endif %}">{% endblock %}
             <caption></caption>
             {% block table_head %}
                 <thead>
@@ -100,7 +99,6 @@
                 </tbody>
             {% endblock %}
         </table>
-        {% if responsive %}</div>{% endif %}
 
         <div class="row table-footer">
             {% set table_batch_actions -%}

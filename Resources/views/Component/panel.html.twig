@@ -4,24 +4,24 @@
 #}
 
 {% block panel %}
-    <div class="panel panel-{{ panel.type|default('default') }}">
+    <div class="card{% if panel.type is defined %} bg-{{ panel.type }}{% endif %}">
         {% set panel_header = block('panel_header') is defined ? block('panel_header') : null  %}
         {% set panel_title = block('panel_title') is defined ? block('panel_title') : null %}
         {% if panel_header is not empty or panel_title is not empty %}
-            <div class="panel-heading">
+            <div class="card-header">
                 {% if panel_title is not empty %}
-                    <h3 class="panel-title">{{ panel_title | raw }}</h3>
+                    <h3 class="card-title">{{ panel_title | raw }}</h3>
                 {% else %}
                     {{ panel_header | raw }}
                 {% endif %}
             </div>
         {% endif %}
-        <div class="panel-body">
+        <div class="card-body">
             {% block panel_body %}{% endblock %}
         </div>
         {% set panel_footer = block('panel_footer') is defined ? block('panel_footer') : null %}
         {% if panel_footer is not empty %}
-            <div class="panel-footer">
+            <div class="card-footer">
                 {{ panel_footer | raw }}
             </div>
         {% endif %}

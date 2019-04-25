@@ -1,7 +1,7 @@
 {% macro navbar(menu, options, renderer, config) %}
     {%- import _self as this -%}
 
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-light">
         <div class="container">
             {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
         </div>
@@ -43,11 +43,13 @@
         {% endif %}
         {% set options = options|default([])|merge(
         {
-        'currentClass': 'active',
-        'currentAsLink': true,
-        'allow_safe_labels': true,
-        'template': 'ImaticViewBundle:Component:knp_menu.html.twig',
-        'menu_class': children_class}
+            'currentClass': 'active',
+            'currentAsLink': true,
+            'allow_safe_labels': true,
+            'template': 'ImaticViewBundle:Component:knp_menu.html.twig',
+            'menu_class': children_class,
+            'leaf_class': 'nav-item'
+        }
         ) %}
         {% if menu is iterable %}
             {{ imatic_view_menu_render_array(menu, options) }}

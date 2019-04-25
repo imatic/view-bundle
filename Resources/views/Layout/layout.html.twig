@@ -42,35 +42,22 @@
     {% block header_full %}
         <header>
             {% block header %}
-                <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button"
-                                    class="navbar-toggle"
-                                    data-toggle="collapse"
-                                    data-target=".navbar-collapse">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            {% block header_logo %}
-                                <a class="navbar-brand" href="{{ path('homepage') }}">
-                                    {% block header_brand %}{{ block('application_name') }}{% endblock %}
-                                </a>
-                            {% endblock %}
-                        </div>
-
-                        <div class="collapse navbar-collapse">
-                            <div class="nav-collapse">
-                                {% block header_menu %}
-                                    {{ menu.menu('imatic.main') }}
-                                    {{ menu.menu('imatic.main_side', null, null, { 'class': 'navbar-right' }) }}
-                                {% endblock %}
-                            </div>
-                        </div>
+                <nav class="navbar navbar-dark bg-dark fixed-top">
+                    {% block header_logo %}
+                        <a class="navbar-brand" href="{{ path('homepage') }}">
+                            {% block header_brand %}{{ block('application_name') }}{% endblock %}
+                        </a>
+                    {% endblock %}
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        {% block header_menu %}
+                            {{ menu.menu('imatic.main') }}
+                            {{ menu.menu('imatic.main_side', null, null, { 'class': 'navbar-right' }) }}
+                        {% endblock %}
                     </div>
-                </div>
+                </nav>
             {% endblock %}
 
             <div class="headline">

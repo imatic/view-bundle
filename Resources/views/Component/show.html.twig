@@ -12,7 +12,7 @@
 
         {% block title %}<h2>{{ item }}</h2>{% endblock %}
 
-        {% block table_tag %}<table class="table table-condensed">{% endblock %}
+        {% block table_tag %}<table class="table table-sm">{% endblock %}
             {% for field in fields %}
                 <tr class="{{ field.format }} {{ field.class }}">
                     <th>{{ field.label|trans({}, show.translationDomain) }}</th>

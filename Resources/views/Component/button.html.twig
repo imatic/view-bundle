@@ -21,7 +21,8 @@
 {% endspaceless %}{% endmacro %}
 
 {% macro _button(element, action) %}{% spaceless %}
-    {% do element.classes.add('btn btn-' ~ action.type | default('default')) %}
+    {% set type = action.type | default('default') %}
+    {% do element.classes.add('btn btn-' ~ (type == 'default' ? 'secondary' : type)) %}
     {{ element|raw }}
 {% endspaceless %}{% endmacro %}
 
@@ -30,7 +31,8 @@
     {% set nested -%}
         {% for nested in action.nested -%}
             {% if imatic_view_condition_evaluate(nested.condition|default(''), context|default({})) %}
-                <li>{{ this.action(nested, context) }}</li>
+                {% do nested.set('attrs', { class: 'dropdown-item' }) %}
+                {{ this.action(nested, context) }}
             {% endif %}
         {%- endfor %}
     {%- endset %}
@@ -44,32 +46,36 @@
         {% if element.value is not empty %}
             {{ this._button(element, action) }}
         {% endif %}
+        {% set type = action.type | default('default') %}
         {% if hasNested %}
             <button type="button"
-                    class="btn btn-{{ action.type | default('default') }} dropdown-toggle"
-                    data-toggle="dropdown">
+                    class="btn btn-{{ (type == 'default' ? 'secondary' : type) }} dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+            >
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
         {% endif %}
     {% elseif hasNested %}
-        {% do element.setValue(action.label ~ ' <span class="caret"></span>') %}
+        {% do element.setValue(action.label) %}
         {% do element.data.set('toggle', 'dropdown') %}
         {% do element.classes.add('dropdown-toggle') %}
         {{ this._button(element, action) }}
     {% endif %}
 
     {% if hasNested %}
-        <ul class="dropdown-menu" role="menu">
+        <div class="dropdown-menu">
             {{ nested }}
-        </ul>
+        </div>
         </div>
     {% endif %}
 {% endmacro %}
 
 {% macro group(buttons, context) %}{% spaceless %}
     {%- import _self as this -%}
-    <div class="btn-group">
+    <div class="btn-group mr-1" role="group">
         {% for button in buttons %}
             {{ this.button(button, context) }}
         {% endfor %}
