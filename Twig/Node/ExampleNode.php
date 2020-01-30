@@ -2,28 +2,28 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Node;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
-use Twig_Compiler;
-use Twig_Node;
+use Twig\Compiler;
+use Twig\Node\Node;
 
 /**
  * Represents an example node.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-class ExampleNode extends Twig_Node
+class ExampleNode extends Node
 {
     /**
-     * @param Twig_Node $body
+     * @param Node $body
      * @param string             $rawBody
      * @param int                $lineno
      * @param string             $tag
      */
-    public function __construct(Twig_Node $body, $rawBody, $lineno, $tag = 'example')
+    public function __construct(Node $body, $rawBody, $lineno, $tag = 'example')
     {
         parent::__construct(['body' => $body], ['raw_body' => $rawBody], $lineno, $tag);
     }
 
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler
             ->addDebugInfo($this)
