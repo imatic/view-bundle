@@ -19,4 +19,9 @@ class TestKernel extends BaseTestKernel
 
         return \array_merge($parentBundles, $bundles);
     }
+
+    public function getProjectDir()
+    {
+        return __DIR__;
+    }
 }

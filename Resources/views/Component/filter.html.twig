@@ -4,7 +4,7 @@
     - display_criteria or filter
 #}
 {% block filter %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set uri = uri|default(app.request.uri) %}
         {% set uri = imatic_view_update_filter_url(uri, component_id|default(none)) %}
         {% if filter is not defined and display_criteria is defined %}
@@ -26,7 +26,7 @@
                     <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
                     <div id="{{ filter_content_id }}" class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
-                        {% for field in form if field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter'] %}
+                        {% for field in form|filter(field => field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter']) %}
                         {% set field_has_error = field.value.vars.errors is not empty %}
                             <div class="form-group row">
                                 <div class="col-md-2">
@@ -72,5 +72,5 @@
                 </fieldset>
             </div>
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

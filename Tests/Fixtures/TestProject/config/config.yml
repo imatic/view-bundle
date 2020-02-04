@@ -17,7 +17,7 @@ framework:
     translator:
         enabled:                true
     router:
-        resource:               "%kernel.root_dir%/config/routing.yml"
+        resource:               "%kernel.project_dir%/config/routing.yml"
     templating:
         engines:                [twig]
     default_locale:             cs_CZ
@@ -37,7 +37,7 @@ doctrine:
                 wrapper_class: "Imatic\\Testing\\Doctrine\\DBAL\\PersistedConnection"
                 driver:         pdo_sqlite
                 memory:         false
-                path:           "%kernel.root_dir%/cache/test.db"
+                path:           "%kernel.project_dir%/var/cache/test.db"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

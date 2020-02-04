@@ -2,9 +2,10 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper;
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ConditionExtension extends Twig_Extension
+class ConditionExtension extends AbstractExtension
 {
     /**
      * @var ConditionHelper
@@ -19,7 +20,7 @@ class ConditionExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_Function('imatic_view_condition_evaluate', [$this->conditionHelper, 'evaluate']),
+            new TwigFunction('imatic_view_condition_evaluate', [$this->conditionHelper, 'evaluate']),
         ];
     }
 }

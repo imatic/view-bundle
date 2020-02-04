@@ -20,11 +20,11 @@
         {%- endif -%}
     {% endblock %}
 
-    <title>{% block title_top %}{% spaceless %}
+    <title>{% block title_top %}{% apply spaceless %}
             {% block title %}{{ block('headline') }}{% endblock %}
-        {% endspaceless %} - {% spaceless %}
+        {% endapply %} - {% apply spaceless %}
             {% block application_name %}Imatic IS{% endblock %}
-        {% endspaceless %}{% endblock %}</title>
+        {% endapply %}{% endblock %}</title>
 
     {% block metas -%}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,7 +77,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-7">
-                            <h1>{% spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endspaceless %}</h1>
+                            <h1>{% apply spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endapply %}</h1>
                         </div>
                         <div class="col-md-5 headline-side">
                             {% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}

@@ -13,7 +13,7 @@
     {% endif %}
     {% set pager_options = pager_options|default({}) %}
 
-    {% spaceless %}
+    {% apply spaceless %}
         {% if pager is defined and pager.haveToPaginate %}
             <ul class="pagination">
                 <li class="{% if pager.isFirstPage() %}disabled{% endif %}">
@@ -58,5 +58,5 @@
                 </p>
             {% endif %}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

@@ -2,8 +2,8 @@
 namespace Imatic\Bundle\ViewBundle\Twig\TokenParser;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\ExampleNode;
-use Twig_Token;
-use Twig_TokenParser;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
 /**
  * Generate an example.
@@ -14,23 +14,23 @@ use Twig_TokenParser;
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-class ExampleTokenParser extends Twig_TokenParser
+class ExampleTokenParser extends AbstractTokenParser
 {
     public function getTag()
     {
         return 'example';
     }
 
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $lineno = $token->getLine();
 
-        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse(function (Twig_Token $token) {
+        $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
+        $body = $this->parser->subparse(function (Token $token) {
             return $token->test('endexample');
         }, true);
         $rawBody = $this->parseRawBody($lineno);
-        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+        $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
         return new ExampleNode($body, $rawBody, $lineno, $this->getTag());
     }

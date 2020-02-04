@@ -14,7 +14,6 @@ Tests/Fixtures/TestProject/web/*
 !Tests/Fixtures/TestProject/web/app.php
 
 Tests/Fixtures/TestProject/node_modules
-Tests/Fixtures/TestProject/cache
-Tests/Fixtures/TestProject/logs
+Tests/Fixtures/TestProject/var
 Tests/Fixtures/TestProject/ProjectBundle/DataFixtures
 Tests/Fixtures/TestProject/ProjectBundle/Entity

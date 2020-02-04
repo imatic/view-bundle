@@ -1,6 +1,11 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Node;
 
+use Twig\Compiler;
+use Twig\FileExtensionEscapingStrategy;
+use Twig\Node\Expression\ConstantExpression;
+use Twig\Node\Expression\FunctionExpression;
+
 /**
  * Format function node.
  *
@@ -8,13 +13,13 @@ namespace Imatic\Bundle\ViewBundle\Twig\Node;
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-class FormatFunctionNode extends \Twig_Node_Expression_Function
+class FormatFunctionNode extends FunctionExpression
 {
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         // guess template format and compile it as an additional argument
-        $templateFormat = \Twig_FileExtensionEscapingStrategy::guess($this->getTemplateName());
-        $this->setNode('node', new \Twig_Node_Expression_Constant($templateFormat, $this->getTemplateLine()));
+        $templateFormat = FileExtensionEscapingStrategy::guess($this->getTemplateName());
+        $this->setNode('node', new ConstantExpression($templateFormat, $this->getTemplateLine()));
 
         parent::compile($compiler);
     }

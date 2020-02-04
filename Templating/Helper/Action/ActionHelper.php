@@ -69,7 +69,7 @@ class ActionHelper
     public function applyParameters($object, array $parameters)
     {
         foreach ($parameters as $name => $value) {
-            if (0 === \strpos($value, '#')) {
+            if (\is_string($value) && 0 === \strpos($value, '#')) {
                 $key = \substr($value, 1);
                 $value = $this->accessor->getValue($object, $key);
                 $parameters[$name] = $value;

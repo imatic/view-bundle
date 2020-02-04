@@ -19,7 +19,7 @@
         {% set sorter = display_criteria.sorter %}
     {% endif %}
 
-    {% spaceless %}
+    {% apply spaceless %}
         <div {{ table.attr|imatic_html_attributes({class: 'imatic-view-table'}) }}>
 
         {{ include('ImaticViewBundle:Component:filter.html.twig') }}
@@ -153,6 +153,6 @@
                 <input name="query" type="hidden" value="{{ query }}">
             </form>
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
     </div>
 {% endblock %}
