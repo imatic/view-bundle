@@ -47,7 +47,8 @@ doctrine:
 monolog:
     handlers:
         main:
-          type:                 "null"
+          # null type doesn't work with Symfony 5: https://github.com/symfony/monolog-bundle/issues/335
+          type: 'test'
 
 security:
     encoders:

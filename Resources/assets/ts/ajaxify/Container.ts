@@ -249,7 +249,7 @@ export class ContainerHandler
      * Get container element using given selector
      */
     getElementFromSelector(selector: string): HTMLElement {
-        var containerElement = $(selector)[0];
+        var containerElement = $(selector)[0] as HTMLElement;
         if (!containerElement) {
             throw new ContainerNotFoundException('Container specified by selector "' + selector + '" was not found');
         }
