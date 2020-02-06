@@ -131,7 +131,7 @@ export class Widget extends AjaxifyObject implements WidgetInterface
                 if (0 === this.pendingActions.length) {
                     this.busyElement = $(this.element).is(':visible')
                         ? this.element
-                        : $(this.element).parents(':visible')[0] || this.element
+                        : $(this.element).parents(':visible')[0] as HTMLElement || this.element
                     ;
                     $(this.busyElement).addClass(CssClasses.COMPONENT_BUSY);
                 }

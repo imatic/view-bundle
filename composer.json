@@ -18,7 +18,10 @@
     "require": {
         "php": "^7.1",
         "knplabs/knp-menu-bundle": "^2.2",
-        "symfony/framework-bundle": "^4.0",
+        "symfony/framework-bundle": "4.4.*",
+        "symfony/security-bundle": "4.4.*",
+        "symfony/expression-language": "4.4.*",
+        "symfony/asset": "4.4.*",
         "twig/twig": "^3.0"
     },
     "require-dev": {
@@ -26,7 +29,10 @@
         "imatic/form-bundle": "^4.0.1",
         "imatic/testing": "^5.0.2",
         "phpmd/phpmd": "^2.6",
-        "symfony/phpunit-bridge": "^4.1"
+        "symfony/phpunit-bridge": "^4.1",
+        "symfony/web-profiler-bundle": "^4.4",
+        "symfony/browser-kit": "^4.4",
+        "symfony/yaml": "^4.4"
     },
     "autoload": {
         "psr-4": {
