@@ -1,4 +1,4 @@
-{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+{% extends '@ImaticView/Demo/base.html.twig' %}
 
 {% block headline 'Layouts' %}
 
@@ -14,7 +14,7 @@
         <h3>One col layout</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {main: {} } }] } %}
+        {% embed '@ImaticView/Layout/grid.html.twig' with {rows: [{ cols: {main: {} } }] } %}
             {% block main %}
                 <p>{{ text }}</p>
             {% endblock %}
@@ -25,7 +25,7 @@
         <h3>Two col layout</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {first: {size: 3}, second: {size:9} } }] } %}
+        {% embed '@ImaticView/Layout/grid.html.twig' with {rows: [{ cols: {first: {size: 3}, second: {size:9} } }] } %}
             {% block first %}
                 <p>{{ text }}</p>
             {% endblock %}
@@ -40,7 +40,7 @@
         <h3>Two col layout with offset</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {first: {size: 4, offset: 3}, second: {size:4 } } }] } %}
+        {% embed '@ImaticView/Layout/grid.html.twig' with {rows: [{ cols: {first: {size: 4, offset: 3}, second: {size:4 } } }] } %}
             {% block first %}
                 <p>{{ text }}</p>
             {% endblock %}
@@ -55,7 +55,7 @@
         <h3>Tree col layout</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: [{ cols: {first: {size: 3}, second: {size:6}, third: {size:3} } }] } %}
+        {% embed '@ImaticView/Layout/grid.html.twig' with {rows: [{ cols: {first: {size: 3}, second: {size:6}, third: {size:3} } }] } %}
             {% block first %}
                 <p>{{ text }}</p>
             {% endblock %}
@@ -73,7 +73,7 @@
         <h3>Multi row layout</h3>
         {% example %}
         {% set rows = [{ cols: {col11: {size:3}, col12: {size:9} } }, { cols: {col21: {size:9}, col22: {size:3} } }] %}
-        {% embed 'ImaticViewBundle:Layout:grid.html.twig' with {rows: rows } %}
+        {% embed '@ImaticView/Layout/grid.html.twig' with {rows: rows } %}
             {% block col11 %}
                 <h5>Col 1-1</h5>
                 <p>{{ text }}</p>

@@ -26,11 +26,11 @@ class FormatExtensionTest extends WebTestCase
         return [
             [
                 '5',
-                'AppImaticViewBundle:FormatExtension:imatic_view_format/number.html.twig',
+                '@AppImaticView/FormatExtension/imatic_view_format/number.html.twig',
             ],
             [
                 '&lt;b&gt;bold&lt;/b&gt;',
-                'AppImaticViewBundle:FormatExtension:imatic_view_format/html.html.twig',
+                '@AppImaticView/FormatExtension/imatic_view_format/html.html.twig',
             ],
         ];
     }

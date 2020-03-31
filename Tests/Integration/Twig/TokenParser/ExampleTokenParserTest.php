@@ -23,7 +23,7 @@ class ExampleTokenParserTest extends WebTestCase
 </code></pre></div>
 HTML
             ,
-            $this->getTwig()->render('AppImaticViewBundle:TokenParser:exampleTokenParser.html.twig')
+            $this->getTwig()->render('@AppImaticView/TokenParser/exampleTokenParser.html.twig')
         );
     }
 

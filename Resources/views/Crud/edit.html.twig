@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '@ImaticView/Layout/base.html.twig' %}
 
 {% block headline imatic_view_resource_create_headline(resource, action, item|default(null)) %}
 
@@ -6,6 +6,6 @@
 
 {% block action %}
 
-    {% include 'ImaticViewBundle:Component:form.html.twig' %}
+    {% include '@ImaticView/Component/form.html.twig' %}
 
 {% endblock %}

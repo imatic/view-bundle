@@ -1,4 +1,4 @@
-{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+{% extends '@ImaticView/Demo/base.html.twig' %}
 
 {% block headline 'Panels' %}
 
@@ -8,7 +8,7 @@
         <h3>Basic panel</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% block panel_body %}
                 I am panel.
             {% endblock %}
@@ -19,7 +19,7 @@
         <h3>Panel with header</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% block panel_header %}
                 I am a <strong>Header</strong>
             {% endblock %}
@@ -33,7 +33,7 @@
         <h3>Panel with title</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% block panel_title %}
                 I am a title
             {% endblock %}
@@ -47,7 +47,7 @@
         <h3>Panel with footer</h3>
         {% example %}
 
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% block panel_body %}
                 I am panel with footer.
             {% endblock %}
@@ -60,7 +60,7 @@
 
         <h3>Panel types</h3>
         {% example %}
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% set panel = {type: 'success'} %}
             {% block panel_title %}Succes panel{% endblock %}
             {% block panel_body %}
@@ -68,7 +68,7 @@
             {% endblock %}
         {% endembed %}
 
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% block panel_title %}Primary panel{% endblock %}
             {% set panel = {type: 'primary'} %}
             {% block panel_body %}
@@ -76,7 +76,7 @@
             {% endblock %}
         {% endembed %}
 
-        {% embed 'ImaticViewBundle:Component:panel.html.twig' %}
+        {% embed '@ImaticView/Component/panel.html.twig' %}
             {% block panel_title %}App panel{% endblock %}
             {% set panel = {type: 'app'} %}
             {% block panel_body %}
