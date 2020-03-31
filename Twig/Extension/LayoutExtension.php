@@ -2,14 +2,15 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Layout extension.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-class LayoutExtension extends Twig_Extension
+class LayoutExtension extends AbstractExtension
 {
     /** @var LayoutHelper */
     private $layoutHelper;
@@ -22,10 +23,10 @@ class LayoutExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_Function('imatic_view_has_layout', [$this->layoutHelper, 'hasLayout']),
-            new \Twig_Function('imatic_view_is_modal_dialog', [$this->layoutHelper, 'isModalDialog']),
-            new \Twig_Function('imatic_view_set_title', [$this->layoutHelper, 'setTitle']),
-            new \Twig_Function('imatic_view_set_full_title', [$this->layoutHelper, 'setFullTitle']),
+            new TwigFunction('imatic_view_has_layout', [$this->layoutHelper, 'hasLayout']),
+            new TwigFunction('imatic_view_is_modal_dialog', [$this->layoutHelper, 'isModalDialog']),
+            new TwigFunction('imatic_view_set_title', [$this->layoutHelper, 'setTitle']),
+            new TwigFunction('imatic_view_set_full_title', [$this->layoutHelper, 'setFullTitle']),
         ];
     }
 }

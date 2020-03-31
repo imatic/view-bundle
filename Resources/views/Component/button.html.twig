@@ -2,7 +2,7 @@
     {{ imatic_view_action_create(imatic_view_action(action), context)|raw }}
 {% endmacro %}
 
-{% macro button(action, context) %}{% spaceless %}
+{% macro button(action, context) %}{% apply spaceless %}
     {%- import _self as this -%}
     {% set action = imatic_view_action(action) %}
     {% set condition = imatic_view_condition_evaluate(action.condition|default(''), context|default({})) %}
@@ -18,13 +18,13 @@
         {% set element = imatic_view_action_create({label: ''}, context) %}
         {{ this._nested(element, action, context) }}
     {% endif %}
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}
 
-{% macro _button(element, action) %}{% spaceless %}
+{% macro _button(element, action) %}{% apply spaceless %}
     {% set type = action.type | default('default') %}
     {% do element.classes.add('btn btn-' ~ (type == 'default' ? 'secondary' : type)) %}
     {{ element|raw }}
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}
 
 {% macro _nested(element, action, context) %}
     {%- import _self as this -%}
@@ -73,23 +73,23 @@
     {% endif %}
 {% endmacro %}
 
-{% macro group(buttons, context) %}{% spaceless %}
+{% macro group(buttons, context) %}{% apply spaceless %}
     {%- import _self as this -%}
     <div class="btn-group mr-1" role="group">
         {% for button in buttons %}
             {{ this.button(button, context) }}
         {% endfor %}
     </div>
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}
 
-{% macro toolbar(buttonGroups, context) %}{% spaceless %}
+{% macro toolbar(buttonGroups, context) %}{% apply spaceless %}
     {%- import _self as this -%}
     <div class="btn-toolbar" role="toolbar">
         {% for buttons in buttonGroups %}
             {{ this.group(buttons, context) }}
         {% endfor %}
     </div>
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}
 
 {# todo:
 - role(s)

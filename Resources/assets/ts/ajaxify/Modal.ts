@@ -44,7 +44,7 @@ export class ModalStackHandler
         }
 
         if (null !== topmostIndex) {
-            return modals[topmostIndex];
+            return modals[topmostIndex] as HTMLElement;
         } else {
             return null;
         }
@@ -276,7 +276,7 @@ export class Modal extends EventDispatcher
             this.create();
         }
 
-        return $('div.modal-header', this.element).get(0);
+        return $('div.modal-header', this.element).get(0) as HTMLElement;
     }
 
     /**
@@ -287,7 +287,7 @@ export class Modal extends EventDispatcher
             this.create();
         }
 
-        return $('div.modal-header > h4.modal-title', this.element).get(0);
+        return $('div.modal-header > h4.modal-title', this.element).get(0) as HTMLElement;
     }
 
     /**
@@ -307,7 +307,7 @@ export class Modal extends EventDispatcher
             this.create();
         }
 
-        return $('div.modal-body', this.element).get(0);
+        return $('div.modal-body', this.element).get(0) as HTMLElement;
     }
 
     /**
@@ -330,7 +330,7 @@ export class Modal extends EventDispatcher
             this.create();
         }
 
-        return $('div.modal-footer', this.element).get(0);
+        return $('div.modal-footer', this.element).get(0) as HTMLElement;
     }
 
     /**
@@ -365,7 +365,7 @@ export class Modal extends EventDispatcher
             + '</div>'
         ;
 
-        this.element = $(html).appendTo(document.body)[0];
+        this.element = $(html).appendTo(document.body)[0] as HTMLElement;
 
         $(this.element).on('hidden.bs.modal', (): void => {
             this.destroy();

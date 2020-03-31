@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Node;
 
-use Twig_Compiler;
-use Twig_Node_Expression_Binary;
+use Twig\Compiler;
+use Twig\Node\Expression\Binary\AbstractBinary;
 
 /**
  * Represents an instanceof node.
  *
  * @author Pavel Batecko <pavel.batecko@imatic.cz>
  */
-class InstanceofNode extends Twig_Node_Expression_Binary
+class InstanceofNode extends AbstractBinary
 {
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler
             ->raw('$this->env->getExtension(\'imatic_view_type\')->isInstanceOf(')
@@ -21,7 +21,7 @@ class InstanceofNode extends Twig_Node_Expression_Binary
             ->raw(')');
     }
 
-    public function operator(Twig_Compiler $compiler)
+    public function operator(Compiler $compiler)
     {
         return $compiler->raw('instanceof');
     }

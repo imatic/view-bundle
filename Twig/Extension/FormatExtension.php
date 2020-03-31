@@ -3,13 +3,15 @@ namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\FormatFunctionNode;
 use Imatic\Bundle\ViewBundle\Twig\Runtime\FormatRuntime;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class FormatExtension extends \Twig_Extension
+class FormatExtension extends AbstractExtension
 {
     public function getFunctions()
     {
         return [
-            new \Twig_Function(
+            new TwigFunction(
                 'imatic_view_format',
                 [
                     FormatRuntime::class, 'format',
@@ -21,7 +23,7 @@ class FormatExtension extends \Twig_Extension
                 ]
             ),
 
-            new \Twig_Function(
+            new TwigFunction(
                 'imatic_view_render_value',
                 [
                     FormatRuntime::class, 'renderValue',

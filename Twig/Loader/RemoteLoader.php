@@ -2,13 +2,14 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Twig_Error_Loader;
-use Twig_LoaderInterface;
+use Twig\Error\LoaderError;
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
 
 /**
  * Remote loader.
  */
-class RemoteLoader implements Twig_LoaderInterface
+class RemoteLoader implements LoaderInterface
 {
     /** @var ContainerInterface */
     private $container;
@@ -57,7 +58,7 @@ class RemoteLoader implements Twig_LoaderInterface
         } catch (\Exception $e) {
         }
         if ($e || false === $source) {
-            throw new Twig_Error_Loader(
+            throw new LoaderError(
                 \sprintf(
                     'Could not load remote template "%s" from URL "%s"',
                     $name,
@@ -79,7 +80,7 @@ class RemoteLoader implements Twig_LoaderInterface
         return $source;
     }
 
-    public function getCacheKey($name)
+    public function getCacheKey($name): string
     {
         $this->ensureExists($name);
 
@@ -97,7 +98,7 @@ class RemoteLoader implements Twig_LoaderInterface
         return $name;
     }
 
-    public function isFresh($name, $time)
+    public function isFresh($name, $time): bool
     {
         // this method is called only if env->isAutoReload() == TRUE
         $this->ensureExists($name);
@@ -128,12 +129,12 @@ class RemoteLoader implements Twig_LoaderInterface
      *
      * @param string $name
      *
-     * @throws Twig_Error_loader
+     * @throws LoaderError
      */
     private function ensureExists($name)
     {
         if (!isset($this->templates[$name])) {
-            throw new Twig_Error_Loader(\sprintf('Template "%s" is not a known remote template', $name));
+            throw new LoaderError(\sprintf('Template "%s" is not a known remote template', $name));
         }
     }
 
@@ -215,8 +216,8 @@ class RemoteLoader implements Twig_LoaderInterface
             + $this->templates[$name]['metadata'];
     }
 
-    public function getSourceContext($name)
+    public function getSourceContext($name): Source
     {
-        return new \Twig_Source($this->getSource($name), $name);
+        return new Source($this->getSource($name), $name);
     }
 }

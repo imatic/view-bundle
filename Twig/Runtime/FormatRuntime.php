@@ -2,6 +2,7 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Runtime;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;
+use Twig\Environment;
 
 class FormatRuntime
 {
@@ -18,7 +19,7 @@ class FormatRuntime
         $this->formatHelper = $formatHelper;
     }
 
-    public function format(\Twig_Environment $env, $templateFormat, $value, $format = null, array $options = [])
+    public function format(Environment $env, $templateFormat, $value, $format = null, array $options = [])
     {
         $output = $this->formatHelper->format($value, $format, $options);
 
@@ -27,7 +28,7 @@ class FormatRuntime
             : twig_escape_filter($env, $output, $templateFormat);
     }
 
-    public function renderValue(\Twig_Environment $env, $templateFormat, $objectOrArray, $propertyPath = null, $format = null, array $options = [])
+    public function renderValue(Environment $env, $templateFormat, $objectOrArray, $propertyPath = null, $format = null, array $options = [])
     {
         $output = $this->formatHelper->renderValue($objectOrArray, $propertyPath, $format, $options);
 

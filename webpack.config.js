@@ -1,9 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
 /*
  * Imatic View bundle webpack configuration.
@@ -28,10 +28,9 @@ module.exports = function configure(env, opts) {
             /*
              * Transpile for browsers determined by browserslist query in package.json.
              */
-            ['env', { // Preset for configured browsers.
+            ['@babel/preset-env', { // Preset for configured browsers.
                 modules: false,
                 loose: true, // Loose mode generated less strict but simpler transpiled code.
-                useBuiltIns: true, // Use built in features where possible in browser.
             }]
         ]
     };
@@ -40,7 +39,15 @@ module.exports = function configure(env, opts) {
      * Options for postcss preprocessor.
      */
     const postcssOptions = {
+        ident: 'postcss',
         sourceMaps: !env.prod,
+        plugins: [
+            /*
+             * Supported browsers are determined by browserslist query in package.json.
+             */
+            require('autoprefixer')(),
+            require('cssnano')()
+        ]
     };
 
     /*
@@ -84,23 +91,22 @@ module.exports = function configure(env, opts) {
                  */
                 {
                     test: /\.css$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    minimize: !!env.prod,
-                                    sourceMaps: !env.prod,
-                                    importLoaders: 1,
-                                }
-                            },
-                            {
-                                loader: 'postcss-loader',
-                                options: postcssOptions
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: !env.prod,
+                                importLoaders: 1,
                             }
-                        ]
-                    })
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: postcssOptions
+                        }
+                    ]
                 },
 
                 /*
@@ -110,31 +116,30 @@ module.exports = function configure(env, opts) {
                  */
                 {
                     test: /\.s[ca]ss$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    minimize: !!env.prod,
-                                    sourceMaps: !env.prod,
-                                    importLoaders: 3,
-                                }
-                            },
-                            {
-                                loader: 'postcss-loader',
-                                options: postcssOptions
-                            },
-                            'resolve-url-loader',
-                            {
-                                loader: 'sass-loader',
-                                options: {
-                                    sourceMap: true,
-                                    sourceMapContents: false
-                                }
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: !env.prod,
+                                importLoaders: 3,
                             }
-                        ]
-                    })
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: postcssOptions
+                        },
+                        'resolve-url-loader',
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                                sourceMapContents: false
+                            }
+                        }
+                    ]
                 },
 
                 /*
@@ -256,16 +261,14 @@ module.exports = function configure(env, opts) {
             /*
              * Extract css files imported throughout the bundle into a separate css file.
              */
-            new ExtractTextPlugin({
+            new MiniCssExtractPlugin({
                 filename: '[name].css'
             }),
 
             /*
              * Clean output folder before rebuild.
              */
-            new CleanWebpackPlugin([
-                'Resources/public/*'
-            ])
+            new CleanWebpackPlugin()
         ]
     };
 

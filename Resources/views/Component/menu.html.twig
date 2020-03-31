@@ -32,7 +32,7 @@
 
 {%- macro _menu(menu, options, renderer, config) -%}
     {%- import _self as this -%}
-    {% spaceless %}
+    {% apply spaceless %}
         {#{% set config = config|default({}) %}#}
         {% set children_class = '' %}
         {% if config.class is defined %}
@@ -56,5 +56,5 @@
         {% else %}
             {{ knp_menu_render(menu, options, renderer) }}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {%- endmacro -%}

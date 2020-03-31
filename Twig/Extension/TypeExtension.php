@@ -2,21 +2,22 @@
 namespace Imatic\Bundle\ViewBundle\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Twig\Node\InstanceofNode;
-use Twig_ExpressionParser;
-use Twig_Extension;
+use Twig\ExpressionParser;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigTest;
 
-class TypeExtension extends Twig_Extension
+class TypeExtension extends AbstractExtension
 {
     public function getTests()
     {
         return [
-            new \Twig_Test('integer', 'is_int'),
-            new \Twig_Test('float', 'is_float'),
-            new \Twig_Test('numeric', 'is_numeric'),
-            new \Twig_Test('boolean', 'is_bool'),
-            new \Twig_Test('string', 'is_string'),
-            new \Twig_Test('array', 'is_array'),
-            new \Twig_Test('object', 'is_object'),
+            new TwigTest('integer', 'is_int'),
+            new TwigTest('float', 'is_float'),
+            new TwigTest('numeric', 'is_numeric'),
+            new TwigTest('boolean', 'is_bool'),
+            new TwigTest('string', 'is_string'),
+            new TwigTest('array', 'is_array'),
+            new TwigTest('object', 'is_object'),
         ];
     }
 
@@ -28,7 +29,7 @@ class TypeExtension extends Twig_Extension
 
             // binary
             [
-                'instanceof' => ['precedence' => 400, 'class' => InstanceofNode::class, 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT],
+                'instanceof' => ['precedence' => 400, 'class' => InstanceofNode::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
             ],
         ];
     }
