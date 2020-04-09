@@ -52,7 +52,7 @@ class ContainerProvider implements MenuProviderInterface
      * @param string $alias Menu alias
      * @param array  $info  Menu info (service ID, method name)
      */
-    public function addService($alias, $info)
+    public function addService(string $alias, array $info)
     {
         $this->menuInfoCollection[$alias] = $info;
     }
@@ -67,7 +67,7 @@ class ContainerProvider implements MenuProviderInterface
      *
      * @throws \InvalidArgumentException if the menu does not exists
      */
-    public function get($name, array $options = [])
+    public function get(string $name, array $options = []): ItemInterface
     {
         if (!isset($this->menuCollection[$name])) {
             if (!isset($this->menuInfoCollection[$name])) {
@@ -96,7 +96,7 @@ class ContainerProvider implements MenuProviderInterface
      *
      * @return bool
      */
-    public function has($name, array $options = [])
+    public function has(string $name, array $options = []): bool
     {
         return isset($this->menuInfoCollection[$name]);
     }

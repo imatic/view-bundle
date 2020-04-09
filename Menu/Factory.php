@@ -36,7 +36,7 @@ class Factory implements FactoryInterface
         $this->nodeLoader = new NodeLoader($factory);
     }
 
-    public function createItem($name, array $options = [])
+    public function createItem(string $name, array $options = []): ItemInterface
     {
         return $this->factory->createItem($name, $options);
     }
@@ -48,7 +48,7 @@ class Factory implements FactoryInterface
      *
      * @return ItemInterface
      */
-    public function createFromNode(NodeInterface $node)
+    public function createFromNode(NodeInterface $node): ItemInterface
     {
         return $this->nodeLoader->load($node);
     }
@@ -62,7 +62,7 @@ class Factory implements FactoryInterface
      *
      * @return ItemInterface
      */
-    public function createFromArray(array $data)
+    public function createFromArray(array $data): ItemInterface
     {
         return $this->arrayLoader->load($data);
     }

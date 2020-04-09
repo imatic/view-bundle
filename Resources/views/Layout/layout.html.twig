@@ -42,39 +42,40 @@
     {% block header_full %}
         <header>
             {% block header %}
-                <nav class="navbar navbar-dark bg-dark fixed-top">
+                <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                     {% block header_logo %}
                         <a class="navbar-brand" href="{{ path('homepage') }}">
                             {% block header_brand %}{{ block('application_name') }}{% endblock %}
                         </a>
                     {% endblock %}
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         {% block header_menu %}
-                            {{ menu.menu('imatic.main') }}
-                            {{ menu.menu('imatic.main_side', null, null, { 'class': 'navbar-right' }) }}
+                            {{ menu.menu('imatic.main', null, null, { 'class': 'mr-auto' }) }}
+                            {{ menu.menu('imatic.main_side') }}
                         {% endblock %}
                     </div>
                 </nav>
             {% endblock %}
 
-            <div class="headline">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1>{% apply spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endapply %}</h1>
+                <div class="headline">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h1>{% apply spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endapply %}</h1>
+                            </div>
+                            <div class="col-md-5 headline-side">
+                                {% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}
+                            </div>
                         </div>
-                        <div class="col-md-5 headline-side">
-                            {% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}
-                        </div>
-                    </div>
 
-                    {% block breadcrumbs %}
-                    {% endblock %}
+                        {% block breadcrumbs %}{% endblock %}
+                    </div>
                 </div>
-            </div>
         </header>
     {% endblock %}
 
