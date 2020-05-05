@@ -1,6 +1,7 @@
-@import "~bootstrap/scss/mixins";
-@import "~font-awesome/scss/mixins";
-@import "~font-awesome/scss/variables";
+@font-face {
+    font-family: Dosis;
+    src: url(../font/Dosis-SemiBold.ttf);
+}
 
 // === Mixins ===
 @mixin header-font() {
@@ -10,11 +11,6 @@
 }
 
 // === Scaffold ===
-@font-face {
-    font-family: Dosis;
-    src: url(../font/Dosis-SemiBold.ttf);
-}
-
 h1, h2, h3, h4, h5, h6 {
     @include header-font();
 }
@@ -33,9 +29,12 @@ legend {
     margin-top: 1em;
 }
 
-header .navbar {
-    margin-bottom: 0;
-    @include gradient-y(lighten(theme-color('dark'), 10%), theme-color('dark'));
+header {
+    .navbar {
+        border-bottom: 1px solid $orange;
+        margin-bottom: 0;
+        @include gradient-y(lighten($gray-dark, 10%), $gray-dark);
+    }
 }
 
 footer {
@@ -44,8 +43,8 @@ footer {
     .footer-content {
         padding-left:15px;
         padding-right:15px;
-        border-top: 1px solid darken($gray-200, 10%);
-        @include gradient-y($gray-200, darken($gray-200, 10%));
+        border-top: 1px solid darken($gray-lighter, 10%);
+        @include gradient-y($gray-lighter, darken($gray-lighter, 10%));
         @include header-font();
     }
 
@@ -59,89 +58,105 @@ footer {
 .headline {
     margin-bottom: 20px;
     padding: 15px 0 10px 0;
-    border-bottom: 1px solid darken($gray-200, 10%);
-    @include gradient-y(darken($gray-200, 10%), $gray-200);
-}
+    border-bottom: 1px solid darken($gray-lighter, 10%);
+    @include gradient-y(darken($gray-lighter, 10%), $gray-lighter);
 
-.headline .breadcrumb {
-    background: none;
-    margin: .4em 0 0;
-    padding: 0;
-}
+    h1 {
+        font-size: 18px;
+        font-weight: normal;
+        line-height: 26px;
+        padding: 0;
+        margin: 0;
+    }
 
-.headline h1 {
-    font-size: 18px;
-    font-weight: normal;
-    line-height: 26px;
-    padding: 0;
-    margin: 0;
-}
+    .headline-side {
+        text-align: right;
 
-.headline .headline-side {
-    text-align: right;
+        @media screen and (max-width: breakpoint-max('sm')) {
+            text-align: left;
+        }
+    }
 
-    @media screen and (max-width: breakpoint-max('xs')) {
-        text-align: left;
+    .breadcrumb {
+        background: none;
+        margin: .4em 0 0;
+        padding: 0;
     }
 }
 
 .footer-content {
     padding: 10px;
-    border-top: 1px solid darken($gray-200, 10%);
-    @include gradient-y($gray-200, darken($gray-200, 10%));
+    border-top: 1px solid darken($gray-lighter, 10%);
+    @include gradient-y($gray-lighter, darken($gray-lighter, 10%));
     @include header-font();
 }
 
-// === Dropdowns ===
-.dropdown-menu > li > input[type=submit] {
-    border: none;
-    background: none;
-    min-width: 100%;
-    text-align: left;
+// === Cards ===
+.card {
+    margin-bottom: 18px;
 
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: $line-height-base;
-    color: $dropdown-link-color;
-    white-space: nowrap; // prevent links from randomly breaking onto new lines
-
-    &:hover,
-    &:focus {
-        text-decoration: none;
-        color: $dropdown-link-hover-color;
-        background-color: $dropdown-link-hover-bg;
+    .card-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: .938rem;
     }
-}
 
-.dropdown-menu > .active > input[type=submit] {
-    &,
-    &:hover,
-    &:focus {
-        color: $dropdown-link-active-color;
-        text-decoration: none;
-        outline: 0;
-        background-color: $dropdown-link-active-bg;
+    @each $color, $value in $theme-colors {
+        &.card-#{$color} {
+            border-color: $value;
+
+            .card-header {
+                color: $white;
+                background-color: $value;
+            }
+        }
+    }
+
+    &.card-app {
+        .card-header {
+            color: $white;
+            border-bottom: 2px solid $orange;
+            @include gradient-y(lighten($gray-dark, 10%), $gray-dark);
+        }
     }
 }
 
 // === Tables ===
-table.table-auto {
-    width: auto;
+table {
+    &.table-auto {
+        width: auto;
+    }
+
+    caption {
+        caption-side: top;
+    }
+}
+
+// === Buttons ===
+.btn-default {
+    @include button-outline-variant(#ccc);
+    color: #333;
 }
 
 // === Classes ===
 .yes {
-    @include fa-icon();
-    content: $fa-var-check;
+    @extend %fa-icon;
+    @extend .fas;
     @extend .text-success;
+
+    &:before {
+        content: fa-content($fa-var-check);
+    }
 }
 
 .no {
-    @include fa-icon();
-    content: $fa-var-times;
+    @extend %fa-icon;
+    @extend .fas;
     @extend .text-danger;
+
+    &:before {
+        content: fa-content($fa-var-times);
+    }
 }
 
 // === Components ===
@@ -163,13 +178,17 @@ table.table-auto {
                 text-align: right;
             }
             &.boolean, &.actions {
-                text-align: left;
+                text-align: center;
                 * {
-                    text-align: right;
+                    text-align: left;
                 }
             }
         }
         thead {
+            th {
+                border-top: none;
+            }
+
             a.sorted {
                 &.desc:after {
                     content: "▾";
@@ -220,25 +239,10 @@ table.table-auto {
     display: none;
 }
 
-// UNKNOWN EQUIVALENTS
-//.panel-app {
-//    @include panel-variant($panel-default-border, $white, theme-color('dark'), $orange);
-//
-//    .panel-heading {
-//        border-width: 2px;
-//        @include gradient-y(lighten(theme-color('dark'), 10%), theme-color('dark'));
-//
-//        h1 {
-//            margin: 0;
-//            padding: 0;
-//        }
-//    }
-//}
-
 // === Modals ===
 .modal.debug-exception {
     .modal-content {
-        border: 3px solid fade(theme-color('danger'), 80%);
+        border: 3px solid lighten(theme-color('danger'), 10%);
     }
     .modal-body {
         overflow-x: auto;
@@ -250,24 +254,10 @@ table.table-auto {
 
 @media (min-width: 768px) {
     .modal-dialog.modal-max {
+        max-width: none !important;
         width: 90%; /* fallback */
         width: calc(100% - 60px) !important;
     }
-}
-
-// === Select2 ===
-.select2-container {
-    width: 100% !important;
-    padding: 0;
-}
-.select2-search__field {
-    width: 100% !important;
-}
-.select2-close-mask{
-    z-index: 10099;
-}
-.select2-dropdown{
-    z-index: 10051;
 }
 
 // === Alerts ===
@@ -275,7 +265,23 @@ table.table-auto {
     @include alert-variant(theme-color-level('danger', $alert-bg-level), theme-color-level('danger', $alert-border-level), theme-color-level('danger', $alert-color-level));
 }
 
-// Disable border radius for select
-select {
-    -webkit-appearance: none;
+// === Forms ===
+form {
+    legend {
+        font-family: $font-family-sans-serif;
+        font-weight: 700;
+        text-transform: none;
+    }
+
+    label.col-form-label {
+        font-weight: 700;
+    }
+
+    div.row {
+        @media (min-width: 768px) {
+            .col-form-label {
+                text-align: right;
+            }
+        }
+    }
 }

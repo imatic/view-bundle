@@ -21,8 +21,7 @@
 {% endapply %}{% endmacro %}
 
 {% macro _button(element, action) %}{% apply spaceless %}
-    {% set type = action.type | default('default') %}
-    {% do element.classes.add('btn btn-' ~ (type == 'default' ? 'secondary' : type)) %}
+    {% do element.classes.add('btn btn-' ~ action.type | default('default')) %}
     {{ element|raw }}
 {% endapply %}{% endmacro %}
 
@@ -46,10 +45,9 @@
         {% if element.value is not empty %}
             {{ this._button(element, action) }}
         {% endif %}
-        {% set type = action.type | default('default') %}
         {% if hasNested %}
             <button type="button"
-                    class="btn btn-{{ (type == 'default' ? 'secondary' : type) }} dropdown-toggle"
+                    class="btn btn-{{ action.type | default('default') }} dropdown-toggle"
                     data-toggle="dropdown"
                     aria-haspopup="true"
                     aria-expanded="false"

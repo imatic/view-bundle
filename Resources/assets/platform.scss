@@ -1,11 +1,16 @@
 // === Variables ===
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~font-awesome/scss/font-awesome";
-
+$gray-lighter: #eee;
+$gray-dark: #333;
 $orange: #f89406;
 $white: #fff;
-$font-size-base: 13rem / 16;
+
+// Bootstrap variable overrides
+$font-size-base: 1rem * .8125; // typically `13px`
+
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
+
+$primary: #337ab7;
 
 $border-radius: 0;
 $border-radius-lg: 0;
@@ -14,37 +19,39 @@ $border-radius-sm: 0;
 $link-color: #08c;
 $link-hover-color: darken($link-color, 15%);
 
-// UNKNOWN EQUIVALENTS
-$navbar-inverse-border: $orange;
-$navbar-inverse-bg: theme-color('dark');
-$navbar-inverse-link-active-bg: theme-color('dark');
-$navbar-inverse-link-color: $white;
-$navbar-inverse-link-hover-color: $orange;
+$navbar-dark-brand-color: $white;
+$navbar-dark-brand-hover-color: $white;
+$navbar-dark-color: $white;
+$navbar-dark-hover-color: $orange;
+$navbar-dark-active-color: $orange;
+
+$card-spacer-x: .938rem;
+
+$enable-shadows: true;
 
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
+// Font awesome variables
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+
+// Font awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+
 // Bootstrap datetime picker
-$bs-datetimepicker-border-radius: $border-radius;
-$bs-datetimepicker-active-bg: theme-color('primary');
-$bs-datetimepicker-active-color: color-yiq(theme-color('primary'));
-$bs-datetimepicker-btn-hover-bg: $gray-200;
-$bs-datetimepicker-disabled-color: theme-color('light');
-$bs-datetimepicker-alternate-color: theme-color('light');
-$screen-sm-min: breakpoint-min('sm');
-$screen-md-min: breakpoint-min('md');
-$screen-lg-min: breakpoint-min('lg');
-@import "~eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss";
+@import "styles/components/datepicker";
 
 // Select2
-@import "./styles/util/select2-bootstrap";
+@import "~select2/dist/css/select2.css";
+@import "~@ttskch/select2-bootstrap4-theme/src/layout";
 
 // Platform
 @import "styles/style.scss";
 @import "styles/components/ajaxify.css";
 
 // Form bundle
-//@import "~imatic/form-bundle/Resources/public/less/forms.less";
+@import "~imatic/form-bundle/Resources/public/styles/forms.scss";
 
 // Animate.css
 @import "~animate.css";
