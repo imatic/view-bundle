@@ -11,7 +11,7 @@ use Twig\Node\Expression\Binary\AbstractBinary;
  */
 class InstanceofNode extends AbstractBinary
 {
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
         $compiler
             ->raw('$this->env->getExtension(\'imatic_view_type\')->isInstanceOf(')
@@ -22,7 +22,7 @@ class InstanceofNode extends AbstractBinary
         ;
     }
 
-    public function operator(Compiler $compiler)
+    public function operator(Compiler $compiler): Compiler
     {
         return $compiler->raw('instanceof');
     }
