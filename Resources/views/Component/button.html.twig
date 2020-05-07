@@ -3,20 +3,19 @@
 {% endmacro %}
 
 {% macro button(action, context) %}{% apply spaceless %}
-    {%- import _self as this -%}
     {% set action = imatic_view_action(action) %}
     {% set condition = imatic_view_condition_evaluate(action.condition|default(''), context|default({})) %}
     {% set nested = action.nested is not empty %}
 
     {% if condition and nested %}
         {% set element = imatic_view_action_create(action, context) %}
-        {{ this._nested(element, action, context) }}
+        {{ _self._nested(element, action, context) }}
     {% elseif condition %}
         {% set element = imatic_view_action_create(action, context) %}
-        {{ this._button(element, action) }}
+        {{ _self._button(element, action) }}
     {% elseif nested %}
         {% set element = imatic_view_action_create({label: ''}, context) %}
-        {{ this._nested(element, action, context) }}
+        {{ _self._nested(element, action, context) }}
     {% endif %}
 {% endapply %}{% endmacro %}
 
@@ -26,12 +25,11 @@
 {% endapply %}{% endmacro %}
 
 {% macro _nested(element, action, context) %}
-    {%- import _self as this -%}
     {% set nested -%}
         {% for nested in action.nested -%}
             {% if imatic_view_condition_evaluate(nested.condition|default(''), context|default({})) %}
                 {% do nested.set('attrs', { class: 'dropdown-item' }) %}
-                {{ this.action(nested, context) }}
+                {{ _self.action(nested, context) }}
             {% endif %}
         {%- endfor %}
     {%- endset %}
@@ -43,7 +41,7 @@
 
     {% if action.url is not empty or action.route is not empty %}
         {% if element.value is not empty %}
-            {{ this._button(element, action) }}
+            {{ _self._button(element, action) }}
         {% endif %}
         {% if hasNested %}
             <button type="button"
@@ -60,7 +58,7 @@
         {% do element.setValue(action.label) %}
         {% do element.data.set('toggle', 'dropdown') %}
         {% do element.classes.add('dropdown-toggle') %}
-        {{ this._button(element, action) }}
+        {{ _self._button(element, action) }}
     {% endif %}
 
     {% if hasNested %}
@@ -72,19 +70,17 @@
 {% endmacro %}
 
 {% macro group(buttons, context) %}{% apply spaceless %}
-    {%- import _self as this -%}
     <div class="btn-group mr-1" role="group">
         {% for button in buttons %}
-            {{ this.button(button, context) }}
+            {{ _self.button(button, context) }}
         {% endfor %}
     </div>
 {% endapply %}{% endmacro %}
 
 {% macro toolbar(buttonGroups, context) %}{% apply spaceless %}
-    {%- import _self as this -%}
     <div class="btn-toolbar" role="toolbar">
         {% for buttons in buttonGroups %}
-            {{ this.group(buttons, context) }}
+            {{ _self.group(buttons, context) }}
         {% endfor %}
     </div>
 {% endapply %}{% endmacro %}

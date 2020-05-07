@@ -28,8 +28,6 @@
 {% endmacro %}
 
 {% macro session_message(close, use_raw, domain) %}
-    {%- import _self as this -%}
-
     {% if app.session.flashbag.peekAll|length > 0 %}
         {% for type, messages in app.session.flashbag.all %}
             {% for message in messages %}
@@ -37,7 +35,7 @@
                     {% set type = 'success' %}
                     {% set domain = 'FOSUserBundle' %}
                 {% endif %}
-                {{ this.message(type, message, close, use_raw, domain) }}
+                {{ _self.message(type, message, close, use_raw, domain) }}
             {% endfor %}
         {% endfor %}
     {% endif %}
