@@ -3,7 +3,7 @@ namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TableData;
 use Imatic\Bundle\ViewBundle\Controller\Demo\Helper\TestingType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/component")
  */
-class ComponentController extends Controller
+class ComponentController extends AbstractController
 {
     /**
      * @Route("/")

@@ -2,7 +2,7 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CommonFormatter implements FormatterInterface
 {

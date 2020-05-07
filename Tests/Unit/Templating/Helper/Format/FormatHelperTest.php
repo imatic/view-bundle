@@ -18,7 +18,8 @@ class FormatHelperTest extends TestCase
             ->method('format')
             ->willReturnCallback(function ($value) {
                 return $value;
-            });
+            })
+        ;
 
         $this->formatHelper = new FormatHelper($container);
         $this->formatHelper->addFormatter('text', $formatter);

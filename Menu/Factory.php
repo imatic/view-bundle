@@ -36,7 +36,7 @@ class Factory implements FactoryInterface
         $this->nodeLoader = new NodeLoader($factory);
     }
 
-    public function createItem(string $name, array $options = []): ItemInterface
+    public function createItem($name, array $options = []): ItemInterface
     {
         return $this->factory->createItem($name, $options);
     }

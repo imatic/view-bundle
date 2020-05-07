@@ -49,7 +49,8 @@ class Helper
         $badge = \sprintf(' <span class="badge badge-%s">%s</span>', $type ?? 'light', $content);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel(StringUtil::escape($item->getLabel()) . $badge);
+            ->setLabel(StringUtil::escape($item->getLabel()) . $badge)
+        ;
     }
 
     public function setIcon(ItemInterface $item, $icon)
@@ -57,23 +58,8 @@ class Helper
         $icon = \sprintf('<i class="imatic-view-menu-icon fas fa-%s"></i> ', $icon);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel($icon . StringUtil::escape($item->getLabel()));
-    }
-
-    /**
-     * Translates the given choice message by choosing a translation according to a number.
-     *
-     * @param string $id         The message id
-     * @param int    $number     The number to use to find the indice of the message
-     * @param array  $parameters An array of parameters for the message
-     * @param string $domain     The domain for the message
-     * @param string $locale     The locale
-     *
-     * @return string The translated string
-     */
-    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null): string
-    {
-        return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
+            ->setLabel($icon . StringUtil::escape($item->getLabel()))
+        ;
     }
 
     /**

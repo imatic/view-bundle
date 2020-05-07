@@ -9,6 +9,8 @@ Menu
 
 * `Imatic\Bundle\ViewBundle\Menu\Helper::setIcon()` last attribute `$right` was removed
 
+* `Imatic\Bundle\ViewBundle\Menu\Helper::transChoice()` was removed, see https://symfony.com/doc/current/translation/message_format.html#pluralization 
+
 * disabled must be set as link attribute
 
    Before:

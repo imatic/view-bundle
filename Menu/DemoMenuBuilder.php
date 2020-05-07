@@ -94,7 +94,8 @@ class DemoMenuBuilder
         $contact->addChild('Test')->setLabelAttribute('class', 'nav-header');
         $contact
             ->addChild('Test 2', ['route' => 'homepage'])
-            ->setAttribute('divider', true);
+            ->setAttribute('divider', true)
+        ;
 
         $item = $contact->addChild('Test 3', ['uri' => 'http://www.imatic.cz']);
 

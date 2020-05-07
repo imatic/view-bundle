@@ -23,7 +23,7 @@
             {% endif %}     
             <div class="imatic-view-filter {% if filter.form.valid %} imatic-view-initial-closed{% endif %}">
                 <fieldset>
-                    <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
+                    <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'filter' : 'filter_errors')|trans({'count': filter.boundCount}, 'ImaticViewBundle') }}</legend>
                     <div id="{{ filter_content_id }}" class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
                         {% for field in form|filter(field => field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter']) %}

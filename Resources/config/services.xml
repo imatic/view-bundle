@@ -11,6 +11,13 @@
     <services>
         <defaults public="false" />
 
+        <!-- Controllers -->
+        <prototype namespace="Imatic\Bundle\ViewBundle\Controller\" resource="../../Controller/*" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </prototype>
+
         <!-- Menu -->
         <service id="Imatic\Bundle\ViewBundle\Menu\Factory">
             <argument type="service" id="knp_menu.factory" />
@@ -54,7 +61,7 @@
             <argument type="service" id="security.helper" />
         </service>
 
-        <!-- Formators -->
+        <!-- Formations -->
         <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter">
             <tag name="imatic_view.formatter" alias="time" />
             <tag name="imatic_view.formatter" alias="date" />
