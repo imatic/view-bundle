@@ -33,8 +33,9 @@ class Helper
      * Creates a drop down menu item from item.
      *
      * @param ItemInterface $dropDownItem
+     * @param string        $aligment
      */
-    public function setDropdown(ItemInterface $dropDownItem)
+    public function setDropdown(ItemInterface $dropDownItem, string $aligment = null)
     {
         $dropDownItem
             ->setUri('#')
@@ -42,6 +43,10 @@ class Helper
             ->setLinkAttribute('class', 'dropdown-toggle')
             ->setLinkAttribute('data-toggle', 'dropdown')
         ;
+
+        if ($aligment) {
+            $dropDownItem->setExtra('alignment', $aligment);
+        }
     }
 
     public function setBadge(ItemInterface $item, $content, $type = null)

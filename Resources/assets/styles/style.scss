@@ -17,7 +17,8 @@ h1, h2, h3, h4, h5, h6 {
 
 legend {
     @include header-font();
-    font-size: $h4-font-size;
+    font-size: 1.063rem; // 17px
+    margin-bottom: 1.125rem;
 }
 
 .navbar, .nav {
@@ -134,7 +135,7 @@ table {
 
 // === Buttons ===
 .btn-default {
-    @include button-outline-variant(#ccc);
+    @include button-variant(#fff, #ccc);
     color: #333;
 }
 
@@ -214,7 +215,7 @@ table {
     }
 
     .table-footer > div {
-        margin-bottom: spacer(2);
+        @extend .mb-2;
     }
 }
 
@@ -227,8 +228,12 @@ table {
 }
 
 .imatic-view-filter {
-    padding-top: spacer(2);
-    padding-bottom: spacer(2);
+    @extend .pt-2;
+    @extend .pb-2;
+
+    legend {
+        border-bottom: 1px solid #e5e5e5;
+    }
 }
 
 .imatic-view-filter legend {
@@ -281,6 +286,24 @@ form {
         @media (min-width: 768px) {
             .col-form-label {
                 text-align: right;
+            }
+        }
+
+        &.is-invalid {
+            .select2-container--focus .select2-selection {
+                box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-invalid-color, .25);
+            }
+        }
+    }
+
+    .select2-container--bootstrap4 {
+        .select2-selection__clear {
+            background-color: transparent;
+            color: $gray-700;
+
+            &:hover {
+                background-color: transparent;
+                color: $gray-900;
             }
         }
     }

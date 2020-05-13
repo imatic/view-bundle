@@ -64,7 +64,7 @@
 {% endblock %}
 
 {% block dropdown_menu %}
-    <div class="dropdown-menu">
+    <div class="dropdown-menu{% if item.extras.alignment|default('') %} {{ "dropdown-menu-#{item.extras.alignment}" }}{% endif %}">
         {% for item in item.children %}
             {% do _self.appendClassAttribute(item, 'linkAttribute', 'dropdown-item') %}
 

@@ -3611,12 +3611,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imatic/form-bundle.git",
-                "reference": "0a0a91bc4b133bdef4e97dc8f2e8ab893e7cad99"
+                "reference": "b8aa05f21ddcac9a2ae9d8da8b10f702556372f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/0a0a91bc4b133bdef4e97dc8f2e8ab893e7cad99",
-                "reference": "0a0a91bc4b133bdef4e97dc8f2e8ab893e7cad99",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/b8aa05f21ddcac9a2ae9d8da8b10f702556372f3",
+                "reference": "b8aa05f21ddcac9a2ae9d8da8b10f702556372f3",
                 "shasum": ""
             },
             "require": {
@@ -3662,7 +3662,7 @@
                 }
             ],
             "description": "Bundle for working with Symfony forms",
-            "time": "2020-05-07T10:29:50+00:00"
+            "time": "2020-05-13T11:16:28+00:00"
         },
         {
             "name": "imatic/testing",
