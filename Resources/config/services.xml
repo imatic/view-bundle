@@ -61,7 +61,7 @@
             <argument type="service" id="security.helper" />
         </service>
 
-        <!-- Formations -->
+        <!-- Formatters -->
         <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter">
             <tag name="imatic_view.formatter" alias="time" />
             <tag name="imatic_view.formatter" alias="date" />
