@@ -1,6 +1,6 @@
-{% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
-{% import 'ImaticViewBundle:Component:message.html.twig' as message %}
-{% import 'ImaticViewBundle:Component:button.html.twig' as button %}
+{% import '@ImaticView/Component/menu.html.twig' as menu %}
+{% import '@ImaticView/Component/message.html.twig' as message %}
+{% import '@ImaticView/Component/button.html.twig' as button %}
 {% set asset_bundle_name = asset_bundle_name is defined ? asset_bundle_name : 'bundles/imaticview/platform' %}
 {% block document -%}
 <!DOCTYPE html>
@@ -42,52 +42,40 @@
     {% block header_full %}
         <header>
             {% block header %}
-                <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button"
-                                    class="navbar-toggle"
-                                    data-toggle="collapse"
-                                    data-target=".navbar-collapse">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            {% block header_logo %}
-                                <a class="navbar-brand" href="{{ path('homepage') }}">
-                                    {% block header_brand %}{{ block('application_name') }}{% endblock %}
-                                </a>
-                            {% endblock %}
-                        </div>
+                <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                    {% block header_logo %}
+                        <a class="navbar-brand" href="{{ path('homepage') }}">
+                            {% block header_brand %}{{ block('application_name') }}{% endblock %}
+                        </a>
+                    {% endblock %}
 
-                        <div class="collapse navbar-collapse">
-                            <div class="nav-collapse">
-                                {% block header_menu %}
-                                    {{ menu.menu('imatic.main') }}
-                                    {{ menu.menu('imatic.main_side', null, null, { 'class': 'navbar-right' }) }}
-                                {% endblock %}
-                            </div>
-                        </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        {% block header_menu %}
+                            {{ menu.menu('imatic.main', null, null, { 'class': 'mr-auto' }) }}
+                            {{ menu.menu('imatic.main_side') }}
+                        {% endblock %}
                     </div>
-                </div>
+                </nav>
             {% endblock %}
 
-            <div class="headline">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1>{% apply spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endapply %}</h1>
+                <div class="headline">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h1>{% apply spaceless %}{% block headline %}{{ block('application_name') }}{% endblock %}{% endapply %}</h1>
+                            </div>
+                            <div class="col-md-5 headline-side">
+                                {% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}
+                            </div>
                         </div>
-                        <div class="col-md-5 headline-side">
-                            {% block headline_side %}{% block page_actions %}{{ button.group(page_actions|default([]), _context) }}{% endblock %}{% endblock %}
-                        </div>
-                    </div>
 
-                    {% block breadcrumbs %}
-                    {% endblock %}
+                        {% block breadcrumbs %}{% endblock %}
+                    </div>
                 </div>
-            </div>
         </header>
     {% endblock %}
 

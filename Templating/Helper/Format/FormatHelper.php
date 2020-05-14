@@ -122,7 +122,7 @@ class FormatHelper implements FormatterInterface
                 $propertyPath = $options['propertyPath'];
             }
 
-            return $this->container->get('templating')->render('ImaticViewBundle:Field:collection.html.twig', [
+            return $this->container->get('templating')->render('@ImaticView/Field/collection.html.twig', [
                 'value' => $value,
                 'options' => $options,
                 'format' => $format,

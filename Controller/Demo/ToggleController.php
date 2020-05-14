@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/toggle")
  */
-class ToggleController extends Controller
+class ToggleController extends AbstractController
 {
     /**
      * @Route("/")

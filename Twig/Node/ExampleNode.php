@@ -36,6 +36,7 @@ class ExampleNode extends Node
             ->string(StringUtil::escape($this->getAttribute('raw_body')))
             ->write(', "</code></pre>";')
             ->write('echo "</div>";')
-            ->write('unset($content);');
+            ->write('unset($content);')
+        ;
     }
 }

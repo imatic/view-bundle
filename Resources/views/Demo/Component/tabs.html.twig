@@ -1,4 +1,4 @@
-{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+{% extends '@ImaticView/Demo/base.html.twig' %}
 
 {% block headline 'Tab component' %}
 
@@ -16,7 +16,7 @@
     {% example %}
 
     {% set tab_config = {profile: {label: 'Profile'}, settings: {label: 'Settings'} } %}
-    {% embed 'ImaticViewBundle:Component:tabs.html.twig' with {tabs: tab_config} %}
+    {% embed '@ImaticView/Component/tabs.html.twig' with {tabs: tab_config} %}
         {% block profile %}
             <p>{{ text }}</p>
         {% endblock %}
@@ -32,7 +32,7 @@
     {% example %}
 
     {% set tab_config = {profile: {label: 'Profile'}, settings: {label: 'Settings', active: true} } %}
-    {% embed 'ImaticViewBundle:Component:tabs.html.twig' with {tabs: tab_config, id: 'another-tabs'} %}
+    {% embed '@ImaticView/Component/tabs.html.twig' with {tabs: tab_config, id: 'another-tabs'} %}
         {% block profile %}
             <p>{{ text }}</p>
         {% endblock %}

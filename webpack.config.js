@@ -65,8 +65,8 @@ module.exports = function configure(env, opts) {
          * Entries for platform and demo ...
          */
         entry: {
-            platform: ['./Resources/assets/platform.less', './Resources/assets/platform'],
-            demo: ['./Resources/assets/platform.less', './Resources/assets/demo']
+            platform: ['./Resources/assets/platform.scss', './Resources/assets/platform'],
+            demo: ['./Resources/assets/platform.scss', './Resources/assets/demo']
         },
 
         /*
@@ -110,12 +110,12 @@ module.exports = function configure(env, opts) {
                 },
 
                 /*
-                 * Less compilation.
+                 * Sass compilation.
                  *
                  * Same rules as for css loader apply.
                  */
                 {
-                    test: /\.less$/,
+                    test: /\.s[ca]ss$/,
                     use: [
                         {
                             loader: MiniCssExtractPlugin.loader
@@ -124,14 +124,21 @@ module.exports = function configure(env, opts) {
                             loader: 'css-loader',
                             options: {
                                 sourceMap: !env.prod,
-                                importLoaders: 2,
+                                importLoaders: 3,
                             }
                         },
                         {
                             loader: 'postcss-loader',
                             options: postcssOptions
                         },
-                        'less-loader'
+                        'resolve-url-loader',
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                                sourceMapContents: false
+                            }
+                        }
                     ]
                 },
 

@@ -1,0 +1,12 @@
+filter: >-
+    {count, plural,
+        =0    {Filtr}
+        =1    {Filtr (1 filtr je nastaven)}
+        other {Filtr (# filtrů je nastaveno)}
+    }
+filter_errors: >-
+    {count, plural,
+        =0    {Filtr (obsahuje chyby)}
+        =1    {Filtr (1 filtr je nastaven, obsahuje chyby)}
+        other {Filtr (# filtrů je nastaveno, obsahuje chyby)}
+    }

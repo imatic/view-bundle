@@ -3,9 +3,10 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 use Knp\Menu\ItemInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Helper
 {
@@ -18,6 +19,10 @@ class Helper
      */
     private $security;
 
+    /**
+     * @param TranslatorInterface $translator
+     * @param Security            $security
+     */
     public function __construct(TranslatorInterface $translator, Security $security)
     {
         $this->translator = $translator;
@@ -25,95 +30,41 @@ class Helper
     }
 
     /**
-     * Adds a vertical/horizontal divider.
-     *
-     * @param ItemInterface $item
-     * @param bool          $vertical
-     *
-     * @return ItemInterface
-     */
-    public function addDivider(ItemInterface $item, $vertical = false)
-    {
-        $class = $vertical ? 'divider-vertical' : 'divider';
-
-        return $item->addChild('divider_' . \rand())
-            ->setLabel('')
-            ->setAttribute('class', $class);
-    }
-
-    /**
-     * Adds a menu header.
-     *
-     * @param ItemInterface $item
-     * @param $text
-     *
-     * @return ItemInterface
-     */
-    public function addHeader(ItemInterface $item, $text)
-    {
-        return $item->addChild('header_' . \rand())
-            ->setLabel($text)
-            ->setAttribute('class', 'nav-header');
-    }
-
-    /**
      * Creates a drop down menu item from item.
      *
      * @param ItemInterface $dropDownItem
+     * @param string        $aligment
      */
-    public function setDropdown(ItemInterface $dropDownItem)
+    public function setDropdown(ItemInterface $dropDownItem, string $aligment = null)
     {
         $dropDownItem
             ->setUri('#')
-            ->setLinkattribute('class', 'dropdown-toggle')
-            ->setLinkattribute('data-toggle', 'dropdown')
             ->setAttribute('class', 'dropdown')
-            ->setChildrenAttribute('class', 'dropdown-menu');
+            ->setLinkAttribute('class', 'dropdown-toggle')
+            ->setLinkAttribute('data-toggle', 'dropdown')
+        ;
 
-        $dropDownItem->setLabel($dropDownItem->getLabel() . '<b class="caret"></b>');
-        $dropDownItem->setExtra('safe_label', true);
+        if ($aligment) {
+            $dropDownItem->setExtra('alignment', $aligment);
+        }
     }
 
-    /**
-     * Creates a sub menu item from item.
-     *
-     * @param ItemInterface $item
-     */
-    public function setSubmenu(ItemInterface $item)
+    public function setBadge(ItemInterface $item, $content, $type = null)
     {
-        $item->setChildrenAttribute('class', 'nav nav-list');
-    }
-
-    public function setBadge(ItemInterface $item, $content, $type = null, $right = null)
-    {
-        $badge = \sprintf(' <span class="badge badge-%s %s">%s</span>', $type, $right ? ' pull-right' : '', $content);
+        $badge = \sprintf(' <span class="badge badge-%s">%s</span>', $type ?? 'light', $content);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel(StringUtil::escape($item->getLabel()) . $badge);
+            ->setLabel(StringUtil::escape($item->getLabel()) . $badge)
+        ;
     }
 
-    public function setIcon(ItemInterface $item, $icon, $right = null)
+    public function setIcon(ItemInterface $item, $icon)
     {
-        $icon = \sprintf('<i class="imatic-view-menu-icon icon-%s pull-%s"></i>', $icon, $right ? 'right' : 'left');
+        $icon = \sprintf('<i class="imatic-view-menu-icon fas fa-%s"></i> ', $icon);
         $item
             ->setExtra('safe_label', true)
-            ->setLabel($icon . StringUtil::escape($item->getLabel()));
-    }
-
-    /**
-     * Translates the given choice message by choosing a translation according to a number.
-     *
-     * @param string $id         The message id
-     * @param int    $number     The number to use to find the indice of the message
-     * @param array  $parameters An array of parameters for the message
-     * @param string $domain     The domain for the message
-     * @param string $locale     The locale
-     *
-     * @return string The translated string
-     */
-    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null): string
-    {
-        return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
+            ->setLabel($icon . StringUtil::escape($item->getLabel()))
+        ;
     }
 
     /**
@@ -148,7 +99,11 @@ class Helper
      */
     public function isUserLogged(): bool
     {
-        return $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        try {
+            return $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        } catch (AuthenticationCredentialsNotFoundException $e) {
+            return false;
+        }
     }
 
     /**
@@ -169,6 +124,10 @@ class Helper
      */
     public function isUserGranted($attributes, $subject = null): bool
     {
-        return $this->security->isGranted($attributes, $subject);
+        try {
+            return $this->security->isGranted($attributes, $subject);
+        } catch (AuthenticationCredentialsNotFoundException $e) {
+            return false;
+        }
     }
 }

@@ -1,54 +1,44 @@
 {% macro navbar(menu, options, renderer, config) %}
-    {%- import _self as this -%}
-
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="container">
-            {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
+            {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
         </div>
     </nav>
 {% endmacro %}
 
 {% macro menu(menu, options, renderer, config) %}
-    {%- import _self as this -%}
-    {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'navbar-nav' })) }}
 {% endmacro %}
 
 {% macro side(menu, options, renderer, config) %}
-    {%- import _self as this -%}
     <nav class="sidebar-nav">
-        {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills nav-stacked' })) }}
+        {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'flex-column nav-pills' })) }}
     </nav>
 {% endmacro %}
 
 {% macro tabs(menu, options, renderer, config) %}
-    {%- import _self as this -%}
-    {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-tabs' })) }}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-tabs' })) }}
 {% endmacro %}
 
 {% macro pills(menu, options, renderer, config) %}
-    {%- import _self as this -%}
-    {{ this._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills' })) }}
+    {{ _self._menu(menu, options, renderer, config|default({})|merge({ 'type': 'nav-pills' })) }}
 {% endmacro %}
 
 {%- macro _menu(menu, options, renderer, config) -%}
-    {%- import _self as this -%}
     {% apply spaceless %}
-        {#{% set config = config|default({}) %}#}
-        {% set children_class = '' %}
+        {% set children_class = [] %}
         {% if config.class is defined %}
-            {% set children_class = children_class ~ ' ' ~ config.class %}
+            {% set children_class = children_class|merge([config.class]) %}
         {% endif %}
         {% if config.type is defined %}
-            {% set children_class = children_class  ~ ' ' ~  'nav ' ~ config.type %}
+            {% set children_class = children_class|merge(['nav', config.type]) %}
         {% endif %}
-        {% set options = options|default([])|merge(
-        {
-        'currentClass': 'active',
-        'currentAsLink': true,
-        'allow_safe_labels': true,
-        'template': 'ImaticViewBundle:Component:knp_menu.html.twig',
-        'menu_class': children_class}
-        ) %}
+        {% set options = options|default([])|merge({
+            'currentClass': 'active',
+            'allow_safe_labels': true,
+            'menu_class': children_class|join(' '),
+            'template': '@ImaticView/Component/knp_menu.html.twig',
+        }) %}
         {% if menu is iterable %}
             {{ imatic_view_menu_render_array(menu, options) }}
         {% else %}

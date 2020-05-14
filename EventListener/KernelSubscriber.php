@@ -5,10 +5,10 @@ use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Kernel subscriber.
@@ -23,7 +23,7 @@ class KernelSubscriber implements EventSubscriberInterface
     private $translator;
     /** @var bool */
     private $debug;
-    /** @var object|null */
+    /** @var \Throwable|null */
     private $lastException;
 
     /**
@@ -49,9 +49,9 @@ class KernelSubscriber implements EventSubscriberInterface
     /**
      * On kernel response.
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if ($event->isMasterRequest()) {
             $request = $event->getRequest();
@@ -75,10 +75,10 @@ class KernelSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         if ($this->debug) {
-            $this->lastException = $event->getException();
+            $this->lastException = $event->getThrowable();
         }
     }
 
@@ -123,7 +123,7 @@ class KernelSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function setExceptionHeader(Response $response, $exception)
+    private function setExceptionHeader(Response $response, \Throwable $exception)
     {
         $info = [
             'className' => \get_class($exception),

@@ -1,4 +1,4 @@
-{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+{% extends '@ImaticView/Demo/base.html.twig' %}
 
 {% block headline 'Show component' %}
 
@@ -16,7 +16,7 @@
         {name: 'url', format: 'url'}
     ] %}
 
-    {{ include('ImaticViewBundle:Component:show.html.twig') }}
+    {{ include('@ImaticView/Component/show.html.twig') }}
     {% endexample %}
 
 {% endblock %}

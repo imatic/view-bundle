@@ -1,6 +1,6 @@
 {% if imatic_view_has_layout() %}
-{% set parent_template = 'ImaticViewBundle:Layout:layout.html.twig' %}
+{% set parent_template = '@ImaticView/Layout/layout.html.twig' %}
 {% else %}
-{% set parent_template = 'ImaticViewBundle:Layout:action.html.twig' %}
+{% set parent_template = '@ImaticView/Layout/action.html.twig' %}
 {% endif %}
 {% extends parent_template %}

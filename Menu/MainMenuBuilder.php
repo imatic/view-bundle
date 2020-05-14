@@ -46,13 +46,11 @@ class MainMenuBuilder
             }
             // User menu - user functions
             if ($this->provider->has('imatic.user')) {
-                $helper->addDivider($menu, true);
                 $menu->addChild($this->provider->get('imatic.user'));
             }
         } else {
             // User menu - login link
             if ($this->provider->has('imatic.user_anon')) {
-                $helper->addDivider($menu, true);
                 $menu->addChild($this->provider->get('imatic.user_anon'));
             }
         }

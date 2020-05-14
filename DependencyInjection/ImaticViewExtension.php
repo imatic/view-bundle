@@ -40,7 +40,8 @@ class ImaticViewExtension extends Extension
         if (!empty($config['formatters']['intl']['date_pattern_overrides'])) {
             $container
                 ->getDefinition(IntlFormatter::class)
-                ->addMethodCall('addDatePatternOverrides', [$config['formatters']['intl']['date_pattern_overrides']]);
+                ->addMethodCall('addDatePatternOverrides', [$config['formatters']['intl']['date_pattern_overrides']])
+            ;
         }
     }
 }

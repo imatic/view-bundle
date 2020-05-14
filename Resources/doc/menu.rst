@@ -92,7 +92,7 @@ Twig template
 .. sourcecode:: twig
 
     {# templates/base.html.twig #}
-    {% import 'ImaticViewBundle:Component:menu.html.twig' as menu %}
+    {% import '@ImaticView/Component/menu.html.twig' as menu %}
 
     {{ menu.menu('app.menu') }}
 

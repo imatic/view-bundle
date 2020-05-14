@@ -1,0 +1,310 @@
+@font-face {
+    font-family: Dosis;
+    src: url(../font/Dosis-SemiBold.ttf);
+}
+
+// === Mixins ===
+@mixin header-font() {
+    font-family: Dosis, $font-family-sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+// === Scaffold ===
+h1, h2, h3, h4, h5, h6 {
+    @include header-font();
+}
+
+legend {
+    @include header-font();
+    font-size: 1.063rem; // 17px
+    margin-bottom: 1.125rem;
+}
+
+.navbar, .nav {
+    @include header-font();
+}
+
+.container.error {
+    text-align: center;
+    margin-top: 1em;
+}
+
+header {
+    .navbar {
+        border-bottom: 1px solid $orange;
+        margin-bottom: 0;
+        @include gradient-y(lighten($gray-dark, 10%), $gray-dark);
+    }
+}
+
+footer {
+    margin-top: $font-size-base * $line-height-base;
+
+    .footer-content {
+        padding-left:15px;
+        padding-right:15px;
+        border-top: 1px solid darken($gray-lighter, 10%);
+        @include gradient-y($gray-lighter, darken($gray-lighter, 10%));
+        @include header-font();
+    }
+
+    &.container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+// === Blocks ===
+.headline {
+    margin-bottom: 20px;
+    padding: 15px 0 10px 0;
+    border-bottom: 1px solid darken($gray-lighter, 10%);
+    @include gradient-y(darken($gray-lighter, 10%), $gray-lighter);
+
+    h1 {
+        font-size: 18px;
+        font-weight: normal;
+        line-height: 26px;
+        padding: 0;
+        margin: 0;
+    }
+
+    .headline-side {
+        text-align: right;
+
+        @media screen and (max-width: breakpoint-max('sm')) {
+            text-align: left;
+        }
+    }
+
+    .breadcrumb {
+        background: none;
+        margin: .4em 0 0;
+        padding: 0;
+    }
+}
+
+.footer-content {
+    padding: 10px;
+    border-top: 1px solid darken($gray-lighter, 10%);
+    @include gradient-y($gray-lighter, darken($gray-lighter, 10%));
+    @include header-font();
+}
+
+// === Cards ===
+.card {
+    margin-bottom: 18px;
+
+    .card-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: .938rem;
+    }
+
+    @each $color, $value in $theme-colors {
+        &.card-#{$color} {
+            border-color: $value;
+
+            .card-header {
+                color: $white;
+                background-color: $value;
+            }
+        }
+    }
+
+    &.card-app {
+        .card-header {
+            color: $white;
+            border-bottom: 2px solid $orange;
+            @include gradient-y(lighten($gray-dark, 10%), $gray-dark);
+        }
+    }
+}
+
+// === Tables ===
+table {
+    &.table-auto {
+        width: auto;
+    }
+
+    caption {
+        caption-side: top;
+    }
+}
+
+// === Buttons ===
+.btn-default {
+    @include button-variant(#fff, #ccc);
+    color: #333;
+}
+
+// === Classes ===
+.yes {
+    @extend %fa-icon;
+    @extend .fas;
+    @extend .text-success;
+
+    &:before {
+        content: fa-content($fa-var-check);
+    }
+}
+
+.no {
+    @extend %fa-icon;
+    @extend .fas;
+    @extend .text-danger;
+
+    &:before {
+        content: fa-content($fa-var-times);
+    }
+}
+
+// === Components ===
+.imatic-view-table {
+    table {
+        th {
+            text-align: center;
+        }
+        td.batch-selector, th.batch-selector-switch {
+            text-align: center;
+        }
+        td, th {
+            vertical-align: middle !important;
+
+            &.text {
+                text-align: left;
+            }
+            &.number, &.money, &.date, &.datetime {
+                text-align: right;
+            }
+            &.boolean, &.actions {
+                text-align: center;
+                * {
+                    text-align: left;
+                }
+            }
+        }
+        thead {
+            th {
+                border-top: none;
+            }
+
+            a.sorted {
+                &.desc:after {
+                    content: "▾";
+                }
+                &.asc:after {
+                    content: "▴";
+                }
+            }
+        }
+    }
+
+    ul.pagination {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .table-exports {
+        text-align: right;
+
+        @media screen and (max-width: breakpoint-max('xs')) {
+            text-align: left;
+        }
+    }
+
+    .table-footer > div {
+        @extend .mb-2;
+    }
+}
+
+.imatic-view-show {
+    table {
+        td, th {
+            text-align: left;
+        }
+    }
+}
+
+.imatic-view-filter {
+    @extend .pt-2;
+    @extend .pb-2;
+
+    legend {
+        border-bottom: 1px solid #e5e5e5;
+    }
+}
+
+.imatic-view-filter legend {
+    cursor: pointer;
+}
+
+.imatic-view-filter.imatic-view-initial-closed .imatic-view-filter-content {
+    display: none;
+}
+
+// === Modals ===
+.modal.debug-exception {
+    .modal-content {
+        border: 3px solid lighten(theme-color('danger'), 10%);
+    }
+    .modal-body {
+        overflow-x: auto;
+    }
+    .modal-title {
+        color: theme-color('danger');
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-dialog.modal-max {
+        max-width: none !important;
+        width: 90%; /* fallback */
+        width: calc(100% - 60px) !important;
+    }
+}
+
+// === Alerts ===
+.alert-error {
+    @include alert-variant(theme-color-level('danger', $alert-bg-level), theme-color-level('danger', $alert-border-level), theme-color-level('danger', $alert-color-level));
+}
+
+// === Forms ===
+form {
+    legend {
+        font-family: $font-family-sans-serif;
+        font-weight: 700;
+        text-transform: none;
+    }
+
+    label.col-form-label {
+        font-weight: 700;
+    }
+
+    div.row {
+        @media (min-width: 768px) {
+            .col-form-label {
+                text-align: right;
+            }
+        }
+
+        &.is-invalid {
+            .select2-container--focus .select2-selection {
+                box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-invalid-color, .25);
+            }
+        }
+    }
+
+    .select2-container--bootstrap4 {
+        .select2-selection__clear {
+            background-color: transparent;
+            color: $gray-700;
+
+            &:hover {
+                background-color: transparent;
+                color: $gray-900;
+            }
+        }
+    }
+}

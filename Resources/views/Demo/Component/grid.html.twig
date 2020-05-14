@@ -1,4 +1,4 @@
-{% extends 'ImaticViewBundle:Demo:base.html.twig' %}
+{% extends '@ImaticView/Demo/base.html.twig' %}
 
 {% block headline 'Grid component' %}
 
@@ -8,7 +8,7 @@
 
     <h3>Simple table</h3>
     {% example %}
-    {{ include('ImaticViewBundle:Component:table.html.twig', {
+    {{ include('@ImaticView/Component/table.html.twig', {
         'items': [
             {name: 'Jan', age: 30, email: 'jan@example.com'},
             {name: 'Steve', age: 34, email: 'steve@example.com'},
@@ -39,7 +39,7 @@
         {name: 'url', format: 'url'}
     ] %}
 
-    {{ include('ImaticViewBundle:Component:table.html.twig') }}
+    {{ include('@ImaticView/Component/table.html.twig') }}
     {% endexample %}
 
 {% endblock %}

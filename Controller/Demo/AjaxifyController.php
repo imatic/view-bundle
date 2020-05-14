@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Controller\Demo;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/ajaxify")
  */
-class AjaxifyController extends Controller
+class AjaxifyController extends AbstractController
 {
     /**
      * @Route("/")

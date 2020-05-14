@@ -20,17 +20,17 @@
                 {% set filter_content_id = 'imatic_view_filter_' ~ component_id %}
             {% else %}
                 {% set filter_content_id = 'imatic_view_filter' %}
-            {% endif %}     
+            {% endif %}
             <div class="imatic-view-filter {% if filter.form.valid %} imatic-view-initial-closed{% endif %}">
                 <fieldset>
-                    <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'Filter' : 'Filter errors')|transchoice(filter.boundCount, {'%count%': filter.boundCount}, 'ImaticViewBundle') }}</legend>
+                    <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'filter' : 'filter_errors')|trans({'count': filter.boundCount}, 'ImaticViewBundle') }}</legend>
                     <div id="{{ filter_content_id }}" class="imatic-view-filter-content">
                         {{ form_start(form, {action: uri, method: 'get'}) }}
                         {% for field in form|filter(field => field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter']) %}
-                        {% set field_has_error = field.value.vars.errors is not empty %}
+                            {% set field_has_error = field.value.vars.errors is not empty %}
                             <div class="form-group row">
                                 <div class="col-md-2">
-                                    <label for="{{ field.value.vars.id }}">{{ field.vars.name|humanize|trans({}, filter.translationDomain) }}</label>
+                                    <label for="{{ field.value.vars.id }}" class="col-form-label">{{ field.vars.name|humanize|trans({}, filter.translationDomain) }}</label>
                                 </div>
                                 <div class="col-md-2">
                                     {% if field.operator is defined %}
@@ -53,15 +53,15 @@
                                     </button>
 
                                     {{ form_widget(form.clearFilter, {
-                                    label: 'Reset filter',
-                                    translation_domain: 'ImaticViewBundle',
-                                    attr: { class: 'btn btn-default' }
+                                        label: 'Reset filter',
+                                        translation_domain: 'ImaticViewBundle',
+                                        attr: { class: 'btn btn-default' }
                                     }) }}
 
                                     {{ form_widget(form.defaultFilter, {
-                                    label: 'Default filter',
-                                    translation_domain: 'ImaticViewBundle',
-                                    attr: { class: 'btn btn-default' }
+                                        label: 'Default filter',
+                                        translation_domain: 'ImaticViewBundle',
+                                        attr: { class: 'btn btn-default' }
                                     }) }}
                                 </div>
                             </div>

@@ -4,7 +4,7 @@ Layout
 Twig templates
 --------------
 
-- ``ImaticViewBundle:Layout:base.html.twig``
+- ``@ImaticView/Layout/base.html.twig``
 
   - this is the main template that should be used and/or extended
 
@@ -15,11 +15,11 @@ Twig templates
 
   - these can be overriden by providing ``asset_bundle_name`` in case files are served from different location.
 
-- ``ImaticViewBundle:Layout:layout.html.twig``
+- ``@ImaticView/Layout/layout.html.twig``
 
   - full HTML page skeleton
 
-- ``ImaticViewBundle:Layout:action.html.twig``
+- ``@ImaticView/Layout/action.html.twig``
 
   - layout-less action output
 
@@ -27,7 +27,7 @@ Twig templates
 Behavior of ``base.html.twig``
 ------------------------------
 
-If you use ``ImaticViewBundle:Layout:base.html.twig``, the parent template
+If you use ``@ImaticView/Layout/base.html.twig``, the parent template
 will be determined dynamically. The logic is as follows:
 
 Use ``action.html.twig`` if any of the following conditions is met:

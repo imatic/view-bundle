@@ -7,7 +7,7 @@
     - display_criteria or pager, filter, sorter
 #}
 
-{% import 'ImaticViewBundle:Component:button.html.twig' as button %}
+{% import '@ImaticView/Component/button.html.twig' as button %}
 
 {% block table %}
     {% set table   = imatic_view_table(table | default([])) %}
@@ -22,7 +22,7 @@
     {% apply spaceless %}
         <div {{ table.attr|imatic_html_attributes({class: 'imatic-view-table'}) }}>
 
-        {{ include('ImaticViewBundle:Component:filter.html.twig') }}
+        {{ include('@ImaticView/Component/filter.html.twig') }}
 
         {% for action in table.actions %}
             {{ button.button(action) }}
@@ -32,8 +32,7 @@
             <form action="{{ uri }}" method="post">
         {% endif %}
 
-        {% if responsive %}<div class="table-responsive">{% endif %}
-        {% block table_tag %}<table class="table">{% endblock %}
+        {% block table_tag %}<table class="table{% if responsive %} table-responsive{% endif %}">{% endblock %}
             <caption></caption>
             {% block table_head %}
                 <thead>
@@ -100,7 +99,6 @@
                 </tbody>
             {% endblock %}
         </table>
-        {% if responsive %}</div>{% endif %}
 
         <div class="row table-footer">
             {% set table_batch_actions -%}
@@ -123,7 +121,7 @@
 
             {% set table_pager -%}
                 {% block table_pager -%}
-                    {{ include('ImaticViewBundle:Component:pager.html.twig') }}
+                    {{ include('@ImaticView/Component/pager.html.twig') }}
                 {%- endblock %}
             {%- endset %}
 

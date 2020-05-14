@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '@ImaticView/Layout/base.html.twig' %}
 
 {% block headline imatic_view_resource_create_headline(resource, action, item) %}
 
@@ -11,6 +11,6 @@
     translationDomain: resource.config.translation_domain
     } %}
 
-    {% include 'ImaticViewBundle:Component:show.html.twig' %}
+    {% include '@ImaticView/Component/show.html.twig' %}
 
 {% endblock %}

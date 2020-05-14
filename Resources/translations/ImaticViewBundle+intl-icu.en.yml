@@ -1,0 +1,12 @@
+filter: >-
+    {count, plural,
+        =0    {Filter}
+        =1    {Filter (1 filter set)}
+        other {Filter (# filters set)}
+    }
+filter_errors: >-
+  {count, plural,
+      =0    {Filter (has errors)}
+      =1    {Filter (1 filter set, has errors)}
+      other {Filter (# filters set, has errors)}
+  }
