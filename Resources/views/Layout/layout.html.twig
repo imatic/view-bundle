@@ -89,12 +89,15 @@
         {% block action_after %}{% endblock %}
     </div>
 
+    {% block footer_full %}
     <footer class="container-fluid">
         <div class="footer-content">
-            <a title="{{ 'Copyright'|trans({}, 'ImaticViewBundle') }}"
-               href="http://www.imatic.cz">{{ 'Copyright'|trans({}, 'ImaticViewBundle') }}</a>
+            <a title="{{ 'Copyright'|trans({}, 'ImaticViewBundle') }}" href="https://www.imatic.cz" target="_blank">
+                {{ 'Copyright'|trans({}, 'ImaticViewBundle') }}
+            </a>
         </div>
     </footer>
+    {% endblock %}
 
 {% endblock %}
 
