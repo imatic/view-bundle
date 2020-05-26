@@ -62,7 +62,7 @@
     {% endif %}
 
     {% if hasNested %}
-        <div class="dropdown-menu">
+        <div class="dropdown-menu{% if action.nestedAlignment %}{{" dropdown-menu-#{action.nestedAlignment}"}}{% endif %}">
             {{ nested }}
         </div>
         </div>

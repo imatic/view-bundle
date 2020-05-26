@@ -142,7 +142,7 @@
                 <div class="col-md-4">{{ table_batch_actions }}</div>
             {% endif %}
             {% if table_pager is not empty or table_exports is not empty %}
-                <div class="{% if table_batch_actions is not empty or table_exports is not empty %}col-md-4 {% endif %}text-center">{{ table_pager }}</div>
+                <div class="col{% if table_batch_actions is not empty or table_exports is not empty %} col-md-4{% endif %} align-self-center text-center">{{ table_pager }}</div>
             {% endif %}
             {% if table_exports is not empty %}
                 <div class="col-md-4 table-exports">{{ table_exports }}</div>

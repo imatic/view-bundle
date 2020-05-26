@@ -36,6 +36,7 @@ class ActionOptions extends AbstractOptions
             'routeParams' => [],
             'url' => '',
             'nested' => [],
+            'nestedAlignment' => '',
             'condition' => '',
             'tag' => 'a',
             'attrs' => [],
@@ -49,6 +50,7 @@ class ActionOptions extends AbstractOptions
         $resolver->setAllowedTypes('routeParams', 'array');
         $resolver->setAllowedTypes('url', 'string');
         $resolver->setAllowedTypes('nested', 'array');
+        $resolver->setAllowedTypes('nestedAlignment', 'string');
         $resolver->setAllowedTypes('condition', ['string', 'bool']);
         $resolver->setAllowedTypes('tag', 'string');
         $resolver->setAllowedTypes('attrs', 'array');

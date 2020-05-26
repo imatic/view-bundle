@@ -290,6 +290,10 @@ form {
         }
 
         &.is-invalid {
+            .select2-selection {
+                border-color: $danger;
+            }
+
             .select2-container--focus .select2-selection {
                 box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-invalid-color, .25);
             }
