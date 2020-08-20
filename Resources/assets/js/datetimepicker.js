@@ -1,3 +1,9 @@
+// import common languages
+import moment from 'moment';
+import 'moment/locale/cs';
+import 'moment/locale/sk';
+import 'moment/locale/ro';
+
 /*! version : 4.17.47
  =========================================================
  bootstrap-datetimejs
