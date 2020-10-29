@@ -85,7 +85,7 @@
         <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguage" />
 
         <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="twig" />
         </service>
 
         <service id="Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper" />

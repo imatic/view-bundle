@@ -11,7 +11,7 @@ class FormatHelperTest extends TestCase
 
     protected function setUp()
     {
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $twig = $this->createMock('Twig\Environment');
 
         $formatter = $this->createMock('Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatterInterface');
         $formatter->expects($this->any())
@@ -21,7 +21,7 @@ class FormatHelperTest extends TestCase
             })
         ;
 
-        $this->formatHelper = new FormatHelper($container);
+        $this->formatHelper = new FormatHelper($twig);
         $this->formatHelper->addFormatter('text', $formatter);
     }
 

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Format;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Twig\Environment;
 
 class FormatHelper implements FormatterInterface
 {
@@ -19,18 +19,18 @@ class FormatHelper implements FormatterInterface
     private $formatterOptions;
 
     /**
-     * @var ContainerInterface
+     * @var Environment
      */
-    private $container;
+    private $twig;
 
     /**
      * @var PropertyAccessor
      */
     private $accessor;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Environment $twig)
     {
-        $this->container = $container; // need a container instance because of a circular dependency
+        $this->twig = $twig;
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -76,7 +76,7 @@ class FormatHelper implements FormatterInterface
         }
 
         if (!empty($options['template'])) {
-            return $this->container->get('templating')->render(
+            return $this->twig->render(
                 $options['template'],
                 ['value' => $value, 'options' => $options, 'format' => $format] + $options
             );
@@ -122,7 +122,7 @@ class FormatHelper implements FormatterInterface
                 $propertyPath = $options['propertyPath'];
             }
 
-            return $this->container->get('templating')->render('@ImaticView/Field/collection.html.twig', [
+            return $this->twig->render('@ImaticView/Field/collection.html.twig', [
                 'value' => $value,
                 'options' => $options,
                 'format' => $format,

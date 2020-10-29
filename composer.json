@@ -38,7 +38,10 @@
     "autoload": {
         "psr-4": {
             "Imatic\\Bundle\\ViewBundle\\": ""
-        }
+        },
+        "exclude-from-classmap": [
+            "Tests/"
+        ]
     },
     "config": {
         "sort-packages": true
