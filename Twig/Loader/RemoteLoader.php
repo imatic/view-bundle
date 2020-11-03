@@ -106,16 +106,25 @@ class RemoteLoader implements LoaderInterface
         return \time() - $time < $this->templates[$name]['ttl'];
     }
 
+    private function getCacheFilename($name)
+    {
+        $twig = $this->container->get('twig');
+        $key = $twig->getCache(false)->generateKey($name, $twig->getTemplateClass($name));
+
+        return !$key ? false : $key;
+    }
+
     /**
      * Check cache file TTL.
+     *
+     * This method is called only if env->isAutoReload() == FALSE
      *
      * @param string $name
      */
     private function checkCacheFileTtl($name)
     {
-        // this method is called only if env->isAutoReload() == FALSE
         if (
-            false !== ($cacheFile = $this->container->get('twig')->getCacheFilename($name))
+            false !== ($cacheFile = $this->getCacheFilename($name))
             && \is_file($cacheFile)
             && \time() - \filemtime($cacheFile) >= $this->templates[$name]['ttl']
         ) {
