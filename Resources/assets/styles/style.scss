@@ -172,7 +172,7 @@ table {
         td, th {
             vertical-align: middle !important;
 
-            &.text {
+            &.text, &.translatable {
                 text-align: left;
             }
             &.number, &.money, &.date, &.datetime {
