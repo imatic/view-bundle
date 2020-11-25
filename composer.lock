@@ -3607,16 +3607,16 @@
         },
         {
             "name": "imatic/form-bundle",
-            "version": "v5.0.1",
+            "version": "v5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imatic/form-bundle.git",
-                "reference": "ae979c29d8fe7344d1f86a5729fae62518ce2f90"
+                "reference": "99b99865526b3f94e370265f124aa7de02d3b1d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/ae979c29d8fe7344d1f86a5729fae62518ce2f90",
-                "reference": "ae979c29d8fe7344d1f86a5729fae62518ce2f90",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/99b99865526b3f94e370265f124aa7de02d3b1d3",
+                "reference": "99b99865526b3f94e370265f124aa7de02d3b1d3",
                 "shasum": ""
             },
             "require": {
@@ -3626,7 +3626,6 @@
                 "symfony/expression-language": "^4.4|^5.0",
                 "symfony/form": "^4.4|^5.0",
                 "symfony/framework-bundle": "^4.4|^5.0",
-                "symfony/templating": "^4.4|^5.0",
                 "symfony/translation": "^4.4|^5.0",
                 "symfony/twig-bundle": "^4.4|^5.0",
                 "symfony/validator": "^4.4|^5.0",
@@ -3645,7 +3644,10 @@
             "autoload": {
                 "psr-4": {
                     "Imatic\\Bundle\\FormBundle\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3662,7 +3664,7 @@
                 }
             ],
             "description": "Bundle for working with Symfony forms",
-            "time": "2020-05-21T13:22:49+00:00"
+            "time": "2020-11-25T15:13:35+00:00"
         },
         {
             "name": "imatic/testing",
@@ -4608,6 +4610,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {
