@@ -49,7 +49,7 @@ class FormatterPass implements CompilerPassInterface
         ]);
         $resolver->setAllowedTypes('is_safe', [
             'string',
-            'NULL',
+            'null',
         ]);
 
         return $resolver;
