@@ -5,7 +5,7 @@ use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;
 
 class ExampleTokenParserTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         static::createClient();
     }

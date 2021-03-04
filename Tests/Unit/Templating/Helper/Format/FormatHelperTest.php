@@ -9,7 +9,7 @@ class FormatHelperTest extends TestCase
 {
     private $formatHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $twig = $this->createMock('Twig\Environment');
 

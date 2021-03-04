@@ -44,7 +44,7 @@ class UrlHelperTest extends TestCase
 
         $result = $urlHelper->parseUrl($this->testUrl);
 
-        $this->assertInternalType('array', $result['query']);
+        $this->assertIsArray($result['query']);
         $this->assertArrayHasKey('param1', $result['query']);
         $this->assertEquals('value1', $result['query']['param1']);
     }

@@ -5,7 +5,7 @@ use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;
 
 class FormatExtensionTest extends WebTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         static::createClient();
     }
