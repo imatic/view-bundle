@@ -99,6 +99,12 @@ class TestingType extends AbstractType
                     'entry_type' => DateType::class,
                     'data' => [new \DateTime('+1 week'), new \DateTime('+2 weeks')],
                 ],
+                'collection_c' => [
+                    'type' => CollectionType::class,
+                    'entry_type' => FileType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                ]
             ];
         }
 
