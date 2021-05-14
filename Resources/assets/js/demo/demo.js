@@ -1,5 +1,5 @@
 // Platform demo initialization
-const hljs = require('highlight.js/lib/highlight');
+const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('twig', require('highlight.js/lib/languages/twig'));
 hljs.registerLanguage('php', require('highlight.js/lib/languages/php'));
 hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'));
