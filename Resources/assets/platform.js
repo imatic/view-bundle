@@ -27,7 +27,7 @@ import "expose-loader?Imatic.Form!imatic/form-bundle/Resources/public/js/Form";
 
 $(function() {
     // file upload - the name of the file appear on select
-    $(".custom-file-input").on("change", function() {
+    $(document).on("change", '.custom-file-input', function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
