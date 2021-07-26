@@ -44,6 +44,11 @@ $form-feedback-icon-invalid: none;
 $table-cell-padding: .5rem;
 $table-hover-bg: #f5f5f5;
 
+$custom-file-text: (
+  en: "Browse",
+  cs: "Procházet"
+);
+
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
