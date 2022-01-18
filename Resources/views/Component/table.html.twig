@@ -15,6 +15,9 @@
     {% set uri = uri|default(app.request.uri) %}
     {% set item_count = items|length %}
     {% set responsive = responsive|default(false) %}
+    {% if pager is not defined and display_criteria is defined %}
+        {% set pager = display_criteria.pager %}
+    {% endif %}
     {% if sorter is not defined and display_criteria is defined %}
         {% set sorter = display_criteria.sorter %}
     {% endif %}
@@ -106,7 +109,13 @@
             {% set table_batch_actions -%}
                 {% block table_batch_actions -%}
                     {% if table.selectable %}
-                        <label class="col-form-label"><input type="checkbox" name="selectedAll"> {{ 'All elements'|trans({}, 'ImaticViewBundle') }}</label>&nbsp;
+                        <label class="col-form-label"><input type="checkbox" name="selectedAll">
+                            {% if pager is defined %}
+                                {{ 'All elements'|trans({}, 'ImaticViewBundle') }} ({{ pager.total }})
+                            {% else %}
+                                {{ 'All elements'|trans({}, 'ImaticViewBundle') }}
+                            {% endif %}
+                        </label>&nbsp;
                         {% for action in table.batchActions %}
                             {% if action.nested is not empty %}
                                 {% for nested_action in action.nested %}
