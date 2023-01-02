@@ -28,6 +28,6 @@ class FieldOptions extends AbstractOptions
         $resolver->setAllowedTypes('formatOptions', 'array');
         $resolver->setAllowedTypes('class', 'string');
         $resolver->setAllowedTypes('label', 'string');
-        $resolver->setAllowedTypes('propertyPath', ['string', 'NULL']);
+        $resolver->setAllowedTypes('propertyPath', ['string', 'null']);
     }
 }
