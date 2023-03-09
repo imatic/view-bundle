@@ -4650,16 +4650,16 @@
         },
         {
             "name": "imatic/form-bundle",
-            "version": "v5.0.5",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imatic/form-bundle.git",
-                "reference": "83258c90c8c9fcff31ef733bc8f279208d84fef1"
+                "reference": "e8381e85f8f010c38f24b2038112d4b7e0ac090b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/83258c90c8c9fcff31ef733bc8f279208d84fef1",
-                "reference": "83258c90c8c9fcff31ef733bc8f279208d84fef1",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/e8381e85f8f010c38f24b2038112d4b7e0ac090b",
+                "reference": "e8381e85f8f010c38f24b2038112d4b7e0ac090b",
                 "shasum": ""
             },
             "require": {
@@ -4709,9 +4709,9 @@
             "description": "Bundle for working with Symfony forms",
             "support": {
                 "issues": "https://github.com/imatic/form-bundle/issues",
-                "source": "https://github.com/imatic/form-bundle/tree/v5.0.5"
+                "source": "https://github.com/imatic/form-bundle/tree/v5.2.0"
             },
-            "time": "2021-03-04T08:49:17+00:00"
+            "time": "2023-03-09T13:25:13+00:00"
         },
         {
             "name": "imatic/testing",
@@ -8729,5 +8729,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }
