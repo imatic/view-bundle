@@ -51,7 +51,7 @@ class TableData implements \IteratorAggregate
         return \array_slice($this->data, $this->offset, $this->limit);
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->getData());
     }
