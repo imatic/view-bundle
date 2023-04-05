@@ -104,7 +104,7 @@ class TestingType extends AbstractType
                     'entry_type' => FileType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
-                ]
+                ],
             ];
         }
 

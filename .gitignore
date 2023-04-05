@@ -3,7 +3,7 @@
 /nbproject/
 /phpunit.xml
 /composer
-/.php_cs.cache
+/.php-cs-fixer.cache
 /phpda.svg
 .DS_Store
 Thumbs.db
