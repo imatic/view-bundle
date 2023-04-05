@@ -8,7 +8,7 @@ framework:
     secret:                     test
     test: ~
     session:
-        storage_id:             session.storage.filesystem
+        storage_factory_id:     session.storage.factory.mock_file
     form:                       true
     csrf_protection:            true
     validation:
@@ -49,7 +49,7 @@ monolog:
           type: 'test'
 
 security:
-    encoders:
+    password_hashers:
         Symfony\Component\Security\Core\User\User: plaintext
 
     role_hierarchy:
@@ -70,7 +70,6 @@ security:
             context:            user
             pattern:            /demo/(.*)
             http_basic:
-            anonymous:          false
 
     access_control:
         - { path: ^/demo, role: [ROLE_ADMIN] }

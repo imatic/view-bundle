@@ -8,7 +8,7 @@ class WebTestCase extends BaseWebTestCase
     /**
      * @return string
      */
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
         return 'Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\TestKernel';
     }

@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__ . '/../../../bootstrap.php';
 
-\umask(0000);
+umask(0000);
 Debug::enable();
 
 $_SERVER['PHP_AUTH_USER'] = 'user';

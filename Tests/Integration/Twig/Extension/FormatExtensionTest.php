@@ -40,6 +40,6 @@ class FormatExtensionTest extends WebTestCase
      */
     private function getTwig()
     {
-        return self::$container->get('twig');
+        return self::getContainer()->get('twig');
     }
 }
