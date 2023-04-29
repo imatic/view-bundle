@@ -33,24 +33,25 @@ abstract class AbstractCollection implements \ArrayAccess
         return $this->remove($name);
     }
 
-    public function offsetExists($name)
+    public function offsetExists($name): bool
     {
         return $this->has($name);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->get($name);
     }
 
-    public function offsetSet($name, $value)
+    public function offsetSet($name, $value): void
     {
-        return $this->set($name, $value);
+        $this->set($name, $value);
     }
 
-    public function offsetUnset($name)
+    public function offsetUnset($name): void
     {
-        return $this->remove($name);
+        $this->remove($name);
     }
 
     public function __toString()

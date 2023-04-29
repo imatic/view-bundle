@@ -53,7 +53,7 @@ class KernelSubscriber implements EventSubscriberInterface
      */
     public function onKernelResponse(ResponseEvent $event)
     {
-        if ($event->isMasterRequest()) {
+        if (method_exists($event, 'isMainRequest') ? $event->isMainRequest() : $event->isMasterRequest()) {
             $request = $event->getRequest();
             $response = $event->getResponse();
 
