@@ -141,9 +141,9 @@ class IntlFormatter implements FormatterInterface
         }
 
         if (NumberFormatter::CURRENCY === $type) {
-            return $formatter->formatCurrency((float)$value, $options['currency']);
+            return $formatter->formatCurrency((float) $value, $options['currency']);
         }
-        return $formatter->format((float)$value);
+        return $formatter->format((float) $value);
     }
 
     /**

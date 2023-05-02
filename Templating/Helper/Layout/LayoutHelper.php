@@ -29,7 +29,7 @@ class LayoutHelper
      */
     public function hasLayout()
     {
-        $masterRequest = method_exists($this->requestStack, 'getMainRequest')
+        $masterRequest = \method_exists($this->requestStack, 'getMainRequest')
             ? $this->requestStack->getMainRequest()
             : $this->requestStack->getMasterRequest();
         $currentRequest = $this->requestStack->getCurrentRequest();
@@ -55,7 +55,7 @@ class LayoutHelper
      */
     public function isModalDialog()
     {
-        $request = method_exists($this->requestStack, 'getMainRequest')
+        $request = \method_exists($this->requestStack, 'getMainRequest')
             ? $this->requestStack->getMainRequest()
             : $this->requestStack->getMasterRequest();
 
