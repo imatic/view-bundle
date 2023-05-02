@@ -18,6 +18,10 @@
             </call>
         </prototype>
 
+        <service id="Imatic\Bundle\ViewBundle\Controller\DefaultController" public="true" autowire="true">
+            <tag name="container.service_subscriber" id="twig"/>
+        </service>
+
         <!-- Menu -->
         <service id="Imatic\Bundle\ViewBundle\Menu\Factory">
             <argument type="service" id="knp_menu.factory" />
