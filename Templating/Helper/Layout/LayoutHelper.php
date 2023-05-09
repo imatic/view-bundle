@@ -29,7 +29,9 @@ class LayoutHelper
      */
     public function hasLayout()
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = \method_exists($this->requestStack, 'getMainRequest')
+            ? $this->requestStack->getMainRequest()
+            : $this->requestStack->getMasterRequest();
         $currentRequest = $this->requestStack->getCurrentRequest();
 
         if (
@@ -53,7 +55,11 @@ class LayoutHelper
      */
     public function isModalDialog()
     {
-        return $this->requestStack->getMasterRequest()->headers->has('X-Modal-Dialog');
+        $request = \method_exists($this->requestStack, 'getMainRequest')
+            ? $this->requestStack->getMainRequest()
+            : $this->requestStack->getMasterRequest();
+
+        return $request->headers->has('X-Modal-Dialog');
     }
 
     /**
