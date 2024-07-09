@@ -329,7 +329,7 @@ export class RequestAction extends Action
      * Prepare the request
      */
     prepareRequest(container: ContainerInterface): RequestInfo {
-        var info = $.extend(true, {}, this.info);
+        var info = $.extend(true, new RequestInfo(), this.info);
 
         // use container's content selector if none was given
         if (!info.contentSelector) {
