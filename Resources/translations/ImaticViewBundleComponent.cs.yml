@@ -7,3 +7,5 @@ first:      První strana
 current:    Aktuální strana
 
 pagination: "%first% - %last% z %total%"
+
+page_limit_label: Počet záznamů na stránku
