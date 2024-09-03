@@ -7,3 +7,5 @@ first:      First page
 current:    Current page
 
 pagination: "%first% - %last% of %total%"
+
+page_limit_label: Items per page
