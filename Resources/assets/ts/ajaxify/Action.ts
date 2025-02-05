@@ -398,7 +398,15 @@ export class RequestAction extends Action
         if (response.flashes.length > 0) {
             container.handleFlashes(response.flashes);
         } else if (!response.valid && !response.aborted) {
-            container.handleError('Internal server error', response);
+            if (response.code === 403) {
+                /**
+                 * this code is returned for AJAX requests when user session expired,
+                 * so reload the page to redirect user to login page
+                 */
+                window.location.reload();
+            } else {
+                container.handleError('Internal server error', response);
+            }
         }
 
         // complete event
