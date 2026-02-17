@@ -1,7 +1,9 @@
 /.idea/
 /vendor/
 /nbproject/
+/.vscode/
 /phpunit.xml
+/.phpunit.result.cache
 /composer
 /.php-cs-fixer.cache
 /phpda.svg

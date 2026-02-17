@@ -171,7 +171,7 @@
         <!-- Twig loaders -->
         <service id="Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader">
             <tag name="twig.loader" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="twig" />
         </service>
 
         <!-- Twig runtime -->

@@ -6,7 +6,7 @@ parameters:
 
 framework:
     secret:                     test
-    test: ~
+    test:                       true
     session:
         storage_factory_id:     session.storage.factory.mock_file
     form:                       true
@@ -27,6 +27,7 @@ web_profiler:
 twig:
     debug:                      "%kernel.debug%"
     strict_variables:           "%kernel.debug%"
+    auto_reload:                false
 
 doctrine:
     dbal:

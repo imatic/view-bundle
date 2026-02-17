@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
@@ -11,14 +11,14 @@ use Twig\Source;
  */
 class RemoteLoader implements LoaderInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    private Environment $twig;
+
     /** @var array map of remote templates */
     private $templates;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Environment $twig)
     {
-        $this->container = $container;
+        $this->twig = $twig;
     }
 
     /**
@@ -34,11 +34,9 @@ class RemoteLoader implements LoaderInterface
     {
         $this->templates[$name] = [
             'url' => $url,
-            'ttl' => $ttl,
+            'ttl' => \max(1, $ttl),
             'blocks' => $blocks,
             'metadata' => $metadata,
-            'checked_ttl' => false,
-            'checking_ttl' => false,
         ];
     }
 
@@ -84,18 +82,14 @@ class RemoteLoader implements LoaderInterface
     {
         $this->ensureExists($name);
 
-        if (
-            !$this->container->get('twig')->isAutoReload()
-            && !$this->templates[$name]['checked_ttl']
-            && !$this->templates[$name]['checking_ttl']
-        ) {
-            $this->templates[$name]['checking_ttl'] = true;
-            $this->checkCacheFileTtl($name);
-            $this->templates[$name]['checking_ttl'] = false;
-            $this->templates[$name]['checked_ttl'] = true;
+        if ($this->twig->isAutoReload()) {
+            return $name;
         }
 
-        return $name;
+        $ttl = $this->templates[$name]['ttl'];
+        $bucket = \intdiv(\time(), $ttl);
+
+        return $name . '@' . $bucket;
     }
 
     public function isFresh($name, $time): bool
@@ -104,33 +98,6 @@ class RemoteLoader implements LoaderInterface
         $this->ensureExists($name);
 
         return \time() - $time < $this->templates[$name]['ttl'];
-    }
-
-    private function getCacheFilename($name)
-    {
-        $twig = $this->container->get('twig');
-        $key = $twig->getCache(false)->generateKey($name, $twig->getTemplateClass($name));
-
-        return !$key ? false : $key;
-    }
-
-    /**
-     * Check cache file TTL.
-     *
-     * This method is called only if env->isAutoReload() == FALSE
-     *
-     * @param string $name
-     */
-    private function checkCacheFileTtl($name)
-    {
-        if (
-            false !== ($cacheFile = $this->getCacheFilename($name))
-            && \is_file($cacheFile)
-            && \time() - \filemtime($cacheFile) >= $this->templates[$name]['ttl']
-        ) {
-            // remove expired cache file
-            \unlink($cacheFile);
-        }
     }
 
     /**
