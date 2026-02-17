@@ -2,6 +2,9 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject;
 
 use Imatic\Testing\Test\TestKernel as BaseTestKernel;
+use Symfony\Component\Clock\ClockInterface;
+use Symfony\Component\Clock\MockClock;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class TestKernel extends BaseTestKernel
 {
@@ -23,5 +26,14 @@ class TestKernel extends BaseTestKernel
     public function getProjectDir(): string
     {
         return __DIR__;
+    }
+
+    protected function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->register(ClockInterface::class, MockClock::class)
+            ->setPublic(true)
+        ;
     }
 }

@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
+use Symfony\Component\Clock\ClockInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
@@ -12,13 +14,20 @@ use Twig\Source;
 class RemoteLoader implements LoaderInterface
 {
     private Environment $twig;
+    private CacheInterface $cache;
+    private ClockInterface $clock;
 
     /** @var array map of remote templates */
     private $templates;
 
-    public function __construct(Environment $twig)
-    {
+    public function __construct(
+        Environment $twig,
+        CacheInterface $cache,
+        ClockInterface $clock
+    ) {
         $this->twig = $twig;
+        $this->clock = $clock;
+        $this->cache = $cache;
     }
 
     /**
@@ -86,10 +95,17 @@ class RemoteLoader implements LoaderInterface
             return $name;
         }
 
+        $now = $this->clock->now()->getTimestamp();
         $ttl = $this->templates[$name]['ttl'];
-        $bucket = \intdiv(\time(), $ttl);
 
-        return $name . '@' . $bucket;
+        $lastFetch = $this->cache->get($name, fn () => $now);
+
+        if ($now - $lastFetch >= $ttl) {
+            $lastFetch = $now;
+            $this->cache->delete($name);
+        }
+
+        return $name . '@' . $lastFetch;
     }
 
     public function isFresh($name, $time): bool
