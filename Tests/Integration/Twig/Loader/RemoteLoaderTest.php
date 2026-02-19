@@ -10,6 +10,9 @@ use Twig\Environment;
 
 class RemoteLoaderTest extends WebTestCase
 {
+    const TEMPLATE_TTL = 'remote_ttl';
+    const TEMPLATE_BLOCK = 'remote_block';
+
     protected function setUp(): void
     {
         static::createClient();
@@ -18,36 +21,54 @@ class RemoteLoaderTest extends WebTestCase
 
     public function testTemplateTtl()
     {
-        $remoteFile = \sys_get_temp_dir() . '/remote_layout.html';
-        \file_put_contents($remoteFile, 'v1');
+        $file = \sys_get_temp_dir() . '/' . self::TEMPLATE_TTL;
+        \file_put_contents($file, 'v1');
 
-        $this->registerTemplate($remoteFile, 999); // TTL in seconds
+        $this->registerTemplate(self::TEMPLATE_TTL, $file, 999); // TTL in seconds
 
         $twig = $this->getTwig();
 
-        $this->assertSame('v1', $twig->render('remote_layout'));
+        $this->assertSame('v1', $twig->render(self::TEMPLATE_TTL));
 
-        \file_put_contents($remoteFile, 'v2');
+        \file_put_contents($file, 'v2');
 
         $this->getClock()->sleep(500); // wait less than TTL
 
         // still v1 since TTL has not expired yet
-        $this->assertSame('v1', $twig->render('remote_layout'));
+        $this->assertSame('v1', $twig->render(self::TEMPLATE_TTL));
 
         $this->getClock()->sleep(500); // wait longer than TTL
 
         // v2 after TTL expires
-        $this->assertSame('v2', $twig->render('remote_layout'));
+        $this->assertSame('v2', $twig->render(self::TEMPLATE_TTL));
     }
 
-    private function registerTemplate(string $file, int $ttl)
+    public function testTemplatePlaceholders()
+    {
+        $file = \sys_get_temp_dir() . '/' . self::TEMPLATE_BLOCK;
+        \file_put_contents($file, '<h1>%%title%%</h1>%%content%%'); // template with placeholders
+
+        $this->registerTemplate(self::TEMPLATE_BLOCK, $file);
+
+        // Tests/Fixtures/TestProject/templates/remote_block.html.twig
+        $template = $this->getTwig()->render(self::TEMPLATE_BLOCK . '.html.twig');
+
+        $this->assertStringContainsString('<h1>Page title</h1>', $template);
+        $this->assertStringContainsString('<p>Page content</p>', $template);
+        $this->assertStringNotContainsString('%%', $template);
+    }
+
+    private function registerTemplate(string $name, string $file, int $ttl = 86400): void
     {
         $loader = $this->getRemoteLoader();
         $loader->addTemplate(
-            'remote_layout',
+            $name,
             'file://' . $file,
             $ttl,
-            ['content' => ['placeholder' => '{{ content }}']],
+            [
+                'title' => ['placeholder' => '%%title%%'],
+                'content' => ['placeholder' => '%%content%%'],
+            ],
             []
         );
     }
