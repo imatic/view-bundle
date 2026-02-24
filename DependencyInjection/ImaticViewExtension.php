@@ -3,8 +3,11 @@ namespace Imatic\Bundle\ViewBundle\DependencyInjection;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter;
 use Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader;
+use Symfony\Component\Clock\ClockInterface;
+use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -34,6 +37,12 @@ class ImaticViewExtension extends Extension
                     isset($remoteTemplate['blocks']) ? $remoteTemplate['blocks'] : [],
                     isset($remoteTemplate['metadata']) ? $remoteTemplate['metadata'] : [],
                 ]);
+            }
+
+            if (!$container->has(ClockInterface::class)) {
+                $definition = new Definition(NativeClock::class);
+                $definition->setPublic(false);
+                $container->setDefinition(ClockInterface::class, $definition);
             }
         }
 
