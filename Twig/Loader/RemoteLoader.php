@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
-use Symfony\Component\Clock\ClockInterface;
+use Imatic\Bundle\ViewBundle\Clock\ClockInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
