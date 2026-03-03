@@ -12,11 +12,27 @@ class RemoteLoaderTest extends WebTestCase
 {
     const TEMPLATE_TTL = 'remote_ttl';
     const TEMPLATE_BLOCK = 'remote_block';
+    const TEMPLATE_ERROR = 'remote_error';
 
     protected function setUp(): void
     {
         static::createClient();
         self::getContainer()->get(CacheInterface::class)->clear();
+    }
+
+    public function testTemplatePlaceholders()
+    {
+        $file = \sys_get_temp_dir() . '/' . self::TEMPLATE_BLOCK;
+        \file_put_contents($file, '<h1>%%title%%</h1>%%content%%'); // template with placeholders
+
+        $this->registerTemplate(self::TEMPLATE_BLOCK, $file);
+
+        // Tests/Fixtures/TestProject/templates/remote_block.html.twig
+        $template = $this->getTwig()->render(self::TEMPLATE_BLOCK . '.html.twig');
+
+        $this->assertStringContainsString('<h1>Page title</h1>', $template);
+        $this->assertStringContainsString('<p>Page content</p>', $template);
+        $this->assertStringNotContainsString('%%', $template);
     }
 
     public function testTemplateTtl()
@@ -43,19 +59,39 @@ class RemoteLoaderTest extends WebTestCase
         $this->assertSame('v2', $twig->render(self::TEMPLATE_TTL));
     }
 
-    public function testTemplatePlaceholders()
+    public function testInitialLoadError()
     {
-        $file = \sys_get_temp_dir() . '/' . self::TEMPLATE_BLOCK;
-        \file_put_contents($file, '<h1>%%title%%</h1>%%content%%'); // template with placeholders
+        $file = \sys_get_temp_dir() . '/' . self::TEMPLATE_ERROR;
+        \file_put_contents($file, 'v1');
 
-        $this->registerTemplate(self::TEMPLATE_BLOCK, $file);
+        $this->registerTemplate(self::TEMPLATE_ERROR, $file);
 
-        // Tests/Fixtures/TestProject/templates/remote_block.html.twig
-        $template = $this->getTwig()->render(self::TEMPLATE_BLOCK . '.html.twig');
+        // Simulate load error by deleting the file
+        \unlink($file);
 
-        $this->assertStringContainsString('<h1>Page title</h1>', $template);
-        $this->assertStringContainsString('<p>Page content</p>', $template);
-        $this->assertStringNotContainsString('%%', $template);
+        $this->expectException(\Twig\Error\LoaderError::class);
+
+        $twig = $this->getTwig();
+        $twig->render(self::TEMPLATE_ERROR);
+    }
+
+    public function testExpireWithError()
+    {
+        $file = \sys_get_temp_dir() . '/' . self::TEMPLATE_ERROR;
+        \file_put_contents($file, 'v1');
+
+        $this->registerTemplate(self::TEMPLATE_ERROR, $file, 300);
+
+        $twig = $this->getTwig();
+
+        // Initial load to cache the template
+        $twig->render(self::TEMPLATE_ERROR);
+
+        \unlink($file);
+
+        $this->getClock()->sleep(400);
+
+        $this->assertSame('v1', $twig->render(self::TEMPLATE_ERROR));
     }
 
     private function registerTemplate(string $name, string $file, int $ttl = 86400): void

@@ -74,26 +74,34 @@ class RemoteLoader implements LoaderInterface
     {
         $ttl = $this->templates[$name]['ttl'];
         $url = $this->templates[$name]['url'];
+        $cacheKey = 'remote_template_' . $name;
 
         $now = $this->clock->now()->getTimestamp();
 
-        [$lastFetch, $source] = $this->cache->get('remote_template_' . $name, function () use ($url, $now) {
-            return $this->doLoad($url, $now);
+        [$lastFetch, $source] = $this->cache->get($cacheKey, function () use ($url, $now) {
+            return [$now, $this->doLoad($url)];
         });
 
-        // template expired
-        if ($now - $lastFetch >= $ttl) {
-            $this->cache->delete('remote_template_' . $name);
-
-            [, $source] = $this->cache->get('remote_template_' . $name, function () use ($url, $now) {
-                return $this->doLoad($url, $now);
-            });
+        // Not expired - return from cache
+        if ($now - $lastFetch < $ttl) {
+            return $source;
         }
 
-        return $source;
+        // Expired — attempt refresh
+        try {
+            $newSource = $this->doLoad($url);
+
+            $this->cache->delete($cacheKey);
+            $this->cache->get($cacheKey, fn () => [$now, $newSource]);
+
+            return $newSource;
+
+        } catch (LoaderError) {
+            return $source;
+        }
     }
 
-    private function doLoad(string $url, int $timestamp): array
+    private function doLoad(string $url): string
     {
         $source = @\file_get_contents($url);
 
@@ -104,7 +112,7 @@ class RemoteLoader implements LoaderInterface
             ));
         }
 
-        return [$timestamp, $source];
+        return $source;
     }
 
     public function getCacheKey($name): string
