@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Twig\Loader;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Imatic\Bundle\ViewBundle\Clock\ClockInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
@@ -11,14 +13,21 @@ use Twig\Source;
  */
 class RemoteLoader implements LoaderInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    private Environment $twig;
+    private CacheInterface $cache;
+    private ClockInterface $clock;
+
     /** @var array map of remote templates */
     private $templates;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        Environment $twig,
+        CacheInterface $cache,
+        ClockInterface $clock
+    ) {
+        $this->twig = $twig;
+        $this->clock = $clock;
+        $this->cache = $cache;
     }
 
     /**
@@ -34,11 +43,9 @@ class RemoteLoader implements LoaderInterface
     {
         $this->templates[$name] = [
             'url' => $url,
-            'ttl' => $ttl,
+            'ttl' => \max(1, $ttl),
             'blocks' => $blocks,
             'metadata' => $metadata,
-            'checked_ttl' => false,
-            'checking_ttl' => false,
         ];
     }
 
@@ -51,24 +58,7 @@ class RemoteLoader implements LoaderInterface
     {
         $this->ensureExists($name);
 
-        // fetch source
-        $e = null;
-        try {
-            $source = \file_get_contents($this->templates[$name]['url']);
-        } catch (\Exception $e) {
-        }
-        if ($e || false === $source) {
-            throw new LoaderError(
-                \sprintf(
-                    'Could not load remote template "%s" from URL "%s"',
-                    $name,
-                    $this->templates[$name]['url']
-                ),
-                -1,
-                null,
-                $e
-            );
-        }
+        $source = $this->getRemoteSource($name);
 
         // convert placeholders to blocks
         $source = $this->placeholdersToBlocks($this->templates[$name]['blocks'], $source);
@@ -80,22 +70,62 @@ class RemoteLoader implements LoaderInterface
         return $source;
     }
 
+    private function getRemoteSource(string $name): string
+    {
+        $ttl = $this->templates[$name]['ttl'];
+        $url = $this->templates[$name]['url'];
+        $cacheKey = 'remote_template_' . $name;
+
+        $now = $this->clock->now()->getTimestamp();
+
+        [$lastFetch, $source] = $this->cache->get($cacheKey, function () use ($url, $now) {
+            return [$now, $this->doLoad($url)];
+        });
+
+        // Not expired - return from cache
+        if ($now - $lastFetch < $ttl) {
+            return $source;
+        }
+
+        // Expired — attempt refresh
+        try {
+            $newSource = $this->doLoad($url);
+
+            $this->cache->delete($cacheKey);
+            $this->cache->get($cacheKey, fn () => [$now, $newSource]);
+
+            return $newSource;
+
+        } catch (LoaderError) {
+            return $source;
+        }
+    }
+
+    private function doLoad(string $url): string
+    {
+        $source = @\file_get_contents($url);
+
+        if ($source === false) {
+            throw new LoaderError(\sprintf(
+                'Could not load remote template from "%s"',
+                $url
+            ));
+        }
+
+        return $source;
+    }
+
     public function getCacheKey($name): string
     {
         $this->ensureExists($name);
 
-        if (
-            !$this->container->get('twig')->isAutoReload()
-            && !$this->templates[$name]['checked_ttl']
-            && !$this->templates[$name]['checking_ttl']
-        ) {
-            $this->templates[$name]['checking_ttl'] = true;
-            $this->checkCacheFileTtl($name);
-            $this->templates[$name]['checking_ttl'] = false;
-            $this->templates[$name]['checked_ttl'] = true;
+        if ($this->twig->isAutoReload()) {
+            return $name;
         }
 
-        return $name;
+        $source = $this->getSource($name);
+
+        return $name . '@' . \sha1($source);
     }
 
     public function isFresh($name, $time): bool
@@ -104,33 +134,6 @@ class RemoteLoader implements LoaderInterface
         $this->ensureExists($name);
 
         return \time() - $time < $this->templates[$name]['ttl'];
-    }
-
-    private function getCacheFilename($name)
-    {
-        $twig = $this->container->get('twig');
-        $key = $twig->getCache(false)->generateKey($name, $twig->getTemplateClass($name));
-
-        return !$key ? false : $key;
-    }
-
-    /**
-     * Check cache file TTL.
-     *
-     * This method is called only if env->isAutoReload() == FALSE
-     *
-     * @param string $name
-     */
-    private function checkCacheFileTtl($name)
-    {
-        if (
-            false !== ($cacheFile = $this->getCacheFilename($name))
-            && \is_file($cacheFile)
-            && \time() - \filemtime($cacheFile) >= $this->templates[$name]['ttl']
-        ) {
-            // remove expired cache file
-            \unlink($cacheFile);
-        }
     }
 
     /**

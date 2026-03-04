@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\DependencyInjection;
 
+use Imatic\Bundle\ViewBundle\Clock\ClockInterface;
+use Imatic\Bundle\ViewBundle\Clock\SystemClock;
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter;
 use Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader;
 use Symfony\Component\Config\FileLocator;
@@ -22,6 +24,20 @@ class ImaticViewExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+
+        if (\interface_exists(\Symfony\Component\Clock\ClockInterface::class)) {
+            $container->register(\Imatic\Bundle\ViewBundle\Clock\SymfonyClockAdapter::class)
+                ->setAutowired(true)
+                ->setAutoconfigured(true)
+            ;
+
+            $container->setAlias(
+                ClockInterface::class,
+                \Imatic\Bundle\ViewBundle\Clock\SymfonyClockAdapter::class
+            );
+        } else {
+            $container->register(ClockInterface::class, SystemClock::class);
+        }
 
         if (!empty($config['templates']['remote'])) {
             $remoteLoaderDefinition = $container->getDefinition(RemoteLoader::class);
