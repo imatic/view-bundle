@@ -96,7 +96,7 @@ class RemoteLoader implements LoaderInterface
 
             return $newSource;
 
-        } catch (LoaderError) {
+        } catch (LoaderError $_) {
             return $source;
         }
     }
