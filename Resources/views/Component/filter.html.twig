@@ -4,73 +4,71 @@
     - display_criteria or filter
 #}
 {% block filter %}
-    {% apply spaceless %}
-        {% set uri = uri|default(app.request.uri) %}
-        {% set uri = imatic_view_update_filter_url(uri, component_id|default(none)) %}
-        {% if filter is not defined and display_criteria is defined %}
-            {% set filter = display_criteria.filter %}
-        {% endif %}
+    {% set uri = uri|default(app.request.uri) %}
+    {% set uri = imatic_view_update_filter_url(uri, component_id|default(none)) %}
+    {% if filter is not defined and display_criteria is defined %}
+        {% set filter = display_criteria.filter %}
+    {% endif %}
 
-        {% if filter is defined and filter.form is not empty %}
-            {% set form = filter.form.createView() %}
+    {% if filter is defined and filter.form is not empty %}
+        {% set form = filter.form.createView() %}
+    {% endif %}
+    {% if form is defined %}
+        {% if component_id is defined and component_id is not empty %}
+            {% do imatic_form_override_namespace(form, component_id) %}
+            {% set filter_content_id = 'imatic_view_filter_' ~ component_id %}
+        {% else %}
+            {% set filter_content_id = 'imatic_view_filter' %}
         {% endif %}
-        {% if form is defined %}
-            {% if component_id is defined and component_id is not empty %}
-                {% do imatic_form_override_namespace(form, component_id) %}
-                {% set filter_content_id = 'imatic_view_filter_' ~ component_id %}
-            {% else %}
-                {% set filter_content_id = 'imatic_view_filter' %}
-            {% endif %}
-            <div class="imatic-view-filter {% if filter.form.valid %} imatic-view-initial-closed{% endif %}">
-                <fieldset>
-                    <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'filter' : 'filter_errors')|trans({'count': filter.boundCount}, 'ImaticViewBundle') }}</legend>
-                    <div id="{{ filter_content_id }}" class="imatic-view-filter-content">
-                        {{ form_start(form, {action: uri, method: 'get'}) }}
-                        {% for field in form|filter(field => field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter']) %}
-                            {% set field_has_error = field.value.vars.errors is not empty %}
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    <label for="{{ field.value.vars.id }}" class="col-form-label">{{ field.vars.name|humanize|trans({}, filter.translationDomain) }}</label>
-                                </div>
-                                <div class="col-md-2">
-                                    {% if field.operator is defined %}
-                                        {{ form_widget(field.operator, {horizontal: false}) }}
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-8{% if field_has_error %} has-error{% endif %}">
-                                    {{ form_widget(field.value, {horizontal: false}) }}
-                                    {% if field_has_error %}
-                                        {{ form_errors(field.value) }}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
+        <div class="imatic-view-filter {% if filter.form.valid %} imatic-view-initial-closed{% endif %}">
+            <fieldset>
+                <legend data-toggle="#{{ filter_content_id }}">{{ (filter.form.valid ? 'filter' : 'filter_errors')|trans({'count': filter.boundCount}, 'ImaticViewBundle') }}</legend>
+                <div id="{{ filter_content_id }}" class="imatic-view-filter-content">
+                    {{ form_start(form, {action: uri, method: 'get'}) }}
+                    {% for field in form|filter(field => field.vars.name not in ['clearFilter', 'resetFilter', 'defaultFilter']) %}
+                        {% set field_has_error = field.value.vars.errors is not empty %}
                         <div class="form-group row">
-                            <div class="col-md-12">
-                                <div class="btn-group">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ 'Do filter'|trans({}, 'ImaticViewBundle') }}
-                                    </button>
-
-                                    {{ form_widget(form.clearFilter, {
-                                        label: 'Reset filter',
-                                        translation_domain: 'ImaticViewBundle',
-                                        attr: { class: 'btn btn-default' }
-                                    }) }}
-
-                                    {{ form_widget(form.defaultFilter, {
-                                        label: 'Default filter',
-                                        translation_domain: 'ImaticViewBundle',
-                                        attr: { class: 'btn btn-default' }
-                                    }) }}
-                                </div>
+                            <div class="col-md-2">
+                                <label for="{{ field.value.vars.id }}" class="col-form-label">{{ field.vars.name|humanize|trans({}, filter.translationDomain) }}</label>
+                            </div>
+                            <div class="col-md-2">
+                                {% if field.operator is defined %}
+                                    {{ form_widget(field.operator, {horizontal: false}) }}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8{% if field_has_error %} has-error{% endif %}">
+                                {{ form_widget(field.value, {horizontal: false}) }}
+                                {% if field_has_error %}
+                                    {{ form_errors(field.value) }}
+                                {% endif %}
                             </div>
                         </div>
-                        {{ form_end(form) }}
-                        {{ imatic_form_javascript(form) }}
+                    {% endfor %}
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ 'Do filter'|trans({}, 'ImaticViewBundle') }}
+                                </button>
+
+                                {{ form_widget(form.clearFilter, {
+                                    label: 'Reset filter',
+                                    translation_domain: 'ImaticViewBundle',
+                                    attr: { class: 'btn btn-default' }
+                                }) }}
+
+                                {{ form_widget(form.defaultFilter, {
+                                    label: 'Default filter',
+                                    translation_domain: 'ImaticViewBundle',
+                                    attr: { class: 'btn btn-default' }
+                                }) }}
+                            </div>
+                        </div>
                     </div>
-                </fieldset>
-            </div>
-        {% endif %}
-    {% endapply %}
+                    {{ form_end(form) }}
+                    {{ imatic_form_javascript(form) }}
+                </div>
+            </fieldset>
+        </div>
+    {% endif %}
 {% endblock %}

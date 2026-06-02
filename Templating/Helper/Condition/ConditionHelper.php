@@ -2,7 +2,7 @@
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ConditionHelper
 {

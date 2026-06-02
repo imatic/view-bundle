@@ -3,7 +3,7 @@ namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Define some ExpressionLanguage functions.
