@@ -2,6 +2,7 @@
 namespace Imatic\Bundle\ViewBundle\Tests\Integration\Twig\Extension;
 
 use Imatic\Bundle\ViewBundle\Tests\Fixtures\TestProject\WebTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FormatExtensionTest extends WebTestCase
 {
@@ -10,9 +11,7 @@ class FormatExtensionTest extends WebTestCase
         static::createClient();
     }
 
-    /**
-     * @dataProvider imaticViewFormatProvider
-     */
+    #[DataProvider('imaticViewFormatProvider')]
     public function testImaticViewFormat($expectedResult, $template)
     {
         $this->assertSame(
@@ -21,7 +20,7 @@ class FormatExtensionTest extends WebTestCase
         );
     }
 
-    public function imaticViewFormatProvider()
+    public static function imaticViewFormatProvider()
     {
         return [
             [
