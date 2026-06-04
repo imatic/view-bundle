@@ -14,7 +14,7 @@ class ImaticViewBundle extends Bundle
         return 'TwigBundle';
     }
 
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 

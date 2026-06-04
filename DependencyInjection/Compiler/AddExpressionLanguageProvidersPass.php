@@ -18,7 +18,7 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariables)
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition(ExpressionLanguage::class);
 

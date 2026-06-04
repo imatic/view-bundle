@@ -38,8 +38,7 @@ abstract class AbstractCollection implements \ArrayAccess
         return $this->has($name);
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetGet($name)
+    public function offsetGet($name): mixed
     {
         return $this->get($name);
     }

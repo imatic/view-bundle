@@ -49,7 +49,7 @@ class RemoteLoader implements LoaderInterface
         ];
     }
 
-    public function exists($name)
+    public function exists($name): bool
     {
         return isset($this->templates[$name]);
     }

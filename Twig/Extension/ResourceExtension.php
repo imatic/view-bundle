@@ -17,7 +17,7 @@ class ResourceExtension extends AbstractExtension
         $this->resourceHelper = $resourceHelper;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('imatic_view_resource_create_page_actions', [$this->resourceHelper, 'createPageActionConfiguration']),

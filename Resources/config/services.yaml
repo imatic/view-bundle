@@ -1,0 +1,203 @@
+parameters:
+    imatic_view.menu.main.class: Imatic\Bundle\ViewBundle\Menu\MainMenuBuilder
+
+services:
+    _defaults:
+        public: false
+
+    # Controllers
+    Imatic\Bundle\ViewBundle\Controller\:
+        resource: '../../Controller/*'
+        public: true
+        calls:
+            - [setContainer, ['@service_container']]
+
+    Imatic\Bundle\ViewBundle\Controller\DefaultController:
+        public: true
+        autowire: true
+        tags:
+            - { name: container.service_subscriber, id: twig }
+
+    # Menu
+    Imatic\Bundle\ViewBundle\Menu\Factory:
+        arguments:
+            - '@knp_menu.factory'
+
+    Imatic\Bundle\ViewBundle\Menu\Helper:
+        arguments:
+            - '@translator'
+            - '@security.helper'
+
+    Imatic\Bundle\ViewBundle\Menu\ContainerProvider:
+        tags:
+            - { name: knp_menu.provider }
+        arguments:
+            - '@service_container'
+            - '@Imatic\Bundle\ViewBundle\Menu\Factory'
+            - '@Imatic\Bundle\ViewBundle\Menu\Helper'
+
+    imatic_view.menu.main:
+        class: '%imatic_view.menu.main.class%'
+        public: true
+        tags:
+            - { name: imatic_view.menu, alias: imatic.main }
+            - { name: imatic_view.menu, alias: imatic.main_side, method: getSideMenu }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Menu\ContainerProvider'
+
+    imatic_view.menu.demo:
+        class: Imatic\Bundle\ViewBundle\Menu\DemoMenuBuilder
+        public: true
+        tags:
+            - { name: imatic_view.menu, alias: imatic.demo }
+            - { name: imatic_view.menu, alias: imatic.demo_normal, method: getNormalMenu }
+            - { name: imatic_view.menu, alias: imatic.demo_sub, method: getSubMenu }
+
+    # Event listeners
+    Imatic\Bundle\ViewBundle\EventListener\KernelSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper'
+            - '@translator'
+            - '%kernel.debug%'
+
+    # Expression Language
+    Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguageProvider:
+        tags:
+            - { name: imatic_view.expression_language_provider }
+        arguments:
+            - '@security.helper'
+
+    # Formatters
+    Imatic\Bundle\ViewBundle\Templating\Helper\Format\IntlFormatter:
+        tags:
+            - { name: imatic_view.formatter, alias: time }
+            - { name: imatic_view.formatter, alias: date }
+            - { name: imatic_view.formatter, alias: datetime }
+            - { name: imatic_view.formatter, alias: number }
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Format\CommonFormatter:
+        tags:
+            - { name: imatic_view.formatter, alias: url, is_safe: html }
+            - { name: imatic_view.formatter, alias: phone, is_safe: html }
+            - { name: imatic_view.formatter, alias: email, is_safe: html }
+            - { name: imatic_view.formatter, alias: text, is_safe: html }
+            - { name: imatic_view.formatter, alias: html, is_safe: html }
+            - { name: imatic_view.formatter, alias: boolean, is_safe: html }
+            - { name: imatic_view.formatter, alias: filesize }
+            - { name: imatic_view.formatter, alias: translatable }
+        arguments:
+            - '@translator'
+
+    # Templating Helpers
+    Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguage: ~
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper:
+        arguments:
+            - '@twig'
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper: ~
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper: ~
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper:
+        arguments:
+            - '@request_stack'
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper:
+        arguments:
+            - '@router'
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper:
+        arguments:
+            - '@security.helper'
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper'
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ExpressionLanguage'
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper: ~
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper: ~
+
+    Imatic\Bundle\ViewBundle\Templating\Helper\Resource\ResourceHelper:
+        arguments:
+            - '@translator'
+            - '@security.helper'
+
+    # Twig extensions
+    Imatic\Bundle\ViewBundle\Twig\Extension\MenuExtension:
+        tags:
+            - { name: twig.extension }
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\UrlExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Html\UrlHelper'
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\HtmlExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Html\HtmlHelper'
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\ExampleExtension:
+        tags:
+            - { name: twig.extension }
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\ComponentExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Grid\GridHelper'
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Show\ShowHelper'
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Action\ActionHelper'
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\LayoutExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Layout\LayoutHelper'
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\FormatExtension:
+        tags:
+            - { name: twig.extension }
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\ConditionExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Condition\ConditionHelper'
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\TypeExtension:
+        tags:
+            - { name: twig.extension }
+
+    Imatic\Bundle\ViewBundle\Twig\Extension\ResourceExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Resource\ResourceHelper'
+
+    # Twig loaders
+    Imatic\Bundle\ViewBundle\Twig\Loader\RemoteLoader:
+        tags:
+            - { name: twig.loader }
+        arguments:
+            - '@twig'
+            - '@Symfony\Contracts\Cache\CacheInterface'
+            - '@Imatic\Bundle\ViewBundle\Clock\ClockInterface'
+
+    # Twig runtime
+    Imatic\Bundle\ViewBundle\Twig\Runtime\FormatRuntime:
+        tags:
+            - { name: twig.runtime }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper'
+
+    Imatic\Bundle\ViewBundle\Twig\Runtime\MenuRuntime:
+        tags:
+            - { name: twig.runtime }
+        arguments:
+            - '@Imatic\Bundle\ViewBundle\Menu\Factory'
+            - '@knp_menu.renderer.twig'

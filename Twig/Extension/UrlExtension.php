@@ -18,14 +18,14 @@ class UrlExtension extends AbstractExtension
         $this->urlHelper = $urlHelper;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('imatic_slug', 'Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil::slugify'),
         ];
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('imatic_view_update_url', [$this->urlHelper, 'updateUrl']),
