@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85ebedc564a4756a6aeabf44b00579cb",
+    "content-hash": "f32d87981efb79632296c209cccee7fe",
     "packages": [
         {
             "name": "knplabs/knp-menu",
@@ -4903,16 +4903,16 @@
         },
         {
             "name": "imatic/form-bundle",
-            "version": "dev-symfony-8.1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imatic/form-bundle.git",
-                "reference": "aa9349c31c837d9817836af7b5f0356ba62a5aad"
+                "reference": "f70fe9b262bb339c3dac1bd7afd1556db1c05ff8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/aa9349c31c837d9817836af7b5f0356ba62a5aad",
-                "reference": "aa9349c31c837d9817836af7b5f0356ba62a5aad",
+                "url": "https://api.github.com/repos/imatic/form-bundle/zipball/f70fe9b262bb339c3dac1bd7afd1556db1c05ff8",
+                "reference": "f70fe9b262bb339c3dac1bd7afd1556db1c05ff8",
                 "shasum": ""
             },
             "require": {
@@ -4962,9 +4962,9 @@
             "description": "Bundle for working with Symfony forms",
             "support": {
                 "issues": "https://github.com/imatic/form-bundle/issues",
-                "source": "https://github.com/imatic/form-bundle/tree/symfony-8.1"
+                "source": "https://github.com/imatic/form-bundle/tree/v6.0.0"
             },
-            "time": "2026-06-15T17:58:35+00:00"
+            "time": "2026-06-16T07:16:06+00:00"
         },
         {
             "name": "imatic/testing",
@@ -9281,9 +9281,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "imatic/form-bundle": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
