@@ -31,7 +31,7 @@ class ComponentExtension extends AbstractExtension
         $this->actionHelper = $actionHelper;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('imatic_view_table_columns', [$this->gridHelper, 'getColumnsOptions']),

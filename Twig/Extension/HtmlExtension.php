@@ -18,7 +18,7 @@ class HtmlExtension extends AbstractExtension
         $this->htmlHelper = $htmlHelper;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('imatic_html_attributes', [$this->htmlHelper, 'attributes'], ['is_safe' => ['html']]),

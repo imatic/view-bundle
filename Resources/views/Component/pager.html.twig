@@ -13,54 +13,52 @@
     {% endif %}
     {% set pager_options = pager_options|default({}) %}
 
-    {% apply spaceless %}
-        {% if pager is defined and pager.haveToPaginate %}
-            <ul class="pagination justify-content-center pb-1">
-                <li class="page-item{% if pager.isFirstPage() %} disabled{% endif %}">
-                    <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getFirstPage(), component_id|default(none)) }}" title="{{ 'first'|trans({}, 'ImaticViewBundleComponent') }}">
-                        |&laquo;
+    {% if pager is defined and pager.haveToPaginate %}
+        <ul class="pagination justify-content-center pb-1">
+            <li class="page-item{% if pager.isFirstPage() %} disabled{% endif %}">
+                <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getFirstPage(), component_id|default(none)) }}" title="{{ 'first'|trans({}, 'ImaticViewBundleComponent') }}">
+                    |&laquo;
+                </a>
+            </li>
+            <li class="page-item{% if pager.isFirstPage() %} disabled{% endif %}">
+                <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getPreviousPage(), component_id|default(none)) }}" title="{{ 'prev'|trans({}, 'ImaticViewBundleComponent') }}">
+                    &laquo;
+                </a>
+            </li>
+            {% for page in pager.links(pager_options.link_count|default(2)) %}
+                <li class="page-item{% if pager.isCurrentPage(page) %} active{% endif %}">
+                    <a class="page-link" href="{{ imatic_view_update_pager_url(uri, page, component_id|default(none)) }}">{{ page }}
+                        {% if pager.isCurrentPage(page) %}
+                            <span class="sr-only">({{ 'current' | trans({}, 'ImaticViewBundleComponent') }})</span>
+                        {% endif %}
                     </a>
                 </li>
-                <li class="page-item{% if pager.isFirstPage() %} disabled{% endif %}">
-                    <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getPreviousPage(), component_id|default(none)) }}" title="{{ 'prev'|trans({}, 'ImaticViewBundleComponent') }}">
-                        &laquo;
-                    </a>
-                </li>
-                {% for page in pager.links(pager_options.link_count|default(2)) %}
-                    <li class="page-item{% if pager.isCurrentPage(page) %} active{% endif %}">
-                        <a class="page-link" href="{{ imatic_view_update_pager_url(uri, page, component_id|default(none)) }}">{{ page }}
-                            {% if pager.isCurrentPage(page) %}
-                                <span class="sr-only">({{ 'current' | trans({}, 'ImaticViewBundleComponent') }})</span>
-                            {% endif %}
-                        </a>
-                    </li>
-                {% endfor %}
-                <li class="page-item{% if pager.isLastPage() %} disabled{% endif %}">
-                    <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getNextPage(), component_id|default(none)) }}" title="{{ 'next'|trans({}, 'ImaticViewBundleComponent') }}">
-                        &raquo;
-                    </a>
-                </li>
-                <li class="page-item{% if pager.isLastPage() %} disabled{% endif %}">
-                    <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getLastPage(), component_id|default(none)) }}" title="{{ 'last'|trans({}, 'ImaticViewBundleComponent') }}">
-                        &raquo;|
-                    </a>
-                </li>
-            </ul>
-            {% if pager_options.page_text|default('expanded') == 'expanded' %}
-                <p class="pagination-text">
-                    {{ 'pagination'|trans({
-                        '%first%': pager.firstIndice,
-                        '%last%': pager.lastIndice,
-                        '%total%': pager.total,
-                    },
-                        'ImaticViewBundleComponent'
-                    ) }}
-                </p>
-            {% else %}
-                <p class="pagination-text">
-                    {{ pager.page }}/{{ pager.total }}
-                </p>
-            {% endif %}
+            {% endfor %}
+            <li class="page-item{% if pager.isLastPage() %} disabled{% endif %}">
+                <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getNextPage(), component_id|default(none)) }}" title="{{ 'next'|trans({}, 'ImaticViewBundleComponent') }}">
+                    &raquo;
+                </a>
+            </li>
+            <li class="page-item{% if pager.isLastPage() %} disabled{% endif %}">
+                <a class="page-link" href="{{ imatic_view_update_pager_url(uri, pager.getLastPage(), component_id|default(none)) }}" title="{{ 'last'|trans({}, 'ImaticViewBundleComponent') }}">
+                    &raquo;|
+                </a>
+            </li>
+        </ul>
+        {% if pager_options.page_text|default('expanded') == 'expanded' %}
+            <p class="pagination-text">
+                {{ 'pagination'|trans({
+                    '%first%': pager.firstIndice,
+                    '%last%': pager.lastIndice,
+                    '%total%': pager.total,
+                },
+                    'ImaticViewBundleComponent'
+                ) }}
+            </p>
+        {% else %}
+            <p class="pagination-text">
+                {{ pager.page }}/{{ pager.total }}
+            </p>
         {% endif %}
-    {% endapply %}
+    {% endif %}
 {% endblock %}

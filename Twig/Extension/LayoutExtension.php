@@ -20,7 +20,7 @@ class LayoutExtension extends AbstractExtension
         $this->layoutHelper = $layoutHelper;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('imatic_view_has_layout', [$this->layoutHelper, 'hasLayout']),

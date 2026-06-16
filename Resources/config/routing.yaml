@@ -1,0 +1,3 @@
+imatic_view_default:
+    resource: '@ImaticViewBundle/Controller/DefaultController.php'
+    type: attribute

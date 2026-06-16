@@ -35,7 +35,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class TestingType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $imaticFormBundle = \class_exists(ImaticFormBundle::class);
 

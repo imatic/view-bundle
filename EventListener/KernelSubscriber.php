@@ -38,7 +38,7 @@ class KernelSubscriber implements EventSubscriberInterface
         $this->debug = $debug;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::RESPONSE => 'onKernelResponse',

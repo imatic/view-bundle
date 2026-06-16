@@ -17,7 +17,7 @@ class ConditionExtension extends AbstractExtension
         $this->conditionHelper = $conditionHelper;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('imatic_view_condition_evaluate', [$this->conditionHelper, 'evaluate']),

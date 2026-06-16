@@ -3,8 +3,8 @@ namespace Imatic\Bundle\ViewBundle\Menu;
 
 use Imatic\Bundle\ViewBundle\Templating\Utils\StringUtil;
 use Knp\Menu\ItemInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -35,7 +35,7 @@ class Helper
      * @param ItemInterface $dropDownItem
      * @param string        $aligment
      */
-    public function setDropdown(ItemInterface $dropDownItem, string $aligment = null)
+    public function setDropdown(ItemInterface $dropDownItem, ?string $aligment = null)
     {
         $dropDownItem
             ->setUri('#')

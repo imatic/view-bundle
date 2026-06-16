@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 namespace Imatic\Bundle\ViewBundle\Templating\Helper\Condition;
 
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Define some ExpressionLanguage functions.
@@ -28,7 +28,7 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariables)
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new ExpressionFunction(

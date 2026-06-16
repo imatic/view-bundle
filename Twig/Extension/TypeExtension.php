@@ -8,7 +8,7 @@ use Twig\TwigTest;
 
 class TypeExtension extends AbstractExtension
 {
-    public function getTests()
+    public function getTests(): array
     {
         return [
             new TwigTest('integer', 'is_int'),
@@ -21,7 +21,7 @@ class TypeExtension extends AbstractExtension
         ];
     }
 
-    public function getOperators()
+    public function getOperators(): array
     {
         return [
             // unary

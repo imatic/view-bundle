@@ -3,6 +3,7 @@ namespace Imatic\Bundle\ViewBundle\Twig\Runtime;
 
 use Imatic\Bundle\ViewBundle\Templating\Helper\Format\FormatHelper;
 use Twig\Environment;
+use Twig\Runtime\EscaperRuntime;
 
 class FormatRuntime
 {
@@ -25,7 +26,7 @@ class FormatRuntime
 
         return !$templateFormat || $this->formatHelper->isSafe($format, $templateFormat)
             ? $output
-            : twig_escape_filter($env, $output, $templateFormat);
+            : $env->getRuntime(EscaperRuntime::class)->escape($output, $templateFormat);
     }
 
     public function renderValue(Environment $env, $templateFormat, $objectOrArray, $propertyPath = null, $format = null, array $options = [])
@@ -34,6 +35,6 @@ class FormatRuntime
 
         return !$templateFormat || $this->formatHelper->isSafe($format, $templateFormat)
             ? $output
-            : twig_escape_filter($env, $output, $templateFormat);
+            : $env->getRuntime(EscaperRuntime::class)->escape($output, $templateFormat);
     }
 }

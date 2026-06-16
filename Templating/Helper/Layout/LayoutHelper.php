@@ -36,7 +36,7 @@ class LayoutHelper
 
         if (
             $masterRequest->isXmlHttpRequest()
-            || 'off' === $masterRequest->get('_layout')
+            || 'off' === $masterRequest->attributes->get('_layout')
             || (
                 $currentRequest !== $masterRequest
                 && !$currentRequest->attributes->has('exception')
